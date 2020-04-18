@@ -18,7 +18,7 @@ klippy::klippy(position = c('top', 'right'))
 ```{r load, echo=FALSE, cache=FALSE}
 load(".Rdata")
 ```
-<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
 # Introduction #
 
 This lecture focuses on two topics that underlie R's facility for reading and analyzing data:  1) the facility for reading and transforming (i.e. *tidying*) data that may not initially be in standard "rectangular data set" form, and 2) the manipulation of arrays, vectors and matrices of data "under the hood" in the execution of various data-analysis routines.  The first topic, which also has been termed "data wrangling" is also an element of the concept of "reproducible research" which aims at documenting the analysis steps and results with sufficient detail that they could be reproduced by others.  

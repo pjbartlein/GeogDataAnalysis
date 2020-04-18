@@ -18,7 +18,7 @@ klippy::klippy(position = c('top', 'right'))
 ```{r load, echo=FALSE, cache=FALSE}
 load(".Rdata")
 ```
-<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
 # Introduction #
 
 *Regression analysis* aims at constructing relationships between a single dependent or response variable and one or more independent or predictor variables, and is one of the more widely used methods in data analysis. Although the computations and analysis that underlie regression analysis appear more complicated than those for other procedures, simple analyses are quite straightforward.
