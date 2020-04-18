@@ -272,7 +272,7 @@ The following plots explore the seasonality of precipitation in the Yellowstone 
 
 ```{r plot19}
 library(sf)
-attach(yellpratio)
+attach(yell_pratio)
 
 # simple map
 # read and plot shapefiles
@@ -286,13 +286,17 @@ points(Lon, Lat, pch=3, cex=0.6)
 
 # stars plot for precipitation ratios
 col.red <- rep("red",length(orstationc[,1]))
-stars(yellpratio[,4:15], locations=as.matrix(cbind(Lon, Lat)),
+stars(yell_pratio[,4:15], locations=as.matrix(cbind(Lon, Lat)),
 col.stars=col.red, len=0.2, lwd=1, key.loc=c(-111.5,42.5), labels=NULL, add=T)
 ```
 
 Here the stars wind up looking more like fans.  The legend indicates that stations with fans that open out to the right are stations with winter precipitation maxima (like in the southwestern portion of the region) while those that open toward the left have summer precipitation maxima (like in the southeastern portion of the region).
 
 The next examples show a couple of conditioning plots (coplots), that illustrate the relationship between January and July precipitation, as varies (is conditioned on) with elevation.  The first block of code does some set up.
+
+```{r}
+detach(yell_pratio)
+```
 
 ```{r plot20}
 # create some conditioning variables

@@ -6,7 +6,7 @@ Note that the data sets on this web page are instructional in nature, intended f
 
 | Data sets | Description |
 |---|---|
-| ===================|=============================================================================|
+| ======================|=============================================================================|
 | [sumcr.csv](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sumcr.csv) | Summit Cr. stream-channel data |
 | [orstationc.csv](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/orstationc.csv) |Oregon climate-station data
 | [ortann.csv](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/ortann.csv) | Oregon climate-station data, annual temperatures only
@@ -39,6 +39,7 @@ Note that the data sets on this web page are instructional in nature, intended f
 | [IPCC-RFtrans.csv](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/IPCC-RFtrans.csv) | IPCC AR5 radiattive forcing time series\--transformed values
 | [NAmodpol.csv](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/NAmodpol.csv) | North American modern pollen data  
 | [gcdv3.csv](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/gcdv3.csv) | Global Charcoal Database v3
+| [MM-ltmdiff-NEurAsia.csv](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/MM-ltmdiff-NEurAsia.csv) | Northern Eurasia PMIP3 MH area averages
 Download .csv data sets to a working directory, and read into R using, for example
 
 `sumcr <- read.csv("sumcr.csv"),` or 
