@@ -1,0 +1,247 @@
+---
+title: "Multivariate distances and cluster analysis"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+load(".Rdata")
+klippy::klippy(position = c('top', 'right'))
+```
+<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+# Introduction #
+
+There is a broad group of multivariate analyses that have as their objective the organization of individual observations (objects, sites, individuals), and these analyses are built upon the concept of multivariate distances (expressed either as similarities or dissimilarities) among the objects.
+
+The organization generally takes two forms:
+
+- the arrangement of the objects in a lower-dimensional space than the data were originally observed on;
+- the development of "natural" clusters or the classifications of the objects.
+
+These analyses share many concepts and techniques (both numerical and practical) with other procedures such as principal components analysis, numerical taxonomy, discriminant analysis and so on.
+
+The analyses generally begin with the construction of an *n* x *n* matrix **D** of the distances between objects.  For example, in a two dimensional space, the elements *d<sub>ij</sub>* of **D** could be the Euclidean distances between points,
+
+*d<sub>ij</sub>* = [(*x<sub>i1</sub>*- *x<sub>j1</sub>*)<sup>2</sup> + (*x<sub>i1</sub>*- *x<sub>j1</sub>*)<sup>2</sup>]<sup>½</sup>
+
+The Euclidean distance, and related measures are easily generalized to more than two dimensions.
+
+# Basic distances #
+
+As an example of the calculation of multivariate distances, the following script will calculate the Euclidean distances, in terms of pollen abundance, among a set of (modern) pollen surface-samples in the Midwest that were used for fitting regression equations for reconstructing past climates from fossil-pollen data.  (Note:  because the pollen data were transformed by taking the square roots of pollen abundance data, what is actually being calculated here is the so-called "squared chord-distance" or SCD.)
+
+The distance matrix, each element of which displays the distance between two points in "pollen space" (as opposed to geographical space) can be displayed using the `image()` function.  The looping in the code below is inefficient, but illustrates what is going on.
+
+```{r dm02, fig.width=3.5, fig.height=3}
+# calculate a Squared Chord-Distance dissimilarity matrix for
+# Midwestern pollen data
+library(lattice)
+library(RColorBrewer)
+attach(midwtf2)
+X <- as.matrix(midwtf2[,7:21])
+nvars <- 14
+nobs <- 124
+SCDist <- array(0.0, c(nobs^2,3))
+dimnames(SCDist) <- list(NULL,c("i","j","SCD"))
+SCDist.matrix <- array(0.0, c(nobs,nobs))
+for (i in 1:nobs) {
+    for (j in 1:nobs) {
+    distance <- 0.0
+        for (k in 1:nvars) {
+            distance <- distance + ((sqrt(X[i,k])-sqrt(X[j,k]))^2)
+            }
+            m <-((i-1)*nobs)+j
+            SCDist[m,3] <- sqrt(distance)
+            SCDist.matrix[i,j] <- sqrt(distance)
+            SCDist[m,1] <- i
+            SCDist[m,2] <- j
+    }
+}
+
+# display the distance matrix
+grid <- expand.grid(obs1 = seq(1:nobs), obs2 = seq(1:nobs))
+levelplot(SCDist.matrix ~ obs1*obs2, data=grid, col.regions = gray(seq(0,1,by=0.0625)),
+  xlab="observation", ylab="observation")
+
+```
+
+## Mahalanobis distances ##
+
+The basic Euclidean distance treats each variable as equally important in calculating the distance.  An alternative approach is to scale the contribution of individual variables to the distance value according to the variability of each variable.  This approach is illustrated by the Mahalanobis distance, which is a measure of the distance between each observation in a multidimensional cloud of points and the centroid of the cloud.  The Mahalnobis distance D2 is given by 
+
+*D<sup>2</sup>* = **(x - m)V** <sup>-1</sup>**(x - m)**
+
+where **x** is a vector of values for a particular observation, **m** is the vector of means of each variable, and **V** is the variance-covariance matrix. 
+
+The following code illustrates the calculation of Mahalanobis distances in a "climate space" described by two climate variables from the Midwest pollen-climate data set.  The graduate circle around each point is proportional to the Mahalanobis distance between that point and the centroid of scatter of points.  The ellipses (drawn using the `ellipse()` function from the `car` package graphically illustrate isolines of Mahalanobis distance from the centroid.)
+
+```{r md02, fig.asp=1}
+# Mahalonobis distances
+# July and annual temperature
+X <- as.matrix(midwtf2[,4:5])
+X.cov <- var(scale(X)) # standardize first
+X.cov <- var(X)
+X.mean <- apply(X,2,mean)
+X.mah <- mahalanobis(X, X.mean, X.cov)
+
+# plot the variables, conf. ellipses and M.D.
+library(car)
+plot(midwtf2$tmeanjul, midwtf2$tmeanyr)
+ellipse(X.mean, X.cov, radius=1, add=TRUE)
+ellipse(X.mean, X.cov, radius=2, add=TRUE)
+points(midwtf2$tmeanjul, midwtf2$tmeanyr, cex=10*(X.mah-min(X.mah))/(max(X.mah)-
+    min(X.mah)))
+```
+
+The following code finds the Mahalanobis distances between each pollen site, where distances are now in "pollen space.".
+
+```{r md03}
+# Mahalonobis distances for individual spectra, Midwestern pollen data
+X <- as.matrix(midwtf2[,7:21])
+X.cov <- var(X)
+X.mean <- apply(X,2,mean)
+X.mah <- mahalanobis(X, X.mean, X.cov, tol.inv=1e-16)
+```
+
+These distances-in-pollen-space can be mapped as graduated circles, where the size of the circle is proporational to the ditance between the pollen data at each point, and the centroid or mean pollen spectrum over all of the data.
+
+```{r md04, message=FALSE}
+# Map the study area
+library(maptools)
+library(RColorBrewer)
+
+# plot shape file
+plot(midwotl.shp)
+points(midwtf2$longitud, midwtf2$latitude, cex=10*(X.mah-min(X.mah))/(max(X.mah)-min(X.mah)))
+```
+
+# Multidimensional scaling (MDS) #
+
+The objective of MDS is to portray the relationship between objects in a multidimensional space in a lower-dimensional space (usually 2-D) in such a way that the relative distances among objects in the multidimensional space are preserved in the lower-dimensional space.  The classic illustrative example is the analysis of geographically arrayed data, which can be done with the Oregon climate-station data:
+
+```{r mds02, message=FALSE}
+## Multi-dimensional scaling (MDS)
+# plot Oregon climate stations
+library(maptools)
+library(RColorBrewer)
+attach(orstationc)
+
+# plot station names as a conventional map
+plot(orotl.shp)
+#points(lon, lat, pch=3)
+text(lon, lat, labels=as.character(station), cex=.6)
+```
+
+The plot generated above is a conventional map, where the points (stations) are located by their absolute coordinates.  The next display uses only the distances among points to determine the positions of the points relative to one another.
+
+```{r, mds03, fig.asp=1}
+# MDS "map" based only on distances between stations, not their absolute coordinates
+X <- as.matrix(orstationc[,2:3]) # longitude and latitude only
+X.scal <- cmdscale(dist(X), k=2, eig=T)
+X.scal$points[,1] <- -X.scal$points[,1] # may need to reverse axes
+# X.scal$points[,2] <- -X.scal$points[,2]
+plot(X.scal$points, type="n")
+text(X.scal$points, labels = station, cex=.6)
+detach(orstationc)
+```
+
+It's possible to see the rough outline of the state in the locations of the stations, which is not surprising.  In the following display, the climate data alone are used in the analysis, and again the rough outline of the state and geographical arrangement of stations is evident on inspection.  Note that only the locations of the stations in "climate space" (as opposed to geographical space) is used to organize the observations in a low-dimensional space.
+
+
+```{r, mds04, fig.asp=1}
+# multidimensional scaling of Oregon climate station data
+# now with climate variables not locations
+X <- as.matrix(orstationc[,5:10])
+X.scal <- cmdscale(dist(X), k=2, eig=T)
+X.scal$points[,1] <- -X.scal$points[,1]
+X.scal$points[,2] <- -X.scal$points[,2]
+plot(X.scal$points, type="n")
+text(X.scal$points, labels = orstationc$station, cex=.6)
+```
+
+The final example, shows an MDS of the Midwestern pollen data.  The two scatter plots show the distributions of latitude and longitude in a low-dimensional pollen space.  Points that are close to one another (on either of the plots) have similar pollen spectra, while points farther away from one another are less similar in terms of pollen.
+
+```{r, fig.asp=1}
+# multidimensional scaling of Midwestern pollen data
+X <- as.matrix(midwtf2[,7:21])
+X.scal <- cmdscale(dist(X), k=2, eig=T)
+X.scal$points[,2] <- -X.scal$points[,2]
+plot(X.scal$points, type="n", main="latitude")
+text(X.scal$points, labels = (format(signif(midwtf2$latitude,digits=3))),
+    cex=.6)
+plot(X.scal$points, type="n", main="longitude")
+text(X.scal$points, labels = (format(signif(midwtf2$longitud,digits=3))),
+    cex=.6)
+detach(midwtf2)
+```
+
+# Cluster analysis #
+
+In a cluster analysis, the objective is to use similarities or dissimilarities among objects (expressed as multivariate distances), to assign the individual observations to "natural" groups.  Cathy Whitlock's surface sample data from Yellowstone National Park describes the spatial variations in pollen data for that region, and each site was subjectively assigned to one of five vegetation zones. 
+
+There is a very large number of clustering procedures, and quite a few have been implemented in R and S-Plus.  Here are some examples:
+
+## Hierarchical clustering ##
+
+```{r}
+# hierarchical clustering, Ward's method, Yellowstone pollen data
+attach(ypolsqrt)
+X <- as.matrix(ypolsqrt[,4:35]) # just the pollen data
+X.dist <- dist(scale(X))
+# image(seq(1:58),seq(1:58),as.matrix(X.dist))
+hier.cls <- hclust(X.dist, method = "ward.D2")
+plot(hier.cls, labels=Veg, cex=.7)
+```
+
+Ward's method is one of the more "traditional" cluster analysis methods and typically is displayed using a "dendrogram" that can be intuitively interpreted.  Note that there is no prior assumption of the *number* of clusters that is made.  The success of the clustering can be judged by a mosaic plot, which compares the objectively determined clusters of samples, with a previous subjective assignement of each sample to a vegetation zone.
+
+```{r}
+# list subjective vegetation zones
+levels(Veg)
+# cut dendrogram to give 5 clusters
+nclust <- 5
+clusternum <- cutree(hier.cls, k=nclust)
+class.table.hier <- table(Veg, clusternum)
+mosaicplot(class.table.hier, color=T)
+```
+
+With the exception of the "Subalpine" vegetation zone, the objective clusters usually contain samples that fall into one or two of the subjective zones.
+
+## *k*-means clustering ##
+
+In "k-means" clustering, a specific number of clusters, *k*,  is set before the analysis, and the analysis moves individual observations into or out of the clusters until the samples are distributed optimally (i.e. low within-cluster variability, high among=cluster variability).
+
+```{r}
+# k-means clustering of Yellowstone pollen data
+library(cluster)
+X <- as.matrix(ypolsqrt[,4:35])
+kmean.cls <- kmeans(X, centers=5)
+class.table.km <- table(Veg, kmean.cls$cluster)
+mosaicplot(class.table.km, color=T)
+```
+
+## PAM ("partioning amung mediods" clustering) ##
+
+Here's another example of a more exotic clustering algorithm
+
+```{r}
+# "pam" clustering of Yellowstone pollen data
+library(cluster)
+X <- as.matrix(ypolsqrt[,4:35])
+pam.cls <- pam(X, k=5)
+plot(pam.cls)
+class.table.pam <- table(Veg, pam.cls$cluster)
+mosaicplot(class.table.pam, color=T)
+```
+
+# Readings #
+
+- Chapter 25, Multivariate Statistics, in Crawley, M.J. (2013) *The R Book*, Wiley.  To get to the book, visit [http://library.uoregon.edu](http://library.uoregon.edu), login, and search for the 2013 edition of the book.  Here's a direct link, once you're logged on: [http://onlinelibrary.wiley.com/book/10.1002/9781118448908](http://onlinelibrary.wiley.com/book/10.1002/9781118448908)
+- Maindonald, Using R, Ch. 6
+- Ch. 14 in Zuur et al. (2007) *Analysing Ecological Data*, Springer.  (Search the UO Library catalog for the Bivand et al. book (as in lecture 7), then search for "Analysing Ecological Data" in the *Springer Link* search field.)

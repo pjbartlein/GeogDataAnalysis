@@ -1,0 +1,538 @@
+---
+title: "Maps in R"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
+# Introduction #
+
+One extremely useful feature of **R** for analyzing geographical data is its ability to provide maps of data in the same computing environment that the data analysis is being performed in, and moreover, to read, manipulate and analyze data with explicitly spatial coordinate information.  This facility for handling spatial data was built into **S** relatively early on, and is now implemented three ways, through the following packages:
+
+- `maps`, which contains a database of world, country (and for the U.S.) state outlines, and includes functions (in the `mapproj` package) for doing projections (or "spatial transforms");
+- `sp` ("spatial"), which provides a format for spatial data in **R**, and a number of functions for its input (through the `rgdal` package), output and display (together constituting a set of "classes and methods"), the `rgeos` package, which implements many of the spatial topology functions that formerly required a full suite of GIS software;
+- `sf` which implements the "simple features" approach of representing spatial objects and their geometries [[https://r-spatial.github.io/sf/index.html]](https://r-spatial.github.io/sf/index.html), and uses the "built-in" `data.frame` (or `tibble`) structure in R to store and manipulate data, while linking to the GEOS, GDAL, and PROJ libraries directly.  The 'sf` package now seems to be the main focus for development of geospatial analyses and mapping in **R**.
+
+Two other projects/packages are aimed at handling spatial data.  These include:
+
+- `raster` (and the related `rasterVis` package, which implements `lattice`-type graphics) for handing raster data [[https://rspatial.org/raster/index.html]](https://rspatial.org/raster/index.html) (and which is accompanied by the `terra` package, which is "conceived as a replacement" for raster [[https://rspatial.org/terra/index.html]](https://rspatial.org/terra/index.html) )
+- `stars`, which considers *all* data to be both spatial and temporal, with those that aren't thought of as special cases, as opposed to typical [[https://r-spatial.github.io/stars/]](https://r-spatial.github.io/stars/) which is designed to handle spatiotemporal arrays or datacubes.
+
+The main place to go to get an overview of the kinds and capabilities of the spatial packages in R is the [Spatial Task Views on CRAN](http://cran.us.r-project.org/web/views/Spatial.html)
+
+# Maps in R -- example data and setup #
+
+The examples here use several libraries, datasets, and shapefiles that should be downloaded and/or installed, and read in before proceeding.  
+The easiest way to get most of these data files and shape-file components, is to download a copy of the workspace `geog495.RData` and "load" it, or read it in.  (Some of the larger files are not included.) Otherwise, all of them are available to download from the Datasets on the Other tab of the course web page.
+
+[[geog495.RData]](https://pjbartlein.github.io/GeogDataAnalysis/data/Rdata/geog495.RData)
+
+Right-click on the above link, and save it to your working folder.  (If you've forgotten where that is, type `getwd()` on the command line).  Then read it in to R
+
+```{r source, echo=FALSE}
+load(".RData")
+```
+
+## Shapefiles as spatial or simple-features objects ##
+
+The difference in the internal (to R) representation of spatial data (as exemplified by a shapefile) by the `sp` and `sf` packages can be seen by reading a typical shapefile (polygon outlines of western U.S. states) by both 
+
+Load some libraries:
+
+```{r LoadLibraries}
+library(sp)
+library(rgeos)
+library(rgdal)
+library(sf)
+```
+
+Note that the `sp` requires the `rgeos` and `rgdal` packages for manipulating and reading spatial data, while the `sf` package links to compiled versions of the `GEOS`, `GDAL`, and `PROJ5` libraries.
+
+
+```{r ll2}
+library(RColorBrewer)
+library(ggplot2)
+library(classInt)
+```
+
+Read the shapefile as an `sp` object.  (The `class()` function tells us what kind of object it is, and `head()` lists the first few lines as well as some information about the object.)
+
+Load a couple of other libraries that will be used here:
+
+```{r s1}
+# read a shapefile 
+shapefile <- "/Users/bartlein/Documents/geog495/data/shp/wus.shp"
+wus_sp <- readOGR(shapefile)
+```
+```{r s2}
+class(wus_sp)
+```
+```{r s3}
+head(wus_sp)
+```
+
+And now using the `st_read()` function in the `sf()` package:
+
+```{r s4}
+wus_sf <- st_read(shapefile)
+```
+```{r s5}
+class(wus_sf)
+```
+```{r s6}
+head(wus_sf)
+```
+
+It's easy to see that `sf` objects "store" data as regular R dataframes, while `sp` objects could be thought of as being "like" dataframes.  This difference has implications for working with the objects using other **R** functions.
+
+
+# Some simple maps #
+
+The following examples demonstrates the ability of **R** to make some simple  maps.
+
+## Oregon county census data -- attribute data in the `orcounty.shp` shape file ##
+
+Read an Oregon county data set as a shape file, with county outlines and some attribute data from the old 1990 U.S. Census.
+
+```{r s7}
+shapefile <- "/Users/bartlein/Documents/geog495/data/shp/orcounty.shp"
+orcounty_sf <- st_read(shapefile)
+names(orcounty_sf)
+```
+
+Plot the data, first including the attributes, and then just the outline or "geometry" of the shapefile:
+
+```{r s8}
+plot(orcounty_sf, max.plot=52) # plot the attributes
+plot(st_geometry(orcounty_sf), axes = TRUE)
+```
+
+The first plot is not very useful, but illustrates the contents of the file.
+
+Now make a map of the population in 1990 using equal-frequency class intervals.
+
+```{r map1_block1}
+# equal-frequency class intervals -- chunk 1
+plotvar = "POP1990"
+plotvals <- orcounty_sf$POP1990
+title <- "Population 1990"
+subtitle <- "Quantile (Equal-Frequency) Class Intervals"
+nclr <- 8
+plotclr <- brewer.pal(nclr,"BuPu")
+class <- classIntervals(plotvals, nclr, style="quantile")
+colcode <- findColours(class, plotclr)
+```
+
+This first chunk of code (above) just does some setting up, while this next chunk actually produces the map:
+
+```{r map1_block2}
+# chunk 2
+plot(orcounty_sf[plotvar], col=colcode, xlim=c(-124.5, -115), ylim=c(42,47))
+title(main=title, sub=subtitle)
+legend("bottomright", legend=names(attr(colcode, "table")),
+    fill=attr(colcode, "palette"), cex=1.0, bty="n")
+```
+
+Here's what's going on.  First, a temporary variable `plotvar` is created by copying the values of `orcounty.sh@data$POP1990` (from "attribute" data in the shape file).  Next the number of colors is set `nclr <- 8` and a set of appropriate colors is generated using the `brewer.pal()` function.  The `classIntervals()` function assigns the individual observations of `plotvar` to one of `nclr` equal-frequency class intervals, and then the `findColours()` function (note the Canadian/U.K. spelling) determines the color for each observation (each county).
+
+In the second block, the first use of the `plot()` function plots the shapefile within an appropriate range of latitudes and longitudes, while the second use plots colored polygons on top.  The rest of block 2 adds a title and legend.  It’s a little clunky, and the placement of labels are not great, but it’s quick.  
+
+Here's an equal-interval (size) class interval map:
+
+```{r s9}
+# equal-interval class intervals -- chunk 1
+plotvar = "POP1990"
+plotvals <- orcounty_sf$POP1990
+title <- "Population 1990"
+subtitle <- "Equal-size Class Intervals"
+nclr <- 8
+plotclr <- brewer.pal(nclr,"BuPu")
+class <- classIntervals(plotvals, nclr, style="equal")
+colcode <- findColours(class, plotclr)
+
+# chunk 2
+plot(orcounty_sf[plotvar], col=colcode, xlim=c(-124.5, -115), ylim=c(42,47))
+title(main=title, sub=subtitle)
+legend("bottomright", legend=names(attr(colcode, "table")),
+       fill=attr(colcode, "palette"), cex=1.0, bty="n")
+```
+
+A `ggplot2` version of the above, can be constructed as follows:
+
+```{r s10}
+pal <- brewer.pal(9, "Greens") #[3:6]
+ggplot()  +
+  geom_sf(data = orcounty_sf, aes(fill = POP1990)) +
+  scale_fill_gradientn(colors = pal) +
+  coord_sf() + theme_bw()
+```
+
+## Symbol plot:  Oregon climate station data ##
+
+Here’s a map of the Oregon climate station data with the data coming from the `orstationc.csv` file, and the basemap from `orotl.shp`
+
+```{r map2}
+# symbol plot -- equal-interval class intervals
+plotvals <- orstationc$tann
+title <- "Oregon Climate Station Data -- Annual Temperature"
+subtitle <- "Equal-Interval Class Intervals"
+nclr <- 8
+plotclr <- brewer.pal(nclr,"PuOr")
+plotclr <- plotclr[nclr:1] # reorder colors
+class <- classIntervals(plotvals, nclr, style="equal")
+colcode <- findColours(class, plotclr)
+
+plot(st_geometry(orcounty_sf), xlim=c(-124.5, -115), ylim=c(42,47))
+points(orstationc$lon, orstationc$lat, pch=16, col=colcode, cex=2)
+points(orstationc$lon, orstationc$lat, cex=2)
+title(main=title, sub=subtitle)
+legend(-117, 44, legend=names(attr(colcode, "table")),
+    fill=attr(colcode, "palette"), cex=1.0, bty="n")
+```
+
+## Oregon climate station data -- locations and data in shape file ##
+
+Here’s a third map with the Oregon climate station data locations and data coming from the shape file:
+
+```{r map3}
+# symbol plot -- equal-interval class intervals
+shapefile <- "/Users/bartlein/Documents/geog495/data/shp/orstations.shp"
+orstations_sf <- st_read(shapefile)
+plot(orstations_sf, max.plot=52) # plot the stations
+plot(st_geometry(orstations_sf), axes = TRUE)
+
+# symbol plot -- fixed-interval class intervals
+plotvals <- orstations_sf$pann
+title <- "Oregon Climate Station Data -- Annual Precipitation"
+subtitle <- "Fixed-Interval Class Intervals"
+nclr <- 5
+plotclr <- brewer.pal(nclr+1,"BuPu")[2:(nclr+1)]
+class <- classIntervals(plotvals, nclr, style="fixed",
+  fixedBreaks=c(0,200,500,1000,2000,9999))
+colcode <- findColours(class, plotclr)
+
+# block 2
+plot(st_geometry(orcounty_sf), xlim=c(-124.5, -115), ylim=c(42,47))
+points(orstations_sf$lon, orstations_sf$lat, pch=16, col=colcode, cex=2)
+points(orstations_sf$lon, orstations_sf$lat, cex=2)
+title(main=title, sub=subtitle)
+legend(-117, 44, legend=names(attr(colcode, "table")),
+  fill=attr(colcode, "palette"), cex=1.0, bty="n")
+```
+
+Notice how the expression `orstations_sf$pann` refers to a specific variable (`pann`), contained in the data attribute of the shape file.  Some other things:  This map uses fixed (ahead of making the map) class intervals (`fixedBreaks`) and the two `points()` function "calls": the first plots a colored dot (`col=colcode`), and the second then just plots a unfilled dot (in black) to put a nice line around each point to make the symbol more obvious.
+
+Here's a `ggplot2` version of a fixed class-interval map:
+
+```{r s12}
+cutpts <- c(0,200,500,1000,2000,9999)
+plot_factor <- factor(findInterval(orstations_sf$pann, cutpts))
+ggplot() +
+  geom_sf(data = orcounty_sf, fill=NA) +
+  geom_point(aes(orstations_sf$lon, orstations_sf$lat, color = plot_factor), size = 5.0, pch=16) +
+  scale_colour_manual(values=plotclr, aesthetics = "colour",
+                    labels = c("0 - 200", "200 - 500", "500 - 1000", "1000 - 2000", "> 2000"),
+                     name = "Ann. Precip.", drop=TRUE) +
+  labs(x = "Longitude", y = "Latitude") +
+  theme_bw()
+```
+
+## The bubble plot (on a map) ##
+
+We tend to be influenced more by the simple area of an object on the page or screen than by whatever is being plotted.  For example, for the 1990 county population, plotted as polygons with equal-width class intervals Multnomah county, the most populated one, despite being plotted in a dark color, gets kind of dominated by the larger, less populated counties that surround it.  The eastern Oregon counties, the least
+populated, occupy the greatest area on the map.  The solution is the bubble plot:
+
+```{r map7}
+# bubble plot equal-frequency class intervals
+orcounty_cntr <- (st_centroid(orcounty_sf))
+ggplot()  +
+  geom_sf(data = orcounty_sf) +
+  geom_sf(data = orcounty_cntr, aes(size = AREA), color="purple") + 
+  scale_size_area(max_size = 15) +
+  labs(x = "Longitude", y = "Latitude", title = "Area") +
+  theme_bw()
+```
+
+Here the size of each symbol is calculated using the county population using the code at the end of the first block, and then the symbol is plotted at the centroid of each county, which is located using the `st_centroid()` function.  Note that the symbol sizes could be made vary continuously.
+
+[[Back to top]](lec06.html)
+
+
+# An example -- Western U.S. precipitation ratios #
+
+The following example illustrates a fairly realistic task, producing a projected map of nicely scaled precipitaion-ratio (July vs. January) values for weather stations across the West.  Such precipitation ratios illustrate the seasonality (e.g. summer vs. winter) of precipitation, and cancel out the strong effect of elevation on precipitation amounts. (High-elevation stations in general have higher precipitation than low-elevations stations, and that effect would otherwise overprint the large-scale pattern of precipitation seasonality.)  The precipitation data are stored in a `.csv` file, and the example illustrates the creation of suitable base map, and the projection of both the base map and the precipitation data.
+
+## Base maps ##
+
+Here the base map will be extracted from the `maps` package data base.  (An alternative source might be the "Natural Earth" shapefiles, accessible through the `rnaturalearth` package.)  Begin by loading the `maps` package:
+
+```{r m1}
+library(maps)
+```
+
+The `map()` function extracts the outlines for, in this case the western U.S. states listed in the `regions` argument of the function.
+
+```{r m2}
+wus_map <- map("state", regions=c("washington", "oregon", "california", "idaho", "nevada",
+  "montana", "utah", "arizona", "wyoming", "colorado", "new mexico", "north dakota", "south dakota",
+  "nebraska", "kansas", "oklahoma", "texas"), plot = FALSE, fill = FALSE)
+```
+
+The `class()` function indicates the class of the data set, in this case "map" and the contents of the object can be listed using the `str()` function:
+
+```{r m3}
+class(wus_map)
+str(wus_map)
+```
+
+The "geometry" of the data can be seen by plotting it, as a scatter plot:
+
+```{r m4}
+plot(wus_map, pch=16, cex=0.5)
+```
+
+What we want, however is a base map of class `sf` (i.e. a simple-features object).  That can be done by wrapping the `map()` by the `st_as_sf()` function:
+
+```{r m5}
+wus_sf <- st_as_sf(map("state", regions=c("washington", "oregon", "california", "idaho", "nevada",
+    "montana", "utah", "arizona", "wyoming", "colorado", "new mexico", "north dakota", "south dakota",
+    "nebraska", "kansas", "oklahoma", "texas"), plot = FALSE, fill = TRUE))
+```    
+
+It can be verified that the class of `wus_sf` is indeed a simple feature `sf` as well as a standard dataframe, `data.frame`:
+
+```{r m6}
+class(wus_sf)
+```
+
+Plot `wus_sf`
+
+```{r m7}
+plot(wus_sf)
+```
+
+and just the geometry (i.e. outlines)
+
+```{r m8}
+plot(st_geometry(wus_sf))
+```
+
+The contents of the object can be listed using `head()`, which describes the object, and as in its usual application, lists the first few lines:
+
+```{r m9}
+head(wus_sf)
+```
+
+Here's a `ggplot2` map:
+
+```{r m10}
+ggplot() + geom_sf(data = wus_sf) + theme_bw()
+```
+
+Similar basemaps with the outlines of the U.S., Canada, and Mexico, and of the coterminous U.S. can also be extracted.
+
+```{r m11}
+na_sf <- st_as_sf(map("world", regions=c("usa", "canada", "mexico"), plot = FALSE, fill = TRUE))
+conus_sf <- st_as_sf(map("state", plot = FALSE, fill = TRUE))
+```
+
+Because `na_sf` and `conus_sf` are data.frames, they can be combined in the usual way, using `rbind()`:
+
+```{r m12}
+na2_sf <- rbind(na_sf, conus_sf)
+```
+
+Verify that the objects are indeed combined:
+
+```{r m13}
+head(na2_sf)
+```
+
+Plot the combined object:
+
+```{r m14}
+ggplot() + geom_sf(data = na2_sf) + theme_bw()
+```
+
+
+## Precipiation-ratio data ##
+
+The precipitation-ratio data can be read in the usual way:
+
+```{r m15}
+shapefile <- "/Users/bartlein/Documents/geog495/data/csv/wus_pratio.csv"
+wus_pratio <- read.csv(shapefile)
+names(wus_pratio)
+```
+
+Get the July-to-January precipitation ratio.  (The input values are all ratios themselves of the value for a particular month to the annual value. Dividing the July ratio by the January ratio cancles out annual precipitation, and gives us the ratio we want.)
+
+```{r m16}
+# get July to annual precipitation ratios
+wus_pratio$pjulpjan <- wus_pratio$pjulpann/wus_pratio$pjanpann  # pann values cancel out
+head(wus_pratio)
+```
+
+To produce a map with "nice" class-interval coloring of the symbols, we'll want to create a factor using the `findInterval()` function from the `classInt` package.  This is done by first specifiying the cutpoints (here a quasi-logrithmic scale appropriate for ratios), then appying the `findInterval()` function and the `factor()` function.
+
+```{r m17}
+# convert the (continous) preciptation ratio to a factor
+cutpts <- c(0.0, .100, .200, .500, .800, 1.0, 1.25, 2.0, 5.0, 10.0, 9999.0)
+pjulpjan_factor <- factor(findInterval(wus_pratio$pjulpjan, cutpts))
+head(cbind(wus_pratio$pjulpjan, pjulpjan_factor, cutpts[pjulpjan_factor]))
+```
+ 
+## Map the unprojected data ##
+
+Map the outlines, and overlay the point data:
+
+```{r m18}
+## ggplot2 map of pjulpjan
+ggplot() +
+  geom_sf(data = na2_sf, fill=NA, color="gray") +
+  geom_sf(data = wus_sf, fill=NA) +
+  geom_sf(data = wus_sf, fill=NA, color="black") +
+  geom_point(aes(wus_pratio$lon, wus_pratio$lat, color = pjulpjan_factor), size = 1.0 ) +
+  scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
+                     labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
+                                "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
+                     name = "Jul:Jan Ppt. Ratio") +
+  labs(x = "Longitude", y = "Latitude") +
+  coord_sf(crs = st_crs(wus_sf), xlim = c(-125, -90), ylim = c(25, 50)) +
+  theme_bw()
+```
+
+Note the build-up of the differnt layers on the map:  First, the combined (`na2_sf`) outlines of the U.S. Canada and Mexico and the coterminous U.S. states are plotted in gray, then the specific outlines of the western U.S. states are added in black (to emphasize the focus on the western U.S.), and finally the precipitation ratios are plotted as symbols on top.  The map clearly shows the spatial variations in precipitation seasonality:  winer wet along the west coast and intermountain West, and summer wet over the Great Plains, and eastern Rocky Mtns.  The interesting regions on the map are those where there is mixture or sharp contrast in precipitation seasonality.
+
+## A projected map ##
+
+The above map is ok, but by not being equal-area, it would not support well the task of estimating the relative areas of summer-wet and winter-wet precipitation regimes.  Projection, or spatial transformation is easily done with spatial features.  First, the `st_crs()` function is used to specify the coordinate reference system (CRS) for the desired projection (in this case a Labert equal-area projection, centered on 30 N and 110 W), then the `st_transform()` funtion does the projection.
+
+```{r m 19}
+# projection of wus_sf
+laea = st_crs("+proj=laea +lat_0=30 +lon_0=-110") # Lambert equal area
+wus_sf_proj = st_transform(wus_sf, laea)
+```
+
+Here is the projected `wus_sf` object, with a graticule overlaid:
+
+```{r m20}
+plot(st_geometry(wus_sf_proj), axes = TRUE)
+plot(st_geometry(st_graticule(wus_sf_proj)), axes = TRUE, add = TRUE)
+```
+
+Note that the coorinates of the map are now in metres.
+
+Here's a nicer map, with the graticule labelled:
+
+```{r m21}
+ggplot() + geom_sf(data = wus_sf_proj) + theme_bw()
+```
+
+Project the other outlines.
+
+```{r m22}
+# project the other outlines
+na_sf_proj = st_transform(na_sf, laea)
+conus_sf_proj = st_transform(conus_sf, laea)
+na2_sf_proj = st_transform(na2_sf, laea)
+```
+
+Now project the precipitation ratio data.  First, verify that the data currently are just a simple dataframe:
+
+```{r m23}
+class(wus_pratio)
+```
+
+We can convert it to an `sf` object using the `st_as_sf()` function, specifying the names of the variables that provide the coordinates of the points.
+
+```{r m24}
+wus_pratio_sf <- st_as_sf(wus_pratio, coords = c("lon", "lat"))
+```
+
+Verify that `wus_pratio_sf` is an `sf` object now.
+
+```{r m25}
+class(wus_pratio_sf)
+```
+
+Get as summary of the object:
+
+```{r m26}
+wus_pratio_sf
+```
+
+Note that the object has a new column, `geometry`. Note also that the object does not have a CRS.  (The attributes `epsg` and `proj4string` are `NA`.)  Set the CRS (knowing that the data are currently unprojected, i.e. the CRS is longtude and latitude.
+
+```{r m27}
+# set crs
+st_crs(wus_pratio_sf) <- st_crs("+proj=longlat")
+```
+
+Verify that the CRS has been set:
+
+```{r m28}
+st_crs(wus_pratio_sf)
+```
+
+Now project the point data:
+
+```{r m29}
+# projection of wus_pratio_sf
+laea = st_crs("+proj=laea +lat_0=30 +lon_0=-110") # Lambert equal area
+wus_pratio_sf_proj = st_transform(wus_pratio_sf, laea)
+```
+
+```{r m30}
+# plot the projected points
+plot(st_geometry(wus_pratio_sf_proj), pch=16, cex=0.5, axes = TRUE)
+plot(st_geometry(st_graticule(wus_pratio_sf_proj)), axes = TRUE, add = TRUE)
+```
+
+
+Map the projected data:
+
+```{r m31}
+# ggplot2 map of pjulpman projected
+ggplot() +
+  geom_sf(data = na2_sf_proj, fill=NA, color="gray") +
+  geom_sf(data = wus_sf_proj, fill=NA) +
+  geom_sf(data = wus_pratio_sf_proj, aes(color = pjulpjan_factor), size = 1.0 ) +
+  scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
+                     labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
+                                "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
+                     name = "Jul:Jan Ppt. Ratio") +
+                       labs(x = "Longitude", y = "Latitude") +
+  coord_sf(crs = st_crs(wus_sf_proj), xlim = c(-1400000, 1900000), ylim = c(-400000, 2150000)) +
+  theme_bw()
+```
+
+[[Back to top]](lec06.html)
+
+# Readings #
+
+In addtion to the web pages listed above, simple features and mapping are discussed in the following Bookdown eBooks:
+
+Lovelace, R., J. Nowosad, and J. Muenchow, 2019, *Geocomputation with R* [[https://bookdown.org/robinlovelace/geocompr/]](https://bookdown.org/robinlovelace/geocompr/)
+
+Pebesma, E. and R. Bivand, 2020, *Spatial Data Science* [[https://keen-swartz-3146c4.netlify.com]](https://keen-swartz-3146c4.netlify.com)
+
+Also worth looking chapter 3 in Bivand, R., et al. (2013) *Applied Spatial Data Analysis with R*, 2nd edition, which describes the `sp` package approach to mapping.  (Search for the eBook version on the UO Library page [[http://library.uoregon.edu]](http://library.uoregon.edu))  (The whole book is worth looking at, but Ch. 3 is the key reference for the display of spatial data (i.e. mapping) using the older `sp` package.)
+
+
+
+
+
+
+

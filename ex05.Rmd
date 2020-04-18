@@ -1,0 +1,197 @@
+---
+title: "Exercise 5"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: no
+    toc_float: false
+    collapsed: no
+    css: html-md-01.css
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+**Geography 4/595:  Geographic Data Analysis**  
+**Winter 2019**
+
+**Exercise 5: Some data wrangling and matrix algebra**  
+**Finish by Monday, February 18th**  
+
+**1. Introduction**
+
+The first aim of this exercise is to illustrate the idea of "data wrangling" or the reshaping or restructuring of input data into the "tidy" form (of a rectangular data set) with variables in columns and observations or cases in rows.  The second part of the exercise consists of a few examples that illustrate the features and application of matrix algebra.
+
+**2. Data and packages**
+
+A the concept of data wrangling, or the reshaping of non-rectangular data set into a rectangular one, can be illustrated using a small sample of monthly climate data for Eugene.  These data are not currently part of the `geog495.RData` workspace file (because they may be read in in different ways--as data frames or "tibbles"), but they can be downloaded here:
+
+- [EugeneClim-short.csv](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/EugeneClim-short.csv) -- Three years (2013-2015) of monthly climate data for Eugene;
+- [EugeneClim-short-alt-tvars.csv](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/EugeneClim-short-alt-tvars.csv) -- Temperature data for those three years in an alternative format that is not tidy (i.e. columns are months (or observations) and rows are variables); and
+- [EugeneClim-short-alt-pvars.csv](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/EugeneClim-short-alt-pvars.csv) -- Precipitation data, also in an alternative format.
+
+The full data set can be downloaded from here:  [EugeneClim.csv](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/EugeneClim.csv)
+
+(Download these to your current working directory, which can be found using `getwd()`.)
+
+Also install the `tidyverse` package, which in turn installs a number of individual packages that are used in reshaping data.
+
+```{r echo=TRUE, eval=FALSE}
+# install the "tidyverse" suite of packages
+install.packages("tidyverse")
+# library
+library(tidyverse)
+```
+
+Read in a typical "tidy" `.csv` file, that has variables in columns and observations in rows.    This can be done in the usual way using the `read.csv()` function, which creates a standard data frame, or, if the `reader` packages has been loaded by `library(tidyverse)`, using the `read_csv()` function, which creates a "tibble".  The data here are a "short" three-year-long subset of Eugene monthly climate data.
+
+```{r echo=TRUE, eval=FALSE}
+# read a .csv file using the `readr` package
+csv_file <- "/Users/bartlein/Projects/geog495/data/csv/EugeneClim-short.csv"
+eugclim <- read_csv(csv_file)
+eugclim
+```
+
+Produce a few plots to look at the time series of individual variables, and to look at the annual cycle of each.  The first use of `plot()` below plots the time series of monthly average temperature (`tavg`), while the second illustrates what the annual cycle looks like.
+
+```{r echo=TRUE, eval=FALSE}
+# time-series plot
+plot(eugclim$tavg ~ eugclim$yrmn, type="o", pch=16, xaxp=c(2013, 2016, 3))
+```
+```{r echo=TRUE, eval=FALSE}
+# by month
+plot(eugclim$mon, eugclim$tavg, pch=16, xaxp=c(1, 12, 1))
+```
+
+Repeat the plots for some other variables, in particular `prcp` (monthly total precipitation). 
+
+(See (see [https://pjbartlein.github.io/GeogDataAnalysis/lec08.html#variables](https://pjbartlein.github.io/GeogDataAnalysis/lec08.html#variables) for a listing of variables)
+
+> Q1.  Describe the annual cycles of the temperature and moisture-related variables.  When during the year is it colder and when is it warmer, and when is it wetter and when is it drier?
+
+**3. Transforming (reshaping) an alternatively shaped table of data**
+
+An alternative layout for the data table (of just the precipitation-related variables) has the data arranged with variables in rows and months in columns.  Read those data in:
+
+```{r echo=TRUE, eval=FALSE}
+# alternative layout of precipitation data
+csv_file <- "/Users/bartlein/Projects/geog495/data/csv/EugeneClim-short-alt-pvars.csv"
+eugclim_alt <- read_csv(csv_file)
+eugclim_alt
+```
+
+> Q2 Describe the different form of the two tables (`eugclim` and `eugclim_alt`).  Can you think of a way to produce a time-series plot of precipitation using the data in `eugclim_alt`?  (If so, show the code for doing that, and if not, why not?)
+
+Now use the `gather()` and `spread()` functions from the `tidyr` package to reshape the data.  This is done here in two steps: 
+
+```{r echo=TRUE, eval=FALSE}
+# reshape by gathering and spreading
+# 1) gather
+eugclim_alt2 <- gather(eugclim_alt, `1`:`12`, key="month", value="cases")
+eugclim_alt2$month <- as.integer(eugclim_alt2$month)
+eugclim_alt2
+```
+```{r echo=TRUE, eval=FALSE}
+# 2) spread
+eugclim_alt3 <- spread(eugclim_alt2, key="param", value=cases)
+eugclim_alt3
+```
+
+Plot the reshaped data (`eugclim_alt3`) to verify that they indeed have been reshaped correctly.
+
+```{r echo=TRUE, eval=FALSE}
+# plot the reshaped data
+eugclim_alt3$yrmn <- eugclim_alt3$year + (as.integer(eugclim_alt3$month)-1)/12
+plot(eugclim_alt3$prcp ~ eugclim_alt3$yrmn, type="o", pch=16, col="blue", xaxp=c(2013, 2016, 3))
+```
+
+> Q3:  Compare `eugclim_alt2` and `eugclim_alt3`.  What did the application of `gather()` do in creating `eugclim_alt2`, and what did the application of `spread()` do in creating `eugclim_alt3`?
+
+> Q4:  What is the benefit of reshaping the data in **R** as opposed to simply doing that in Excel or a text editor?
+
+
+**4.  A little matrix algebra**
+
+Create three matrices, **A**, **B**, and **C**:
+
+```{r echo=TRUE, eval=FALSE}
+# create three matrices
+# default fill method: byrow = FALSE
+A <- matrix(c(6, 9, 12, 13, 21, 5), nrow=3, ncol=2)
+A
+```
+```{r echo=TRUE, eval=FALSE}
+# same elements, but byrow = TRUE
+B <-  matrix(c(6, 9, 12, 13, 21, 5), nrow=3, ncol=2, byrow=TRUE)
+B
+```
+```{r echo=TRUE, eval=FALSE}
+# a third matrix
+C <- matrix(c(1,2,3,4,5,6,7,8,9), nrow=3, ncol=3)
+C
+```
+
+>Q5 Describe the shapes of the three matrices.  (Note that the `dim()` function applied to a matrix (e.g. `dim(A)`) displays the number of rows and the number of columns in the matrix.)
+
+*Matrix addition*
+
+Add **A** and **B**:
+
+```{r echo=TRUE, eval=FALSE}
+# matrix addition
+F <- A + B
+F
+```
+
+Now try adding **A** and **C**:
+
+```{r echo=TRUE, eval=FALSE}
+G <- A + C
+```
+
+> Q6:  What happend?  Can **A** and **C** be added?  Why not?  (Again, the `dim()` function might be useful.)
+
+*Matrix multiplication*
+
+Matrix multiplication (as distinct from element-by-element multiplication) produces a new matrix whose elements are sums of squares and cross products of the elements of matrices being multiplied 
+(see [matrix.pdf](https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.pdf)).  Matrix multiplication uses `%*%` as the operator. 
+
+"Postmultiply" the matrix **C** by **A**:
+
+```{r echo=TRUE, eval=FALSE}
+# matrix multiplication
+Q <- C %*% A
+Q
+```
+
+... and try to postmultiply **A** by **B** (e.g. `T <- A %*% B`) 
+
+>Q7:  What happens here?  What are the dimensions of **C**?  What does the message `non-conformable arguments` imply about the shapes of **A** and **B**?
+
+*Matrix inversion*
+
+To illustrate matrix inversion (i.e. the matrix algebra version of scalar division), a realistic matrix can be used, in this case the correlation matrix of the temperature variables in the `orstationc` data set:
+
+```{r echo=TRUE, eval=FALSE}
+# a realistic matrix, orstationc temperature-variable correlation matrix
+R <- cor(cbind(orstationc$tjan, orstationc$tjul, orstationc$tann))
+R
+```
+
+Get the inverse of **R**:
+
+```{r echo=TRUE, eval=FALSE}
+# matrix inversion
+Rinv <- solve(R)
+Rinv
+```
+
+One property of the inverse matrix is that when pre- or postmultiplied by the original matrix, the identity matrix, **I** should be produced.
+
+> Q8:  Check to see if `Rinv` is indeed the inverse of `R`.  (Show the results of the check.) 
+

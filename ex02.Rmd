@@ -1,0 +1,239 @@
+---
+title: "Exercise 2"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: no
+    toc_float: false
+    collapsed: no
+    css: html-md-01.css
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
+**Geography 4/595:  Geographic Data Analysis**  
+**Spring 2020**
+
+**Exercise 2: Univariate Plots**  
+**Finish by Friday, April 10**  
+
+The objective of this exercise is to demonstrate some of the basic univariate plots for displaying data.  This exercise will not involve much manipulation of R code; the individual “commands” (text in this font) can be easily copied and pasted into the R Console window.
+
+**Read through the exercise before attempting to complete it.**
+
+**1. Univariate scatter plot (scatter diagrams) --** `plot()` **version**
+
+The univariate "scatter diagram" is a very simple plot of the values of a variable, plotted vs the observation number, or row number in a rectangular data set (labeled "Index" on the plot).  (Ordinary scatter diagrams or scatterplots will be described later.)  As it happens, in this data set the observations are arranged in downstream order, so there actually is some meaning to the observation number.  That won't always be the case, however.  
+
+Start RStudio.
+
+Check to see if the "`sumcr`" data set ("data frame") is still in your workspace using the `ls()` or "list" function:  
+
+```{r echo=TRUE, eval=FALSE}
+# list files
+ls()  
+```
+
+(Note that lines beginning with `#` are comments.)
+
+If the `sumcr` data set is not in the workspace, read it into the `/data` folder your working directory again as in Exercise 1 (here's a link [[sumcr.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sumcr.csv)).  You can find the working directory after starting R bytyping
+
+```{r echo=TRUE, eval=FALSE}
+# get the working directory
+getwd()
+```
+
+Here are the example `/data` folders working directories from the first exercise:
+
+- Mac:  `/Users/bartlein/Projects/geog495/data/`
+- Windows: `C:/Users/userid/Documents/geog495/data/`
+- VM (Window Virtual Machine): `R:/geog495_1/Student_Data/userid/data/` (where, as always, `userid` is replaced by your userid).
+
+You can quickly change the working directory as follows:  
+
+- RStudio:  `Session > Set Working Directory > Choose Directory...` then browse to the folder.
+
+Next, to make it easy to refer to individual variables (by their simple names (e.g. `WidthWS`) as opposed to their full or compound names ("`sumcr$WidthWS`", i.e. `dataframe$variable`), use the `attach()` function:
+
+```{r echo=TRUE, eval=FALSE}
+# attach the sumcr dataframe
+attach(sumcr)
+```
+
+To create a univariate scatter diagram for the variable "`Length`", type
+
+```{r echo=TRUE, eval=FALSE}
+# "index plot"
+plot(Length)
+```
+
+> Q1: What is the typical length of a hydrologic unit along Summit Cr.? What is the shortest, and what is the longest? What is the range of hydrologic unit lengths (difference between the smallest and largest)? (Just "eyeball" the graph to get these answers.)
+
+Note that there is no information lost in this display.  The original values of the variables, and even the order of the observations, could be reconstructed using a ruler.  
+
+It's sometimes helpful to be able to return to previously generated plots.  The obvious way to do that is to just reissue the commands again, but the individual plots can also be saved.  Using Windows, after creating a plot, make sure the RGraphics window is active (by clicking on it), and then use the RGui History > Recording menu to turn recording on.  On the Mac, the Quartz window has history turned on by default.  Subsequent plots will then be added, and can be viewed again by using the PgUp and PgDn keys on Windows, or Command-left arrow on the Mac, when the RGraphics window is active.
+
+**2.  Univariate scatter Diagram --** `stripchart()` **version**
+
+(This plot is also known as a "strip plot" or "dot plot".)  Type the following
+
+```{r echo=TRUE, eval=FALSE}
+# stripchart
+stripchart(Length) 
+```
+	
+Here's an alternative version with the points with identical values "stacked":
+
+```{r echo=TRUE, eval=FALSE}
+# stacked stripchart
+stripchart(Length, method="stack")
+```
+
+> Q2:  Describe what this plot looks like, in comparison with the first one for length.  Has any information been lost?  Is there any particular pattern to the points in this plot?  Was that pattern also evident on the first plot?
+
+The two plots each have one point for each observation, and each point is plotted using the particular value of Length, but each gives a slightly different view of the data.  That's actually a desirable situation because one view may allow you to see a pattern that is not evident in the other view.  
+
+**3.  Dotplots (**`dotcharts`**)**
+
+Another way to examine a single variable and gain some insight into its variations across the observations in a data is through Cleveland's dotplots (called "`dotchart`" in R).  In the simple version here, the plot again shows individual observations.  By default, the observations are arranged in the row-order of the data frame (i.e. first observation on the bottom of the plot, last on the top).  Try
+
+```{r echo=TRUE, eval=FALSE}
+dotchart(WidthWS)
+```
+
+Here's an alternative, this time with each line labeled by the Location variable
+
+```{r echo=TRUE, eval=FALSE}
+"Clevland" dot plot/chart
+dotchart(WidthWS, labels=as.character(Location), cex=0.5)
+```
+
+The `as.character()` function converts the Location variable back to a character string (it was read in as a factor by the `read.csv(`) function.  The `cex=0.5` parameter makes the characters smaller for legibility.
+
+Here's a version in which the observations are sorted by the values of `WidthWS`.  The creation of an index using the order() function is used to rearrange the the values of `WidthWS` and the corresponding values of the Location character-string label:
+
+```{r echo=TRUE, eval=FALSE}
+# stacked dotplot
+index <- order(WidthWS)
+dotchart(WidthWS[index], labels=as.character(Location[index]), cex=0.5)
+```
+
+**4.  Boxplots**  
+
+A *boxplot* contains a object (a box) and some decorations (lines, etc.) that are drawn to illustrate certain aspects of a variable.  The box is drawn in such a way that the box itself encloses half of the data points.  The top edge of the box is drawn so that 1/4 of the observations have values greater than that value, the bottom edge is drawn so that 1/4 of the observations have values that are less than that value, and the line in the middle of the box is drawn so that half of the observations have values greater than its value and half have values less than its value (i.e., at the median).  The other parts of the box plot will be discussed in class.  Try
+
+```{r echo=TRUE, eval=FALSE}
+# boxplot
+boxplot(Length)
+```
+
+(the "whiskers", by default, extend to 1.5 times the interquartile range).  Here's an alternative version where the "whiskers" of the plot extend to the extremes of the data:
+
+```{r echo=TRUE, eval=FALSE}
+# boxplot, different whiskers
+boxplot(Length, range=0)
+```
+	
+>Q3: What does the boxplot look like?  Compare it to the univariate scatter diagram and strip plot for Length.  Does the boxplot provide more information, less information, or different information than the other plots?
+
+At this point we're done with the Summit Cr. data set, and so it's a good practice to "`detach`" using the `detach()` function.  This removes the shorthand way of referring to the variables in that data frame, which will avoid possible collisions with the variables in another data frame that might be read in that could have variables with the same names as those in the Summit Cr. data frame--a data frame from another study site for example.  `detach()` doesn't remove the data frame from the workspace, which you can verify using the `ls()` function.  To detach the `sumcr` data frame, type 
+
+```{r echo=TRUE, eval=FALSE}
+# detach sumcr dataframe
+detach(sumcr)
+```
+
+**5.  Histograms** 
+
+A *histogram* essentially is a bar chart of a frequency table, where the heights of the bars reflect the relative (or absolute) proportion of observations that fall within particular class intervals of the variable of interest.  The s!hape of the histogram reveals the distribution of the individual observations. 
+
+Open Alec Murphy's Scandinavian EU voter-preference data.  The data include the name of the commune (or county) (`District`), the percentage of Yes votes (`Yes`), the population of each commune (`Pop`), and a country code (`Country`).  Here's a link to the .csv file:  [[scanvote.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/scanvote.csv).  Download it and save it in your working directory.
+
+The command to read the .csv file is a little different than was used for reading the Summit Cr. data:
+
+```{r echo=TRUE, eval=FALSE}
+# read the scanvote data set
+scanvote <- read.csv("scanvote.csv", as.is=1)
+```
+
+The `as.is=1` parameter prevents R from turning the commune name (`District`) in column 1 into a "factor" (like `Country`), leaving it as a text label.
+
+Here's the alternative approach using `file.choose()`
+
+```{r echo=TRUE, eval=FALSE}
+# alternativd read
+scanvote <- read.csv(file.choose(), as.is=1)
+```
+
+The nature of the individual variables in a data frame, i.e., whether they are continuous numeric variables “factors” that indicate group membership, or character-string labels can be seen using the `str()` function, which shows the “structure” of the data frame, and also prints out a little data:
+
+```{r echo=TRUE, eval=FALSE}
+# look at the structure of the scanvote data
+str(scanvote)
+```
+
+The listing produced should indicate that the District variable is a character string (chr), Yes and Pop are numerical variables, and Country is a factor.
+
+Attach the data frame by typing `attach(scanvote)`:
+
+```{r echo=TRUE, eval=FALSE}
+# attach the scanvote dataframe
+attach(scanvote)
+```
+
+Now, get histograms for the variable "Yes" (the proportion of voters in each commune (county) expressing a positive preference for joining the EU.  To get a basic histogram, type
+
+```{r echo=TRUE, eval=FALSE}
+# histogram
+hist(Yes)
+```
+
+>Q4:  Describe the distribution of Yes.  What range of values occur the most frequently?  What is the overall range of Yes values in the data set (looking at the figure)?  
+
+>Q5:  Produce a stripchart of the Yes votes using the `stripchart()` function described above.  How well does each plot type describe the distribution of the Yes values.  (You don't really have to answer this--it's easy to see but hard to say, but give it a shot.)
+
+Experiment with the number of bars in the histogram:  Type the following:
+
+```{r echo=TRUE, eval=FALSE}
+# histogram, specific number of breaks
+hist(Yes, breaks=20)
+```
+
+>Q6:  Describe what the histogram looks like now.  How does the shape of the histogram change as the number of bars increases?  What does it look like if `breaks=40`?
+
+**6.  Density Plots**
+
+Evidently, the shape of the histogram (and consequently what it may imply about the distribution of the data) can vary considerably depending on the bin widths that are used to summarize the data or the number of bars (bins) used.  An alternative plot type is the "kernel density smoother plot"   This plot is produced by first using the `density()` function to estimate the number of data points in the vicinity of different values of the Yes percents, and then plotting these.  To produce the plot, type the following two lines at the command prompt:
+
+```{r echo=TRUE, eval=FALSE}
+# density plot
+Yes.density <- density(Yes)
+plot(Yes.density)
+```
+
+>Q7:  Describe the different views that the histogram and density lines give of the data.  Which view seems less dependent on the particular way the plot is generated?  Which view loses the least information about the individual values of the variable?
+
+**7.  A composite plot**
+
+The views of the data provided by the different plotting methods vary quite a bit.  Some retain a lot of information, but may be hard to interpret (particularly if there are a lot of data), while others are very simple appearing, but lose information.  One strategy for dealing with this is to produce a plot that superimposes several different plots.  Type the following, one line at a time:
+
+```{r echo=TRUE, eval=FALSE}
+# composite plot
+Yes.density <- density(Yes)
+hist(Yes, breaks=20, probability=TRUE)
+lines(Yes.density)
+rug(Yes)
+```
+
+>Q8:  What does the resulting plot contain?  What does the `rug()` function apparently do?  Does this plot offer any advantages over the individual plots, or is too cluttered?
+
+**8. What to hand in**
+
+Answers to the eight questions. Do not go overboard—all of them should fit on a single typed page.
+

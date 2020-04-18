@@ -1,0 +1,97 @@
+name: GEOG 4/595
+navbar:
+  title: Geographic Data Analysis
+  left:
+  - text: Overview
+    href: overview.html
+  - text: Topics
+    menu:
+    - text: Lecture topics
+    - text: Introduction to the course
+      href: lec01.html
+    - text: Univariate plots
+      href: lec02.html
+    - text: Bivariate plots
+      href: lec03.html
+    - text: Descriptive statistics
+      href: lec04.html
+    - text: Multivariate plots
+      href: lec05.html    
+    - text: ggplot2 versions of basic plots
+      href: ggplot2.html
+    - text: Maps in R
+      href: lec06.html
+    - text: Geospatial analysis in R
+      href: lec07.html
+    - text: Data wrangling and matrix algebra
+      href: lec08.html
+    - text: Reference distributions
+      href: lec09.html
+    - text: Statistical inference
+      href: lec10.html
+    - text: Analysis of variance
+      href: lec11.html
+    - text: Regression analysis
+      href: lec12.html
+    - text: More regression analysis
+      href: lec13.html
+    - text: Nonparametric regression
+      href: lec14.html
+    - text: GLMs, GAMs, and CARTs
+      href: lec15.html
+    - text: Principal components and factor analyses
+      href: lec16.html
+    - text: MANOVA and discriminant analysis
+      href: lec17.html
+    - text: Multivariate distances and cluster analysis
+      href: lec18.html
+    - text: High-resolution and high-dimension data
+      href: lec19.html
+    - text: Analysis and visualization of large raster data sets
+      href: lec20.html
+  - text: Exercises
+    menu:
+    - text: Exercises
+    - text: Exercise 01 -- Getting R and RStudio
+      href: ex01.html
+    - text: Exercise 02 -- Univariate plots
+      href: ex02.html
+    - text: Exercise 03 -- Bivariate plots and descriptive statistics
+      href: ex03.html
+    - text: Exercise 04 -- Multivariate plots
+      href: ex04.html
+    - text: Exercise 05 -- Data wrangling and matrix algebra
+      href: ex05.html
+    - text: Exercise 06 -- CI's, t-tests, ANOVA
+      href: ex06.html
+    - text: Exercise 07 -- Regression analysis
+      href: ex07.html
+    - text: Exercise 08 -- Multivariate analysis
+      href: ex08.html
+  - text: Other
+    menu:
+    - text: Packages and data
+      href: packages-and-data.html
+    - text: Virtual machine instructions
+      href: vm_inst.html
+    - text: Readings
+      href: readings.html
+    - text: Datasets
+      href: datasets.html
+  right:
+  - text: About
+    href: about.html
+output:
+  html_document:
+    theme: cosmo
+    highlight: haddock
+    css: SI-md-08.css
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: no
+    collapsed: no
+    lib_dir: site_libs
+    self_contained: no
+output_dir: docs
+

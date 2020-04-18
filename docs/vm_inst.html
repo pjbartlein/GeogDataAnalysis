@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Virtual Machine Instructions</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="SI-md-08.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Geographic Data Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="lec01.html">Introduction to the course</a>
+    </li>
+    <li>
+      <a href="lec02.html">Univariate plots</a>
+    </li>
+    <li>
+      <a href="lec03.html">Bivariate plots</a>
+    </li>
+    <li>
+      <a href="lec04.html">Descriptive statistics</a>
+    </li>
+    <li>
+      <a href="lec05.html">Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ggplot2.html">ggplot2 versions of basic plots</a>
+    </li>
+    <li>
+      <a href="lec06.html">Maps in R</a>
+    </li>
+    <li>
+      <a href="lec07.html">Geospatial analysis in R</a>
+    </li>
+    <li>
+      <a href="lec08.html">Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="lec09.html">Reference distributions</a>
+    </li>
+    <li>
+      <a href="lec10.html">Statistical inference</a>
+    </li>
+    <li>
+      <a href="lec11.html">Analysis of variance</a>
+    </li>
+    <li>
+      <a href="lec12.html">Regression analysis</a>
+    </li>
+    <li>
+      <a href="lec13.html">More regression analysis</a>
+    </li>
+    <li>
+      <a href="lec14.html">Nonparametric regression</a>
+    </li>
+    <li>
+      <a href="lec15.html">GLMs, GAMs, and CARTs</a>
+    </li>
+    <li>
+      <a href="lec16.html">Principal components and factor analyses</a>
+    </li>
+    <li>
+      <a href="lec17.html">MANOVA and discriminant analysis</a>
+    </li>
+    <li>
+      <a href="lec18.html">Multivariate distances and cluster analysis</a>
+    </li>
+    <li>
+      <a href="lec19.html">High-resolution and high-dimension data</a>
+    </li>
+    <li>
+      <a href="lec20.html">Analysis and visualization of large raster data sets</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Exercises</li>
+    <li>
+      <a href="ex01.html">Exercise 01 -- Getting R and RStudio</a>
+    </li>
+    <li>
+      <a href="ex02.html">Exercise 02 -- Univariate plots</a>
+    </li>
+    <li>
+      <a href="ex03.html">Exercise 03 -- Bivariate plots and descriptive statistics</a>
+    </li>
+    <li>
+      <a href="ex04.html">Exercise 04 -- Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ex05.html">Exercise 05 -- Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="ex06.html">Exercise 06 -- CI's, t-tests, ANOVA</a>
+    </li>
+    <li>
+      <a href="ex07.html">Exercise 07 -- Regression analysis</a>
+    </li>
+    <li>
+      <a href="ex08.html">Exercise 08 -- Multivariate analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="packages-and-data.html">Packages and data</a>
+    </li>
+    <li>
+      <a href="vm_inst.html">Virtual machine instructions</a>
+    </li>
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="datasets.html">Datasets</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Virtual Machine Instructions</h1>
+
+</div>
+
+
+<p>One option for running R and RStudio is to use a “Virtual Machine” VM, hosted by UO IT and CASIT. A virtual machine runs a server, and is accessed (in this case) through a web browser. The VMs that have been “provisioned” for us run R and RStudio only a little more slowly than a “local” machine, and could provide a workaround if your access to a newish computer is limited. The instructions here cover the initial setup that needs to be done in order to insure that your workspace and data are saved between sessions.</p>
+<p><strong>Setting up the virtual machine</strong></p>
+<p><em>Logon/start the VM</em></p>
+<p>To start:</p>
+<ul>
+<li>Open Firefox, and click on this URL: <a href="https://view.uoregon.edu/">https://view.uoregon.edu/</a></li>
+<li>Login using your UO userid (the part of your email address in front of the @ sign) and password;</li>
+<li>Click (or double-click) on the <code>UO Virtual Computer Lab</code> icon;</li>
+<li>respond <code>Yes</code> to the cut-and-paste option.</li>
+</ul>
+<p>A standard Windows 10 boot-up screen should appear. It takes a little while for the virtual machine to start up. Give everything a little more time after clicking on something than you would expect on a laptop or lab machine.</p>
+<p><em>Start RStudio</em></p>
+<p>To start RStudio,</p>
+<ul>
+<li>click on the Windows Start button, and</li>
+<li>type “RStudio” (without the quotes); then</li>
+<li>click on the <code>RStudio Desktop app</code> bar</li>
+</ul>
+<p>RStudio will start in a few seconds (wait). Then (<strong>this is important</strong>), in the <code>Console</code> window of RStudio, type the following, replacing “userid” with your login/user id:</p>
+<pre><code> setwd(&quot;R:/geog495_1/Student_Data/userid/&quot;) 
+ .libPaths(&quot;R:/geog495_1/Class_Data/win-library/3.6&quot;)</code></pre>
+<p>Note the forward slashes in the paths (the backward slash in R is an escape character), and make sure the cases (upper or lower) of the characters are strictly followed. The first command sets the “working directroy” (where R saves data and plots) to the <code>Class_Data</code> folder, while the second indicates where downloaded packages should be installed. (The default locations for these are volitile, and disappear when logging off.)</p>
+<p>The <code>Files</code> pane (usually in the lower right of RStudio) can be pointed at the working directory by clicking on the <code>More</code> dropdown, and clicking on <code>Go To Working Directory</code></p>
+<p><strong>Test the VM</strong></p>
+<p><em>Create some data and a plot</em></p>
+<p>Create a simple data set and a plot. First, create an R script,</p>
+<ul>
+<li>click on <code>File</code>, then <code>New File</code> and <code>R Script</code></li>
+</ul>
+<p>A new file named <code>Untitled</code> will be created. Save that file by clicking on the disk icon, or by</p>
+<ul>
+<li>clicking on <code>File</code>, then <code>Save As</code> and</li>
+<li>enter <code>test01</code> in the <code>File name:</code> area of the <code>Save File</code> dialog box.</li>
+</ul>
+<p>As the file is saved, it will automatically be given the extension <code>.R</code>.</p>
+<p>Next, copy or type the following into the <code>test01.R</code> script window.</p>
+<pre><code>x &lt;- rnorm(1000)
+plot(x)</code></pre>
+<p>Save the file again.</p>
+<p>Now run the script by selecting the code, and clicking on the <code>Run</code> button (to run both lines at once) or by placing the cursor in the first line and clicking <code>Run</code>, and then clicking <code>Run</code> again as the cursor moves to the second line.</p>
+<p>Save the plot as a .pdf</p>
+<ul>
+<li>click on <code>Export</code> and then <code>Save as PDF...</code>;</li>
+<li>in the <code>Save Plot as PDF</code> dialog box, the <code>Directory</code> should be <code>R:/geog495_1/Student_Data/userid</code>, where “userid” is again your userid. if the path is not correct, the <code>Directory</code> button can be used to browse to it;</li>
+<li>click <code>Save</code></li>
+</ul>
+<p><em>Close RStudio</em></p>
+<p>To quit RStudio,</p>
+<ul>
+<li>click on <code>File</code>, <code>Quit R Session</code>.</li>
+</ul>
+<p>A <code>Quit R Session</code> dialog box will pop up, asking if you wish to save the <code>Worspace image (.RData)</code>, and the script file <code>test01.R</code>.</p>
+<ul>
+<li>click on the <code>Save Selected</code>.</li>
+</ul>
+<p><em>Log off the virtual machine</em></p>
+<p>To log off the virtual machine, use the gray tab at the left of the browser window, and click on the menu button of the <code>Running</code> virtual machine, and click on <code>Logoff</code>. Close the brower to completely disconnect.</p>
+<p><em>Log in, run RStudio, and check that the data have been saved</em></p>
+<p>Start the virtual machine again, and RStudio as above. Copy and paste or type the following where as usual, userid is replace by your userid.</p>
+<pre><code> setwd(&quot;R:/geog495_1/Student_Data/userid/&quot;) 
+ .libPaths(&quot;R:/geog495_1/Class_Data/win-library/3.6&quot;)</code></pre>
+<p>Use <code>Files</code> and <code>More</code> to set the view of the <code>Files</code> pane to the working directory, and you should see the plot file, <code>.Rdata</code> workspace, and the script file, and the variable <code>x</code> should appear in the <code>Environment</code> tab.</p>
+<p><strong>An alternative way to start RStudio</strong></p>
+<p>Once you have files in your “R” folder (<code>R:/geog495_1/Student_Data/userid/</code>) you can start RStudio simply by clicking on a script file (<code>*.R</code>) or the R workspace file (<code>.RData</code>). A useful thing to do would be to create a script called, e.g. <code>startup.R</code>, and copy into it the setup code:</p>
+<pre><code> setwd(&quot;R:/geog495_1/Student_Data/userid/&quot;) 
+ .libPaths(&quot;R:/geog495_1/Class_Data/win-library/3.6&quot;)</code></pre>
+<p>(replacing <code>userid</code> with your user id). Once that file is created and saved, simply clicking on it will start RStudio, and open that script file. Then the first thing to do is to select the two lines, and run the script. (Note that simply opening the script in RStudio doesn’t execute the lines.)</p>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

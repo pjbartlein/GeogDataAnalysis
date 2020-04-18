@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Bivariate Plots</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="SI-md-08.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Geographic Data Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="lec01.html">Introduction to the course</a>
+    </li>
+    <li>
+      <a href="lec02.html">Univariate plots</a>
+    </li>
+    <li>
+      <a href="lec03.html">Bivariate plots</a>
+    </li>
+    <li>
+      <a href="lec04.html">Descriptive statistics</a>
+    </li>
+    <li>
+      <a href="lec05.html">Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ggplot2.html">ggplot2 versions of basic plots</a>
+    </li>
+    <li>
+      <a href="lec06.html">Maps in R</a>
+    </li>
+    <li>
+      <a href="lec07.html">Geospatial analysis in R</a>
+    </li>
+    <li>
+      <a href="lec08.html">Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="lec09.html">Reference distributions</a>
+    </li>
+    <li>
+      <a href="lec10.html">Statistical inference</a>
+    </li>
+    <li>
+      <a href="lec11.html">Analysis of variance</a>
+    </li>
+    <li>
+      <a href="lec12.html">Regression analysis</a>
+    </li>
+    <li>
+      <a href="lec13.html">More regression analysis</a>
+    </li>
+    <li>
+      <a href="lec14.html">Nonparametric regression</a>
+    </li>
+    <li>
+      <a href="lec15.html">GLMs, GAMs, and CARTs</a>
+    </li>
+    <li>
+      <a href="lec16.html">Principal components and factor analyses</a>
+    </li>
+    <li>
+      <a href="lec17.html">MANOVA and discriminant analysis</a>
+    </li>
+    <li>
+      <a href="lec18.html">Multivariate distances and cluster analysis</a>
+    </li>
+    <li>
+      <a href="lec19.html">High-resolution and high-dimension data</a>
+    </li>
+    <li>
+      <a href="lec20.html">Analysis and visualization of large raster data sets</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Exercises</li>
+    <li>
+      <a href="ex01.html">Exercise 01 -- Getting R and RStudio</a>
+    </li>
+    <li>
+      <a href="ex02.html">Exercise 02 -- Univariate plots</a>
+    </li>
+    <li>
+      <a href="ex03.html">Exercise 03 -- Bivariate plots and descriptive statistics</a>
+    </li>
+    <li>
+      <a href="ex04.html">Exercise 04 -- Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ex05.html">Exercise 05 -- Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="ex06.html">Exercise 06 -- CI's, t-tests, ANOVA</a>
+    </li>
+    <li>
+      <a href="ex07.html">Exercise 07 -- Regression analysis</a>
+    </li>
+    <li>
+      <a href="ex08.html">Exercise 08 -- Multivariate analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="packages-and-data.html">Packages and data</a>
+    </li>
+    <li>
+      <a href="vm_inst.html">Virtual machine instructions</a>
+    </li>
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="datasets.html">Datasets</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Bivariate Plots</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#basic-scatter-plots"><span class="toc-section-number">2</span> Basic scatter plots</a><ul>
+<li><a href="#scatter-diagramscatterplot"><span class="toc-section-number">2.1</span> Scatter diagram/Scatterplot</a><ul>
+<li><a href="#axis-scaling"><span class="toc-section-number">2.1.1</span> Axis scaling</a></li>
+<li><a href="#multiple-plots-with-different-y-axes"><span class="toc-section-number">2.1.2</span> Multiple plots with different y-axes</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#line-plots"><span class="toc-section-number">3</span> Line Plots</a><ul>
+<li><a href="#standard-line-plots"><span class="toc-section-number">3.1</span> Standard line Plots</a></li>
+</ul></li>
+<li><a href="#labeled-plots-enhancing-information-on-bivariate-plots"><span class="toc-section-number">4</span> Labeled plots – enhancing information on bivariate plots</a><ul>
+<li><a href="#symbol-variations"><span class="toc-section-number">4.1</span> Symbol variations</a></li>
+<li><a href="#jittering-points"><span class="toc-section-number">4.2</span> Jittering points</a></li>
+</ul></li>
+<li><a href="#summarizing-scatter-plots"><span class="toc-section-number">5</span> Summarizing scatter plots</a><ul>
+<li><a href="#slicing-scatter-diagrams"><span class="toc-section-number">5.1</span> Slicing scatter diagrams</a></li>
+<li><a href="#smoothing-a-scatter-diagram"><span class="toc-section-number">5.2</span> Smoothing a scatter diagram</a></li>
+</ul></li>
+<li><a href="#annotating-plots"><span class="toc-section-number">6</span> Annotating plots</a><ul>
+<li><a href="#identify-function"><span class="toc-section-number">6.1</span> Identify function</a></li>
+</ul></li>
+<li><a href="#scatter-plot-matrices"><span class="toc-section-number">7</span> Scatter plot matrices</a><ul>
+<li><a href="#scatter-plot-matrix"><span class="toc-section-number">7.1</span> Scatter plot matrix</a></li>
+</ul></li>
+<li><a href="#descriptive-plots-for-categorical-data"><span class="toc-section-number">8</span> Descriptive plots for categorical data</a><ul>
+<li><a href="#mosaic-plots"><span class="toc-section-number">8.1</span> Mosaic Plots</a></li>
+</ul></li>
+<li><a href="#readings"><span class="toc-section-number">9</span> Readings</a></li>
+</ul>
+</div>
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<p>
+<span style="color: #00cc00;">NOTE: This page has been revised for Spring 2020, but may undergo further edits.</span>
+</p>
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>Bivariate descriptive displays or plots are designed to reveal the relationship between two variables. As was the case when examining single variables, there are several basic characteristics of the relationship between two variables that are of interest. These include:</p>
+<ul>
+<li>the <em>form</em> of the relationship</li>
+<li>the <em>strength</em> of the relationship, and</li>
+<li>the <em>dependence</em> of the relationship on external (to the two variables being examined) circumstances.</li>
+</ul>
+<p>Bivariate plots provide the means for characterizing pair-wise relationships between variables. Some simple extensions to such plots, such as presenting multiple bivariate plots in a single diagram, or labeling the points in a plot, allow simultaneous relationships among a number of variables to be viewed.</p>
+</div>
+<div id="basic-scatter-plots" class="section level1">
+<h1><span class="header-section-number">2</span> Basic scatter plots</h1>
+<p>The scatter diagram or scatter plot is the workhorse bivariate plot, and is probably the plot type that is most frequently generated in practice (which is why it is the default plot method in R).</p>
+<p>Data files for these examples (download to the working directory and read in):<br />
+<a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/orstationc.csv">[orstationc.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/scanvote.csv">[scanvote.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sumcr.csv">[sumcr.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/specmap.csv">[specmap.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/florida.csv">[florida.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sierra.csv">[sierra.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/ortann.csv">[ortann.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/cities.csv">[cities.csv]</a></p>
+<div id="scatter-diagramscatterplot" class="section level2">
+<h2><span class="header-section-number">2.1</span> Scatter diagram/Scatterplot</h2>
+<p>A scatter plot displays the values of two variables at a time using symbols, where the value of one variable determines the relative position of the symbol along the X-axis and the value of a second variable determines the relative position of the symbol along the Y-axis.</p>
+<p>Traditionally the dependent or response variable is plotted on the vertical or Y-axis, while the “independent”&quot; or predictor variable is plotted on the horizontal or X-axis. The convention can be imposed on plots in by listing the horizontal or X-axis variable first, and Y-axis variable second (as om X-Y plots).</p>
+<p>Plot annual temperature <code>tann</code> on the y-axis as a function of elevation <code>elev</code> on the x-axis</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># use Oregon climate-station data </span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">attach</span>(orstationc)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">plot</span>(elev,tann)</a></code></pre></div>
+<p><img src="lec03_files/figure-html/plot_orstationc-1.png" width="2100" /></p>
+<p>Detach the <code>orstationc</code> data frame.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># detach orstationc dataframe</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">detach</span>(orstationc)</a></code></pre></div>
+<p>##Variations on basic scatter plots ##</p>
+<p>There are several variations on the basic scatter plot that can be made to enhance interpret ability of the plots.</p>
+<div id="axis-scaling" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Axis scaling</h3>
+<p>Linear, log (base 10), ln (base e) and probability-scale axes may be examined to linearize the relationship between variables</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># use Scandinavian EU vote data [scanvote.csv]</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">attach</span>(scanvote)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw">plot</span>(Pop, Yes)         <span class="co"># arithmetic axis</span></a></code></pre></div>
+<p><img src="lec03_files/figure-html/axis_scaling-1.png" width="2100" /> Plot again, using log scaling of the x-axis:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># logrithmic axis</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">log10</span>(Pop), Yes)  <span class="co"># logrithmic axis</span></a></code></pre></div>
+<p><img src="lec03_files/figure-html/log_plot-1.png" width="2100" /></p>
+<p>Note how the log10 transformation linearizes the relationship. Logarithmic transformations basically compress the high end of the range of values of the transformed variable, and expand the low end.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">detach</span>(scanvote)</a></code></pre></div>
+</div>
+<div id="multiple-plots-with-different-y-axes" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> Multiple plots with different y-axes</h3>
+<p>Differing symbol types may be used to distinguish multiple Y-variables plotted versus the same X-variable. Here, two y-axis variables are plotted vs the same x-axis:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># use Oregon climate-station data [orstationc.csv]</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">attach</span>(orstationc)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">5</span>)<span class="op">+</span><span class="fl">0.1</span>) <span class="co"># space for second axis</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw">plot</span>(elev, tann)                <span class="co"># first plot</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="kw">par</span>(<span class="dt">new=</span><span class="ot">TRUE</span>)                   <span class="co"># second plot is going to get added to first</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="kw">plot</span>(elev, pann, <span class="dt">pch=</span><span class="dv">3</span>, <span class="dt">axes=</span><span class="ot">FALSE</span>, <span class="dt">ylab=</span><span class="st">&quot;&quot;</span>)  <span class="co"># don&#39;t overwrite</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="kw">axis</span>(<span class="dt">side=</span><span class="dv">4</span>)                    <span class="co"># add axis</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="kw">mtext</span>(<span class="dt">side=</span><span class="dv">4</span>,<span class="dt">line=</span><span class="fl">3.8</span>,<span class="st">&quot;pann&quot;</span>)   <span class="co"># add label</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="kw">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;tann&quot;</span>,<span class="st">&quot;pann&quot;</span>), <span class="dt">pch=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</a></code></pre></div>
+<p><img src="lec03_files/figure-html/plotting_symbols-1.png" width="2100" /></p>
+<p>The first use of the <code>par()</code> function adjusts the margins on the plot to allow room for the second axis, and the <code>&lt;-</code> assignment saves the original values in the object <code>opar</code>. The second use of the <code>par()</code> function indicates that the results of the next use of the <code>plot()</code> function will be added to the current graph. The <code>axis()</code> and <code>mtext()</code> functions add an axis and a label for the second variable. Finally, the <code>legend()</code> function adds a small legend to the figure. The <code>&quot;topright&quot;</code> argument indicates where to place the legend (it can also be located specifically by specifying an x- and y-coordinate pair), the <code>legend=</code> argument specifies the labels, and the <code>pch=</code> argument specifies the plotting characters.</p>
+<p>Restore the original plotting parameters, and detach the data frame.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">par</span>(opar)  <span class="co"># restore plot par</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">detach</span>(orstationc)</a></code></pre></div>
+<p><a href="lec03.html">[Back to top]</a></p>
+</div>
+</div>
+</div>
+<div id="line-plots" class="section level1">
+<h1><span class="header-section-number">3</span> Line Plots</h1>
+<p>Line plots are bivariate plots in which the individual symbols are connected by line segments. This generally makes sense when the X-axis variable can be arranged in a natural sequence, such a by time or by distance. Sometimes, the symbols are omitted–they are usually redundant, and may clutter the plot.</p>
+<div id="standard-line-plots" class="section level2">
+<h2><span class="header-section-number">3.1</span> Standard line Plots</h2>
+<p>First, here is the standard or default plot</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># use Specmap oxygen-isotope data</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">attach</span>(specmap)</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">plot</span>(Age, O18)</a></code></pre></div>
+<p><img src="lec03_files/figure-html/standard_plot-1.png" width="2100" /> Next, the same plot with lines connecting the data points</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># points and line plot</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw">plot</span>(Age, O18, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
+<p><img src="lec03_files/figure-html/line_plot-1.png" width="2100" /></p>
+<p>Lines and symbols</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">plot</span>(O18, Insol, <span class="dt">type=</span><span class="st">&quot;o&quot;</span>)</a></code></pre></div>
+<p><img src="lec03_files/figure-html/lines_and_symbols-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># detach the specmap dataframe</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw">detach</span>(specmap)</a></code></pre></div>
+<p>However, it should make sense to connect the symbols. Here’s an example where it doesn’t:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># use Oregon climate-station data </span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw">attach</span>(orstationc)</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw">plot</span>(elev, tann, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>) <span class="co"># does this make sense?</span></a></code></pre></div>
+<p><img src="lec03_files/figure-html/dumb_plot-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">detach</span>(orstationc)</a></code></pre></div>
+<p><a href="lec03.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="labeled-plots-enhancing-information-on-bivariate-plots" class="section level1">
+<h1><span class="header-section-number">4</span> Labeled plots – enhancing information on bivariate plots</h1>
+<p>There are a number of ways of enhancing the information gained from bivariate displays, in addition to simple alterations of plot axes and symbols. These include:</p>
+<div id="symbol-variations" class="section level2">
+<h2><span class="header-section-number">4.1</span> Symbol variations</h2>
+<p>One of the most effective ways to add more information to a scatter diagram is to use different symbols (either size, shape or color) to represent the values of a third variable. This technique begins to touch on multivariate descriptive plots.</p>
+<p>The symbol styles on scatter diagrams can be used to encode or represent the influence of an additional variable. The symbol properties can be changed on a scatter plot as follows:</p>
+<p>Use a different symbol for each country</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">attach</span>(scanvote)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">log10</span>(Pop),Yes, <span class="dt">pch=</span><span class="kw">unclass</span>(Country))  <span class="co"># different symbol</span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="dt">legend=</span><span class="kw">levels</span>(Country), <span class="dt">pch=</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>))</a></code></pre></div>
+<p><img src="lec03_files/figure-html/symbol-1.png" width="2100" /></p>
+<p>Now, label each point by the country (a text plot)</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># text plot</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">log10</span>(Pop),Yes, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="kw">text</span>(<span class="kw">log10</span>(Pop),Yes, <span class="dt">labels=</span><span class="kw">as.character</span>(Country)) <span class="co"># text</span></a></code></pre></div>
+<p><img src="lec03_files/figure-html/text_plot-1.png" width="2100" /></p>
+<p>The <code>type=&quot;n&quot;</code> argument supresses plotting a symbol at each point. Now label the points by district:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">attach</span>(scanvote)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># text plot</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">log10</span>(Pop), Yes, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="kw">text</span>(<span class="kw">log10</span>(Pop), Yes, <span class="dt">labels=</span><span class="kw">as.character</span>(District))</a></code></pre></div>
+<p><img src="lec03_files/figure-html/label2-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">detach</span>(scanvote)</a></code></pre></div>
+<p>Note the use of the <code>cex=</code> argument, which plots the District names at one-half the size of the default character size in plots (for greater legibility).</p>
+</div>
+<div id="jittering-points" class="section level2">
+<h2><span class="header-section-number">4.2</span> Jittering points</h2>
+<p>Sometimes symbols are plotted on top of one another so much that the relationship is obscured. An extreme case of this occurs when two factor-type variables are plotted.</p>
+<p>This first plot is an extreme case of overprinting</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># use Summit Cr. geomorph data </span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw">attach</span>(sumcr)</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="kw">plot</span>(<span class="kw">unclass</span>(Reach), <span class="kw">unclass</span>(HU))  <span class="co"># an extreme case</span></a></code></pre></div>
+<p><img src="lec03_files/figure-html/overprint-1.png" width="2100" /></p>
+<p>This second plot jitters the individual points to make them visible:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># jittered points</span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">jitter</span>(<span class="kw">unclass</span>(Reach)), <span class="kw">jitter</span>(<span class="kw">unclass</span>(HU)))</a></code></pre></div>
+<p><img src="lec03_files/figure-html/jittered-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">detach</span>(sumcr)</a></code></pre></div>
+<p>Here’s a second example of jittering to make points visible. Compare the two plots.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co"># use Florida 2000 presidential election data [florida.csv]</span></a>
+<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="kw">attach</span>(florida)</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3"><span class="kw">plot</span>(BUSH, GORE)</a></code></pre></div>
+<p><img src="lec03_files/figure-html/jitter_florida-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">plot</span>(BUSH, <span class="kw">jitter</span>(GORE, <span class="dt">factor=</span><span class="dv">500</span>))</a></code></pre></div>
+<p><img src="lec03_files/figure-html/jitter_florida-2.png" width="2100" /></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">detach</span>(florida)</a></code></pre></div>
+<p><a href="lec03.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="summarizing-scatter-plots" class="section level1">
+<h1><span class="header-section-number">5</span> Summarizing scatter plots</h1>
+<p>Although the visual inspection of a scatter plot generally reveals the nature of the relationship between the pair of variables being plotted, sometimes this relationship may be obscured simply by the number of points on the plot. In such cases the relationship, if present, may be detected by a summarization method. Similarly, our tendency to seek order in a chaotic set of points may lead us to perceive a relationship where none is really there. Again, summarizing the scatter plot may be useful.</p>
+<div id="slicing-scatter-diagrams" class="section level2">
+<h2><span class="header-section-number">5.1</span> Slicing scatter diagrams</h2>
+<p>Slicing scatter diagrams involves first “binning” the data along the X-axis, and then plotting a boxplot for each bin. Variations in the shapes of the box plots may indicate relationships between the variables that are obscured in a basic scatter plot. Here’s the first p;lot</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># use Sierra Nevada annual climate reconstructions</span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw">attach</span>(sierra)</a>
+<a class="sourceLine" id="cb25-3" data-line-number="3"><span class="kw">plot</span>(PWin, TSum)  <span class="co"># scatter diagram</span></a></code></pre></div>
+<p><img src="lec03_files/figure-html/scatterplot_slicing-1.png" width="2100" /></p>
+<p>Now here’s a plot summarized by slicing along the x-axis and summarizing the slices with box plots.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># sliced scatter diagram</span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2">PWin_classes &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.0</span>, <span class="fl">25.</span>, <span class="fl">50.</span>, <span class="fl">75.</span>, <span class="fl">100.</span>, <span class="fl">125.</span>, <span class="fl">150.</span>, <span class="fl">175.</span>)</a>
+<a class="sourceLine" id="cb26-3" data-line-number="3">PWin_group &lt;-<span class="st"> </span><span class="kw">cut</span>(PWin, PWin_classes)</a>
+<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="kw">plot</span>(TSum <span class="op">~</span><span class="st"> </span>PWin_group) <span class="co"># note formula in plot function call</span></a></code></pre></div>
+<p><img src="lec03_files/figure-html/sliced-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">detach</span>(sierra)</a></code></pre></div>
+</div>
+<div id="smoothing-a-scatter-diagram" class="section level2">
+<h2><span class="header-section-number">5.2</span> Smoothing a scatter diagram</h2>
+<p>Scatter plot smoothing involves fitting a smoothed curve through the cloud of points to describe the general relationship between variables. This technique is very generalizable, and a variety of smoothers can be used. The most common is the “lowess” or “loess” smoother, which will be discussed in more detail later:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># use Oregon climate station annual temperature data </span></a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">attach</span>(ortann)</a>
+<a class="sourceLine" id="cb28-3" data-line-number="3"><span class="kw">plot</span>(elevation,tann)</a>
+<a class="sourceLine" id="cb28-4" data-line-number="4"><span class="kw">lines</span>(<span class="kw">lowess</span>(elevation,tann))</a></code></pre></div>
+<p><img src="lec03_files/figure-html/lowess-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">detach</span>(ortann)</a></code></pre></div>
+<p><a href="lec03.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="annotating-plots" class="section level1">
+<h1><span class="header-section-number">6</span> Annotating plots</h1>
+<p>Annotation of points involves adding information to a plot for individual points, that include such things as the observation number or other information, to “explain” individual points that may be unusual, or to simply identify the point for a key observation or set of observations.</p>
+<div id="identify-function" class="section level2">
+<h2><span class="header-section-number">6.1</span> Identify function</h2>
+<p>The <code>identify()</code> function allows one to click near points on a scatter plot and add some text labels to the plot. Note the x and y variables are the same as for the recently created plot. The particular way this function works varies amoung the different GUIs (R for Windows, Mac, RStudio), and so a little experimentation may be required</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">attach</span>(florida)</a>
+<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="kw">plot</span>(GORE, BUCHANAN)</a>
+<a class="sourceLine" id="cb30-3" data-line-number="3"><span class="kw">identify</span>(GORE, BUCHANAN, <span class="dt">labels=</span>County)</a></code></pre></div>
+<p><img src="lec03_files/figure-html/identify-1.png" width="2100" /></p>
+<pre><code>## integer(0)</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">detach</span>(florida)</a></code></pre></div>
+<p><a href="lec03.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="scatter-plot-matrices" class="section level1">
+<h1><span class="header-section-number">7</span> Scatter plot matrices</h1>
+<p>Scatter plot matrices (sometimes called “sploms”) are simply sets of scatter plots arranged in matrix form on the page. As is the case for using symbol properties to show the influence of a third variable, scatter plot matrices also touch on multivariate descriptive plots.</p>
+<div id="scatter-plot-matrix" class="section level2">
+<h2><span class="header-section-number">7.1</span> Scatter plot matrix</h2>
+<p>Produce a matrix of scatter plots for the large-cites data set:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co"># use large-cities data</span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="kw">attach</span>(cities)</a></code></pre></div>
+<pre><code>## The following objects are masked from cities (pos = 4):
+## 
+##     Area, City, Elec, Food, Growth, PersRoom, Phones, Pop.1980, Pop.1990, Pop.2000, Vehicles,
+##     Water</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="kw">plot</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>], <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.6</span>) <span class="co"># scatter plot matrix, omit city name</span></a></code></pre></div>
+<p><img src="lec03_files/figure-html/matrix_scatter_plot-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw">detach</span>(cities)</a></code></pre></div>
+<p><a href="lec03.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="descriptive-plots-for-categorical-data" class="section level1">
+<h1><span class="header-section-number">8</span> Descriptive plots for categorical data</h1>
+<p>Categorical or group-membership data (“factors” in R) are often summarized in tables, the cells of which indicate absolute or relative frequencies of different combinations of the levels of the factors. There are several approaches for visualizing the contents of a table.</p>
+<p>Attach the Summit Cr. data, and create a cross-tabulation of reach and hydrologic unit (<code>Reach</code> and <code>HU</code>).</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">attach</span>(sumcr)</a>
+<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="co"># &quot;contingency table&quot;</span></a>
+<a class="sourceLine" id="cb37-3" data-line-number="3">ReachHU_table &lt;-<span class="st"> </span><span class="kw">table</span>(Reach, HU)   <span class="co"># tabluate Reach and HU data</span></a>
+<a class="sourceLine" id="cb37-4" data-line-number="4">ReachHU_table</a></code></pre></div>
+<pre><code>##      HU
+## Reach  G  P  R
+##     A  6  4 10
+##     B 12 13 21
+##     C  9  5  8</code></pre>
+<p>Plot a dotchart and barplot of the data:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">dotchart</span>(ReachHU_table)</a></code></pre></div>
+<p><img src="lec03_files/figure-html/catplot02-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw">barplot</span>(ReachHU_table)</a></code></pre></div>
+<p><img src="lec03_files/figure-html/catplot02-2.png" width="2100" /></p>
+<div id="mosaic-plots" class="section level2">
+<h2><span class="header-section-number">8.1</span> Mosaic Plots</h2>
+<p>The “mosaic” plot provides a way of looking at two categorical variables simultaneously, where the area of each “tile” of the mosaic is proportional to the frequency of cases in each cell of the cross tabulation.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="co"># mosaic plot</span></a>
+<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="kw">mosaicplot</span>(ReachHU_table, <span class="dt">color=</span>T)</a></code></pre></div>
+<p><img src="lec03_files/figure-html/catplot03-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="kw">detach</span>(sumcr)</a></code></pre></div>
+<p><a href="lec03.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="readings" class="section level1">
+<h1><span class="header-section-number">9</span> Readings</h1>
+<ul>
+<li>Owen (<em>The R Guide</em>): Ch. 5<br />
+</li>
+<li>Kuhnert &amp; Venebles (<em>An Introduction…</em>): p. 80-85<br />
+</li>
+<li>Maindonald (<em>Using R…</em>): section 3.6;</li>
+<li>Cleveland (<em>Visualizing Data</em>): ch. 3</li>
+</ul>
+<p><a href="lec03.html">[Back to top]</a></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

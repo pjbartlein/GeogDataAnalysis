@@ -1,0 +1,1 @@
+install.packages(c("cluster", "car", "qgraph", "corrplot", "psych", "gam", "tabplot", "rgl", "akima", "chron", "zoo", "raster", "rasterVis", "ncdf4", "leaps", "fields", "ggplot2", "GGally", "gridExtra", "magrittr", "tidyverse", "tree", "mvtsplot", "mapview" ))

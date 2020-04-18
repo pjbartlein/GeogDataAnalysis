@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>header.utf8</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="SI-md-08.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Geographic Data Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="lec01.html">Introduction to the course</a>
+    </li>
+    <li>
+      <a href="lec02.html">Univariate plots</a>
+    </li>
+    <li>
+      <a href="lec03.html">Bivariate plots</a>
+    </li>
+    <li>
+      <a href="lec04.html">Descriptive statistics</a>
+    </li>
+    <li>
+      <a href="lec05.html">Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ggplot2.html">ggplot2 versions of basic plots</a>
+    </li>
+    <li>
+      <a href="lec06.html">Maps in R</a>
+    </li>
+    <li>
+      <a href="lec07.html">Geospatial analysis in R</a>
+    </li>
+    <li>
+      <a href="lec08.html">Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="lec09.html">Reference distributions</a>
+    </li>
+    <li>
+      <a href="lec10.html">Statistical inference</a>
+    </li>
+    <li>
+      <a href="lec11.html">Analysis of variance</a>
+    </li>
+    <li>
+      <a href="lec12.html">Regression analysis</a>
+    </li>
+    <li>
+      <a href="lec13.html">More regression analysis</a>
+    </li>
+    <li>
+      <a href="lec14.html">Nonparametric regression</a>
+    </li>
+    <li>
+      <a href="lec15.html">GLMs, GAMs, and CARTs</a>
+    </li>
+    <li>
+      <a href="lec16.html">Principal components and factor analyses</a>
+    </li>
+    <li>
+      <a href="lec17.html">MANOVA and discriminant analysis</a>
+    </li>
+    <li>
+      <a href="lec18.html">Multivariate distances and cluster analysis</a>
+    </li>
+    <li>
+      <a href="lec19.html">High-resolution and high-dimension data</a>
+    </li>
+    <li>
+      <a href="lec20.html">Analysis and visualization of large raster data sets</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Exercises</li>
+    <li>
+      <a href="ex01.html">Exercise 01 -- Getting R and RStudio</a>
+    </li>
+    <li>
+      <a href="ex02.html">Exercise 02 -- Univariate plots</a>
+    </li>
+    <li>
+      <a href="ex03.html">Exercise 03 -- Bivariate plots and descriptive statistics</a>
+    </li>
+    <li>
+      <a href="ex04.html">Exercise 04 -- Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ex05.html">Exercise 05 -- Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="ex06.html">Exercise 06 -- CI's, t-tests, ANOVA</a>
+    </li>
+    <li>
+      <a href="ex07.html">Exercise 07 -- Regression analysis</a>
+    </li>
+    <li>
+      <a href="ex08.html">Exercise 08 -- Multivariate analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="packages-and-data.html">Packages and data</a>
+    </li>
+    <li>
+      <a href="vm_inst.html">Virtual machine instructions</a>
+    </li>
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="datasets.html">Datasets</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+
+</div>
+
+
+<html>
+<head>
+<meta content="text/html; charset=ISO-8859-1"
+http-equiv="content-type">
+<title>
+</title>
+</head>
+<body>
+<table id="table2" cellpadding="0" cellspacing="0" height="136" width="595">
+<tbody>
+<tr>
+<td rowspan="3" align="left" height="136" valign="bottom" width="180">
+<a href="http://webcam.uoregon.edu/oneshotimage1"> <img
+src="http://webcam.uoregon.edu/oneshotimage1" alt="UO Webcam"
+border="0" height="132" width="176"></a>
+</td>
+</tr>
+<tr>
+<td colspan="4" align="center" valign="top" width="415">
+<p style="margin-top: 0pt; margin-bottom: 0pt;">
+<font face="Arial"><font
+size="6">Current Weather &amp; Climate<br> </font><font size="4">Department of Geography / University of Oregon</font> </font>
+</p>
+</td>
+</tr>
+<tr>
+<td colspan="1" align="left" height="75" valign="bottom" width="105">
+<p style="margin-top: 0pt; margin-bottom: 0pt;">
+<a
+href="http://www.goes.noaa.gov/GIFS/WCIR.JPG"><img
+src="http://www.goes.noaa.gov/ICONS/WCIRICON.JPG"
+alt="GOES 10 Western Infrared Image" border="0" height="75" width="100"></a>
+</p>
+</td>
+<td colspan="1" align="left" height="75" valign="bottom" width="105">
+<p style="margin-top: 0pt; margin-bottom: 0pt;">
+<a
+href="http://www.goes.noaa.gov/GIFS/WCVS.JPG"><img
+src="http://www.goes.noaa.gov/ICONS/WCVSICON.JPG"
+alt="GOES 10 Western Visible Image" border="0" height="75" width="100"></a>
+</p>
+</td>
+<td colspan="1" align="left" height="75" valign="bottom" width="105">
+<p style="margin-top: 0pt; margin-bottom: 0pt;">
+<a
+href="http://www.goes.noaa.gov/GIFS/ALIR.JPG"><img
+src="http://www.goes.noaa.gov/ICONS/ALIRICON.JPG"
+alt="GOES 10 Alaska Infrared Image" border="0" height="75" width="100"></a>
+</p>
+</td>
+<td colspan="1" align="left" height="75" valign="bottom" width="105">
+<p style="margin-top: 0pt; margin-bottom: 0pt;">
+<a
+href="http://www.goes.noaa.gov/GIFS/ALVS.JPG"><img
+src="http://www.goes.noaa.gov/ICONS/ALVSICON.JPG"
+alt="GOES 10 Alaska Visible Image" border="0" height="75" width="100"></a>
+</p>
+</td>
+</tr>
+<tr>
+<td align="left" height="9" valign="top" width="180">
+<p style="margin-top: 0pt; margin-bottom: 0pt;">
+<b><font
+face="Arial"><small> <font size="1"> </font></small><font
+size="1"><a
+href="http://webcam.uoregon.edu/axis-cgi/jpg/image.cgi?resolution=1024x768"><i>UO </i> Webcam </a> [click to enlarge]</font></font></b>
+</p>
+</td>
+<td align="left" height="1" valign="bottom" width="104">
+<p style="margin-top: 0pt; margin-bottom: 0pt;" align="left">
+<font
+face="Arial" size="1"><b>IR  <i><a
+href="http://www.goes.noaa.gov/"> GOES-W Images</a> </i> </b></font>
+</p>
+</td>
+<td align="left" height="1" valign="bottom" width="105">
+<p style="margin-top: 0pt; margin-bottom: 0pt;" align="left">
+<font
+face="Arial" size="1"><b>Visible</b></font>
+</p>
+</td>
+<td align="left" height="1" valign="bottom" width="105">
+<p style="margin-top: 0pt; margin-bottom: 0pt;" align="left">
+<font
+face="Arial" size="1"><b>IR</b></font>
+</p>
+</td>
+<td align="left" height="1" valign="bottom" width="105">
+<p style="margin-top: 0pt; margin-bottom: 0pt;" align="left">
+<font
+face="Arial" size="1"><b>Visible</b></font>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<font style="font-size: 9pt;" face="Arial"><b>Quick Links</b> (use <em>Back</em> to return to this page) </font>
+<table style="border-collapse: collapse;" id="table1" border="0" cellpadding="0" width="600">
+<tbody>
+<tr>
+<td align="left" valign="top" width="8%">
+<font
+style="font-size: 9pt;" face="Arial"><strong>Info</strong></font>
+</td>
+<td align="left" valign="top" width="92%">
+<font
+style="font-size: 9pt;" face="Arial"><a
+href="file:///E:/Dropbox/CW&amp;C/timezone.htm">[Time Zones]</a> <a
+href="https://ww8.fltplan.com/AreaForecast/abbreviations.htm"
+target="_blank"> [wx abbr]</a> <a
+href="http://www.ofcm.gov/fmh-1/pdf/N-APNDXB.pdf">[METAR codes]</a> glossaries <a href="http://w1.weather.gov/glossary/" target="_blank">[NWS]</a> <a href="http://glossary.ametsoc.org/wiki/Main_Page">[AMS]</a> <a
+href="http://ipcc.ch/pdf/assessment-report/ar5/wg1/WG1AR5_AnnexIII_FINAL.pdf"> [IPCC]</a></font>
+</td>
+</tr>
+<tr>
+<td align="left" valign="top" width="8%">
+<p style="margin-top: 0pt; margin-bottom: 0pt;">
+<font
+style="font-size: 9pt;" face="Arial"><b>Text</b></font>
+</p>
+</td>
+<td align="left" valign="top" width="92%">
+<p style="margin-top: 0pt; margin-bottom: 0pt;">
+<font
+style="font-size: 9pt;" face="Arial"> <a
+href="http://www.wrh.noaa.gov/pqr/observations.php">[NWS Portland observational Data]</a> <a
+href="http://www.wrh.noaa.gov/pqr/forecasts.php/display_special_product_versions.php?sid=pqr&amp;pil=afd">[Current Oregon area forecast]</a> <a
+href="http://forecast.weather.gov/MapClick.php?lon=-123.09952036132812&amp;lat=44.14161867128607#.V0Mx9eSBkfg">[Eugene forecast at a glance]</a></font>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<table style="border-collapse: collapse;" id="table1" border="0" cellpadding="0" width="600">
+<tbody>
+<tr>
+<td style="width: 8%;" align="left" valign="top">
+<p style="margin-top: 0pt; margin-bottom: 0pt;">
+<b> <font
+style="font-size: 9pt;" face="Arial">Images</font></b>
+</p>
+</td>
+<td align="left" valign="top" width="92%">
+<p style="margin-top: 0pt; margin-bottom: 0pt;">
+<font face="Arial"> <font style="font-size: 9pt;"> <a
+href="http://www.ssd.noaa.gov/goes/west/wfo/pqr/vis.jpg"> [GOES NW Oregon Visible Close-Up]</a> </font><font style="font-size: 9pt;"> </font><a
+href="http://radar.weather.gov/Conus/pacnorthwest_lite.php"> <font
+style="font-size: 9pt;">[radar PNW sector and loop]</font></a><font
+style="font-size: 9pt;"> <a
+href="http://www.tripcheck.com/popups/Cam.asp?curRegion=4&amp;camera=2728"> [Santiam Pass]</a> <a
+href="http://www.tripcheck.com/popups/Cam.asp?curRegion=4&amp;camera=2613"> [Willamette Pass]</a> <a
+href="http://virga.sfsu.edu/gif/jetstream_norhem_00.gif"> [NH Jet Stream]</a> <a
+href="http://maps.weather.com/images/maps/current/curwx_720x486.jpg">[US Surface]</a> <a
+href="http://maps.weather.com/images/maps/current/acttemp_720x486.jpg"> [US temp]</a> <a
+href="http://image.weather.com/web/radar/us_radar_large_usen.jpg"> [US radar]</a> <a
+href="http://iwin.nws.noaa.gov/iwin/iwdspg1.html"> [US severe weather watches and warnings]</a><br> <a href="http://aviationweather.gov/obs/sat/intl/">[AWC mosaics]</a> <a
+href="http://www.goes.noaa.gov/GIFS/ALIR.JPG">[Alaska IR]</a> <a
+href="http://www.goes.noaa.gov/GIFS/HAIR.JPG">[Hawaii IR]</a> <a
+href="http://www.goes.noaa.gov/FULLDISK/GWIR.JPG">[W Hemis IR]</a> <a href="http://www.goes.noaa.gov/FULLDISK/GWVS.JPG">[W Hemis Vis]</a> <a href="http://www.ssec.wisc.edu/data/comp/latest_moll.gif"> [Global IR]</a> <a
+href="http://www.ssec.wisc.edu/data/comp/wv/LATEST_WV.gif">[Global WV]</a></font></font>
+</p>
+<p style="margin-top: 0pt; margin-bottom: 0pt;">
+<font
+style="font-size: 9pt;" face="Arial">Eugene hourly weather forecast graphs:   <a href="file:///E:/Dropbox/CW&amp;C/eugwx/all3.htm">[0-144hrs]</a>     MFJD <a href="file:///E:/Dropbox/CW&amp;C/eugwx/all3_mfjd_winter.htm"> [0-144hrs]</a> <a
+href="http://forecast.weather.gov/MapClick.php?lat=44.654977979262924&amp;lon=-118.68804931640625&amp;site=pdt&amp;smap=1&amp;marine=0&amp;unit=0&amp;lg=en&amp;TextType=1">[text]</a> <a href="file:///E:/Dropbox/CW&amp;C/MFJD/index.html">[web page]</a> </font>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<table style="border-collapse: collapse;" id="table1" border="0" cellpadding="0" width="600">
+<tbody>
+<tr>
+<td align="left" valign="top" width="8%">
+<p style="margin-top: 0pt; margin-bottom: 0pt;">
+<b> <font
+style="font-size: 9pt;" face="Arial">Movies</font></b>
+</p>
+</td>
+<td align="left" valign="top" width="92%">
+<p style="margin-top: 0pt; margin-bottom: 0pt;">
+<font
+style="font-size: 9pt;" face="Arial"> [<a
+href="http://www.ssd.noaa.gov/goes/west/nw/h5-loop-ft.html">PNW IR]</a> <a href="http://www.ssd.noaa.gov/goes/west/nw/h5-loop-vis.html">[PNW Vis]</a> <a href="http://www.ssd.noaa.gov/goes/west/nw/h5-loop-wv.html">[PNW WV]</a> <a href="http://www.goes.noaa.gov/GSSLOOPS/wcir.html">[Western IR]</a> <a href="http://www.goes.noaa.gov/GSSLOOPS/wcvs.html">[Western Vis]</a> <a href="http://www.goes.noaa.gov/GSSLOOPS/wcwv.html">[Western WV]</a><br> <a href="file:///E:/Dropbox/CW&amp;C/qthtml/cmoll.htm">[Global Montage]</a> <a href="file:///E:/Dropbox/CW&amp;C/qthtml/irmoll.htm">[Global IR]</a> <a href="file:///E:/Dropbox/CW&amp;C/qthtml/wvmoll.htm">[Global WV]</a> <a
+href="http://sat.wrh.noaa.gov/satellite/loopsat.php?wfo=mfr&amp;area=west&amp;type=vis&amp;size=1"> [GOES West Oregon Visible Close-Up]</a></font>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<table style="border-collapse: collapse;" id="table1" border="0" cellpadding="0" width="600">
+<tbody>
+<tr>
+<td align="left" valign="top" width="8%">
+<p style="margin-top: 0pt; margin-bottom: 0pt;">
+<font
+style="font-size: 9pt;" face="Arial"><b>Links</b></font>
+</p>
+</td>
+<td align="left" valign="top" width="92%">
+<p style="margin-top: 0pt; margin-bottom: 0pt;">
+<font
+style="font-size: 9pt;" face="Arial"><a
+href="file:///E:/Dropbox/envchange/index.html">[Environmental Change Research Group]</a> <a
+href="file:///E:/Dropbox/index.html">[Department of Geography Home Page]</a> <a href="http://www.uoregon.edu/">[UO Home Page]</a>   <a href="file:///E:/Dropbox/bartlein/courses/geog321/index.html">[Geog 321:Climatology]</a> <a href="file:///E:/Dropbox/bartlein/courses/geog361/index.html">[Geog 361 Global Environmental Change]</a> <a
+href="file:///E:/Dropbox/CW&amp;C/index2.html#Global_Climate_Animations">[Global Climate Animations]</a><br> [<a href="file:///E:/Dropbox/bartlein/courses/geog421/index.html">Geog 4/521 Adv. Climatology]</a> <a
+href="file:///E:/Dropbox/bartlein/courses/geog495/index.html">[Geog 4/595 Geographic Data Analysis]</a></font>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<table style="border-collapse: collapse;" id="table1" border="0" cellpadding="0" width="600">
+<tbody>
+<tr>
+<td align="left" valign="top" width="8%">
+<font
+style="font-size: 9pt;" face="Arial"><strong>Mobile</strong></font>
+</td>
+<td align="left" valign="top" width="92%">
+<font
+style="font-size: 9pt;" face="Arial"> <a
+href="http://www.ssec.wisc.edu/data/us_comp/us_comp.html">[US Composite Sat] </a>PAW <a href="http://www.ssec.wisc.edu/data/paw/">[link] </a>OR <a href="http://www.ssec.wisc.edu/data/paw/sfcobsor.html">[sfc obs] </a> <a
+href="http://www.ssec.wisc.edu/data/paw/uspn_oreg_radr_imag_none.html">[images] </a> <a
+href="http://www.ssec.wisc.edu/data/paw/uspn_oreg_radr_anim_none.html">[loops] </a>EUG <a
+href="http://www.ssec.wisc.edu/data/paw/sfcobskeug_none.html">[history] </a> <a href="http://www.ssec.wisc.edu/data/paw/nwsfcsteug1.html">[txt fcst] </a>NWS <a
+href="http://mobile.weather.gov/index.php?lat=44.13333&amp;lon=-123.21444">[EUG] </a> <a
+href="http://mobile.weather.gov/index.php?lat=45.5234515&amp;lon=-122.6762071">[PDX]</a></font>
+</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

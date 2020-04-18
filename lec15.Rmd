@@ -1,0 +1,434 @@
+---
+title: "GLMs, GAMs, and CARTs"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+```{r load, echo=FALSE, cache=FALSE}
+load(".Rdata")
+```
+<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+# Introduction #
+
+There are a number of extensions or alternative approaches for building regression-like models for circumstances when the (fairly restrictive) set of assumptions that underlie the use of ordinary least squares for fitting the regression model may be violated (e.g. binary response variables, nonlinearizable relationships, etc.)  These alternative approaches are not simply workarounds, but are useful in their own right for exploring or describing relationships between a response variable and several predictors.
+
+# Generalized Linear Models (GLMs) #
+
+Generalized linear models (GLMSs) can be considered a general case of the "General Linear Model" that underlies analysis of variance and regression (and note the subtle distinction between "Generalized" and "General").  GLMs (pronounced "glims") relax many of the assumptions that underly OLS (Ordinary Least Squares) regression, such as the assumption that the residuals are "i.i.d. normal" (independent, indentically (normally) distributed random (i.e. not autocorrelate) variables).  Datasets in which the response variable is binary (0 or 1), a proportion or fraction, or a count usually automatically violate that assumption.  
+
+GLMs consist of a linear predictor (that looks like an ordinary regression equation), that together with a "link fucntion", describes the distribution of the response variable (which may be one of several from the family of exponential distributions).  When the distribution of the dependent variable is gaussian (i.e. normal), and the link function is just the identity function, the model is equivalent to the standard regression model.
+
+GLMs have a *family* attribute that describes the distribution of the errors (residuals) which includes, but is not limited to the normal distribution assumed in OLS regression, and a *link function* that describes the relationship of the response to the predictor variables.  In fitting GLMs, a quantity called the *deviance* is minimized, and is similar to the sum-of-squares of deviations that is minimized in OLS regression.
+
+This example uses data from Chuck Gottfried's master's thesis (Gottfried, C.E., 1992. Residential wood heating and urban air quality : evaluation of a voluntary wood-heating curtailment program.  MA Thesis, University of Oregon, Department of Geography, 83 p.) [[burn.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/burn.csv).  
+
+The objective this study was to understand the controls of woodstove use in Lane County (i.e. the proprotion of wood-stove chimneys that were "hot" (`hotp`) during a particular survey).  The potential predictor variables included various meteorological variables, like the dew-point temperature (`dewpt`), where high values (relative to air temperature) indicate generally cool, damp conditions, as well as the binary variable that indicated whether a wood-stove-use curtailment advisory was issued (to reduce air pollution during cool, stable, foggy conditions).
+
+```{r glm02, eval=TRUE, warning=FALSE, message=FALSE}
+# Gottfried MS Thesis data (UO Dept. Geography)
+attach(burn)
+names(burn)
+```
+As always, the first thing to do is to examine the data:
+
+```{r glm03}
+# examine variables
+pairs(cbind(hotp,tmin,tmax,degday,trange,precip,dewpt,wind,api,adv))
+```
+
+The matrix scatter plots suggest that minimum temperature `tmin` and dewpoint temperature `dewpt` are correlated with the proportion of wood stoves in use `hotp`, e.g.:
+
+```{r glm04}
+plot(hotp ~ dewpt)
+```
+
+## OLS regression ##
+
+Here's a standard OLS (linear) regression model with `hotp` as the response and `dewpt` as the predictor:
+
+```{r glm05}
+# linear model
+burn.lm1 <- lm(hotp ~ dewpt)
+burn.lm1
+summary(burn.lm1)
+
+# diagnostic plots
+opar <- par(mfrow = c(2,2))
+plot(burn.lm1, which=c(1,2,4))
+hist(burn.lm1$residuals, breaks=20)
+par <- opar
+```
+
+Note that the histogram (lower-right plot) is nothing like one that resembles a normal distribution--it looks like there are actually two distinct modes.
+
+The regression line superficially looks fine (left below) but if plotted over a larger range (right) shows that unreasonable proporations (greater than 1.0, and less than 0.0) could result.
+
+```{r glm06, fig.width=13}
+# plot regression line
+opar <- par(mfrow = c(1,2))
+plot(hotp ~ dewpt, ylim=c(0,1))
+abline(burn.lm1)
+
+# plot regression line again -- larger range
+plot(hotp ~ dewpt, ylim=c(0,1), xlim=c(-40,40))
+abline(burn.lm1)
+par <- opar
+```
+
+## GLM regression ##
+
+A genearlized linear model can be fit using the `glm()` function.  Because the response here is a proportion (based on a number of individual binary (burn/noburn) observations, the appropriate family is the "binomial" with a "logit" link function, and each observation weighted by the total number of chimneys that were measured.
+
+```{r glm07}
+# generalized linear model
+burn.glm1 <- glm(hotp ~ dewpt, binomial(link = "logit"), weights=total)
+burn.glm1
+summary(burn.glm1)
+
+# diagnostic plots
+opar <- par(mfrow = c(2,2))
+plot(burn.glm1, which=c(1,2,4))
+hist(burn.glm1$residuals, breaks=20)
+par <- opar
+```
+
+Note that the regression diagnostic plots are much better "behaved" than previously.  Get predicted values for a range of `dewpt` values for plotting:
+
+```{r glm08}
+# evaluate predicted values
+new.dewpt <- seq(-40,40,.2)
+newdata <- data.frame(dewpt=new.dewpt)
+hotp.pred1 <- predict(burn.glm1,newdata,type="resp")
+```
+
+Here's the regression line generated by the `glm()` function--note that it is curvilinear, and approaches the possible limits of a proportion (0 and 1) asymptotically.
+
+```{r glm09, fig.width=13}
+# plot regression line
+opar <- par(mfrow = c(1,2))
+plot(hotp ~ dewpt, ylim=c(0,1))
+lines(hotp.pred1 ~ new.dewpt, col="blue")
+
+# plot regression line again
+plot(hotp ~ dewpt, ylim=c(0,1), xlim=c(-40,40))
+lines(hotp.pred1 ~ new.dewpt, col="blue")
+```
+
+## A second GLM model ##
+
+Inspection of the matrix scatter plot also suggested that the issuance of a "no-use" advisory (`adv` = 0 if no advisory issued, `adv` = 1 if issued) is also correlated with the proportion of stoves in use (in a perverse way, more stoves were in use when a no-burn advisory was issued than when not, which might be expected because the meteorological conditions that lead to the issuance of an advisory are just those when a nice fire would be, nice.  Look at the correlations with an interaction (`dewpt*adv`) between dewpoint and the issuance of an advisory. (Note that in the R formula `dewpt*adv` means generate the set of predictors `dewpt`, `adv`, and `dewpt*adv`, and *not* simply include the product between `dewpt` and `adv`).
+
+```{r glm10}
+# generalized linear model -- two predictors
+burn.glm2 <- glm(hotp ~ dewpt*adv, binomial(link = "logit"), weights=total)
+burn.glm2
+summary(burn.glm2)
+```
+
+The two models can be compared by doing an "analysis of deviance" in a parallel fashion to an analysis of variance.  If large, the `Deviance` value signals that the second model is better than the first, as it is here.
+
+```{r glm11}
+# compare models
+anova(burn.glm1,burn.glm2,test="Chi")
+```
+
+The two models can also be compared using their AIC (Akaike Information Criterion) values, a statistic that trades off the goodness of fit of a model against the number of parameters that have to be estimated.  In general, we favor a model with a lower AIC.  The first model has an AIC value of `r burn.glm1$aic`, while the second has a lower value of `r burn.glm2$aic`, and so is preferred on this basis as well.
+
+Finally, plot some of regression lines
+
+```{r glm12, fig.width=13}
+# evaluate predicted values
+new.dewpt <- seq(-40,40,.2)
+new.adv0 <- rep(0,length(new.dewpt))
+newdata.adv0 <- data.frame(dewpt=new.dewpt, adv=new.adv0)
+hotp.pred2.adv0 <- predict(burn.glm2, newdata.adv0, type="resp")
+
+new.adv1 <- rep(1,length(new.dewpt))
+newdata.adv1 <- data.frame(dewpt=new.dewpt, adv=new.adv1)
+hotp.pred2.adv1 <- predict(burn.glm2, newdata.adv1, type="resp")
+
+opar <- par(mfrow = c(1,2))
+# plot regression lines
+plot(hotp ~ dewpt, ylim=c(0,1))
+lines(hotp.pred2.adv0 ~ new.dewpt, col="green")
+lines(hotp.pred2.adv1 ~ new.dewpt, col="magenta")
+legend("topright", legend = c("no advisory", "advisory"), lty = c(1, 1), lwd = 2, 
+    cex = 1, col = c("green", "magenta"))
+
+# plot regression lines again
+plot(hotp ~ dewpt, ylim=c(0,1), xlim=c(-40,40))
+lines(hotp.pred2.adv0 ~ new.dewpt, col="green")
+lines(hotp.pred2.adv1 ~ new.dewpt, col="magenta")
+legend("topright", legend = c("no advisory", "advisory"), lty = c(1, 1), lwd = 2, 
+    cex = 1, col = c("green", "magenta"))
+```
+
+The interpretation is straightforward:  as the dew point temperature falls, the liklihood of using a woodstove increases, and it increase faster if a no-burn advisory was issued.
+
+Here is everything on a single scatter diagram:
+
+```{r glm13}
+# plot all
+plot(hotp ~ dewpt, ylim=c(0,1), xlim=c(-40,40))
+abline(burn.lm1)
+lines(hotp.pred1 ~ new.dewpt, col="blue")
+lines(hotp.pred2.adv0 ~ new.dewpt, col="green")
+lines(hotp.pred2.adv1 ~ new.dewpt, col="magenta")
+legend("topright", legend = c("OLS", "GLM", "GLM no advisory", "GLM advisory"), lty = c(1,1,1,1), lwd = 2, 
+    cex = 1, col = c("black", "blue", "green", "magenta"))
+detach(burn)
+```
+[[Back to top]](lec15.html)
+
+# Another GLM example #
+
+This second example of GLMs using a data set and code from Crawley, M.J. (2013) *The R Book*, Wiley. [[island.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/island.csv)  
+
+The data describe the controls of the indcidence (presence or absence) of a particular bird species on a set of islands, and such controls as the area of the island, its isolation, presence of predators, etc.  Such *binary response* data sets occur frequently in practice, and OLS regression is not appropriate for a number of reasons.
+
+First, look at the data.
+
+```{r glm202}
+# examine variables
+attach(island)
+pairs(cbind(incidence,area,isolation,quality,enemy,competitors))
+```
+Compare two models for `incidence`, one a simple model with `area` and `isolation` as predictors, and the other, a model that includes those predictors with interaction.
+
+## Simple model, no interaction ##
+
+```{r glm203}
+# simple model
+island.glm1<-glm(incidence~area+isolation, binomial)
+summary(island.glm1)
+```
+
+The model can be visualized by generating a grid of values of the predictor variables, and "pluggin in" those values to the fitted model using the `predict()` function, and displaying the results as a perspective plot.
+
+```{r}
+new.area <- seq(from=0, to=10, len=40); new.isolation <- seq(from=-2, to=12, len=40)
+new.x <- expand.grid(area=new.area, isolation=new.isolation)
+island.glm1.sfc  <- matrix(predict(island.glm1, new.x, type="response"),40,40)
+persp(new.area, new.isolation, island.glm1.sfc, theta=-150, phi=20, d=1.5, 
+  col="gray", ticktype="detailed",  zlim=c(0,1), xlab="Area", 
+  ylab="Isolation", zlab = "Species Incidence")
+```
+
+## A second model, with interaction ## 
+
+Here's a second model, that allows for interaction between `area` and `isolation`:
+
+```{r}
+# interaction
+island.glm2<-glm(incidence~area*isolation, binomial)
+summary(island.glm2)
+
+island.glm2.sfc  <- matrix(predict(island.glm2, new.x, type="response"),40,40)
+persp(new.area, new.isolation, island.glm1.sfc, theta=-150, phi=20, d=1.5, 
+  col="gray", ticktype="detailed",  zlim=c(0,1), xlab="Area", 
+  ylab="Isolation", zlab = "Species Incidence")
+```
+
+```{r}
+# compare models
+anova(island.glm1,island.glm2,test="Chi")
+```
+
+The comparison here suggests that the simpler model is better.  This could also be expected because in the simpler model, the *z*-statistic test of the significance of the regression coefficients shows that the coefficients of `area` and `isolation` are both significant, whereas in the second model, none of the coefficeints are significant.
+
+Another way to look at the relationships is via two bivariate models:
+
+```{r glm204, fig.width=13}
+island.glma<-glm(incidence ~ area, binomial)
+summary(island.glma)
+island.glmi<-glm(incidence ~ isolation, binomial)
+summary(island.glmi)
+```
+Take a look at two scatter plots with fitted curves using `area` and `isolation` as individual predictors.
+
+```{r glm205}
+par(mfrow=c(1,2))
+xv<-seq(0,9,0.01)
+yv<-predict(island.glma,list(area=xv),type="response")
+plot(area,incidence)
+lines(xv,yv, lwd=2)
+xv2<-seq(0,10,0.1)
+yv2<-predict(island.glmi,list(isolation=xv2),type="response")
+plot(isolation,incidence)
+lines(xv2,yv2, lwd=2)
+par(mfrow=c(1,1))
+```
+[[Back to top]](lec15.html)
+
+# Generalized Additive Models (GAMs) #
+
+Generalized additive models implement an overall strategy for relaxing the assumption that the relationships between the response variable and predictor variables are linear, by allowing the forms of the relationship to be determined by the data, in a manner analogous to using loess to describe the relationship.
+
+Generalized additive models (GAMs) in some ways can be considered to be the general case of regression analysis, with GLMs being a special case that allows for different kinds of responses (e.g. binary, counts, proportions, as well as "continuous" interval- or ratio-scale data), and OLS regression being a very special case where the residuals are i.i.d. normal, and the relationships between responses and predictors are linear.  GAMs are quite flexible, making no assumptions of the forms of the relationships between the response and predictors.
+
+This simple example of GAMs using a data set and code from This second example of GLMs using a data set and code from Crawley, M.J. (2013) *The R Book*, Wiley: [[ozone.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/ozone.csv)  The `ozone` data set is one of the classical data sets that has been used in illustrating analyses is S and R.
+
+Look at the data:
+
+```{r gam02}
+attach(ozone.data)
+pairs(ozone.data, panel=function(x,y) {points(x,y); lines(lowess(x,y), lwd=2, col="red")})
+```
+
+## A simple example ##
+
+Fit a GAM using the `gam` package, with `ozone` levels as the response and solar radiation (`rad`), temperature (`temp`) and wind speed (`wind`) as predictors.
+
+```{r gam03}
+# load Hastie & Tibshirani-style GAM package
+library(gam)
+ozone.gam1 <- gam(ozone ~ s(rad)+s(temp)+s(wind))
+summary(ozone.gam1)
+```
+Note that in GAMs there is no "regression equation" that is produced.  Instead, the sense of the relationships between the response and individual predictors is illustrated using "partial residual plots" for individual predictors that show the relationship between that predictor and the differences (residuals) of a prediction of the response using all other predictors.
+
+```{r gam04}
+opar <- par(mfrow=c(2,2))
+plot(ozone.gam1, resid=T, pch=16)
+par <- opar
+```
+
+
+```{r gam05}
+# check for interactions
+wt<-wind*temp
+ozone.gam2 <- gam(ozone~s(temp)+s(wind)+s(rad)+s(wt))
+summary(ozone.gam2)
+opar <- par(mfrow=c(2,2))
+plot(ozone.gam2, resid=T, pch=16)
+par <- opar
+```
+
+```{r gam06}
+# compare models
+anova(ozone.gam1,ozone.gam2,test="F")
+```
+
+The F statistic is not very large (which is indicated by its *p*-value), but the partial residual plots show evidence of a strong effect of including the `wind x temp` interaction, and that term is significant in the regression equation, so it might be scientifically reasonable to include it.
+
+[[Back to top]](lec15.html)
+
+# Classification and regression trees (CARTs) #
+
+CARTs implement a much different approach for describing the relationship between a continuous or categorical response variable and several predictor variables that makes few assumptions about the nature of the relationship.  Instead of an equation (or an R object that is "equation-like" in the sense of turning some plugged-in values of predictor variable values into estimates of the response using the R `predict()` function), a tree-structure reminiscent of a "binomial key" is constructed, and is used to arrive at a prediction of the response variable at the tip of a branch.  When applied to categorical variables, a "classification tree" results, and when applied to continuous variables, a "regression tree" is produced.
+
+This example comes from Crawley, M.J. (2013) *The R Book*, Wiley.
+
+## A regression-tree example ##
+
+The easiest way to visualize what a regrssion tree looks like and does is to simply produce one:
+
+```{r cart02}
+library(tree)
+ozone.tree1 <-tree(ozone~.,data=ozone.data)
+plot(ozone.tree1,type="u")
+text(ozone.tree1)
+```
+
+The `tree()` function produces what amounts to an (upside down) decision tree, where (starting at the top) each level and branch the values of a specific variable are examined, and a decsion is made as to which branch to take based on whether the value of that variable exceeds some threshold, or does not.  The values at the tip of each branch show the values of the response variable that prevail under the conditions indicated by the individual branches that were followed.
+
+A second example from Crawley (2013) [[Pollute.csv]]((https://pjbartlein.github.io/GeogDataAnalysis/data/csv/Pollute.csv))
+
+Look at the data:
+
+```{r cart03}
+attach(Pollute)
+pairs(Pollute, panel=function(x,y) {points(x,y); lines(lowess(x,y))})
+```
+
+Regression tree for `SO2Conc`
+
+```{r cart04}
+SO2Conc.tree1 <- tree(SO2Conc ~ . , Pollute)
+plot(SO2Conc.tree1)
+text(SO2Conc.tree1)
+```
+
+Printing the object created by `tree()` provides a text description of the tree and branches:
+
+```{r cart05}
+print(SO2Conc.tree1)
+```
+
+The variables and their threshold values are determined by "partitioning" the observations that remain at each step into two groups that maximize the between group variance.  This can be illustrated as follows for the first split, where a threhold value of 748 for `Industry` maximizes the distinctiveness of the two groups.
+
+
+```{r cart06}
+xcut <- 748
+plot(SO2Conc ~ Industry)
+lines(c(xcut,xcut),c(min(SO2Conc),max(SO2Conc)), col="blue", lwd=2, lty="dashed")
+m1 <- mean(SO2Conc[Industry < xcut])
+m2 <- mean(SO2Conc[Industry >= xcut])
+lines(c(0,xcut),c(m1,m1), col="blue", lwd=2)
+lines(c(xcut,max(Industry)),c(m2,m2), col="blue", lwd=2)
+```
+
+## A "Maptree" example
+
+Denis White (OSU/EPA in Corvallis) developed a package that allows the results of a recursive partitioning and regression tree ("RPART", same thing as CART...) to be mapped.  Here the data consist of bird species distributions and environmental variables for Oregon, and the tree-like partioning derives clusters of data points (hexagonal grid boxes) with similar attributes, and `maptree` maps them.
+
+```{r maptr02, warning=FALSE, message=FALSE}
+library(maptree)
+data(oregon.env.vars, oregon.grid, oregon.border)
+names(oregon.env.vars)
+attach(oregon.env.vars)
+```
+
+```{r maptr3}
+# regression tree of Oregon environmental variables
+model.tree1 <- "bird.spp ~ jan.temp+jul.temp+rng.temp+ann.ppt+min.elev+rng.elev+max.slope"
+bird.tree1 <- rpart(model.tree1)
+plot(bird.tree1)
+text(bird.tree1)
+```
+
+"Pruning" (as on a real tree) removes some long, dangly branches...
+
+```{r maptr4}
+# prune the tree
+group <- group.tree(clip.rpart(rpart(model.tree1), best=7))
+plot(clip.rpart(rpart(model.tree1), best=7))
+text(clip.rpart(rpart(model.tree1), best=7))
+```
+
+The following code plots the clusters...
+
+```{r maptr5}
+# plot the regression tree
+names(group) <- row.names(oregon.env.vars)
+map.groups(oregon.grid, group=group)
+map.key (0.05, 0.6, labels=as.character(seq(6)),pch=19, head="node")
+lines(oregon.border)
+```
+
+... and redraws the tree to serve as a legend for the map.
+
+```{r maptr6}
+draw.tree (clip.rpart(rpart(model.tree1), best=7), nodeinfo=TRUE, 
+     units="species", cases="cells", cex=.7, pch=16, digits=0)
+```
+
+[[Back to top]](lec15.html)
+
+# Readings # 
+
+GLMs, GAMs and CARTs are well covered in Chapters 13-18 and 23 in Crawley, M.J. (2013) *The R Book*, Wiley.  To get to the book, visit [http://library.uoregon.edu](http://library.uoregon.edu), login, and search for the 2013 edition of the book.  
+Here's a direct link, once you're logged on: [http://onlinelibrary.wiley.com/book/10.1002/9781118448908](http://onlinelibrary.wiley.com/book/10.1002/9781118448908)
+
+Kuhnert & Venebles (An Introduction...):  p. 141-168, 169-178, 259-300;  Maindonald (Using R...):  ch. 9

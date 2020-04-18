@@ -1,0 +1,20 @@
+---
+title: "Analysis and visualization of large raster data sets"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
+pdf.options(useDingbats = TRUE)
+```
+
+<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+```{r child="lec20.md"}
+```

@@ -1,0 +1,27 @@
+---
+title: "Geographic Data Analysis"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: no
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+```
+
+**GEOG 4/595: Spring 2020, Nominal Class Time 2:00-3:50 T&Th**
+
+- Topic:  Visualization and Data Analysis
+- Instructor:  Pat Bartlein, bartlein@uoregon.edu, 154 Condon, +1 541 346 4967
+
+The web pages here support the Spring 2020 course offering of GEOG 4/595 Geographic Data Analysis
+
+Note that the data sets on this web page are instructional in nature, intended for illustrating various aspects of data analysis and visualization.  It would be a bad idea to use them as research-grade data sets.
+
+The GitHub repository for these pages is at [https://github.com/pjbartlein/GeogDataAnalysis](https://github.com/pjbartlein/GeogDataAnalysis)

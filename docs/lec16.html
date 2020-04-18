@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Principal components and factor analysis</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="SI-md-08.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Geographic Data Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="lec01.html">Introduction to the course</a>
+    </li>
+    <li>
+      <a href="lec02.html">Univariate plots</a>
+    </li>
+    <li>
+      <a href="lec03.html">Bivariate plots</a>
+    </li>
+    <li>
+      <a href="lec04.html">Descriptive statistics</a>
+    </li>
+    <li>
+      <a href="lec05.html">Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ggplot2.html">ggplot2 versions of basic plots</a>
+    </li>
+    <li>
+      <a href="lec06.html">Maps in R</a>
+    </li>
+    <li>
+      <a href="lec07.html">Geospatial analysis in R</a>
+    </li>
+    <li>
+      <a href="lec08.html">Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="lec09.html">Reference distributions</a>
+    </li>
+    <li>
+      <a href="lec10.html">Statistical inference</a>
+    </li>
+    <li>
+      <a href="lec11.html">Analysis of variance</a>
+    </li>
+    <li>
+      <a href="lec12.html">Regression analysis</a>
+    </li>
+    <li>
+      <a href="lec13.html">More regression analysis</a>
+    </li>
+    <li>
+      <a href="lec14.html">Nonparametric regression</a>
+    </li>
+    <li>
+      <a href="lec15.html">GLMs, GAMs, and CARTs</a>
+    </li>
+    <li>
+      <a href="lec16.html">Principal components and factor analyses</a>
+    </li>
+    <li>
+      <a href="lec17.html">MANOVA and discriminant analysis</a>
+    </li>
+    <li>
+      <a href="lec18.html">Multivariate distances and cluster analysis</a>
+    </li>
+    <li>
+      <a href="lec19.html">High-resolution and high-dimension data</a>
+    </li>
+    <li>
+      <a href="lec20.html">Analysis and visualization of large raster data sets</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Exercises</li>
+    <li>
+      <a href="ex01.html">Exercise 01 -- Getting R and RStudio</a>
+    </li>
+    <li>
+      <a href="ex02.html">Exercise 02 -- Univariate plots</a>
+    </li>
+    <li>
+      <a href="ex03.html">Exercise 03 -- Bivariate plots and descriptive statistics</a>
+    </li>
+    <li>
+      <a href="ex04.html">Exercise 04 -- Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ex05.html">Exercise 05 -- Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="ex06.html">Exercise 06 -- CI's, t-tests, ANOVA</a>
+    </li>
+    <li>
+      <a href="ex07.html">Exercise 07 -- Regression analysis</a>
+    </li>
+    <li>
+      <a href="ex08.html">Exercise 08 -- Multivariate analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="packages-and-data.html">Packages and data</a>
+    </li>
+    <li>
+      <a href="vm_inst.html">Virtual machine instructions</a>
+    </li>
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="datasets.html">Datasets</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Principal components and factor analysis</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#properties-of-principal-components"><span class="toc-section-number">2</span> Properties of principal components</a></li>
+<li><a href="#pca-examples"><span class="toc-section-number">3</span> PCA Examples</a><ul>
+<li><a href="#pca-of-a-two-variable-matrix"><span class="toc-section-number">3.1</span> PCA of a two-variable matrix</a></li>
+<li><a href="#a-second-example-using-the-large-cites-data-set"><span class="toc-section-number">3.2</span> A second example using the large-cites data set</a><ul>
+<li><a href="#examining-the-correlation-matrix"><span class="toc-section-number">3.2.1</span> Examining the correlation matrix</a></li>
+<li><a href="#pca-of-the-cities-data"><span class="toc-section-number">3.2.2</span> PCA of the cities data</a></li>
+</ul></li>
+<li><a href="#rotation-of-principal-components"><span class="toc-section-number">3.3</span> “Rotation” of principal components</a></li>
+</ul></li>
+<li><a href="#factor-analyis-fa-and-pca"><span class="toc-section-number">4</span> Factor analyis (FA) and PCA</a><ul>
+<li><a href="#example-of-a-factor-analysis"><span class="toc-section-number">4.1</span> Example of a factor analysis</a></li>
+</ul></li>
+<li><a href="#another-pca-example"><span class="toc-section-number">5</span> Another PCA Example</a></li>
+<li><a href="#readings"><span class="toc-section-number">6</span> Readings</a></li>
+</ul>
+</div>
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<p>
+<span style="color: #FF0040;">NOTE: Not yet revised for Spring 2020</span>
+</p>
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p><em>Principal components analysis (PCA)</em> is a widely used multivariate analysis method, the general aim of which is to reveal systematic covariations among a group of variables. The analysis can be motivated in a number of different ways, including (in geographical contexts) finding groups of variables that measure the same underlying dimensions of a data set, describing the basic anomaly patterns that appear in spatial data sets, or producing a general index of the common variation of a set of variables.</p>
+<ul>
+<li>Example: Davis’ boxes (<a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_data.png">data</a>, <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_boxes.png">plot</a>, <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scatter.png">scatter</a>, <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scores.png">components</a>), (Davis, J.C., 2001, <em>Statistics and Data Analysis in Geology</em>, Wiley)</li>
+<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html">Derivation of principal components</a></li>
+</ul>
+</div>
+<div id="properties-of-principal-components" class="section level1">
+<h1><span class="header-section-number">2</span> Properties of principal components</h1>
+<p>Because the components are derived by solving a particular optimization problem, they naturally have some “built-in” properties that are desirable in practice (e.g. maximum variability). In addition, there are a number of other properties of the components that can be derived:</p>
+<ul>
+<li><em>variances</em> of each component, and the <em>proportion of the total variance</em> of the original variables are are given by the eigenvalues;</li>
+<li>component <em>scores</em> may be calculated, that illustrate the value of each component at each observation;</li>
+<li>component <em>loadings</em> that describe the correlation between each component and each variable may also be obtained;</li>
+<li>the <em>correlations among the original variables</em> can be reproduced by the <em>p</em>-components, as can that part of the correlations “explained” by the first q components.</li>
+<li>the <em>original data can be reproduced</em> by the <em>p</em> components, as can those parts of the original data “explained” by the first <em>q</em> components;</li>
+<li>the components can be “<em>rotated</em>” to increase the interpretability of the components.</li>
+</ul>
+<p><a href="lec16.html">[Back to top]</a></p>
+</div>
+<div id="pca-examples" class="section level1">
+<h1><span class="header-section-number">3</span> PCA Examples</h1>
+<div id="pca-of-a-two-variable-matrix" class="section level2">
+<h2><span class="header-section-number">3.1</span> PCA of a two-variable matrix</h2>
+<p>A very simple, two-variable analysis can be illustrated using Davis’ boxes data <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/boxes.csv">[boxes.csv]</a></p>
+<p>In this example, a simple two-variable (long-axis length and diagonal length) data set is created using Davis’ artificial data.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># boxes.pca -- principal components analysis of Davis boxes data</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">boxes.matrix &lt;-<span class="st"> </span><span class="kw">data.matrix</span>(<span class="kw">cbind</span>(boxes[,<span class="dv">1</span>],boxes[,<span class="dv">4</span>]))</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">dimnames</span>(boxes.matrix) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="ot">NULL</span>, <span class="kw">cbind</span>(<span class="st">&quot;long&quot;</span>,<span class="st">&quot;diag&quot;</span>))</a></code></pre></div>
+<p>Matrix scatter plot of the data (which in this case is a single panel), and the correlation matrix:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">plot</span> (boxes.matrix)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/pca03-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">cor</span>(boxes.matrix)</a></code></pre></div>
+<pre><code>##           long      diag
+## long 1.0000000 0.9112586
+## diag 0.9112586 1.0000000</code></pre>
+<p>PCA using the <code>princomp()</code> function from the <code>stats</code> package. The <code>loadings()</code> function extracts the <em>loadings</em> or the correlations between the input variables and the new components, and the the <code>biplot()</code> function creates a <em>biplot</em> a single figure that plots the loadings as vectors and the <em>component scores</em> as points represented by the observation numbers.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">boxes.pca &lt;-<span class="st"> </span><span class="kw">princomp</span>(boxes.matrix, <span class="dt">cor=</span>T)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">boxes.pca</a></code></pre></div>
+<pre><code>## Call:
+## princomp(x = boxes.matrix, cor = T)
+## 
+## Standard deviations:
+##   Comp.1   Comp.2 
+## 1.382483 0.297895 
+## 
+##  2  variables and  25 observations.</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">summary</span>(boxes.pca)</a></code></pre></div>
+<pre><code>## Importance of components:
+##                           Comp.1    Comp.2
+## Standard deviation     1.3824828 0.2978950
+## Proportion of Variance 0.9556293 0.0443707
+## Cumulative Proportion  0.9556293 1.0000000</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">print</span>(<span class="kw">loadings</span>(boxes.pca),<span class="dt">cutoff=</span><span class="fl">0.0</span>)</a></code></pre></div>
+<pre><code>## 
+## Loadings:
+##      Comp.1 Comp.2
+## long  0.707  0.707
+## diag  0.707 -0.707
+## 
+##                Comp.1 Comp.2
+## SS loadings       1.0    1.0
+## Proportion Var    0.5    0.5
+## Cumulative Var    0.5    1.0</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">biplot</span>(boxes.pca)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/pca04-1.png" width="2100" /></p>
+<p>Note the angle between the vectors–the correlation between two variables is equal to the cosine of the angle between the vectors (<em>θ</em>), or <em>r = cos(θ)</em>. Here the angle is 24.3201359, which is found by the following R code: <code>acos(cor(boxes.matrix[,1],boxes.matrix[,2]))/((2*pi)/360)</code>.</p>
+<p>The components can be drawn on the scatter plot as follows,</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># get parameters of component lines (after Everitt &amp; Rabe-Hesketh)</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">load &lt;-<span class="st"> </span>boxes.pca<span class="op">$</span>loadings</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">slope &lt;-<span class="st"> </span>load[<span class="dv">2</span>,]<span class="op">/</span>load[<span class="dv">1</span>,]</a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">mn &lt;-<span class="st"> </span><span class="kw">apply</span>(boxes.matrix,<span class="dv">2</span>,mean)</a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">intcpt &lt;-<span class="st"> </span>mn[<span class="dv">2</span>]<span class="op">-</span>(slope<span class="op">*</span>mn[<span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co"># scatter plot with the two new axes added</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="kw">par</span>(<span class="dt">pty=</span><span class="st">&quot;s&quot;</span>) <span class="co"># square plotting frame</span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9">xlim &lt;-<span class="st"> </span><span class="kw">range</span>(boxes.matrix) <span class="co"># overall min, max</span></a>
+<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="kw">plot</span>(boxes.matrix, <span class="dt">xlim=</span>xlim, <span class="dt">ylim=</span>xlim, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>) <span class="co"># both axes same length</span></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="kw">abline</span>(intcpt[<span class="dv">1</span>],slope[<span class="dv">1</span>],<span class="dt">lwd=</span><span class="dv">2</span>) <span class="co"># first component solid line</span></a>
+<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="kw">abline</span>(intcpt[<span class="dv">2</span>],slope[<span class="dv">2</span>],<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">lty=</span><span class="dv">2</span>) <span class="co"># second component dashed</span></a>
+<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="kw">legend</span>(<span class="st">&quot;right&quot;</span>, <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&quot;PC 1&quot;</span>, <span class="st">&quot;PC 2&quot;</span>), <span class="dt">lty =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb12-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co"># projections of points onto PCA 1</span></a>
+<a class="sourceLine" id="cb12-16" data-line-number="16">y1 &lt;-<span class="st"> </span>intcpt[<span class="dv">1</span>]<span class="op">+</span>slope[<span class="dv">1</span>]<span class="op">*</span>boxes.matrix[,<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb12-17" data-line-number="17">x1 &lt;-<span class="st"> </span>(boxes.matrix[,<span class="dv">2</span>]<span class="op">-</span>intcpt[<span class="dv">1</span>])<span class="op">/</span>slope[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb12-18" data-line-number="18">y2 &lt;-<span class="st"> </span>(y1<span class="op">+</span>boxes.matrix[,<span class="dv">2</span>])<span class="op">/</span><span class="fl">2.0</span></a>
+<a class="sourceLine" id="cb12-19" data-line-number="19">x2 &lt;-<span class="st"> </span>(x1<span class="op">+</span>boxes.matrix[,<span class="dv">1</span>])<span class="op">/</span><span class="fl">2.0</span></a>
+<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="kw">segments</span>(boxes.matrix[,<span class="dv">1</span>],boxes.matrix[,<span class="dv">2</span>], x2, y2, <span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">col=</span><span class="st">&quot;purple&quot;</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/pca05-1.png" width="2100" /></p>
+<p>This plot illustrates the idea of the first (or “principal” component) providing an optimal summary of the data–no other line drawn on this scatter plot would produce a set of projected values of the data points onto the line with less variance. The first component also has an application in reduced major axis (RMA) regression in which both x- and y-variables are assumed to have errors or uncertainties, or where there is no clear distinction between a predictor and a response.</p>
+</div>
+<div id="a-second-example-using-the-large-cites-data-set" class="section level2">
+<h2><span class="header-section-number">3.2</span> A second example using the large-cites data set</h2>
+<p>A second example of a simple PCA analysis can be illustrated using the large-cities data set <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/cities.csv">[cities.csv]</a></p>
+<p>Create a data matrix that omits the city names and look at the data and the correlation matrix.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">cities.matrix &lt;-<span class="st"> </span><span class="kw">data.matrix</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>])</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">rownames</span>(cities.matrix) &lt;-<span class="st"> </span>cities[,<span class="dv">1</span>] <span class="co"># add city names as row labels</span></a></code></pre></div>
+<div id="examining-the-correlation-matrix" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> Examining the correlation matrix</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">plot</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>], <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.6</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/pca06b-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">cor</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>])</a></code></pre></div>
+<pre><code>##                Area   Pop.1980   Pop.1990   Pop.2000     Growth       Food   PersRoom      Water
+## Area      1.0000000  0.1776504  0.1482707  0.0811688 -0.3106659 -0.2277181 -0.5172160  0.2941461
+## Pop.1980  0.1776504  1.0000000  0.9559486  0.7919490 -0.6935458 -0.5209447 -0.5664580  0.6213565
+## Pop.1990  0.1482707  0.9559486  1.0000000  0.9233506 -0.4888987 -0.4080286 -0.4612457  0.5995832
+## Pop.2000  0.0811688  0.7919490  0.9233506  1.0000000 -0.1720913 -0.1386787 -0.1876411  0.4545814
+## Growth   -0.3106659 -0.6935458 -0.4888987 -0.1720913  1.0000000  0.5607890  0.6711674 -0.5594034
+## Food     -0.2277181 -0.5209447 -0.4080286 -0.1386787  0.5607890  1.0000000  0.6016164 -0.5047112
+## PersRoom -0.5172160 -0.5664580 -0.4612457 -0.1876411  0.6711674  0.6016164  1.0000000 -0.6643779
+## Water     0.2941461  0.6213565  0.5995832  0.4545814 -0.5594034 -0.5047112 -0.6643779  1.0000000
+## Elec      0.2793523  0.4811426  0.4337657  0.2333170 -0.4730705 -0.6207611 -0.7934353  0.8304116
+## Phones    0.1393848  0.6734610  0.5870475  0.3669274 -0.5402193 -0.8429700 -0.5926469  0.5512366
+## Vehicles  0.4117518  0.4179417  0.4191265  0.2430040 -0.3214298 -0.7610807 -0.5537093  0.4163189
+##                Elec     Phones   Vehicles
+## Area      0.2793523  0.1393848  0.4117518
+## Pop.1980  0.4811426  0.6734610  0.4179417
+## Pop.1990  0.4337657  0.5870475  0.4191265
+## Pop.2000  0.2333170  0.3669274  0.2430040
+## Growth   -0.4730705 -0.5402193 -0.3214298
+## Food     -0.6207611 -0.8429700 -0.7610807
+## PersRoom -0.7934353 -0.5926469 -0.5537093
+## Water     0.8304116  0.5512366  0.4163189
+## Elec      1.0000000  0.5180646  0.5019066
+## Phones    0.5180646  1.0000000  0.6303538
+## Vehicles  0.5019066  0.6303538  1.0000000</code></pre>
+<p>Matrix scatter plots, particularly those for a data set with a large number of variables are some times difficult to interpret. Two alternative plots are available: 1) a generalized depiction of the correlation matrix using the <code>corrplot()</code> function, and 2) a plot of the correlations as a network of links (“edges”) between variables (“nodes”) provided by the <code>qgraph()</code> function in the package of the same name.</p>
+<p>The <code>corrplot()</code> function displays the correlation matrix using a set of little ellipses that provide a generalized dipiction of the strength and sign of a correlation.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">library</span>(corrplot)</a></code></pre></div>
+<pre><code>## corrplot 0.84 loaded</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">corrplot</span>(<span class="kw">cor</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>]), <span class="dt">method=</span><span class="st">&quot;ellipse&quot;</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/pca07-1.png" width="2100" /></p>
+<p>An alternative is simply fill each cell with an appropriate color and shade.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">corrplot</span>(<span class="kw">cor</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>]), <span class="dt">method=</span><span class="st">&quot;color&quot;</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/pca08-1.png" width="2100" /></p>
+<p>Rectangular areas of similar sign and magnitude of the correlation identify groups of variables that tend to covary together across the observations. For example, the three population variables are postively correlated with one another, and are inversely correlated with <code>Growth</code>, <code>Food</code> and <code>PersRoom</code>.</p>
+<p>Another way of depicting the correlations is as a network of line segments, which are drawn to illustrate the strength and sign of the correlations between each pair of variables.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">library</span>(qgraph)</a></code></pre></div>
+<pre><code>## Registered S3 methods overwritten by &#39;huge&#39;:
+##   method    from   
+##   plot.sim  BDgraph
+##   print.sim BDgraph</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">qgraph</span>(<span class="kw">cor</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>]))</a></code></pre></div>
+<p><img src="lec16_files/figure-html/pca09-1.png" width="2100" /></p>
+<p>Note that in the above plot, the variable names are abbreviated using just three characters. Most of the time this is enough.</p>
+<p>A modification of the basic <code>qgraph()</code> plot involves arranging the nodes in a way that locates more highly correlated variables closer to one another (a “force-embedded” layout, specified by the <code>layout=&quot;spring&quot;</code> argument. The sign of the correlations are indicated by color: positive correlations are green, negative magenta (or red).</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">qgraph</span>(<span class="kw">cor</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>]), <span class="dt">layout=</span><span class="st">&quot;spring&quot;</span>, <span class="dt">shape=</span><span class="st">&quot;rectangle&quot;</span>, <span class="dt">posCol=</span><span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol=</span><span class="st">&quot;darkmagenta&quot;</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/pca10-1.png" width="2100" /></p>
+</div>
+<div id="pca-of-the-cities-data" class="section level3">
+<h3><span class="header-section-number">3.2.2</span> PCA of the cities data</h3>
+<p>Here’s the principal components analysis of the cities data:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">cities.pca &lt;-<span class="st"> </span><span class="kw">princomp</span>(cities.matrix, <span class="dt">cor=</span>T)</a>
+<a class="sourceLine" id="cb25-2" data-line-number="2">cities.pca</a></code></pre></div>
+<pre><code>## Call:
+## princomp(x = cities.matrix, cor = T)
+## 
+## Standard deviations:
+##     Comp.1     Comp.2     Comp.3     Comp.4     Comp.5     Comp.6     Comp.7     Comp.8     Comp.9 
+## 2.46294201 1.31515696 1.00246883 0.92086602 0.83523273 0.50012846 0.48128911 0.35702153 0.17468753 
+##    Comp.10    Comp.11 
+## 0.10314352 0.05779932 
+## 
+##  11  variables and  21 observations.</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">summary</span>(cities.pca)</a></code></pre></div>
+<pre><code>## Importance of components:
+##                           Comp.1    Comp.2     Comp.3     Comp.4     Comp.5     Comp.6     Comp.7
+## Standard deviation     2.4629420 1.3151570 1.00246883 0.92086602 0.83523273 0.50012846 0.48128911
+## Proportion of Variance 0.5514621 0.1572398 0.09135852 0.07709038 0.06341943 0.02273895 0.02105811
+## Cumulative Proportion  0.5514621 0.7087019 0.80006045 0.87715083 0.94057026 0.96330921 0.98436732
+##                            Comp.8      Comp.9      Comp.10      Comp.11
+## Standard deviation     0.35702153 0.174687526 0.1031435150 0.0577993220
+## Proportion of Variance 0.01158767 0.002774157 0.0009671441 0.0003037056
+## Cumulative Proportion  0.99595499 0.998729150 0.9996962944 1.0000000000</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">screeplot</span>(cities.pca)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/pca11-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">loadings</span>(cities.pca)</a></code></pre></div>
+<pre><code>## 
+## Loadings:
+##          Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6 Comp.7 Comp.8 Comp.9 Comp.10 Comp.11
+## Area      0.160  0.299  0.603  0.569  0.141  0.326  0.131  0.195  0.106                
+## Pop.1980  0.350 -0.340                0.248 -0.123         0.130  0.158  0.677  -0.428 
+## Pop.1990  0.324 -0.445         0.104        -0.145                               0.804 
+## Pop.2000  0.229 -0.586  0.109  0.228 -0.190                      -0.114 -0.571  -0.393 
+## Growth   -0.295        -0.115  0.310 -0.682         0.388        -0.152  0.389         
+## Food     -0.316 -0.263  0.456               -0.167        -0.574  0.502                
+## PersRoom -0.332 -0.270 -0.241  0.116         0.544 -0.449  0.254  0.417                
+## Water     0.330         0.229 -0.331 -0.357  0.533 -0.252 -0.376 -0.291  0.169         
+## Elec      0.315  0.214  0.132 -0.345 -0.483 -0.183         0.414  0.517 -0.111         
+## Phones    0.331        -0.447                0.364  0.571 -0.291  0.352                
+## Vehicles  0.282  0.232 -0.272  0.519 -0.209 -0.288 -0.481 -0.372  0.152                
+## 
+##                Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6 Comp.7 Comp.8 Comp.9 Comp.10 Comp.11
+## SS loadings     1.000  1.000  1.000  1.000  1.000  1.000  1.000  1.000  1.000   1.000   1.000
+## Proportion Var  0.091  0.091  0.091  0.091  0.091  0.091  0.091  0.091  0.091   0.091   0.091
+## Cumulative Var  0.091  0.182  0.273  0.364  0.455  0.545  0.636  0.727  0.818   0.909   1.000</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">biplot</span>(cities.pca, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;black&quot;</span>,<span class="st">&quot;red&quot;</span>), <span class="dt">cex=</span><span class="kw">c</span>(<span class="fl">0.7</span>,<span class="fl">0.8</span>))</a></code></pre></div>
+<p><img src="lec16_files/figure-html/pca11-2.png" width="2100" /></p>
+<p>In this case, there were two “important components” and a third that was pretty important, as evidenced by the break in slope of the “screeplot”. The biplot diplays both the <em>loadings</em> (correlations between the original variables and the components) as lablelled vectors, and the component <em>scores</em> as either symbols, or as here when the matrix has rownames, as labels.</p>
+<p>The biplot and table of component loadings indicate that the first component includes variables that (more-or-less) trade off developed-world cities against developing-world ones. (Note the opposing directions of the vectors that are sub-parallel to the x-axis.) The second component (population) is noted by vectors and loadings that are (more-or-less) at right angles to the first set, and sub-parallel to the y-axis. (But note that the vector for <code>Pop.1980</code> is actually more parallel to the x-axis than the y.)</p>
+<p>An alternative visualization of the principal component and their relationship with the original variables is provided by the <code>qgraph()</code> function. The <code>qgraph.pca()</code> function does the analyis creates a “default” (circle) plot layout, and the various arguments of the <code>qgraph()</code> function create a more informative plot. The original variables are indicted by three-character abbreviations, and the components by numbered nodes.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co">#qg.pca &lt;- qgraph.pca(cities[,2:12], factors=2, rotation=&quot;none&quot;) -- qgraph.pca() does not work for qgraph &gt;= 1.6</span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="co">#qgraph(qg.pca, posCol=&quot;darkgreen&quot;, layout=&quot;spring&quot;, negCol=&quot;darkmagenta&quot;, edge.width=2, arrows=FALSE)</span></a>
+<a class="sourceLine" id="cb33-3" data-line-number="3"><span class="co"># workaround</span></a>
+<a class="sourceLine" id="cb33-4" data-line-number="4">cities.pca.loadings &lt;-<span class="st"> </span><span class="kw">loadings</span>(cities.pca)</a>
+<a class="sourceLine" id="cb33-5" data-line-number="5"><span class="kw">qgraph.loadings</span>(cities.pca.loadings[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">posCol=</span><span class="st">&quot;darkgreen&quot;</span>, <span class="dt">layout=</span><span class="st">&quot;circle&quot;</span>, <span class="dt">negCol=</span><span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">edge.width=</span><span class="dv">1</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/pca12-1.png" width="2100" /></p>
+</div>
+</div>
+<div id="rotation-of-principal-components" class="section level2">
+<h2><span class="header-section-number">3.3</span> “Rotation” of principal components</h2>
+<p>The interpretation of the components (which is governed by the loadings–the correlations of the original varialbles with the newly created components) can be enhanced by “rotation” which could be thought of a set of coordinated adjustments of the vectors on a biplot. There is not single optimal way of doing rotations, but probably the most common approach is “varimax” rotation in which the components are adjusted in a way that makes the loadings either high positive (or negative) or zero, while keeping the components uncorrelated or orthogonal. One side-product of rotation is that the first, or principal components is no longer optimal or the most efficient single-variable summary of the data set, but losing that property is often worth the incraese in interpretability. The <code>principal()</code> function in the <code>psych</code> package implements rotation of principal components.</p>
+<p>Here’s the <code>psych</code> package version of a simple PCA:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">library</span>(psych)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">cities.pca.unrot &lt;-<span class="st"> </span><span class="kw">principal</span>(cities.matrix, <span class="dt">nfactors=</span><span class="dv">2</span>, <span class="dt">rotate=</span><span class="st">&quot;none&quot;</span>)</a>
+<a class="sourceLine" id="cb35-2" data-line-number="2">cities.pca.unrot</a></code></pre></div>
+<pre><code>## Principal Components Analysis
+## Call: principal(r = cities.matrix, nfactors = 2, rotate = &quot;none&quot;)
+## Standardized loadings (pattern matrix) based upon correlation matrix
+##            PC1   PC2   h2    u2 com
+## Area      0.39 -0.39 0.31 0.690 2.0
+## Pop.1980  0.86  0.45 0.94 0.056 1.5
+## Pop.1990  0.80  0.59 0.98 0.019 1.8
+## Pop.2000  0.56  0.77 0.91 0.087 1.8
+## Growth   -0.73  0.13 0.54 0.457 1.1
+## Food     -0.78  0.35 0.73 0.273 1.4
+## PersRoom -0.82  0.35 0.80 0.205 1.4
+## Water     0.81 -0.01 0.66 0.341 1.0
+## Elec      0.77 -0.28 0.68 0.320 1.3
+## Phones    0.82 -0.05 0.67 0.332 1.0
+## Vehicles  0.69 -0.30 0.57 0.426 1.4
+## 
+##                        PC1  PC2
+## SS loadings           6.07 1.73
+## Proportion Var        0.55 0.16
+## Cumulative Var        0.55 0.71
+## Proportion Explained  0.78 0.22
+## Cumulative Proportion 0.78 1.00
+## 
+## Mean item complexity =  1.4
+## Test of the hypothesis that 2 components are sufficient.
+## 
+## The root mean square of the residuals (RMSR) is  0.1 
+##  with the empirical chi square  21.58  with prob &lt;  0.95 
+## 
+## Fit based upon off diagonal values = 0.97</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">summary</span>(cities.pca.unrot)</a></code></pre></div>
+<pre><code>## 
+## Factor analysis with Call: principal(r = cities.matrix, nfactors = 2, rotate = &quot;none&quot;)
+## 
+## Test of the hypothesis that 2 factors are sufficient.
+## The degrees of freedom for the model is 34  and the objective function was  6.87 
+## The number of observations was  21  with Chi Square =  97.36  with prob &lt;  5e-08 
+## 
+## The root mean square of the residuals (RMSA) is  0.1</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">biplot</span>(cities.pca.unrot, <span class="dt">labels=</span><span class="kw">rownames</span>(cities.matrix), <span class="dt">cex=</span><span class="fl">0.5</span>, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;black&quot;</span>,<span class="st">&quot;red&quot;</span>))</a></code></pre></div>
+<p><img src="lec16_files/figure-html/pca14-1.png" width="2100" /></p>
+<p>… and the <code>qgraph()</code> plot of the results:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">cities.pca.unrot.loadings &lt;-<span class="st"> </span><span class="kw">loadings</span>(cities.pca.unrot)</a>
+<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="kw">qgraph.loadings</span>(cities.pca.unrot.loadings[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">posCol=</span><span class="st">&quot;darkgreen&quot;</span>, <span class="dt">layout=</span><span class="st">&quot;circle&quot;</span>, <span class="dt">negCol=</span><span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">edge.width=</span><span class="dv">1</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/pca15-1.png" width="2100" /></p>
+<p>Note the location and linkages of <code>Pop.1980</code> in the plot. Here’s the result with rotated components:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">cities.pca.rot &lt;-<span class="st"> </span><span class="kw">principal</span>(cities.matrix, <span class="dt">nfactors=</span><span class="dv">2</span>, <span class="dt">rotate=</span><span class="st">&quot;varimax&quot;</span>)</a>
+<a class="sourceLine" id="cb41-2" data-line-number="2">cities.pca.rot</a></code></pre></div>
+<pre><code>## Principal Components Analysis
+## Call: principal(r = cities.matrix, nfactors = 2, rotate = &quot;varimax&quot;)
+## Standardized loadings (pattern matrix) based upon correlation matrix
+##            RC1   RC2   h2    u2 com
+## Area      0.55 -0.07 0.31 0.690 1.0
+## Pop.1980  0.41  0.88 0.94 0.056 1.4
+## Pop.1990  0.28  0.95 0.98 0.019 1.2
+## Pop.2000 -0.02  0.96 0.91 0.087 1.0
+## Growth   -0.65 -0.34 0.54 0.457 1.5
+## Food     -0.83 -0.20 0.73 0.273 1.1
+## PersRoom -0.87 -0.22 0.80 0.205 1.1
+## Water     0.65  0.49 0.66 0.341 1.9
+## Elec      0.79  0.25 0.68 0.320 1.2
+## Phones    0.68  0.45 0.67 0.332 1.7
+## Vehicles  0.74  0.18 0.57 0.426 1.1
+## 
+##                        RC1  RC2
+## SS loadings           4.46 3.33
+## Proportion Var        0.41 0.30
+## Cumulative Var        0.41 0.71
+## Proportion Explained  0.57 0.43
+## Cumulative Proportion 0.57 1.00
+## 
+## Mean item complexity =  1.3
+## Test of the hypothesis that 2 components are sufficient.
+## 
+## The root mean square of the residuals (RMSR) is  0.1 
+##  with the empirical chi square  21.58  with prob &lt;  0.95 
+## 
+## Fit based upon off diagonal values = 0.97</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="kw">summary</span>(cities.pca.rot)</a></code></pre></div>
+<pre><code>## 
+## Factor analysis with Call: principal(r = cities.matrix, nfactors = 2, rotate = &quot;varimax&quot;)
+## 
+## Test of the hypothesis that 2 factors are sufficient.
+## The degrees of freedom for the model is 34  and the objective function was  6.87 
+## The number of observations was  21  with Chi Square =  97.36  with prob &lt;  5e-08 
+## 
+## The root mean square of the residuals (RMSA) is  0.1</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="kw">biplot.psych</span>(cities.pca.rot, <span class="dt">labels=</span><span class="kw">rownames</span>(cities.matrix), <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;black&quot;</span>,<span class="st">&quot;red&quot;</span>), <span class="dt">cex=</span><span class="kw">c</span>(<span class="fl">0.7</span>,<span class="fl">0.8</span>),</a>
+<a class="sourceLine" id="cb45-2" data-line-number="2">  <span class="dt">xlim.s=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">3</span>,<span class="dv">3</span>), <span class="dt">ylim.s=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>,<span class="dv">4</span>))</a></code></pre></div>
+<p><img src="lec16_files/figure-html/pca16-1.png" width="2100" /> … and the <code>qgraph()</code> plot of the rotated-component results:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="co"># qg.pca &lt;- qgraph(cities.pca.rot) qgraph.pca() does not work for qgraph &gt;= 1.6</span></a>
+<a class="sourceLine" id="cb46-2" data-line-number="2"><span class="co"># qgraph(qg.pca, posCol=&quot;darkgreen&quot;, layout=&quot;spring&quot;, negCol=&quot;darkmagenta&quot;, edge.width=2, arrows=FALSE)</span></a>
+<a class="sourceLine" id="cb46-3" data-line-number="3"><span class="co"># workaround</span></a>
+<a class="sourceLine" id="cb46-4" data-line-number="4">cities.pca.rot.loadings &lt;-<span class="st"> </span><span class="kw">loadings</span>(cities.pca.rot)</a>
+<a class="sourceLine" id="cb46-5" data-line-number="5"><span class="kw">qgraph.loadings</span>(cities.pca.rot.loadings[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">posCol=</span><span class="st">&quot;darkgreen&quot;</span>, <span class="dt">layout=</span><span class="st">&quot;circle&quot;</span>, <span class="dt">negCol=</span><span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">edge.width=</span><span class="dv">1</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/pca17-1.png" width="2100" /></p>
+<p>Notice that now all three population variables are “most highly loaded on” the second component.</p>
+<p><a href="lec16.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="factor-analyis-fa-and-pca" class="section level1">
+<h1><span class="header-section-number">4</span> Factor analyis (FA) and PCA</h1>
+<p><em>Factor analysis (FA)</em> can be thought of as a parallel analysis, and in some ways PCA and be viewed as a special case of FA. Despite their names being used indiscriminantly, the two alaysis do have differing underlying models:</p>
+<ul>
+<li>PCA: maximum variance, maximum simultaneous resemblance motivations</li>
+<li>Factor Analysis: variables are assembled from two major components common “factors” and “unique” factors, e.g. <strong>X</strong> = <strong>m</strong> + <strong>Lf</strong> + <strong>u</strong>, where <strong>X</strong> is a maxrix of data, <strong>m</strong> is the (vector) mean of the variables, <strong>L</strong> is a <em>p</em> x <em>k</em> matrix of factor loadings <strong>f</strong> and <strong>u</strong> are random vectors representing the underlying common and unique factors.</li>
+</ul>
+<p>The model underlying factor analysis is:</p>
+<p><em>data = common factors + unique factors</em></p>
+<p>The common factors in factor analysis are much like the first few principal components, and are often defined that way in initial phases of the analysis.</p>
+<p>The practical difference between the two analyses now lies mainly in the decision whether to rotate the principal components to emphasize the “simple structure” of the component loadings:</p>
+<ul>
+<li>easier interpretation</li>
+<li>in geographical data: regionalization</li>
+</ul>
+<div id="example-of-a-factor-analysis" class="section level2">
+<h2><span class="header-section-number">4.1</span> Example of a factor analysis</h2>
+<p>Here’s a factor analysis of the large-cities data set using the <code>factanal()</code> function:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="co"># cities.fa1 -- factor analysis of cities data -- no rotation</span></a>
+<a class="sourceLine" id="cb47-2" data-line-number="2">cities.fa1 &lt;-<span class="st"> </span><span class="kw">factanal</span>(cities.matrix, <span class="dt">factors=</span><span class="dv">2</span>, <span class="dt">rotation=</span><span class="st">&quot;none&quot;</span>, <span class="dt">scores=</span><span class="st">&quot;regression&quot;</span>)</a>
+<a class="sourceLine" id="cb47-3" data-line-number="3">cities.fa1</a></code></pre></div>
+<pre><code>## 
+## Call:
+## factanal(x = cities.matrix, factors = 2, scores = &quot;regression&quot;,     rotation = &quot;none&quot;)
+## 
+## Uniquenesses:
+##     Area Pop.1980 Pop.1990 Pop.2000   Growth     Food PersRoom    Water     Elec   Phones Vehicles 
+##    0.933    0.022    0.005    0.005    0.179    0.437    0.387    0.541    0.605    0.426    0.706 
+## 
+## Loadings:
+##          Factor1 Factor2
+## Area      0.129   0.225 
+## Pop.1980  0.914   0.377 
+## Pop.1990  0.988   0.136 
+## Pop.2000  0.967  -0.243 
+## Growth   -0.386  -0.820 
+## Food     -0.316  -0.681 
+## PersRoom -0.368  -0.691 
+## Water     0.558   0.384 
+## Elec      0.366   0.510 
+## Phones    0.518   0.553 
+## Vehicles  0.356   0.409 
+## 
+##                Factor1 Factor2
+## SS loadings      3.989   2.766
+## Proportion Var   0.363   0.251
+## Cumulative Var   0.363   0.614
+## 
+## Test of the hypothesis that 2 factors are sufficient.
+## The chi square statistic is 83.44 on 34 degrees of freedom.
+## The p-value is 4.86e-06</code></pre>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="kw">biplot</span>(cities.fa1<span class="op">$</span>scores[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="kw">loadings</span>(cities.fa1), <span class="dt">cex=</span><span class="kw">c</span>(<span class="fl">0.7</span>,<span class="fl">0.8</span>))</a></code></pre></div>
+<p><img src="lec16_files/figure-html/fa02-1.png" width="2100" /></p>
+<p>Notice that the biplot looks much the same as that for PCA (as to the loadings, which have the same interpretation–as correlations between the factors and the original variables). A new element of the factor analysis output is the “Uniquenesses” table, which, as it says, describes the uniqueness of individual variables, where values near 1.0 indicate variables that are tending to measure unique properties in the data set, while values near 0.0 indicate variables that are duplicated in a sense by other variables in the data set.</p>
+<p>Here’s the <code>qgraph</code> plot:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="kw">library</span>(qgraph)</a>
+<a class="sourceLine" id="cb50-2" data-line-number="2"><span class="co"># qg.fa1 &lt;- qgraph(cities.fa1) qgraph.pca() does not work for qgraph &gt;= 1.6</span></a>
+<a class="sourceLine" id="cb50-3" data-line-number="3"><span class="co"># qgraph(qg.fa1, posCol=&quot;darkgreen&quot;, layout=&quot;spring&quot;, negCol=&quot;darkmagenta&quot;, edge.width=2, arrows=FALSE)</span></a>
+<a class="sourceLine" id="cb50-4" data-line-number="4"><span class="co"># workaround</span></a>
+<a class="sourceLine" id="cb50-5" data-line-number="5">cities.fa1.loadings &lt;-<span class="st"> </span><span class="kw">loadings</span>(cities.fa1)</a>
+<a class="sourceLine" id="cb50-6" data-line-number="6"><span class="kw">qgraph.loadings</span>(cities.fa1.loadings[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">posCol=</span><span class="st">&quot;darkgreen&quot;</span>, <span class="dt">layout=</span><span class="st">&quot;circle&quot;</span>, <span class="dt">negCol=</span><span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">edge.width=</span><span class="dv">1</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/fa03-1.png" width="2100" /></p>
+<p>Note the “external” line segments that are scaled to the uniqueness values of each variable, and represent sources of variability extraneous to (or outside of) that generated by the factors.</p>
+<p>Here is a “rotated” factor analysis:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="co"># cities.fa2 -- factor analysis of cities data -- varimax rotation</span></a>
+<a class="sourceLine" id="cb51-2" data-line-number="2">cities.fa2 &lt;-<span class="st"> </span><span class="kw">factanal</span>(cities.matrix, <span class="dt">factors=</span><span class="dv">2</span>, <span class="dt">rotation=</span><span class="st">&quot;varimax&quot;</span>, <span class="dt">scores=</span><span class="st">&quot;regression&quot;</span>)</a>
+<a class="sourceLine" id="cb51-3" data-line-number="3">cities.fa2</a></code></pre></div>
+<pre><code>## 
+## Call:
+## factanal(x = cities.matrix, factors = 2, scores = &quot;regression&quot;,     rotation = &quot;varimax&quot;)
+## 
+## Uniquenesses:
+##     Area Pop.1980 Pop.1990 Pop.2000   Growth     Food PersRoom    Water     Elec   Phones Vehicles 
+##    0.933    0.022    0.005    0.005    0.179    0.437    0.387    0.541    0.605    0.426    0.706 
+## 
+## Loadings:
+##          Factor1 Factor2
+## Area      0.251         
+## Pop.1980  0.602   0.784 
+## Pop.1990  0.389   0.919 
+## Pop.2000          0.997 
+## Growth   -0.892  -0.159 
+## Food     -0.740  -0.127 
+## PersRoom -0.763  -0.175 
+## Water     0.516   0.439 
+## Elec      0.588   0.221 
+## Phones    0.669   0.356 
+## Vehicles  0.488   0.237 
+## 
+##                Factor1 Factor2
+## SS loadings      3.801   2.954
+## Proportion Var   0.346   0.269
+## Cumulative Var   0.346   0.614
+## 
+## Test of the hypothesis that 2 factors are sufficient.
+## The chi square statistic is 83.44 on 34 degrees of freedom.
+## The p-value is 4.86e-06</code></pre>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="kw">biplot</span>(cities.fa2<span class="op">$</span>scores[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="kw">loadings</span>(cities.fa2), <span class="dt">cex=</span><span class="kw">c</span>(<span class="fl">0.7</span>,<span class="fl">0.8</span>))</a></code></pre></div>
+<p><img src="lec16_files/figure-html/fa04-1.png" width="2100" /></p>
+<p>… and the <code>qgraph</code> plot:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="kw">library</span>(qgraph)</a>
+<a class="sourceLine" id="cb54-2" data-line-number="2"><span class="co"># qg.fa2 &lt;- qgraph(cities.fa2)</span></a>
+<a class="sourceLine" id="cb54-3" data-line-number="3"><span class="co"># qgraph(qg.fa2, posCol=&quot;darkgreen&quot;, layout=&quot;spring&quot;, negCol=&quot;darkmagenta&quot;, edge.width=2, arrows=FALSE)</span></a>
+<a class="sourceLine" id="cb54-4" data-line-number="4"><span class="co"># workaround</span></a>
+<a class="sourceLine" id="cb54-5" data-line-number="5">cities.fa2.loadings &lt;-<span class="st"> </span><span class="kw">loadings</span>(cities.fa2)</a>
+<a class="sourceLine" id="cb54-6" data-line-number="6"><span class="kw">qgraph.loadings</span>(cities.fa2.loadings[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">posCol=</span><span class="st">&quot;darkgreen&quot;</span>, <span class="dt">layout=</span><span class="st">&quot;circle&quot;</span>, <span class="dt">negCol=</span><span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">edge.width=</span><span class="dv">1</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/fa05-1.png" width="2100" /></p>
+<p><a href="lec16.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="another-pca-example" class="section level1">
+<h1><span class="header-section-number">5</span> Another PCA Example</h1>
+<p>Another example of the application of PCA can be illustrated using a set of time series of “radiative forcing” variables extracted from the IPCC AR5 WG1 volume. The individual series, all in units of <em>Wm<sup>-2</sup></em> show the impact since 1750 of both natural and anthropogenic (human) perturbations of the Earth’s energy balance, and an interesting question is “how many distinct temporal patterns are there in these data”?</p>
+<p>Several of the variables have distinctly non-normal distributions, and so all were transformed before the analyses below using the variance-stabilizing Box-Cox transformation. (Note to AGW contrarians: This is a teaching example using an interesting data set, and not whatsoever a data analysis intending to prove or disprove anything–we’re way past time for that…)</p>
+<p>Here are some simple time-series plots, which are dominated by various versions of the “hockey-stick” curve.</p>
+<p><img src="lec16_files/figure-html/fa11-1.png" width="3600" /><img src="lec16_files/figure-html/fa11-2.png" width="3600" /><img src="lec16_files/figure-html/fa11-3.png" width="3600" /></p>
+<p>Here is a <code>corrplot()</code> display, which has considerable rectagular patterning in it, reflecting the similarity in the trends of many of the individual variables.</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1">RFtrans.matrix &lt;-<span class="st"> </span>RF[<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>]</a>
+<a class="sourceLine" id="cb55-2" data-line-number="2"><span class="kw">rownames</span>(RFtrans.matrix) &lt;-<span class="st"> </span>RF[,<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb55-3" data-line-number="3"><span class="kw">corrplot</span>(<span class="kw">cor</span>(RFtrans.matrix), <span class="dt">method=</span><span class="st">&quot;color&quot;</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/fa12-1.png" width="2100" /></p>
+<p>A <code>qgraph()</code> plots can be produced as follows:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="kw">qgraph</span>(<span class="kw">cor</span>(RFtrans.matrix), <span class="dt">layout=</span><span class="st">&quot;spring&quot;</span>, <span class="dt">posCol=</span><span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol=</span><span class="st">&quot;darkmagenta&quot;</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/fa13-1.png" width="2100" /></p>
+<p>Simple inspection of this plot suggests that there are two variables, the radiative forcing by volcanos (<code>Volcanos/Vlc</code>) and solar irradiance variations (<code>Solar/Slr</code>) that vary more independently of the others, and of these two variables, radiative forcing by volcanos are the most independent.</p>
+<p>Here’s the PCA, as implemented in the <code>psych</code> package:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="co"># PCA using psych</span></a>
+<a class="sourceLine" id="cb57-2" data-line-number="2">RFtrans.pca &lt;-<span class="st"> </span><span class="kw">principal</span>(RFtrans.matrix, <span class="dt">nfactors=</span><span class="dv">3</span>, <span class="dt">rotate=</span><span class="st">&quot;none&quot;</span>)</a>
+<a class="sourceLine" id="cb57-3" data-line-number="3">RFtrans.pca</a></code></pre></div>
+<pre><code>## Principal Components Analysis
+## Call: principal(r = RFtrans.matrix, nfactors = 3, rotate = &quot;none&quot;)
+## Standardized loadings (pattern matrix) based upon correlation matrix
+##             PC1   PC2   PC3   h2     u2 com
+## CO2        0.99 -0.06  0.06 0.99 0.0118 1.0
+## OtherGHG   0.99 -0.11  0.11 0.99 0.0052 1.0
+## O3Tropos   1.00 -0.03  0.00 0.99 0.0054 1.0
+## O3Stratos -0.91  0.24 -0.24 0.95 0.0460 1.3
+## Aerosol   -0.99  0.01  0.03 0.99 0.0135 1.0
+## LUC       -0.97 -0.10  0.14 0.97 0.0264 1.1
+## H2OStrat   1.00  0.00 -0.02 0.99 0.0075 1.0
+## BCSnow     0.84  0.29 -0.34 0.91 0.0949 1.6
+## Contrails  0.85 -0.30  0.36 0.95 0.0542 1.6
+## Solar      0.62  0.49 -0.40 0.78 0.2166 2.7
+## Volcano    0.05  0.76  0.65 1.00 0.0033 2.0
+## 
+##                        PC1  PC2  PC3
+## SS loadings           8.52 1.08 0.92
+## Proportion Var        0.77 0.10 0.08
+## Cumulative Var        0.77 0.87 0.96
+## Proportion Explained  0.81 0.10 0.09
+## Cumulative Proportion 0.81 0.91 1.00
+## 
+## Mean item complexity =  1.4
+## Test of the hypothesis that 3 components are sufficient.
+## 
+## The root mean square of the residuals (RMSR) is  0.03 
+##  with the empirical chi square  25.01  with prob &lt;  0.46 
+## 
+## Fit based upon off diagonal values = 1</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="kw">summary</span>(RFtrans.pca)</a></code></pre></div>
+<pre><code>## 
+## Factor analysis with Call: principal(r = RFtrans.matrix, nfactors = 3, rotate = &quot;none&quot;)
+## 
+## Test of the hypothesis that 3 factors are sufficient.
+## The degrees of freedom for the model is 25  and the objective function was  10.19 
+## The number of observations was  262  with Chi Square =  2593.61  with prob &lt;  0 
+## 
+## The root mean square of the residuals (RMSA) is  0.03</code></pre>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1"><span class="kw">biplot</span>(RFtrans.pca, <span class="dt">cex=</span><span class="fl">0.5</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;gray&quot;</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/fa15-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1"><span class="co"># qg.pca &lt;- qgraph(RFtrans.pca)  qgraph.pca() does not work for qgraph &gt;= 1.6</span></a>
+<a class="sourceLine" id="cb62-2" data-line-number="2"><span class="co"># qgraph(qg.pca, layout=&quot;spring&quot;, posCol=&quot;darkgreen&quot;, negCol=&quot;darkmagenta&quot;, arrows=FALSE, edge.width=2)</span></a>
+<a class="sourceLine" id="cb62-3" data-line-number="3"><span class="co"># workaround</span></a>
+<a class="sourceLine" id="cb62-4" data-line-number="4">RFtrans.pca.loadings &lt;-<span class="st"> </span><span class="kw">loadings</span>(RFtrans.pca)</a>
+<a class="sourceLine" id="cb62-5" data-line-number="5"><span class="kw">qgraph.loadings</span>(RFtrans.pca.loadings[,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>], <span class="dt">posCol=</span><span class="st">&quot;darkgreen&quot;</span>, <span class="dt">layout=</span><span class="st">&quot;circle&quot;</span>, <span class="dt">negCol=</span><span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">edge.width=</span><span class="dv">1</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/fa15-2.png" width="2100" /></p>
+<p>Inspection of the loadings, the biplot and the <code>qgraph()</code> plot each confirm that idea, but also show that solar is highly correlated with the first component. Try rotating the components:</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="co"># rotated</span></a>
+<a class="sourceLine" id="cb63-2" data-line-number="2">RFtrans.pca.rot &lt;-<span class="st"> </span><span class="kw">principal</span>(RFtrans.matrix, <span class="dt">nfactors=</span><span class="dv">3</span>, <span class="dt">rotate=</span><span class="st">&quot;varimax&quot;</span>)</a>
+<a class="sourceLine" id="cb63-3" data-line-number="3">RFtrans.pca.rot</a></code></pre></div>
+<pre><code>## Principal Components Analysis
+## Call: principal(r = RFtrans.matrix, nfactors = 3, rotate = &quot;varimax&quot;)
+## Standardized loadings (pattern matrix) based upon correlation matrix
+##             RC1   RC3   RC2   h2     u2 com
+## CO2        0.87  0.48  0.01 0.99 0.0118 1.6
+## OtherGHG   0.90  0.43  0.01 0.99 0.0052 1.4
+## O3Tropos   0.84  0.54 -0.01 0.99 0.0054 1.7
+## O3Stratos -0.95 -0.23  0.00 0.95 0.0460 1.1
+## Aerosol   -0.81 -0.57  0.01 0.99 0.0135 1.8
+## LUC       -0.71 -0.69  0.01 0.97 0.0264 2.0
+## H2OStrat   0.82  0.57  0.00 0.99 0.0075 1.8
+## BCSnow     0.45  0.84 -0.01 0.91 0.0949 1.5
+## Contrails  0.97  0.08  0.03 0.95 0.0542 1.0
+## Solar      0.16  0.86  0.10 0.78 0.2166 1.1
+## Volcano    0.00  0.05  1.00 1.00 0.0033 1.0
+## 
+##                        RC1  RC3  RC2
+## SS loadings           6.16 3.34 1.01
+## Proportion Var        0.56 0.30 0.09
+## Cumulative Var        0.56 0.86 0.96
+## Proportion Explained  0.59 0.32 0.10
+## Cumulative Proportion 0.59 0.90 1.00
+## 
+## Mean item complexity =  1.5
+## Test of the hypothesis that 3 components are sufficient.
+## 
+## The root mean square of the residuals (RMSR) is  0.03 
+##  with the empirical chi square  25.01  with prob &lt;  0.46 
+## 
+## Fit based upon off diagonal values = 1</code></pre>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="kw">summary</span>(RFtrans.pca.rot)</a></code></pre></div>
+<pre><code>## 
+## Factor analysis with Call: principal(r = RFtrans.matrix, nfactors = 3, rotate = &quot;varimax&quot;)
+## 
+## Test of the hypothesis that 3 factors are sufficient.
+## The degrees of freedom for the model is 25  and the objective function was  10.19 
+## The number of observations was  262  with Chi Square =  2593.61  with prob &lt;  0 
+## 
+## The root mean square of the residuals (RMSA) is  0.03</code></pre>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1"><span class="kw">biplot</span>(RFtrans.pca.rot, <span class="dt">cex=</span><span class="fl">0.5</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;gray&quot;</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/fa16-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1"><span class="co">#qg.pca.rot &lt;- qgraph(RFtrans.pca.rot) qgraph.pca() does not work for qgraph &gt;= 1.6</span></a>
+<a class="sourceLine" id="cb68-2" data-line-number="2"><span class="co">#qgraph(qg.pca.rot, layout=&quot;spring&quot;, posCol=&quot;darkgreen&quot;, negCol=&quot;darkmagenta&quot;, arrows=FALSE, #edge.width=2)</span></a>
+<a class="sourceLine" id="cb68-3" data-line-number="3"><span class="co"># workaround</span></a>
+<a class="sourceLine" id="cb68-4" data-line-number="4">RFtrans.pca.rot.loadings &lt;-<span class="st"> </span><span class="kw">loadings</span>(RFtrans.pca.rot)</a>
+<a class="sourceLine" id="cb68-5" data-line-number="5"><span class="kw">qgraph.loadings</span>(RFtrans.pca.rot.loadings[,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>], <span class="dt">posCol=</span><span class="st">&quot;darkgreen&quot;</span>, <span class="dt">layout=</span><span class="st">&quot;circle&quot;</span>, <span class="dt">negCol=</span><span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">edge.width=</span><span class="dv">1</span>)</a></code></pre></div>
+<p><img src="lec16_files/figure-html/fa16-2.png" width="2100" /></p>
+<p>Rotation clearly sharpens the interpretation that there are three distinct components of the radiative forcing changes since 1750: 1) all of the anthropogenic forcing variables, varying in a coherent (hockey-stickish) fashion, which “explains” 72 percent of the total variability over time in these variables, followed by 2) solar and 3) volcanic forcing. The variance accounted for by the second and third components suggests that they are roughly similar in importance, and could easily switch places.</p>
+<p><a href="lec16.html">[Back to top]</a></p>
+</div>
+<div id="readings" class="section level1">
+<h1><span class="header-section-number">6</span> Readings</h1>
+<ul>
+<li>Chapter 25, Multivariate Statistics, in Crawley, M.J. (2013) <em>The R Book</em>, Wiley. To get to the book, visit <a href="http://library.uoregon.edu">http://library.uoregon.edu</a>, login, and search for the 2013 edition of the book. Here’s a direct link, once you’re logged on: <a href="http://onlinelibrary.wiley.com/book/10.1002/9781118448908">http://onlinelibrary.wiley.com/book/10.1002/9781118448908</a></li>
+<li>Maindonald (<em>Using R</em>…): ch. 6, cex=c(0.7,0.8)</li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

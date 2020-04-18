@@ -1,0 +1,355 @@
+---
+title: "Statistical inference"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+```{r load, echo=FALSE, cache=FALSE}
+load(".Rdata")
+```
+<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+# Introduction #
+
+The general idea that underlies statistical inference is the comparison of particular statistics from on observational data set (i.e. the mean, the standard deviation, the differences among the means of subsets of the data), with an appropriate reference distribution in order to judge the significance of those statistics.  When various assumptions are met, and specific hypotheses about the values of those statistics that should arise in practice have been specified, then statistical inference can be a powerful approach for drawing scientific conclusions that efficiently uses existing data or those collected for the specific purpose of testing those hypotheses.  Even in a context when a formal experimental design is not possible, or when the objective is to explore the data, significance evaluation can be useful.
+
+As a consequence of the central limit theorem, we know that the mean is normally distributed, and so we can use the normal distribution to describe the uncertainty of a sample mean.
+
+# Characterization of samples #
+
+Once a sample has been obtained, and descriptive statistics calculated, attention may then turn to the significance (representativeness as opposed to unusualness) of the sample or of the statistics. This information may be gained by comparing the specific value of a statistic with an appropriate reference distribution, and by the calculation of additional statistics that describe the level of uncertainty a particular statistic may have.
+
+In the case of the sample mean, the appropriate reference distribution is the normal distribution, which is implied by the Central Limit Theorem.
+
+## Standard error of the mean and confidence interval for the mean ##
+
+Uncertainty in the mean can be described by the standard error of the mean or by the confidence interval for the mean. The standard error of the mean can be thought of as the standard deviation of a set mean values from repeated samples.
+
+Definition of the [standard error of the mean](https://pjbartlein.github.io/GeogDataAnalysis/topics/semean.pdf)
+
+Here is a demonstration using simulated data and repeated samples of different sizes
+
+```{r semean01}
+# generate 1000 random numbers from the normal distribution
+npts <- 1000
+demo.mean <- 5; demo.sd <- 2
+data.values <- rnorm(npts, demo.mean, demo.sd)
+hist(data.values); mean(data.values); sd(data.values)
+```
+
+Set the number of replications `nreps` and the (maximum) sample size
+
+```{r semean02}
+nreps <- 1000 # number of replications (samples) for each sample size
+max.sample.size <- 100 # number of example sample sizes
+```
+
+Create several matrices to hold the individual replication results.
+
+```{r semean03}
+# matrix to hold means of each of the nreps samples
+mean.samp <- matrix(1:nreps)
+# matrices to hold means, sd’s and sample sizes for for each n
+average.means <- matrix(1:(max.sample.size-1))
+sd.means <- matrix(1:(max.sample.size-1))
+sample.size <- matrix(1:(max.sample.size-1))
+```
+
+Generate means for a range of sample sizes (1:max.sample.size)
+
+```{r semean04}
+for (n in seq(1,max.sample.size-1)) {
+   # for each sample size generate nreps samples and get their mean
+   for (i in seq(1,nreps)) {
+         samp <- sample(data.values, n+1, replace=T)
+         mean.samp[i] <- mean(samp)
+   }
+   # get the average and standard deviation of the nreps means
+   average.means[n] <- apply(mean.samp,2,mean)
+   sd.means[n] <- apply(mean.samp,2,sd)
+   sample.size[n] <- n+1
+}
+```
+
+Take a look at the means and the standard errors.  Note that means remain essentially constant across the range of sample sizes, while the standard errors decrease rapidly (at first) with increasing sample size.
+
+```{r semean05}
+plot(sample.size, sd.means, pch=16)
+head(cbind(average.means,sd.means,sample.size))
+tail(cbind(average.means,sd.means,sample.size))
+```
+
+Verify that the standard error of the mean is sigma/sqrt(n)
+
+```{r semean06}
+plot(demo.sd/sqrt((2:max.sample.size)), sd.means, pch=16)
+```
+
+Generate some data values, this time from a uniform distribution
+
+```{r semean07}
+# data.values from a uniform distribution
+data.values <- runif(npts, 0, 1)
+hist(data.values); mean(data.values); sd(data.values)
+```
+
+Rescale these values so that they have the same mean (`demo.mean`) and standard deviation (`demo.sd`) as in the previous example, 
+```{r semean08}
+# rescale the data.values so they have a mean of demo.mean
+# and a standard deviation of demo.sd (standardize, then rescale)
+data.values <- (data.values-mean(data.values))/sd(data.values)
+mean(data.values); sd(data.values)
+data.values <- (data.values*demo.sd)+demo.mean
+hist(data.values); mean(data.values); sd(data.values)
+```
+
+Repeat the demonstration
+
+```{r semean09}
+for (n in seq(1,max.sample.size-1)) {
+   # for each sample size generate nreps samples and get their mean
+   for (i in seq(1,nreps)) {
+         samp <- sample(data.values, n+1, replace=T)
+         mean.samp[i] <- mean(samp)
+   }
+   # get the average and standard deviation of the nreps means
+   average.means[n] <- apply(mean.samp,2,mean)
+   sd.means[n] <- apply(mean.samp,2,sd)
+   sample.size[n] <- n+1
+}
+plot(sample.size, sd.means, pch=16)
+head(cbind(average.means,sd.means,sample.size))
+tail(cbind(average.means,sd.means,sample.size))
+```
+
+This demonstrates that the standard error of the mean is insensitive to the underlying distribution of the data.
+
+## Confidence intervals ##
+
+The confidence interval provides a verbal or graphical characterization, based on the information in a sample, of the likely range of values within which the "true" or population mean lies.  This example uses an artificial data set  [[cidat.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/cidat.csv)
+
+`cidat` is a data frame that can be generated as follows
+```{r eval=FALSE}
+# generate 4000 random values from the Normal Distribution with mean=10, and standard deviation=1
+NormDat <- rnorm(mean=10, sd=1, n=4000) 
+# generate a "grouping variable" that defines 40 groups, each with 100 observations
+Group <- sort(rep(1:40,100))
+cidat <- data.frame(cbind(NormDat, Group)) # make a data frame
+```
+
+Attach and summarize the data set.  
+
+```{r semean11}
+attach(cidat)
+summary(cidat)
+```
+
+The idea here is to imagine that each group of 100 observations represents one possible sample of some underlying process or information set, that might occur in practice.  These hypothetical samples (which are each equally likely) provide a mechanism for illustrating the range of values of the mean that could occur simply due to natural variability of the data, and the "confidence interal" is that range of values of the mean that enclose 90% of the possible mean values.  
+
+Get the means and standard errors of each group.
+
+```{r semean12}
+group.means <- tapply(NormDat, Group, mean)
+group.sd <- tapply(NormDat, Group, sd)
+group.npts <- tapply(NormDat, Group, length)
+group.semean <- (group.sd/(sqrt(group.npts)))
+mean(group.means)
+sd(group.means)
+```
+
+Plot the individual samples (top plot) and then the means, and their standard errors (bottom plot).  Note the different scales on the plots.
+
+```{r semean13, fig.height=7}
+# plot means and data
+par(mfrow=c(2,1))
+plot(Group, NormDat)
+points(group.means, col="red", pch=16)
+# plot means and standard errors of means
+plot(group.means, ylim=c(9, 11), col="red", pch=16, xlab="Group")
+points(group.means + 2.0*group.semean , pch="-")
+points(group.means - 2.0*group.semean , pch="-")
+abline(10,0)
+```
+
+The bottom plot shows that out the 40 mean values (red dots), 2 (0.05 or 5 percent) have intervals (defined to be twice the standard error either side of the mean, black tick marks) that do not enclose the "true" value of the mean (10.0).
+
+Set the graphics window back to normal and detach `cidat`.
+
+```{r detach}
+par(mfrow=c(1,1))
+detach(cidat)
+```
+
+[[Back to top]](lec10.html)
+
+# Simple inferences based on the standard error of the mean #
+
+The standard error of the mean, along with the knowledge that the sample mean is normally distributed allows inferences about the mean to made For example, questions of the following kind can be answered:
+
+- What is the probability of occurrence of an observation with a particular value?
+- What is the probability of occurrence of a sample mean with a particular value?
+- What is the "confidence interval" for a sample mean with a particular value?
+
+Here's a short discussion of simple inferential statistics:
+
+- [[simple inferential statistics]](https://pjbartlein.github.io/GeogDataAnalysis/topics/simpleinf.pdf)
+
+[[Back to top]](lec10.html)
+
+#Hypothesis tests#
+
+The next step toward statistical inference is the more formal development and testing of specific hypotheses (as opposed to the rather informal inspection of descriptive plots, confidence intervals, etc.)
+
+&quot;Hypothesis&quot; is a word used in several contexts in data analysis or statistics:
+
+- the _research hypothesis_ is the general scientific issue that is being explored by a data analysis. It may take the form of quite specific statements, or just general speculations.
+- the _null hypothesis_ (H<sub>o</sub>) is a specific statement whose truthfulness can be evaluated by a particular statistical test. An example of a null hypothesis is that the means of two groups of observations are identical.
+- the _alternative hypothesis_ (H<sub>a</sub>) is, as its name suggests an alternative statement of what situation is true, in the event that the null hypothesis is rejected. An example of an alternative hypothesis to a null hypothesis that the means of two groups of observations are identical is that the means are not identical.
+
+A null hypothesis is _never_ &quot;proven&quot; by a statistical test. Tests may only reject, or fail to reject, a null hypothesis.
+
+There are two general approaches toward setting up and testing specific hypotheses: the &quot;classical approach&quot; and the &quot;p-value&quot; approach.
+
+The steps in the classical approach:
+
+1. define or state the null and alternative hypotheses.
+2. select a test statistic.
+3. select a significance level, or a specific probability level, which if exceeded, signals that the test statistic is large enough to consider significant.
+4. delineate the &quot;rejection region&quot; under the pdf of the appropriate distribution for the test statistic, (i.e. determine the specific value of the test statistic that if exceeded would be grounds to consider it significant.
+5. compute the test statistic.
+6. depending on the particular value of the test statistics either a) reject the null hypothesis (H<sub>o</sub>) and accept the alternative hypothesis (H<sub>a</sub>), or b) fail to reject the null hypothesis.
+
+The steps in the &quot;p-value&quot; approach are:
+
+1. define or state the null and alternative hypotheses.
+2. select and compute the test statistic.
+3. refer the test statistic to its appropriate reference distribution.
+4. calculate the probability that a value of the test statistic as large as that observed would occur by chance if the null hypothesis were true (this probability, or _p-value_, is called the significance level).
+5. if the significance level is small, the tested hypothesis (H<sub>o</sub>) is discredited, and we assert that a &quot;significant result&quot; or &quot;significant difference&quot; has been observed.
+
+- [short guide to interpreting test statistics, p-values, and significance](https://pjbartlein.github.io/GeogDataAnalysis/topics/interpstats.pdf)
+
+[[Back to top]](lec10.html)
+
+# The t-test#
+
+An illustration of an hypothesis test that is frequently used in practice is provided by the *t*-test, one of several "difference-of-means" tests.  The t-test (or more particularly *Student's t-test* (after the pseudonym of its author, W.S. Gosset) provides a mechanism for the simple task of testing whether there is a significant difference between two groups of observations, as reflected by differences in the means of the two groups.  In the *t*-test, two sample mean values, or a sample mean and a theoretical mean value, are compared as follows:
+
+- the null hypthesis is that the two mean values are equal, while the 
+- alternative hypothesis is that the means are not equal (or that one is greater than or less than the other)    
+- the test statistic is the t-statistic
+- the significance level or p-value is determined using the t-distribution
+
+The shape of the t distribution can be visualized as follows (for df=30):
+
+```{r ttest01}
+x <- seq(-3,3, by=.1)
+pdf.t <- dt(x,3)
+plot(pdf.t ~ x, type="l")
+```
+
+You can read about the origin of Gosset's pseudonum (and his contributions to brewing) [here](http://pubs.aeaweb.org/doi/pdfplus/10.1257/jep.22.4.199).
+
+## The *t*-test for assessing differences in group means##
+
+[[Details of the t-test]](https://pjbartlein.github.io/GeogDataAnalysis/topics/ttest.pdf)
+
+There are two ways the *t*-test is implemented in practice, depending on the nature of the question being asked and hence on the nature of the null hypotheis:
+
+- one-sample t-test (for testing the hypothesis that a sample mean is equal to a "known" or "theoretical" value), or the  
+- two-sample t-test (for testing the hypothesis that the means of two groups of observations are identical).
+
+Example data sets:  
+
+- [[ttestdat.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/ttestdat.csv)
+- [[foursamples.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/foursamples.csv)
+
+Attach the example data, and get a boxplot of the data by group:
+
+```{r ttest02}
+# t-tests
+attach(ttestdat)
+boxplot(Set1 ~ Group1)
+```
+
+Two-tailed *t*-test (are the means different in a general way?)
+
+```{r ttest03}
+# two-tailed tests
+t.test(Set1 ~ Group1)
+```
+
+The *t*-statistic is -0.2071 and the *p*-value = 0.8367, which indicates that the *t*-statistic is not significant, i.e. that there is little support for rejecting the null hypothesis that there is no difference between the mean of group 0 and the mean of group 1.
+
+Two one-tailed *t*-tests (each evaluates whether the means are different in a specific way?)
+
+```{r ttest04}
+t.test(Set1 ~ Group1, alternative = "less")    # i.e. mean of group 0 is less than the mean of group 1
+t.test(Set1 ~ Group1, alternative = "greater") # i.e. mean of group 0 is greater than the mean of group 1
+```
+
+Notice that for each example, the statistics (*t*-statistic, means of each group), are identical, while the *p*-values, and confidence intervals for the *t*-statistic differ).  The smallest *p*-value is obtained for the test of the hypothes that the mean of group 0 is less than the mean of group 1 (which is the observed difference).  *But*, that difference is not significant (the *p*-value is greater than 0.05).
+
+A a second example
+
+```{r ttest05}
+boxplot(Set2 ~ Group2)
+t.test(Set2 ~ Group2)
+detach(ttestdat)
+```
+
+Here the *t*-statistic is relatively large and the *p*-value very small, lending support for rejecting the null hypothesis of no significant difference in the means (and accepting the alternative hypothesis that the means do differ).  Remember, we haven't "proven" that they differ, we've only rejected the idea that they are identical.
+
+## Differences in group variances ##
+
+One assumption that underlies the *t*-test is that the variances (or dispersions) of the two samples are equal.  A modification of the basic test allows cases when the variances are approximately equal to be handled, but large differences in variability between the two groups can have an impact on the interpretability of the test results:  
+
+Example data:  [[foursamples.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/foursamples.csv)
+
+*t*-tests among groups with different variances
+
+```{r ttest06}
+attach(foursamples)
+
+# nice histograms
+cutpts <- seq(0.0, 20.0, by=1)
+par(mfrow=c(2,2))
+hist(Sample1, breaks=cutpts, xlim=c(0,20))
+hist(Sample2, breaks=cutpts, xlim=c(0,20))
+hist(Sample3, breaks=cutpts, xlim=c(0,20))
+hist(Sample4, breaks=cutpts, xlim=c(0,20))
+par(mfrow=c(1,1))
+
+boxplot(Sample1, Sample2, Sample3, Sample4)
+mean(Sample1)-mean(Sample2)
+t.test(Sample1, Sample2)
+
+mean(Sample3)-mean(Sample4)
+t.test(Sample3, Sample4)
+
+mean(Sample1)-mean(Sample3)
+t.test(Sample1, Sample3)
+
+mean(Sample2)-mean(Sample4)
+t.test(Sample2, Sample4)
+
+detach(foursamples)
+```
+
+There is a formal test for equality of group variances that will be described with analysis of variance.
+
+[[Back to top]](lec10.html)
+
+#Readings#
+
+- Owen (The R Guide):  section 7.1

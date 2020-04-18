@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Introduction to the course</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="SI-md-08.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Geographic Data Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="lec01.html">Introduction to the course</a>
+    </li>
+    <li>
+      <a href="lec02.html">Univariate plots</a>
+    </li>
+    <li>
+      <a href="lec03.html">Bivariate plots</a>
+    </li>
+    <li>
+      <a href="lec04.html">Descriptive statistics</a>
+    </li>
+    <li>
+      <a href="lec05.html">Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ggplot2.html">ggplot2 versions of basic plots</a>
+    </li>
+    <li>
+      <a href="lec06.html">Maps in R</a>
+    </li>
+    <li>
+      <a href="lec07.html">Geospatial analysis in R</a>
+    </li>
+    <li>
+      <a href="lec08.html">Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="lec09.html">Reference distributions</a>
+    </li>
+    <li>
+      <a href="lec10.html">Statistical inference</a>
+    </li>
+    <li>
+      <a href="lec11.html">Analysis of variance</a>
+    </li>
+    <li>
+      <a href="lec12.html">Regression analysis</a>
+    </li>
+    <li>
+      <a href="lec13.html">More regression analysis</a>
+    </li>
+    <li>
+      <a href="lec14.html">Nonparametric regression</a>
+    </li>
+    <li>
+      <a href="lec15.html">GLMs, GAMs, and CARTs</a>
+    </li>
+    <li>
+      <a href="lec16.html">Principal components and factor analyses</a>
+    </li>
+    <li>
+      <a href="lec17.html">MANOVA and discriminant analysis</a>
+    </li>
+    <li>
+      <a href="lec18.html">Multivariate distances and cluster analysis</a>
+    </li>
+    <li>
+      <a href="lec19.html">High-resolution and high-dimension data</a>
+    </li>
+    <li>
+      <a href="lec20.html">Analysis and visualization of large raster data sets</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Exercises</li>
+    <li>
+      <a href="ex01.html">Exercise 01 -- Getting R and RStudio</a>
+    </li>
+    <li>
+      <a href="ex02.html">Exercise 02 -- Univariate plots</a>
+    </li>
+    <li>
+      <a href="ex03.html">Exercise 03 -- Bivariate plots and descriptive statistics</a>
+    </li>
+    <li>
+      <a href="ex04.html">Exercise 04 -- Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ex05.html">Exercise 05 -- Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="ex06.html">Exercise 06 -- CI's, t-tests, ANOVA</a>
+    </li>
+    <li>
+      <a href="ex07.html">Exercise 07 -- Regression analysis</a>
+    </li>
+    <li>
+      <a href="ex08.html">Exercise 08 -- Multivariate analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="packages-and-data.html">Packages and data</a>
+    </li>
+    <li>
+      <a href="vm_inst.html">Virtual machine instructions</a>
+    </li>
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="datasets.html">Datasets</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Introduction to the course</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction-to-the-course"><span class="toc-section-number">1</span> Introduction to the course</a><ul>
+<li><a href="#data-analysis-vs-statistics-and-their-roles-in-geography"><span class="toc-section-number">1.1</span> Data Analysis vs “Statistics” and their roles in geography</a></li>
+<li><a href="#course-plan-visualization-and-data-analysis-using-r"><span class="toc-section-number">1.2</span> Course Plan: Visualization and Data Analysis Using “R”</a></li>
+</ul></li>
+<li><a href="#nature-of-geographical-data"><span class="toc-section-number">2</span> Nature of Geographical Data</a></li>
+<li><a href="#r-software-for-data-analysis-and-visualization"><span class="toc-section-number">3</span> R: Software for data analysis and visualization</a></li>
+<li><a href="#exercise-1-getting-and-using-r-and-rstudio"><span class="toc-section-number">4</span> Exercise 1: Getting and Using R (and RStudio)</a></li>
+<li><a href="#readings"><span class="toc-section-number">5</span> Readings:</a></li>
+</ul>
+</div>
+
+<div id="introduction-to-the-course" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction to the course</h1>
+<div id="data-analysis-vs-statistics-and-their-roles-in-geography" class="section level2">
+<h2><span class="header-section-number">1.1</span> Data Analysis vs “Statistics” and their roles in geography</h2>
+<ul>
+<li>Data analysis features continual iterations between the development of a conceptual model of reality (theory building or hypothesis generation) and the testing of that model (using formal or informal hypothesis testing).</li>
+<li>Classical statistics has been more oriented toward assessment (hypothesis testing) than toward discovery of relationships within data sets.</li>
+<li>Modern data analysis exploits recent developments in computing, and “scientific visualization,” but still uses more traditional “statistical analysis” approaches when appropriate.</li>
+<li>Roles in geography: “quantitative revolution”, “GIS revolution”, “Geographic Visualization”.</li>
+</ul>
+<p><strong>Statistics is not mathematics; data analysis is not statistics; but visualization <em>is</em> data analysis</strong></p>
+</div>
+<div id="course-plan-visualization-and-data-analysis-using-r" class="section level2">
+<h2><span class="header-section-number">1.2</span> Course Plan: Visualization and Data Analysis Using “R”</h2>
+<ul>
+<li>lecture web pages with embedded R examples</li>
+<li>exercises with other examples</li>
+<li>R “packages” for advanced analyses</li>
+<li>two take-home exams</li>
+</ul>
+</div>
+</div>
+<div id="nature-of-geographical-data" class="section level1">
+<h1><span class="header-section-number">2</span> Nature of Geographical Data</h1>
+<p>An implicit feature of most data sets that are examined by geographers is that individual “observations” have locational information attached to them.</p>
+<p>Most statistical packages do not explicitly recognize those spatial attributes–i.e. they treat them as ordinary variables.</p>
+<p>The principal exception is the software package we’ll use here–<strong>R</strong></p>
+<p>The “<a href="https://pjbartlein.github.io/GeogDataAnalysis/images/dcube0.gif">Data Cube</a>” – attributes, locations, occasions. The cube is made up of individual cells or datums, that represent a single attribute or variable, measured at a particular place and time (after Rummel, 1970, and many others).</p>
+<ul>
+<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/images/dcube1.gif">location x time slice</a></li>
+<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/images/dcube2.gif">time x attribute slice</a></li>
+<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/images/dcube3.gif">attribute x location slice</a></li>
+</ul>
+<p>The Rectangular Data Set – Two Examples</p>
+<ul>
+<li>Summit Cr. Geomorphic Data <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sumcr.csv">[sumcr.csv]</a></li>
+<li>Megacities <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/cities.csv">[cities.csv]</a></li>
+</ul>
+</div>
+<div id="r-software-for-data-analysis-and-visualization" class="section level1">
+<h1><span class="header-section-number">3</span> R: Software for data analysis and visualization</h1>
+<p><strong>R</strong> – Back to the future?</p>
+<ul>
+<li>Command-line interface as opposed to point-and-click GUI</li>
+<li>Extensible to new analyses</li>
+<li>Based on the “S” language</li>
+<li>Open source <a href="http://www.r-project.org/">http://www.r-project.org/</a>(home page)<br />
+</li>
+<li>many add-on “packages” <a href="http://cran.us.r-project.org/">http://cran.us.r-project.org/</a> (software)</li>
+</ul>
+<p>Many ways to use</p>
+<ul>
+<li>directly from the command line -Rterm (hard-core)</li>
+<li>RGui interface, along with a text editor (recommended)</li>
+<li>other gui’s (RStudio (recommended); Rcmdr package)</li>
+<li>Basic idea: Use text editor and RGui/RStudio jointly to write and debug “scripts”</li>
+</ul>
+</div>
+<div id="exercise-1-getting-and-using-r-and-rstudio" class="section level1">
+<h1><span class="header-section-number">4</span> Exercise 1: Getting and Using R (and RStudio)</h1>
+<ul>
+<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/ex01.html">[https://pjbartlein.github.io/GeogDataAnalysis/ex01.html]</a></li>
+</ul>
+</div>
+<div id="readings" class="section level1">
+<h1><span class="header-section-number">5</span> Readings:</h1>
+<p>Links to the readings can be found on the <em>Resources</em> tab.</p>
+<ul>
+<li>Owen (<em>The R Guide</em>): sections 1 and 2, scan section 3;</li>
+<li>Kuhnert &amp; Venebles (<em>An Introduction…</em>): p. 13-20</li>
+<li>Cleveland (<em>Visualizing Data</em> (reserve, but currently not available in library): Ch. 1</li>
+</ul>
+<p>Also, take a quick look at the folowing <em>Bookdown</em> eBooks</p>
+<ul>
+<li><em>Geocomputation with R</em> (Lovelace, Nowosad, Muenchow)</li>
+<li><em>Spatial Data Science</em> (Pebesma and Bivand)</li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

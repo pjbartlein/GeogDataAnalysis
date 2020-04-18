@@ -1,0 +1,540 @@
+---
+title: "Data wrangling and matrix algebra"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+```{r load, echo=FALSE, cache=FALSE}
+load(".Rdata")
+```
+<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+# Introduction #
+
+This lecture focuses on two topics that underlie R's facility for reading and analyzing data:  1) the facility for reading and transforming (i.e. *tidying*) data that may not initially be in standard "rectangular data set" form, and 2) the manipulation of arrays, vectors and matrices of data "under the hood" in the execution of various data-analysis routines.  The first topic, which also has been termed "data wrangling" is also an element of the concept of "reproducible research" which aims at documenting the analysis steps and results with sufficient detail that they could be reproduced by others.  
+
+Often, data are available in a format that might be efficient for one reason or another, but may not be in the *tidy* arrangement of *variables* in columns and *observations* or *cases* in rows.  Although it is possible to coerce such data into the standard rectangular or "data frame" layout, perhaps by using Excel or by simple cutting and pasting in a text editor, that approach may not be reproducible, in the sense of having a body of code that can be rerun on the same or similar data sets.  By doing the reorganization or reshaping within R, and documenting the analysis using R Markdown, the specific steps involved in the reshaping of the data can be reproduced using that documented code.  The tidying of data is supported by several packages that are elements of what Hadley Wickham (see the readings below) calls the "tidyverse" -- these packages include `readr` (for reading various kind of text data), and `dplyr` and `tidyr` for manipulation.
+
+The second topic *matrix algebra* can be thought of as an efficient way of documenting the specific manipulations of or operations on data that are used to develop specific data-analysis results, by representing those operations in a very efficient and elegant manner.  It is also the case, however, that matrix algebra is used in an analytical (as well as representational) sense to develop the specific statistics and their properties that are produced during an analysis.  This will be illustrated later for regression and multivariate analysis.
+
+# Data wrangling #
+
+## Example data ##
+
+A simple example of data wrangling, or the reshaping of non-rectangular data set into a rectangular one, can be illustrated using a small sample of monthly climate data for Eugene.  These data are not currently part of the `geog495.RData` workspace file, but can be dowloaded here:
+
+- [EugeneClim-short.csv](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/EugeneClim-short.csv) -- Three years (2013-2015) of monthly climate data for Eugene;
+- [EugeneClim-short-alt-tvars.csv](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/EugeneClim-short-alt-tvars.csv) -- Temperature data for those three years in an alternative format that is not tidy (i.e. columns are months (or observations) and rows are variables); and
+- [EugeneClim-short-alt-pvars.csv](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/EugeneClim-short-alt-pvars.csv) -- Precipitation data, also in an alternative format.
+
+The full data set can be downloaded from here:  [EugeneClim.csv](ttp://geog.uoregon.edu/GeogR/data/csv/EugeneClim.csv)
+
+### Variables ###
+The variables in the data set include:
+
+- TMAX – Monthly/Annual Maximum Temperature. Average of daily maximum temperature 
+- TMIN – Monthly/Annual Minimum Temperature. Average of daily minimum temperature
+- TAVG – Average Monthly/Annual Temperature. Computed by adding the unrounded monthly/annual maximum and minimum temperatures and dividing by 2.
+- EMXT – Extreme maximum temperature for month/year. Highest daily maximum temperature for the month/year.
+- EMNT – Extreme minimum temperature for month/year. Lowest daily minimum
+- HTDD - Heating Degree Days. Computed when daily average temperature is less than 65 degrees Fahrenheit/18.3 degrees Celsius. HDD = 65(F)/18.3(C) – mean daily temperature. Each day is summed to produce a monthly/annual total.
+- CLDD - Cooling Degree Days. Computed when daily average temperature is more than 65 degrees Fahrenheit/18.3 degrees Celsius. CDD = mean daily temperature - 65 degrees Fahrenheit/18.3 degrees Celsius. Each day is summed to produce a monthly/annual total.
+- PRCP – Total Monthly/Annual Precipitation. Given in inches or millimeters depending on user specification.
+- EMXP – Highest daily total of precipitation in the month/year.
+- DP01 – Number of days with >= 0.01 inch/0.254 millimeter in the month/year.
+- DP05 – Number of days with >= 0.5 inch/12.7 millimeters in the month/year.
+- DP10 – Number of days with >= 1.00 inch/25.4 millimeters in the month/year.
+- SNOW – Total Monthly/Annual Snowfall.
+- EMSD – Highest daily snow depth in the month/year
+- AWND – Monthly/Annual Average Wind Speed.
+
+(Variable names in the files are in lower case.)
+
+## Read the data ##
+
+The "short" (3-year) data set can be read in the conventional way, as a `data.frame` object:
+
+```{r read df}
+# read the .csv file conventionally
+csv_file <- "/Users/bartlein/Documents/geog495/data/csv/EugeneClim-short.csv"
+eugclim_df <- read.csv(csv_file) 
+```
+
+Notice the name of the function that was used to read the `.csv` file:  `read.csv()`.
+
+The `class()` and `str()` functions can be used to figure out the kind and format of the data:
+
+```{r}
+class(eugclim_df)
+str(eugclim_df)
+eugclim_df
+```
+
+The data are in a standard data frame, and it's easy to see that these data are *tidy* in th sense of variables as columns, cases as rows.  
+
+An alternative (internal to R) format for data frames is provided by the `tibble` package and funcion.  `tibbles` behave much the same as data frames, and can easily be transformed back and forth.
+
+First, load the `tidyverse` package (install it if it's not available):
+
+```{r load library}
+# load library
+library(tidyverse)
+```
+
+Note that loading the `tidyverse` library produces warnings about conflicts with other packages.  Individual functions that are "masked" by packages or libraries loaded later can always be referenced by adding the package name.  The following two statements are equivalent: 
+
+```{r masking, eval=FALSE, echo=TRUE}
+median(eugclim_df$tavg)
+stats::median(eugclim_df$tavg)
+```
+
+## Reread as a tibble ##
+
+Now read the same file as a `tibble`:
+
+```{r read tibble}
+# reading using `readr` package
+eugclim <- read_csv(csv_file)
+```
+
+Notice here the name of the function used to read the `.csv` file (`read_csv()`), which superficially looks like the function `read.csv()` that was used earlier.  Here's the distinction:
+
+- `read.csv()` -- read a `.csv` file as a `data.frame` object
+- `read_csv()` -- read a `.csv` file as a "`tibble`" (i.e. a `tbl_df` object)
+
+Take a look at the `tibble` version of the data:
+
+```{r list tibble}
+class(eugclim)
+eugclim
+```
+
+Get a basic plot of the average monthly temperature (`tavg`); this is simiple, because each colunn of the `tibble` is a time series of the values for a particular variable.  Note the 'yrmn' variable, which is a "decimal year" representation of the months in the record that facilitates plotting the data as a time series:
+
+```{r plot1}
+plot(eugclim$tavg ~ eugclim$yrmn, type="o", pch=16, xaxp=c(2013, 2016, 3))
+```
+
+[[Back to top]](lec08.html)
+
+# A data-wrangling example #
+
+An alternative way in which that Eugene climate data could have been laid out is one in which there are blocks of data, one per year, with months in columns, and individual variables in rows:
+
+```{r read alt layout}
+# alternative layout
+csv_file <- "/Users/bartlein/Documents/geog495/data/csv/EugeneClim-short-alt-tvars.csv"
+eugclim_alt <- read_csv(csv_file)
+eugclim_alt
+```
+
+This layout is obviously not "tidy", but is not atypical of the way many data sets are provided.  With considerable cutting and pasting in Excel (including transposing data using Paste > Special) these data could be rearranged, but such editing is prone to mistakes, masks what has actually been done to the data, and is not easy to repeat.
+
+## Reshaping by gathering ## 
+
+The data can be reshaped into the appropriate form using the `gather()` function in the `tidyr` package.  To illustrate this, first make another data set that includes just the average temperature data (`tavg`) from the "untidy" version of the data:
+
+```{r extract tavg}
+# get just the tavg data
+eugclim_alt_tavg <- eugclim_alt[eugclim_alt$param == "tavg", ]
+eugclim_alt_tavg
+```
+
+Then reshape the data using `gather()`: 
+
+```{r reshape by gathering}
+# reshape by gathering
+eugclim_alt_tavg2 <- gather(eugclim_alt_tavg, `1`:`12`, key="month", value="cases")
+eugclim_alt_tavg2
+```
+
+The arguments of the `gather()` function include 1) the table to be reshaped (`eugclim_alt_tavg`), 2) the columns to be gathered together (here specified as `` `1`:`12` `` and note the use of the backtick (`` ` ``) to indicate the columnn names, which in this example are character (`chr`) variables), 3) the "key" column that individual columns will be stacked up into, and 4) the  values that will be stacked.
+
+The observations are not quite in the right time-series order, but they can be sorted using the `arrange()` function from the `dplyr` package:  
+
+```{r arrange tavg2}
+eugclim_alt_tavg3 <- arrange(eugclim_alt_tavg2, year)
+eugclim_alt_tavg3
+```
+
+Add a decimal year (`yrmn`) variable to the new data set, and plot.
+
+```{r plot tavg3}
+eugclim_alt_tavg3$yrmn <- eugclim_alt_tavg3$year + (as.integer(eugclim_alt_tavg3$month)-1)/12
+plot(eugclim_alt_tavg3$cases ~ eugclim_alt_tavg3$yrmn, type="o", pch=16, col="blue", xaxp=c(2013, 2016, 3))
+```
+
+Looks right.
+
+## Reshape the whole data set ##
+
+The whole alternative-layout data set can be reshaped by first gathering the data 
+
+```{r gather and spread 1}
+# alternative layout -- gather, then spread
+eugclim_alt2 <- gather(eugclim_alt, `1`:`12`, key="month", value="cases")
+eugclim_alt2
+```
+
+The month values, which are now characters (which just happen to be numerals here), can be recoded to integers as follows:
+
+```{r recode month}
+eugclim_alt2$month <- as.integer(eugclim_alt2$month)
+```
+
+Then the "tall" stack of data is spread into rectangular data set using the values in the `param` column:
+
+```{r spread}
+eugclim_alt3 <- spread(eugclim_alt2, key="param", value=cases)
+eugclim_alt3
+```
+
+Plot the reshaped data:
+```{r}
+eugclim_alt3$yrmn <- eugclim_alt3$year + (as.integer(eugclim_alt3$month)-1)/12
+plot(eugclim_alt3$tavg ~ eugclim_alt3$yrmn, type="o", pch=16, col="red", xaxp=c(2013, 2016, 3))
+```
+[[Back to top]](lec08.html)
+
+# Other data-wrangling tasks #
+
+There are a number of other operations on a data table using the `dplyr` package (as well as base R) that can produce useful results.
+
+## Summarization ## 
+
+Summarize the whole data set.  In this example, `summarize_all()` generates a long-term mean of the data.
+
+```{r}
+# summarize
+eugclim_ltm <- summarize_all(eugclim, "mean")
+eugclim_ltm
+```
+
+Filter out just the January values, and get a long-term mean of those:
+
+```{r filter}
+# filter
+eugclim_jan <- filter(eugclim, mon==1)
+eugclim_jan
+eugclim_jan_ltm <- summarize_all(eugclim_jan, "mean")
+eugclim_jan_ltm
+```
+
+Summarize the data by groups, in this case by months.  First rearrange the data, and then summarize:
+
+```{r  groups}
+# summarize by groups -- define groups
+eugclim_group <- group_by(eugclim, mon)
+eugclim_group
+```
+
+Note that grouped data set looks almost exactly like the ungrouped one, except when listed, it includes the mention of the grouping variable (i.e., `Groups: mon [12]`).
+
+```{r summarize groups}
+# summarize groups
+eugclim_summary <- summarize_all(eugclim_group, funs(mean))
+eugclim_summary
+```
+Calculate annual averages of each variable, using the `aggregate()` function from the `stats` package.
+
+```{r aggr}
+# aggregate
+eugclim_ann <- aggregate(eugclim, by=list(eugclim$year), FUN="mean")
+eugclim_ann
+```
+
+## The pipe operator ##
+
+Operations on a data table that require multiple steps can be streamlined both in appearance in the code and in the operations themselves using the "Pipe" operator (`%>%`) from the `magrittr` package.  The operator "pipes", or moves forward, the output from one function to another.
+
+Here's a simple example, combining the grouping and summarization steps for calculating means by month.
+
+```{r pipe}
+# the pipe
+eugclim_summary <- eugclim %>% group_by(mon) %>% summarize_all(funs("mean"))
+eugclim_summary
+```
+
+What happens here is that the data table `eugclim`, is passed forward into the `group_by()` function, and the output from that is passed into the `summarize_all()` function.  There is, of course, a tradeoff between the explicitness of doing one thing at a time, and the efficiency of a single line of code that performs multiple operations.
+
+## Calculating anomalies ##
+
+A common task in analyzing climate data is to convert the "absolute" values (i.e. the observations) into "anomalies" or deviations from some long-term mean (and note that "absolute values" here should not be confused with those unsigned values of a variable produced by the absolute-value operator `abs()`, e.g. |x|).
+
+```{r}
+# anomalies
+eugclim$tavg_anm <- eugclim$tavg - eugclim_summary$tavg
+eugclim$tavg_anm
+```
+
+Plot the anomalies.
+
+```{r}
+plot(eugclim$tavg_anm ~ eugclim$yrmn, type="o", pch=16, col="green", xaxp=c(2013, 2016, 3))
+```
+
+[[Back to top]](lec08.html)
+
+# Matrix algebra #
+
+Matrix algebra provides an elegant way of representing both the data the kind of operations on tables or arrays that frequently come up in data analysis, and when implemented numerically, matrix algebra also provides efficient an means of carrying those operations out.  The following is a brief introduction to matrix algebra as implmented in R.
+
+A short dicussion of matrices in general, special matrices, and matrix operations can be found here:  [matrix.pdf](https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.pdf)
+
+## Some basic matrix definitions in R ##
+
+Create the 3 row by 2 column matrix **A**.  Note the use of the concatenation (`c()`) function to collect the individual matrix elements (the a<sub>ij</sub>'s) together, and the default fill order (`byrow = FALSE`), which implies filling the matrix by rows:
+
+```{r create matix}
+# create a matrix
+# default fill method: byrow = FALSE
+A <- matrix(c(6, 9, 12, 13, 21, 5), nrow=3, ncol=2)
+A
+class(A)
+```
+
+The `class()` function indicates that **A** is indeed a matrix (as opposed to a data frame).
+
+Create another matrix, **B**, with the same elements, only filled by row this time:
+
+```{r matrix B}
+# same elements, but byrow = TRUE
+B <-  matrix(c(6, 9, 12, 13, 21, 5), nrow=3, ncol=2, byrow=TRUE)
+B
+```
+
+Individual matrix elements can be reference using the "square-bracket selection" rules.
+
+```{r element reference}
+# referencing matrix elements
+A[1,2] # row 1, col 2
+A[2,1] # row 2, col 1
+A[2, ] # all elements in row 2
+A[, 2] # all elements in column 2 ] 
+```
+
+For comparison, create a vector **c**:
+
+```{r vector}
+# create a vector
+c <- c(1,2,3,4,5,6,7,8,9)
+c
+class(c)
+```
+
+At this point, **c** is just a list of numbers.  The `as.matrix()` function creates a 9 row by 1 column vector, which can be verified by  the `dim()` function:
+
+```{r as vector}
+c <- as.matrix(c)
+class(c)
+dim(c)
+```
+The vector **c** has 9 rows and 1 column.
+
+A vector can be reshaped into a matrix:
+
+```{r vector to matrix}
+# reshape the vector into a 3x3 matrix
+C <- matrix(c, nrow=3, ncol=3)
+C
+```
+
+A vector can also be created from a single row or column of a matrix:
+  
+```{r create vector from column}
+# create a vector from a column or row of a matrix
+a1 <- as.matrix(A[, 1]) # vector from column 1
+a1
+dim(a1)
+```
+
+**a1** is a 3 row by 1 column column vector.
+
+## Matrix operations ##
+
+Transposition (`t()`) flips the rows and columns of a matrix:
+
+```{r transposition}
+# transposition
+A
+t(A)
+```
+A second example, the transpose of **C**
+
+```{r transpose2}
+C
+t(C)
+```
+
+Vectors and also be transposed, which simply turns a column vector, e.g. **a1** into a row vector
+```{r transpose3}
+a1t <- t(a1)
+a1t
+dim(a1t)
+```
+
+## Matrix algebra ##
+
+Matrix algebra is basically analogous to scalar algebra (with the exception of division), and obeys most of the same rules that scalar algebra does.
+
+Add two matrices, **A** and **B**:
+
+```{r matrix algebra}
+# addition
+F <- A + B
+F
+```
+Note that the individual elements of **A** and **B** are simply added together to produce the corresponding elements of **F** (i.e. f<sub>ij</sub> = a<sub>ij</sub> + b<sub>ij</sub>).
+
+In order to be added together, the matrices have to be of the same shape (i.e. have the same number of rows and colums).  The shape of a matrix can be verified using the `dim()` function:
+
+```{r check same shape}
+dim(C)
+dim(A)
+```
+
+Here, **A** and **C** are not the same shape, and the following code, if executed, would product an error message:
+
+```{r non conform1, echo=TRUE, eval=FALSE}
+# A and C not same shape
+G <- A + C
+```
+
+Scalar multiplication involves muliplying each element of a matrix by a scalar value:
+
+```{r }
+# scalar multiplication
+H <- 0.5*A
+H
+```
+
+Here, h<sub>ij</sub> = 0.5 &middot; a<sub>ij</sub>.  Element-by-element multiplication is also possible for identically shaped matrices, e.g., p<sub>ij</sub> = a<sub>ij</sub> &middot; b<sub>ij</sub>:
+
+```{r}
+# element-by-element multipliction
+P <- A*B
+P
+```
+
+### Matrix multiplication ###
+
+Matrix multiplication (see [matrix.pdf](https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.pdf)) results in a a set of sums and crossproducts, as opposed to element-by-element products.  Matrix multiplication is symbolized by the `%*%` operator:
+
+```{r matrix multiplication}
+# matrix multiplication
+Q <- C %*% A
+Q
+dim(C); dim(A)
+```
+
+Note that the matrices have to be *conformable*, as they are here (the number of columns of the first matrix must equal the number of rows of the second, and the product matrix **Q** here has the number of rows of the first matrix and the number of columns of the second).  
+
+The matrices **A** and **B** are not conformable for multiplication; although they have the same shape, they are not square, and the following code would produce an error:
+
+```{r non conform2, echo=TRUE, eval=FALSE}
+T <- A %*% B # not conformable
+```
+```{r }
+dim(A); dim(B)
+```
+
+## Special matrices ##
+
+There are a number of special matrices that come up in data analysis.  Here **D** is a *diagonal* matrix, with non-zero values along the principal diagonal, and zeros elsewhere:
+
+```{r diagonal}
+# diagonal matrix
+D <- diag(c(6,2,1,3), nrow=4, ncol=4)
+D
+```
+
+A special form of a diagonal matrix is the identity matrix **I**, which has ones along the principal diagonal, and zeros elsewhere:
+
+```{r identity}
+# identity matrix
+I <- diag(1, nrow=4, ncol=4)
+I
+```
+
+A special *scalar* that appears often in practice is the *norm* (or *Euclidean norm*) of a vector, which is simply the square root of the sum of squares of the elements of the vector:
+
+```{r norm}
+# Euclidean norm of a vector
+anorm <- sqrt(t(a1) %*% a1)
+anorm
+```
+
+It can be verified that `sqrt(sum(a1^2))` = `r sqrt(sum(a1^2))`.
+
+### Inverse matrices ###
+
+The matrix algebra equivalent of division is the multiplication of one matrix by the *inverse* of another.  To illustrate this, and the topic of the *eigenstructure* of a matrix discussed below, we can look at a realistic matrix, the correlation matrix of the temperature variables in the Oregon climate-station data set.
+
+Here's the correlation matrix, **R**:
+
+```{r}
+# a realistic matrix, orstationc temperature-variable correlation matrix
+R <- cor(cbind(orstationc$tjan, orstationc$tjul, orstationc$tann))
+R
+```
+
+The inverse of the correlation matrix **R**, written as **R<sup>-1</sup>** is obtained using the `solve()` function:
+
+```{r}
+# matrix inversion
+Rinv <- solve(R)
+Rinv
+```
+
+As in scalar division, where *a*  &middot; (1/*a*) = 1.0, postmuliplying a matrix by its inverse yields the Identity matrix, **I**:
+
+```{r check inverse}
+# check inverse
+D <- R %*% Rinv
+D
+```
+
+After rounding using the `zapsmall()` function **D** indeed equals **I**:
+
+```{r round D}
+zapsmall(D)
+```
+
+### Eigenvectors and eigenvalues ###
+
+An important concept that comes up in multivariate analysis is the *decomposition* of a matrix like the correlation matrix **R** (see [matrix.pdf](https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.pdf)), into another square matrix, **E**, and a diagonal matrix, **V**, that each have some desireable properties, and which make the following statement true:  **RE** = **EV**, where **V** is a diagonal matrix with the elements v<sub>i</sub> along the diagonal.  The matrix **E** contains the *eigenvectors* of **R**, while the v<sub>i</sub>'s are the *eigenvalues* of **R**.
+
+```{r eigen}
+# eigenvectors
+E <- eigen(R)
+E
+```
+
+[[Back to top]](lec08.html)
+
+# Readings #
+
+Data wrangling is nicely covered in the "preprint" version of the *R for Data Science* book by Wickham and Grolemund (2017), available at [http://r4ds.had.co.nz](http://r4ds.had.co.nz) or through the *Bookdown* web site at [https://bookdown.org](https://bookdown.org)
+
+The routines used in data wrangling are covered in the following cheatsheets from the RStudio web site:
+
+- [Data Import with `readr`, `tibble`, and `tidyr`](https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/data-import-cheatsheet.pdf)
+- [Data Transformation with `dplyr`](https://github.com/rstudio/cheatsheets/raw/master/source/pdfs/data-transformation-cheatsheet.pdf)
+- [Data Wrangling with `dplyr` and `tidyr`](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf), a previous version of the above.
+
+Matrix algebra is concisely reviewed in:
+
+Rencher, A., 2002, Matrix Algebra, Ch. 2 in *Methods of Multivariate Analysis*, Wiley.  The chapter (and book) is available online through [http://library.uoregon.edu](http://library.uoregon.edu).
+
+
+

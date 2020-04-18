@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Exercise 5</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Geographic Data Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="lec01.html">Introduction to the course</a>
+    </li>
+    <li>
+      <a href="lec02.html">Univariate plots</a>
+    </li>
+    <li>
+      <a href="lec03.html">Bivariate plots</a>
+    </li>
+    <li>
+      <a href="lec04.html">Descriptive statistics</a>
+    </li>
+    <li>
+      <a href="lec05.html">Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ggplot2.html">ggplot2 versions of basic plots</a>
+    </li>
+    <li>
+      <a href="lec06.html">Maps in R</a>
+    </li>
+    <li>
+      <a href="lec07.html">Geospatial analysis in R</a>
+    </li>
+    <li>
+      <a href="lec08.html">Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="lec09.html">Reference distributions</a>
+    </li>
+    <li>
+      <a href="lec10.html">Statistical inference</a>
+    </li>
+    <li>
+      <a href="lec11.html">Analysis of variance</a>
+    </li>
+    <li>
+      <a href="lec12.html">Regression analysis</a>
+    </li>
+    <li>
+      <a href="lec13.html">More regression analysis</a>
+    </li>
+    <li>
+      <a href="lec14.html">Nonparametric regression</a>
+    </li>
+    <li>
+      <a href="lec15.html">GLMs, GAMs, and CARTs</a>
+    </li>
+    <li>
+      <a href="lec16.html">Principal components and factor analyses</a>
+    </li>
+    <li>
+      <a href="lec17.html">MANOVA and discriminant analysis</a>
+    </li>
+    <li>
+      <a href="lec18.html">Multivariate distances and cluster analysis</a>
+    </li>
+    <li>
+      <a href="lec19.html">High-resolution and high-dimension data</a>
+    </li>
+    <li>
+      <a href="lec20.html">Analysis and visualization of large raster data sets</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Exercises</li>
+    <li>
+      <a href="ex01.html">Exercise 01 -- Getting R and RStudio</a>
+    </li>
+    <li>
+      <a href="ex02.html">Exercise 02 -- Univariate plots</a>
+    </li>
+    <li>
+      <a href="ex03.html">Exercise 03 -- Bivariate plots and descriptive statistics</a>
+    </li>
+    <li>
+      <a href="ex04.html">Exercise 04 -- Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ex05.html">Exercise 05 -- Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="ex06.html">Exercise 06 -- CI's, t-tests, ANOVA</a>
+    </li>
+    <li>
+      <a href="ex07.html">Exercise 07 -- Regression analysis</a>
+    </li>
+    <li>
+      <a href="ex08.html">Exercise 08 -- Multivariate analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="packages-and-data.html">Packages and data</a>
+    </li>
+    <li>
+      <a href="vm_inst.html">Virtual machine instructions</a>
+    </li>
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="datasets.html">Datasets</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Exercise 5</h1>
+
+</div>
+
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<p>
+<span style="color: #FF0040;">NOTE: Not yet revised for Spring 2020</span>
+</p>
+<p><strong>Geography 4/595: Geographic Data Analysis</strong><br />
+<strong>Winter 2019</strong></p>
+<p><strong>Exercise 5: Some data wrangling and matrix algebra</strong><br />
+<strong>Finish by Monday, February 18th</strong></p>
+<p><strong>1. Introduction</strong></p>
+<p>The first aim of this exercise is to illustrate the idea of “data wrangling” or the reshaping or restructuring of input data into the “tidy” form (of a rectangular data set) with variables in columns and observations or cases in rows. The second part of the exercise consists of a few examples that illustrate the features and application of matrix algebra.</p>
+<p><strong>2. Data and packages</strong></p>
+<p>A the concept of data wrangling, or the reshaping of non-rectangular data set into a rectangular one, can be illustrated using a small sample of monthly climate data for Eugene. These data are not currently part of the <code>geog495.RData</code> workspace file (because they may be read in in different ways–as data frames or “tibbles”), but they can be downloaded here:</p>
+<ul>
+<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/EugeneClim-short.csv">EugeneClim-short.csv</a> – Three years (2013-2015) of monthly climate data for Eugene;</li>
+<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/EugeneClim-short-alt-tvars.csv">EugeneClim-short-alt-tvars.csv</a> – Temperature data for those three years in an alternative format that is not tidy (i.e. columns are months (or observations) and rows are variables); and</li>
+<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/EugeneClim-short-alt-pvars.csv">EugeneClim-short-alt-pvars.csv</a> – Precipitation data, also in an alternative format.</li>
+</ul>
+<p>The full data set can be downloaded from here: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/EugeneClim.csv">EugeneClim.csv</a></p>
+<p>(Download these to your current working directory, which can be found using <code>getwd()</code>.)</p>
+<p>Also install the <code>tidyverse</code> package, which in turn installs a number of individual packages that are used in reshaping data.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install the &quot;tidyverse&quot; suite of packages</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co"># library</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<p>Read in a typical “tidy” <code>.csv</code> file, that has variables in columns and observations in rows. This can be done in the usual way using the <code>read.csv()</code> function, which creates a standard data frame, or, if the <code>reader</code> packages has been loaded by <code>library(tidyverse)</code>, using the <code>read_csv()</code> function, which creates a “tibble”. The data here are a “short” three-year-long subset of Eugene monthly climate data.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># read a .csv file using the `readr` package</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">csv_file &lt;-<span class="st"> &quot;/Users/bartlein/Projects/geog495/data/csv/EugeneClim-short.csv&quot;</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">eugclim &lt;-<span class="st"> </span><span class="kw">read_csv</span>(csv_file)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">eugclim</a></code></pre></div>
+<p>Produce a few plots to look at the time series of individual variables, and to look at the annual cycle of each. The first use of <code>plot()</code> below plots the time series of monthly average temperature (<code>tavg</code>), while the second illustrates what the annual cycle looks like.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># time-series plot</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">plot</span>(eugclim<span class="op">$</span>tavg <span class="op">~</span><span class="st"> </span>eugclim<span class="op">$</span>yrmn, <span class="dt">type=</span><span class="st">&quot;o&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">xaxp=</span><span class="kw">c</span>(<span class="dv">2013</span>, <span class="dv">2016</span>, <span class="dv">3</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># by month</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">plot</span>(eugclim<span class="op">$</span>mon, eugclim<span class="op">$</span>tavg, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">xaxp=</span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">12</span>, <span class="dv">1</span>))</a></code></pre></div>
+<p>Repeat the plots for some other variables, in particular <code>prcp</code> (monthly total precipitation).</p>
+<p>(See (see <a href="https://pjbartlein.github.io/GeogDataAnalysis/lec08.html#variables">https://pjbartlein.github.io/GeogDataAnalysis/lec08.html#variables</a> for a listing of variables)</p>
+<blockquote>
+<p>Q1. Describe the annual cycles of the temperature and moisture-related variables. When during the year is it colder and when is it warmer, and when is it wetter and when is it drier?</p>
+</blockquote>
+<p><strong>3. Transforming (reshaping) an alternatively shaped table of data</strong></p>
+<p>An alternative layout for the data table (of just the precipitation-related variables) has the data arranged with variables in rows and months in columns. Read those data in:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># alternative layout of precipitation data</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">csv_file &lt;-<span class="st"> &quot;/Users/bartlein/Projects/geog495/data/csv/EugeneClim-short-alt-pvars.csv&quot;</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">eugclim_alt &lt;-<span class="st"> </span><span class="kw">read_csv</span>(csv_file)</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">eugclim_alt</a></code></pre></div>
+<blockquote>
+<p>Q2 Describe the different form of the two tables (<code>eugclim</code> and <code>eugclim_alt</code>). Can you think of a way to produce a time-series plot of precipitation using the data in <code>eugclim_alt</code>? (If so, show the code for doing that, and if not, why not?)</p>
+</blockquote>
+<p>Now use the <code>gather()</code> and <code>spread()</code> functions from the <code>tidyr</code> package to reshape the data. This is done here in two steps:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># reshape by gathering and spreading</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co"># 1) gather</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">eugclim_alt2 &lt;-<span class="st"> </span><span class="kw">gather</span>(eugclim_alt, <span class="st">`</span><span class="dt">1</span><span class="st">`</span><span class="op">:</span><span class="st">`</span><span class="dt">12</span><span class="st">`</span>, <span class="dt">key=</span><span class="st">&quot;month&quot;</span>, <span class="dt">value=</span><span class="st">&quot;cases&quot;</span>)</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">eugclim_alt2<span class="op">$</span>month &lt;-<span class="st"> </span><span class="kw">as.integer</span>(eugclim_alt2<span class="op">$</span>month)</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">eugclim_alt2</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># 2) spread</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">eugclim_alt3 &lt;-<span class="st"> </span><span class="kw">spread</span>(eugclim_alt2, <span class="dt">key=</span><span class="st">&quot;param&quot;</span>, <span class="dt">value=</span>cases)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">eugclim_alt3</a></code></pre></div>
+<p>Plot the reshaped data (<code>eugclim_alt3</code>) to verify that they indeed have been reshaped correctly.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># plot the reshaped data</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">eugclim_alt3<span class="op">$</span>yrmn &lt;-<span class="st"> </span>eugclim_alt3<span class="op">$</span>year <span class="op">+</span><span class="st"> </span>(<span class="kw">as.integer</span>(eugclim_alt3<span class="op">$</span>month)<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span><span class="dv">12</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">plot</span>(eugclim_alt3<span class="op">$</span>prcp <span class="op">~</span><span class="st"> </span>eugclim_alt3<span class="op">$</span>yrmn, <span class="dt">type=</span><span class="st">&quot;o&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">xaxp=</span><span class="kw">c</span>(<span class="dv">2013</span>, <span class="dv">2016</span>, <span class="dv">3</span>))</a></code></pre></div>
+<blockquote>
+<p>Q3: Compare <code>eugclim_alt2</code> and <code>eugclim_alt3</code>. What did the application of <code>gather()</code> do in creating <code>eugclim_alt2</code>, and what did the application of <code>spread()</code> do in creating <code>eugclim_alt3</code>?</p>
+</blockquote>
+<blockquote>
+<p>Q4: What is the benefit of reshaping the data in <strong>R</strong> as opposed to simply doing that in Excel or a text editor?</p>
+</blockquote>
+<p><strong>4. A little matrix algebra</strong></p>
+<p>Create three matrices, <strong>A</strong>, <strong>B</strong>, and <strong>C</strong>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># create three matrices</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co"># default fill method: byrow = FALSE</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">9</span>, <span class="dv">12</span>, <span class="dv">13</span>, <span class="dv">21</span>, <span class="dv">5</span>), <span class="dt">nrow=</span><span class="dv">3</span>, <span class="dt">ncol=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">A</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># same elements, but byrow = TRUE</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">B &lt;-<span class="st">  </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">9</span>, <span class="dv">12</span>, <span class="dv">13</span>, <span class="dv">21</span>, <span class="dv">5</span>), <span class="dt">nrow=</span><span class="dv">3</span>, <span class="dt">ncol=</span><span class="dv">2</span>, <span class="dt">byrow=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">B</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># a third matrix</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">C &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">9</span>), <span class="dt">nrow=</span><span class="dv">3</span>, <span class="dt">ncol=</span><span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">C</a></code></pre></div>
+<blockquote>
+<p>Q5 Describe the shapes of the three matrices. (Note that the <code>dim()</code> function applied to a matrix (e.g. <code>dim(A)</code>) displays the number of rows and the number of columns in the matrix.)</p>
+</blockquote>
+<p><em>Matrix addition</em></p>
+<p>Add <strong>A</strong> and <strong>B</strong>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># matrix addition</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">F &lt;-<span class="st"> </span>A <span class="op">+</span><span class="st"> </span>B</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">F</a></code></pre></div>
+<p>Now try adding <strong>A</strong> and <strong>C</strong>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">G &lt;-<span class="st"> </span>A <span class="op">+</span><span class="st"> </span>C</a></code></pre></div>
+<blockquote>
+<p>Q6: What happend? Can <strong>A</strong> and <strong>C</strong> be added? Why not? (Again, the <code>dim()</code> function might be useful.)</p>
+</blockquote>
+<p><em>Matrix multiplication</em></p>
+<p>Matrix multiplication (as distinct from element-by-element multiplication) produces a new matrix whose elements are sums of squares and cross products of the elements of matrices being multiplied (see <a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.pdf">matrix.pdf</a>). Matrix multiplication uses <code>%*%</code> as the operator.</p>
+<p>“Postmultiply” the matrix <strong>C</strong> by <strong>A</strong>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># matrix multiplication</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">Q &lt;-<span class="st"> </span>C <span class="op">%*%</span><span class="st"> </span>A</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">Q</a></code></pre></div>
+<p>… and try to postmultiply <strong>A</strong> by <strong>B</strong> (e.g. <code>T &lt;- A %*% B</code>)</p>
+<blockquote>
+<p>Q7: What happens here? What are the dimensions of <strong>C</strong>? What does the message <code>non-conformable arguments</code> imply about the shapes of <strong>A</strong> and <strong>B</strong>?</p>
+</blockquote>
+<p><em>Matrix inversion</em></p>
+<p>To illustrate matrix inversion (i.e. the matrix algebra version of scalar division), a realistic matrix can be used, in this case the correlation matrix of the temperature variables in the <code>orstationc</code> data set:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># a realistic matrix, orstationc temperature-variable correlation matrix</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">R &lt;-<span class="st"> </span><span class="kw">cor</span>(<span class="kw">cbind</span>(orstationc<span class="op">$</span>tjan, orstationc<span class="op">$</span>tjul, orstationc<span class="op">$</span>tann))</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">R</a></code></pre></div>
+<p>Get the inverse of <strong>R</strong>:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># matrix inversion</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">Rinv &lt;-<span class="st"> </span><span class="kw">solve</span>(R)</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3">Rinv</a></code></pre></div>
+<p>One property of the inverse matrix is that when pre- or postmultiplied by the original matrix, the identity matrix, <strong>I</strong> should be produced.</p>
+<blockquote>
+<p>Q8: Check to see if <code>Rinv</code> is indeed the inverse of <code>R</code>. (Show the results of the check.)</p>
+</blockquote>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

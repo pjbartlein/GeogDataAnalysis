@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Exercise 3</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Geographic Data Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="lec01.html">Introduction to the course</a>
+    </li>
+    <li>
+      <a href="lec02.html">Univariate plots</a>
+    </li>
+    <li>
+      <a href="lec03.html">Bivariate plots</a>
+    </li>
+    <li>
+      <a href="lec04.html">Descriptive statistics</a>
+    </li>
+    <li>
+      <a href="lec05.html">Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ggplot2.html">ggplot2 versions of basic plots</a>
+    </li>
+    <li>
+      <a href="lec06.html">Maps in R</a>
+    </li>
+    <li>
+      <a href="lec07.html">Geospatial analysis in R</a>
+    </li>
+    <li>
+      <a href="lec08.html">Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="lec09.html">Reference distributions</a>
+    </li>
+    <li>
+      <a href="lec10.html">Statistical inference</a>
+    </li>
+    <li>
+      <a href="lec11.html">Analysis of variance</a>
+    </li>
+    <li>
+      <a href="lec12.html">Regression analysis</a>
+    </li>
+    <li>
+      <a href="lec13.html">More regression analysis</a>
+    </li>
+    <li>
+      <a href="lec14.html">Nonparametric regression</a>
+    </li>
+    <li>
+      <a href="lec15.html">GLMs, GAMs, and CARTs</a>
+    </li>
+    <li>
+      <a href="lec16.html">Principal components and factor analyses</a>
+    </li>
+    <li>
+      <a href="lec17.html">MANOVA and discriminant analysis</a>
+    </li>
+    <li>
+      <a href="lec18.html">Multivariate distances and cluster analysis</a>
+    </li>
+    <li>
+      <a href="lec19.html">High-resolution and high-dimension data</a>
+    </li>
+    <li>
+      <a href="lec20.html">Analysis and visualization of large raster data sets</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Exercises</li>
+    <li>
+      <a href="ex01.html">Exercise 01 -- Getting R and RStudio</a>
+    </li>
+    <li>
+      <a href="ex02.html">Exercise 02 -- Univariate plots</a>
+    </li>
+    <li>
+      <a href="ex03.html">Exercise 03 -- Bivariate plots and descriptive statistics</a>
+    </li>
+    <li>
+      <a href="ex04.html">Exercise 04 -- Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ex05.html">Exercise 05 -- Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="ex06.html">Exercise 06 -- CI's, t-tests, ANOVA</a>
+    </li>
+    <li>
+      <a href="ex07.html">Exercise 07 -- Regression analysis</a>
+    </li>
+    <li>
+      <a href="ex08.html">Exercise 08 -- Multivariate analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="packages-and-data.html">Packages and data</a>
+    </li>
+    <li>
+      <a href="vm_inst.html">Virtual machine instructions</a>
+    </li>
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="datasets.html">Datasets</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Exercise 3</h1>
+
+</div>
+
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<p>
+<span style="color: #00cc00;">NOTE: This page has been revised for Spring 2020, but may undergo further edits.</span>
+</p>
+<p><strong>Geography 4/595: Geographic Data Analysis</strong><br />
+<strong>Spring 2020</strong></p>
+<p><strong>Exercise 3: Bivariate Plots &amp; Descriptive Statistics</strong><br />
+<strong>Finish by Friday, April 17</strong></p>
+<p><strong>1. Introduction</strong></p>
+<p>The purpose of this exercise is to introduce some bivariate plots and basic descriptive statistics.</p>
+<p><strong>Read through the exercise before attempting to complete it.</strong></p>
+<p>Before starting the exercise, you may want to load the workspace contained in the geog495.RData file, which contains the individual .csv and shapefiles used in the exercises. See Section 6 of the “packages-and-data” instructions: <a href="https://pjbartlein.github.io/GeogDataAnalysis/packages-and-data.html">[packages-and-data.html]</a> Downloading this workspace eliminates having to read individual files, but the instructions for doing so are still included below.</p>
+<p>Begin by starting RStudio. Check to make sure that you’re back in your working directory. You can verify that R is looking at the correct folder by clicking on File &gt; Change dir… on the RGUI menu (Windows) or Misc &gt; Change Working Directory… (Mac). If you’re in the folder you created in the first exercise, fine, otherwise you could browse to it.</p>
+<p><strong>2. Scatter Diagrams</strong></p>
+<p><em>Simple scatter diagrams</em></p>
+<p>Check to make sure the Summit Creek “data frame” (the data set after it has been read into R’s workspace) is still in the workspace:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">ls</span>()</a></code></pre></div>
+<p>If not, re-read the sumcr.csv file as in Section 8 of Exercise 1. Also, use the <code>names()</code> function to get a reminder of the names of the variables in the data frame, and attach the data frame so you can refer to individual variables by their simple names (e.g. <code>WidthWS</code> as opposed to the complete full name <code>sumcr$WidthWS</code>):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">names</span>(sumcr)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">attach</span>(sumcr)</a></code></pre></div>
+<p>The scatter diagram (sometimes also referred to as a “scatter plot”, “scattergram” or “X-Y plot” is the most basic of multivariate (more that one variable) plots, and is the workhorse among bivariate plots. Produce a scatter diagram (with water-surface depth (<code>DepthWS</code>) as the Y-axis variable, and cumulative length (<code>CumLen</code>) as the X-axis variable:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">plot</span>(CumLen, DepthWS)   <span class="co"># X-axis variable first, Y-axis variable second</span></a></code></pre></div>
+<p>Produce a second scatter diagram using the above steps for water-surface width (<code>WidthWS</code>) versus bankfull width (<code>WidthBF</code>). On Windows, before creating this second plot, click on the R graphics window to give it the focus, and then use the menu command History &gt; Recording to start saving copies of the plots so that you can use PgUp and PgDn to review previous plots.</p>
+<blockquote>
+<p>Q1: What do the overall relationships between <code>DepthWS</code> and <code>CumLen</code> and between <code>WidthWS</code> and <code>WidthBF</code> look like? (Contrast them: Which is stronger, which is weaker? What is the sense of the relationships (positive or negative)?)</p>
+</blockquote>
+<p>Detach the <code>sumcr</code> data frame before going on:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">detach</span>(sumcr)</a></code></pre></div>
+<p><em>Annotated scatter diagrams</em></p>
+<p>Download the Oregon climate station data from this link: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/orstationc.csv">[orstationc.csv]</a> and save it in your working directory. Read the data into R’s workspace using the following code:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">orstationc &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;../data/orstationc.csv&quot;</span>, <span class="dt">as.is=</span>T)</a></code></pre></div>
+<p>Note that you may have to modify the path to point to the particular folder where your data is. The path in the code above assumes that the folder structure that you set up in exercise 1 looks like</p>
+<pre><code>../geog495
+      /data</code></pre>
+<p>… and that you downloaded the <code>orstationc.csv</code> dataset to <code>../geog495/data/</code>.</p>
+<p>(The “<code>as.is=T</code>” argument in the <code>read.csv()</code> function tells R not to convert text information (station and Name) into group-membership factors, which is the default behavior.)</p>
+<p>If you’ve accidentally downloaded the file to some different place than your working directory, you can search for it while loading the file using the <code>file.choose()</code> function:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">orstationc &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">file.choose</span>(), <span class="dt">as.is=</span>T)</a></code></pre></div>
+<p>(but don’t do this if you were successful the first time.)</p>
+<p>Attach the data frame, and create a crude map by plotting <code>longitude</code> on the X-axis and <code>latitude</code> on the Y-axis:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">attach</span>(orstationc)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">plot</span>(lon, lat)</a></code></pre></div>
+<p>Label the points with the station-name abbreviations using the <code>text()</code> function</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">text</span>(lon, lat, <span class="dt">labels=</span>station)</a></code></pre></div>
+<p>(Note that <code>text()</code> won’t work unless there is a plot with the same X-axis and Y-axis variables already open.)</p>
+<p>Now plot annual precipitation (<code>pann</code>) as a function of elevation (<code>elev</code>) (i.e. <code>elev</code> on the X-axis, <code>pann</code> on the Y-axis):</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">plot</span>(elev, pann)</a></code></pre></div>
+<p>Although it might seem more intuitive to plot elevation on the vertical axis, this particular arrangement of variables is a strong convention in data analysis–elevation is the control and is plotted along the x-axis while precipitation is the response and plotted along the y-axis.</p>
+<blockquote>
+<p>Q2: Describe the relationship. Are the data “well behaved” in the sense that most points fall in a distinct cloud of points, or are there outliers or unusual points?</p>
+</blockquote>
+<p>Label individual points using the <code>identify()</code> function:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">identify</span>(elev, pann, <span class="dt">labels=</span>station)</a></code></pre></div>
+<p>To stop identifying points, hit Esc. The behavior of <code>indentify()</code> in RStudio is a little different than in the individual Windows or MacOS GUIs-—individual points are indicated with a “drop pin”-type marker that appears as they are selected, but the labels don’t appear until Esc is hit. The labels that appear then are “sticky” in that they remain identified if the <code>identify()</code> function is used again.</p>
+<blockquote>
+<p>Q3: Use the crude map of station names as well as simple inspection of the data to describe local variations in the basic relationship between elevation and annual precipitation. It may be useful to create other scatter plots, say, of elevation and longitude, or latitude and longitude and annual precipitation to get further insight. (A quick way of seeing lots of plots is to use the <code>plot()</code> function with a list of numeric variables, e.g., <code>plot(orstationc[,2:10])</code> – the “construct” <code>[,2:10]</code> means all rows, and columns 2 through 10 of the dataframe).) Unfortunately <code>identify()</code> only works on simple scatter plots.</p>
+</blockquote>
+<p>Detach the <code>orstationc</code> data frame as above.</p>
+<p><strong>3. Descriptive Statistics</strong></p>
+<p><em>Simple descriptive statistics</em></p>
+<p>This part of the exercise involves producing some descriptive statistics for the Summit Cr. data. The easiest way to get a sense of what information is provided by a particular statistic (say, the standard deviation of water-surface width within a particular reach) is to compare descriptive plots for the variable with the values of a descriptive statistic.</p>
+<p>Produce some descriptive statistics for the variable <code>WidthWS</code> (This is almost too easy!) :</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">attach</span>(sumcr)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw">summary</span>(WidthWS)</a></code></pre></div>
+<p>By themselves, the statistics don’t mean much. However, you can contrast the amount of information provided by the numerical and graphical descriptions, and the efficiency with which it is presented. Get the summary statistics for bankfull width (<code>WidthBF</code>) as well.</p>
+<blockquote>
+<p>Q4: Compare the two variables using the summary statistics and whatever descriptive plots that may seem useful. Which variable has typically larger values, which varies more from one observation to another?</p>
+</blockquote>
+<p><em>Descriptive statistics by observation-group membership</em></p>
+<p>The calculation of descriptive statistics for subsets of a data set provides one means for investigating the influence of another variable on the variations within a data set of a variable of interest.</p>
+<p>Remember that the Summit Cr. study area is divided into three sections: an upstream reach (reach A, represented by an A in column 2) in which cattle are permitted to graze, a middle reach (reach B, represented by a B) from which cattle have been excluded, and a downstream reach (reach C, represented by a C), in which cattle were again permitted to graze.</p>
+<p>Use the <code>tapply()</code> function to get descriptive statistics for <code>WidthWS</code>, stratified by reach.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">tapply</span>(WidthWS, Reach, summary)</a></code></pre></div>
+<p>The arguments of the function are 1) the name of the variable (<code>WidthWS</code>), the name of the grouping variable used to stratify the data or assign to groups (<code>Reach</code>), and the function to apply to the stratified data (in this case, <code>summary()</code>).</p>
+<p>You should see three blocks of summary statistics, one for each reach. Before attempting to answer the following, also produce a univariate scatter diagram (see Section 1 of Exercise 2) that shows the values of <code>WidthWS</code> plotted versus observation number.</p>
+<blockquote>
+<p>Q5: Describe the variations in the location (e.g. mean) and dispersion (i.e. variance or standard deviation) of water-surface width across the reaches (i.e. from the upstream grazed reach, the middle ungrazed reach, and the downstream grazed reach). Note: This is a purposefully vague question. Think about what kind of information you will need to present to adequately describe each reach, and to compare the values of <code>WidthWS</code> from one reach to another. You might think about a one-page display that would contain a couple of plots and an abbreviated table.</p>
+</blockquote>
+<p>You can leave the <code>sumcr</code> data frame attached, because there is no overlap among variable names in <code>sumcr</code> and <code>orstationc</code>.</p>
+<p><strong>4. Correlations</strong></p>
+<p>Inferring the strength of a relationship (and sometimes even the sign) from a scatter plot is somewhat of a judgment call—e.g., what kind of pattern on a scatter plot indicates a “strong” relationship? Consequently, it would be convenient to have some kind of more objective measure of the strength of a relationship than simple visual interpretation. This is provided by the correlation coefficient—a single number description of the extent to which the relationship between two variables can be described by a straight line.</p>
+<p>Attach the <code>orstationc</code> data frame again, and also plot <code>pann</code> “as a function of” <code>elev</code> (i.e. plot <code>pann</code> along the y-axis and <code>elev</code> on the x-axis. Then get the correlation coefficient between annual precipitation and elevation:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">cor</span>(elev, pann)</a></code></pre></div>
+<p>By itself, a single correlation coefficient is difficult to interpret, so you may wish to calculate correlations for other pairs of variables, and compare these to their scatter plots. Any easy way to do this to create a “correlation matrix” equivalent to the scatter plot matrix you created earlier:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">plot</span>(orstationc[,<span class="dv">2</span><span class="op">:</span><span class="dv">10</span>])</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">cor</span>(orstationc[,<span class="dv">2</span><span class="op">:</span><span class="dv">10</span>])</a></code></pre></div>
+<p>Detach the <code>orstationsc</code> dataframe:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">detach</span>(orstationc)</a></code></pre></div>
+<blockquote>
+<p>Q6: Which pairs of variables are most highly correlated, and which less so? Are the correlations consistent with your subjective interpretation of the scatter plots or not?</p>
+</blockquote>
+<p>Next, attach the <code>sumcr</code> dataframe again, and produce a scatter plot for <code>CumLen</code> vs <code>WidthWS</code>, using the alternative “equation” form of specifying the variables to be plotted.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">attach</span>(sumcr)</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw">plot</span>(WidthWS <span class="op">~</span><span class="st"> </span>CumLen)</a></code></pre></div>
+<p>In this form of specifying variables, the tilde (“<code>~</code>”) can be read as “as it varies with” or “as a function of”.</p>
+<p>Also get the correlation between these two variables.</p>
+<blockquote>
+<p>Q7: Describe the relationship evident in the scatter plot. (Is is simply a jumble of points, or is there some pattern in the plot?) Is relationship strong or weak? Now look at the correlation coefficient. Is its value consistent with your inference of the strength of the relationship? If so, does that make sense, if not, why not?</p>
+</blockquote>
+<p>Now construct a smooth curve to summarize the relationship apparent on the scatter diagram using the <code>loess()</code> function: (note–if for some reason the plot of <code>CumLen</code> vs <code>WidthWS</code> disappeared, regenerate it using the above example.)</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">loess.model &lt;-<span class="st"> </span><span class="kw">loess</span>(WidthWS <span class="op">~</span><span class="st"> </span>CumLen)</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">loess.model</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">hat &lt;-<span class="st"> </span><span class="kw">predict</span>(loess.model)</a>
+<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="kw">lines</span>(CumLen[<span class="kw">order</span>(CumLen)], hat[<span class="kw">order</span>(CumLen)], <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p>The <code>loess()</code> function finds the smooth curve and saves the details (goodness-of-fit-statistics and fitted values) in the object <code>loess.model</code>, typing <code>loess.model</code> prints out the summary statistics, the <code>predict()</code> function puts the fitted values into the variable <code>hat</code>, and the <code>lines()</code> function draws the line on the current scatter plot.</p>
+<p>Construct a scatter diagram of <code>WidthWS</code> plotted as a function of <code>hat</code>, and get the correlation between those variables.</p>
+<blockquote>
+<p>Q8: What does the relationship between <code>WidthWS</code> and the fitted values (<code>hat</code>) from the loess curve look like? (Compare it with the scatter diagram of <code>WidthWS</code> and <code>CumLen</code>.) What does this <code>WidthWS</code> vs <code>hat</code> scatter diagram (and companion correlation coefficient) suggest now about the strength of the relationship between <code>WidthWS</code> and <code>CumLen</code>.?</p>
+</blockquote>
+<p><strong>5. What to hand in.</strong></p>
+<p>Answers to the questions, and the scatter plots for Q7 and Q8.</p>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

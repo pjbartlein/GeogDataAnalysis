@@ -1,0 +1,377 @@
+---
+title: "Principal components and factor analysis"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+```{r load, echo=FALSE, cache=FALSE}
+load(".Rdata")
+```
+<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+# Introduction #
+
+*Principal components analysis (PCA)* is a widely used multivariate analysis method, the general aim of which is to reveal systematic covariations among a group of variables.   The analysis can be motivated in a number of different ways, including (in geographical contexts) finding groups of variables that measure the same underlying dimensions of a data set, describing the basic anomaly patterns that appear in spatial data sets, or producing a general index of the common variation of a set of variables.
+
+- Example:  Davis' boxes ([data](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_data.png), [plot](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_boxes.png), [scatter](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scatter.png), [components](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scores.png)), (Davis, J.C., 2001, *Statistics and Data Analysis in Geology*, Wiley)
+- [Derivation of principal components](https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html)
+
+# Properties of principal components #
+
+Because the components are derived by solving a particular optimization problem, they naturally have some "built-in" properties that are desirable in practice (e.g. maximum variability).  In addition, there are a number of other properties of the components that can be derived:
+
+- *variances* of each component, and the *proportion of the total variance* of the original variables are are given by the eigenvalues;
+- component *scores* may be calculated, that illustrate the value of each component at each observation;
+- component *loadings* that describe the correlation between each component and each variable may also be obtained;
+- the *correlations among the original variables* can be reproduced by the *p*-components, as can that part of the correlations "explained" by the first q components.
+- the *original data can be reproduced* by the *p* components, as can those parts of the original data "explained" by the first *q* components;
+- the components can be "*rotated*" to increase the interpretability of the components.
+
+[[Back to top]](lec16.html)
+
+# PCA Examples #
+
+## PCA of a two-variable matrix ##
+
+A very simple, two-variable analysis can be illustrated using Davis' boxes data [[boxes.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/boxes.csv)
+
+In this example, a simple two-variable (long-axis length and diagonal length) data set is created using Davis' artificial data.
+
+```{r pca02}
+# boxes.pca -- principal components analysis of Davis boxes data
+boxes.matrix <- data.matrix(cbind(boxes[,1],boxes[,4]))
+dimnames(boxes.matrix) <- list(NULL, cbind("long","diag"))
+```
+
+Matrix scatter plot of the data (which in this case is a single panel), and the correlation matrix:
+
+```{r pca03, fig.asp=1}
+plot (boxes.matrix)
+cor(boxes.matrix)
+```
+PCA using the `princomp()` function from the `stats` package.  The `loadings()` function extracts the *loadings* or the correlations between the input variables and the new components, and the the `biplot()` function creates a *biplot* a single figure that plots the loadings as vectors and the *component scores* as points represented by the observation numbers.  
+
+
+```{r pca04}
+boxes.pca <- princomp(boxes.matrix, cor=T)
+boxes.pca
+summary(boxes.pca)
+print(loadings(boxes.pca),cutoff=0.0)
+biplot(boxes.pca)
+```
+
+Note the angle between the vectors--the correlation between two variables is equal to the cosine of the angle between the vectors (*&theta;*), or *r = cos(&theta;)*.  Here the angle is `r acos(cor(boxes.matrix[,1],boxes.matrix[,2]))/((2*pi)/360)`, which is found by the following R code: `acos(cor(boxes.matrix[,1],boxes.matrix[,2]))/((2*pi)/360)`.
+
+The components can be drawn on the scatter plot as follows, 
+
+```{r pca05}
+# get parameters of component lines (after Everitt & Rabe-Hesketh)
+load <- boxes.pca$loadings
+slope <- load[2,]/load[1,]
+mn <- apply(boxes.matrix,2,mean)
+intcpt <- mn[2]-(slope*mn[1])
+
+# scatter plot with the two new axes added
+par(pty="s") # square plotting frame
+xlim <- range(boxes.matrix) # overall min, max
+plot(boxes.matrix, xlim=xlim, ylim=xlim, pch=16, col="purple") # both axes same length
+abline(intcpt[1],slope[1],lwd=2) # first component solid line
+abline(intcpt[2],slope[2],lwd=2,lty=2) # second component dashed
+legend("right", legend = c("PC 1", "PC 2"), lty = c(1, 2), lwd = 2, cex = 1)
+
+# projections of points onto PCA 1
+y1 <- intcpt[1]+slope[1]*boxes.matrix[,1]
+x1 <- (boxes.matrix[,2]-intcpt[1])/slope[1]
+y2 <- (y1+boxes.matrix[,2])/2.0
+x2 <- (x1+boxes.matrix[,1])/2.0
+segments(boxes.matrix[,1],boxes.matrix[,2], x2, y2, lwd=2,col="purple")
+```
+
+This plot illustrates the idea of the first (or "principal" component) providing an optimal summary of the data--no other line drawn on this scatter plot would produce a set of projected values of the data points onto the line with less variance.  The first component also has an application in reduced major axis (RMA) regression in which both x- and y-variables are assumed to have errors or uncertainties, or where there is no clear distinction between a predictor and a response.
+
+## A second example using the large-cites data set ##
+
+A second example of a simple PCA analysis can be illustrated using the large-cities data set [[cities.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/cities.csv)
+
+Create a data matrix that omits the city names and look at the data and the correlation matrix.
+
+```{r pca06, fig.asp=1}
+cities.matrix <- data.matrix(cities[,2:12])
+rownames(cities.matrix) <- cities[,1] # add city names as row labels
+```
+
+### Examining the correlation matrix ###
+
+```{r pca06b, fig.asp=1}
+plot(cities[,2:12], pch=16, cex=0.6)
+cor(cities[,2:12])
+```
+
+Matrix scatter plots, particularly those for a data set with a large number of variables are some times difficult to interpret.  Two alternative plots are available:  1) a generalized depiction of the correlation matrix using the `corrplot()` function, and 2) a plot of the correlations as a network of links ("edges") between variables ("nodes") provided by the `qgraph()` function in the package of the same name.
+
+The `corrplot()` function displays the correlation matrix using a set of little ellipses that provide a generalized dipiction of the strength and sign of a correlation.
+
+```{r pca07}
+library(corrplot)
+corrplot(cor(cities[,2:12]), method="ellipse")
+```
+
+An alternative is simply fill each cell with an appropriate color and shade.
+
+```{r pca08}
+corrplot(cor(cities[,2:12]), method="color")
+```
+
+Rectangular areas of similar sign and magnitude of the correlation identify groups of variables that tend to covary together across the observations.  For example, the three population variables are postively correlated with one another, and are inversely correlated with `Growth`, `Food` and `PersRoom`.
+
+Another way of depicting the correlations is as a network of line segments, which are drawn to illustrate the strength and sign of the correlations between each pair of variables.
+
+```{r pca09, messages=FALSE}
+library(qgraph)
+qgraph(cor(cities[,2:12]))
+```
+
+Note that in the above plot, the variable names are abbreviated using just three characters.  Most of the time this is enough.
+
+A modification of the basic `qgraph()` plot involves arranging the nodes in a way that locates more highly correlated variables closer to one another (a "force-embedded" layout, specified by the `layout="spring"` argument.  The sign of the correlations are indicated by color:  positive correlations are green, negative magenta (or red).
+
+```{r pca10}
+qgraph(cor(cities[,2:12]), layout="spring", shape="rectangle", posCol="darkgreen", negCol="darkmagenta")
+```
+
+### PCA of the cities data ###
+
+Here's the principal components analysis of the cities data:
+
+```{r pca11}
+cities.pca <- princomp(cities.matrix, cor=T)
+cities.pca
+summary(cities.pca)
+screeplot(cities.pca)
+loadings(cities.pca)
+biplot(cities.pca, col=c("black","red"), cex=c(0.7,0.8))
+```
+
+In this case, there were two "important components" and a third that was pretty important, as evidenced by the break in slope of the "screeplot".  The biplot diplays both the *loadings* (correlations between the original variables and the components) as lablelled vectors, and the component *scores* as either symbols, or as here when the matrix has rownames, as labels.
+
+The biplot and table of component loadings indicate that the first component includes variables that (more-or-less) trade off developed-world cities against developing-world ones.  (Note the opposing directions of the vectors that are sub-parallel to the x-axis.)  The second component (population) is noted by vectors and loadings that are (more-or-less) at right angles to the first set, and sub-parallel to the y-axis.  (But note that the vector for `Pop.1980` is actually more parallel to the x-axis than the y.)
+
+An alternative visualization of the principal component and their relationship with the original variables is provided by the `qgraph()` function.  The `qgraph.pca()` function does the analyis creates a "default" (circle) plot layout, and the various arguments of the `qgraph()` function create a more informative plot.  The original variables are indicted by three-character abbreviations, and the components by numbered nodes.
+
+```{r pca12}
+#qg.pca <- qgraph.pca(cities[,2:12], factors=2, rotation="none") -- qgraph.pca() does not work for qgraph >= 1.6
+#qgraph(qg.pca, posCol="darkgreen", layout="spring", negCol="darkmagenta", edge.width=2, arrows=FALSE)
+# workaround
+cities.pca.loadings <- loadings(cities.pca)
+qgraph.loadings(cities.pca.loadings[,1:2], posCol="darkgreen", layout="circle", negCol="darkmagenta", edge.width=1)
+```
+
+## "Rotation" of principal components ##
+
+The interpretation of the components (which is governed by the loadings--the correlations of the original varialbles with the newly created components) can be enhanced by "rotation" which could be thought of a set of coordinated adjustments of the vectors on a biplot.  There is not single optimal way of doing rotations, but probably the most common approach is "varimax" rotation in which the components are adjusted in a way that makes the loadings either high positive (or negative) or zero, while keeping the components uncorrelated or orthogonal.  One side-product of rotation is that the first, or principal components is no longer optimal or the most efficient single-variable summary of the data set, but losing that property is often worth the incraese in interpretability.  The `principal()` function in the `psych` package implements rotation of principal components.
+
+Here's the `psych` package version of a simple PCA:
+
+```{r pca13, message=FALSE}
+library(psych)
+```
+
+```{r pca14}
+cities.pca.unrot <- principal(cities.matrix, nfactors=2, rotate="none")
+cities.pca.unrot
+summary(cities.pca.unrot)
+biplot(cities.pca.unrot, labels=rownames(cities.matrix), cex=0.5, col=c("black","red"))
+```
+
+... and the `qgraph()` plot of the results:
+
+```{r pca15}
+cities.pca.unrot.loadings <- loadings(cities.pca.unrot)
+qgraph.loadings(cities.pca.unrot.loadings[,1:2], posCol="darkgreen", layout="circle", negCol="darkmagenta", edge.width=1)
+```
+
+Note the location and linkages of `Pop.1980` in the plot.  Here's the result with rotated components:
+
+```{r pca16}
+cities.pca.rot <- principal(cities.matrix, nfactors=2, rotate="varimax")
+cities.pca.rot
+summary(cities.pca.rot)
+biplot.psych(cities.pca.rot, labels=rownames(cities.matrix), col=c("black","red"), cex=c(0.7,0.8),
+  xlim.s=c(-3,3), ylim.s=c(-2,4))
+```
+... and the `qgraph()` plot of the rotated-component results:
+
+```{r pca17}
+# qg.pca <- qgraph(cities.pca.rot) qgraph.pca() does not work for qgraph >= 1.6
+# qgraph(qg.pca, posCol="darkgreen", layout="spring", negCol="darkmagenta", edge.width=2, arrows=FALSE)
+# workaround
+cities.pca.rot.loadings <- loadings(cities.pca.rot)
+qgraph.loadings(cities.pca.rot.loadings[,1:2], posCol="darkgreen", layout="circle", negCol="darkmagenta", edge.width=1)
+```
+
+Notice that now all three population variables are "most highly loaded on" the second component.
+
+[[Back to top]](lec16.html)
+
+# Factor analyis (FA) and PCA #
+
+*Factor analysis (FA)* can be thought of as a parallel analysis, and in some ways PCA and be viewed as a special case of FA. Despite their names being used indiscriminantly, the two alaysis do have differing underlying models:
+
+- PCA:  maximum variance, maximum simultaneous resemblance motivations
+- Factor Analysis:  variables are assembled from two major components common "factors" and "unique" factors, e.g. 
+**X** = **m** + **Lf** + **u**, where **X** is a maxrix of data, **m** is the (vector) mean of the variables, **L** is a *p* x *k* matrix of factor loadings **f** and **u** are random vectors representing the underlying common and unique factors.
+
+The model underlying factor analysis is:  
+
+*data = common factors + unique factors*
+
+The common factors in factor analysis are much like the first few principal components, and are often defined that way in initial phases of the analysis.
+
+The practical difference between the two analyses now lies mainly in the decision whether to rotate the principal components to emphasize the "simple structure" of the component loadings:
+
+- easier interpretation
+- in geographical data:  regionalization
+
+## Example of a factor analysis ##
+
+Here's a factor analysis of the large-cities data set using the `factanal()` function:
+
+```{r fa02}
+# cities.fa1 -- factor analysis of cities data -- no rotation
+cities.fa1 <- factanal(cities.matrix, factors=2, rotation="none", scores="regression")
+cities.fa1
+biplot(cities.fa1$scores[,1:2], loadings(cities.fa1), cex=c(0.7,0.8))
+```
+
+Notice that the biplot looks much the same as that for PCA (as to the loadings, which have the same interpretation--as correlations between the factors and the original variables).  A new element of the factor analysis output is the "Uniquenesses" table, which, as it says, describes the uniqueness of individual variables, where values near 1.0 indicate variables that are tending to measure unique properties in the data set, while values near 0.0 indicate variables that are duplicated in a sense by other variables in the data set.
+
+Here's the `qgraph` plot:
+
+```{r fa03}
+library(qgraph)
+# qg.fa1 <- qgraph(cities.fa1) qgraph.pca() does not work for qgraph >= 1.6
+# qgraph(qg.fa1, posCol="darkgreen", layout="spring", negCol="darkmagenta", edge.width=2, arrows=FALSE)
+# workaround
+cities.fa1.loadings <- loadings(cities.fa1)
+qgraph.loadings(cities.fa1.loadings[,1:2], posCol="darkgreen", layout="circle", negCol="darkmagenta", edge.width=1)
+```
+
+Note the "external" line segments that are scaled to the uniqueness values of each variable, and represent sources of variability extraneous to (or outside of) that generated by the factors.
+
+Here is a "rotated" factor analysis:
+
+```{r fa04}
+# cities.fa2 -- factor analysis of cities data -- varimax rotation
+cities.fa2 <- factanal(cities.matrix, factors=2, rotation="varimax", scores="regression")
+cities.fa2
+biplot(cities.fa2$scores[,1:2], loadings(cities.fa2), cex=c(0.7,0.8))
+```
+
+... and the `qgraph` plot:
+
+```{r fa05}
+library(qgraph)
+# qg.fa2 <- qgraph(cities.fa2)
+# qgraph(qg.fa2, posCol="darkgreen", layout="spring", negCol="darkmagenta", edge.width=2, arrows=FALSE)
+# workaround
+cities.fa2.loadings <- loadings(cities.fa2)
+qgraph.loadings(cities.fa2.loadings[,1:2], posCol="darkgreen", layout="circle", negCol="darkmagenta", edge.width=1)
+```
+
+[[Back to top]](lec16.html)
+
+# Another PCA Example #
+
+Another example of the application of PCA can be illustrated using a set of time series of "radiative forcing" variables extracted from the IPCC AR5 WG1 volume.  The individual series, all in units of *Wm<sup>-2</sup>* show the impact since 1750 of both natural and anthropogenic (human) perturbations of the Earth's energy balance, and an interesting question is "how many distinct temporal patterns are there in these data"?
+
+Several of the variables have distinctly non-normal distributions, and so all were transformed before the analyses below using the variance-stabilizing Box-Cox transformation.  (Note to AGW contrarians:  This is a teaching example using an interesting data set, and not whatsoever a data analysis intending to prove or disprove anything--we're way past time for that...)
+
+Here are some simple time-series plots, which are dominated by various versions of the "hockey-stick" curve.
+
+```{r fa10, echo=FALSE, include=FALSE}
+attach(RF)
+```
+```{r fa11, echo=FALSE, fig.width=12, fig.height=5}
+opar <- par(mfrow=c(2,2))
+plot(CO2 ~ Year, pch=16)
+plot(OtherGHG ~ Year, pch=16)
+plot(O3Tropos ~ Year, pch=16)
+plot(O3Stratos ~ Year, pch=16)
+plot(Aerosol ~ Year, pch=16)
+plot(LUC ~ Year, pch=16)
+plot(H2OStrat ~ Year, pch=16)
+plot(BCSnow ~ Year, pch=16)
+plot(Contrails ~ Year, pch=16)
+plot(Solar ~ Year, pch=16)
+plot(Volcano ~ Year, pch=16)
+
+par <- opar
+detach(RF)
+```
+
+Here is a `corrplot()` display, which has considerable rectagular patterning in it, reflecting the similarity in the trends of many of the individual variables.
+
+```{r fa12}
+RFtrans.matrix <- RF[2:12]
+rownames(RFtrans.matrix) <- RF[,1]
+corrplot(cor(RFtrans.matrix), method="color")
+```
+
+A `qgraph()` plots can be produced as follows:
+
+```{r fa13}
+qgraph(cor(RFtrans.matrix), layout="spring", posCol="darkgreen", negCol="darkmagenta")
+```
+
+Simple inspection of this plot suggests that there are two variables, the radiative forcing by volcanos (`Volcanos/Vlc`) and solar irradiance variations (`Solar/Slr`) that vary more independently of the others, and of these two variables, radiative forcing by volcanos are the most independent.
+
+Here's the PCA, as implemented in the `psych` package:
+
+```{r fa15}
+# PCA using psych
+RFtrans.pca <- principal(RFtrans.matrix, nfactors=3, rotate="none")
+RFtrans.pca
+summary(RFtrans.pca)
+biplot(RFtrans.pca, cex=0.5, pch=16, col="gray")
+
+# qg.pca <- qgraph(RFtrans.pca)  qgraph.pca() does not work for qgraph >= 1.6
+# qgraph(qg.pca, layout="spring", posCol="darkgreen", negCol="darkmagenta", arrows=FALSE, edge.width=2)
+# workaround
+RFtrans.pca.loadings <- loadings(RFtrans.pca)
+qgraph.loadings(RFtrans.pca.loadings[,1:3], posCol="darkgreen", layout="circle", negCol="darkmagenta", edge.width=1)
+```
+
+Inspection of the loadings, the biplot and the `qgraph()` plot each confirm that idea, but also show that solar is highly correlated with the first component.  Try rotating the components:
+
+```{r fa16}
+# rotated
+RFtrans.pca.rot <- principal(RFtrans.matrix, nfactors=3, rotate="varimax")
+RFtrans.pca.rot
+summary(RFtrans.pca.rot)
+biplot(RFtrans.pca.rot, cex=0.5, pch=16, col="gray")
+
+#qg.pca.rot <- qgraph(RFtrans.pca.rot) qgraph.pca() does not work for qgraph >= 1.6
+#qgraph(qg.pca.rot, layout="spring", posCol="darkgreen", negCol="darkmagenta", arrows=FALSE, #edge.width=2)
+# workaround
+RFtrans.pca.rot.loadings <- loadings(RFtrans.pca.rot)
+qgraph.loadings(RFtrans.pca.rot.loadings[,1:3], posCol="darkgreen", layout="circle", negCol="darkmagenta", edge.width=1)
+```
+
+Rotation clearly sharpens the interpretation that there are three distinct components of the radiative forcing changes since 1750:  1) all of the anthropogenic forcing variables, varying in a coherent (hockey-stickish) fashion, which "explains" 72 percent of the total variability over time in these variables, followed by 2) solar and 3) volcanic forcing.  The variance accounted for by the second and third components suggests that they are roughly similar in importance, and could easily switch places.
+
+[[Back to top]](lec16.html)
+
+# Readings #
+
+- Chapter 25, Multivariate Statistics, in Crawley, M.J. (2013) *The R Book*, Wiley.  To get to the book, visit [http://library.uoregon.edu](http://library.uoregon.edu), login, and search for the 2013 edition of the book.  Here's a direct link, once you're logged on: [http://onlinelibrary.wiley.com/book/10.1002/9781118448908](http://onlinelibrary.wiley.com/book/10.1002/9781118448908)
+- Maindonald (*Using R*...):  ch. 6, cex=c(0.7,0.8)

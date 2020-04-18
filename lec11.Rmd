@@ -1,0 +1,211 @@
+---
+title: "Analysis of variance"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+```{r load, echo=FALSE, cache=FALSE}
+load(".Rdata")
+```
+<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+# Introduction #
+
+"Analysis of variance" (or ANOVA) is designed to test hypotheses about the equality of two or more group means, and gets its name from the idea of judging the apparent differences among the means of the groups of observations relative to the *variance* of the individual groups.
+
+The basic underlying idea is to compare the variability of the observations *among* groups to the variability *within* groups:
+
+- if the variability among groups is small (relative to the variability within groups), this lends support to a null hypothesis that the means of the different groups are identical (i.e. that they don't differ from on another); but
+- if the variability among groups is large (relative to the variability within groups), this discredits the null hypothesis, and lends support for the alternative hypothesis (i.e. that the means *do* differ).
+
+There are some assumptions that underlie the application of analysis of variance, and which, if violated, add uncertainty to the results. The assumptions are:
+
+- there are three or more independent groups of data;
+- within each group, the values of the variables are normally distributed;
+- the variances of each group are equal;
+- the dependent or response variables are measured on an interval or ratio scale.
+
+Analysis of variance for testing for the equality of k mean values is a special case of a set of techniques known as linear modeling, which also includes regression analysis, a future topic.
+
+# Examples of analysis of variance #
+
+## One-way analysis of variance, *k*-groups of observations ##
+
+The basic analysis of variance involves one nominal or ordinal scale variable that can be used to place each observation into two or more groups, along with a single response variable.  The analysis can be viewed as determining whether knowledge of the group that a particular observation falls in will allow a better idea of the expected value of the response variable to be gained than in the absence of that knowledge.
+
+- [[definition]](https://pjbartlein.github.io/GeogDataAnalysis/topics/anova.pdf)
+- [[the null and alternative hypothesis]](https://pjbartlein.github.io/GeogDataAnalysis/images/aov.gif)
+    
+There are several approaches for evaluating the reasonableness of the assumption of homogeneity of variance.  A simple one is Bartlett's test: 
+
+- [[a test for homogeneity of variance]](https://pjbartlein.github.io/GeogDataAnalysis/topics/bartlett.pdf)
+    
+Here is an example data set:  [[anovadat.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/anovadat.csv)
+
+
+In R's implementation of the `aov()` function the group membership is expected to be represented by a "`factor`".  If the data set is being read in here, the group-membership variables will have to be converted to factors.  (They are alread factors in the `geog495.Rdata` workspace, so if that's how the data were read in the next step can be skipped.)
+
+After reading the data using `read.csv()` as usual (e.g. `anovadat <- read.csv("anovadat.csv")`), convert the integer group-membership variables to factors as follows:
+
+```{r tofactors}
+anovadat[,'Group1']<-as.factor(anovadat[,'Group1'])
+anovadat[,'Group2']<-as.factor(anovadat[,'Group2'])
+anovadat[,'Group3']<-as.factor(anovadat[,'Group3'])
+anovadat[,'Group4']<-as.factor(anovadat[,'Group4'])
+```
+
+That the conversion has properly taken place can be confirmed by looking at the structure of the data frame.
+
+```{r str_anovadat}
+str(anovadat)
+```
+
+The appropriate reference distribution in the case of analysis of variance is the *F*-distribution.  The *F* distribution has two parameters, the between-groups degrees of freedom, *k*, and the residual degrees of freedom, *N-k*:
+
+Here is a plot of the pdf (probability density function) of the *F* distribution for the following examples:
+
+```{r anova01}
+k <- 3         # number of groups
+n <- 750       # number of observations
+x <- seq(0,10,by=0.1)
+df1 <- k-1
+df2 <- n-k
+pdf_f <- df(x,df1,df2)
+plot(pdf_f ~ x, type="l")
+```
+
+See the guide for interpreting p-values for reference:  [short guide to interpreting test statistics, p-values, and significance](https://pjbartlein.github.io/GeogDataAnalysis/topics/interpstats.pdf)
+
+### Example 1 -- Significant differences in the means, but variances are not significantly different ###
+
+In this example, the `boxplot()` function is used to get a quick impression of the distribution of the data, and the `tapply()` function is used to get the mean and standard deviation for each group of observations.  
+
+```{r anova02}
+attach(anovadat)
+boxplot(Data1 ~ Group1, ylim=c(-10,50), main="ANOVA Example 1")
+tapply(Data1, Group1, mean)
+tapply(Data1, Group1, sd)
+```
+
+At first glance, the groups don't look all that different, but changing the y-axis limits can change that perception.
+
+```{r anova03}
+boxplot(Data1 ~ Group1, ylim=c(0,20), main="ANOVA Example 1")
+```
+
+The `aov()` function does the analysis, and stores the results in an object, named here as `aov1`;  similarly, the `bartlett.test()` test stores the results of the homogenetiy of variance test in the object `hov1`.  Both 'aov1' and 'hov1' are printed out, and `aov1` is further summarized using the `summary()` function.
+
+```{r anova04}
+aov1 <- aov(Data1 ~ Group1)
+aov1
+summary(aov1)
+hov1 <- bartlett.test(Data1 ~ Group1)
+hov1
+```
+
+The "signifcance" of the test statistics (*F* in the case of analysis of variance and *K^2* in the case of the homogeneity of variance test) can be judged by their *p*-values, or the probablility that the particular value of a test statistic is consistent with values that might arise by chance if the null hypotheses were true.  In the case of the *F* statistic in analysis of variance, the *p*-value is 0.0091, which implies that the value of the *F* statistic (6.83) would be highly unusual (occurring only 91 times out of 10,000) if the null hypothesis of no differences in the means among groups was true.  We thus have support for rejecting the null hypothesis of no difference among the mean values of the groups of observations, and accepting the alternative hypothesis (i.e. that the means are not equal).
+
+In contrast, the *p*-value for the homogeneity of variance test, 0.1397, is large enough (i.e. greater than 0.05) to suggest that there is little support for rejecting the null hypothesis that the variances of the data in the individual groups is equal.
+
+There are set of diagnostic plots that can be used to check the assumptions, as well as to gain some more information on the (potential differences) among groups.
+
+```{r anoma05}
+par(mfrow=c(2,2))
+plot(aov1)
+par(mfrow=c(1,1))
+```
+
+### Example 2 -- means not significantly different, and variances not significantly different ###
+
+```{r anova06}
+boxplot(Data2 ~ Group2, ylim=c(-10,50), main="ANOVA Example 2")
+tapply(Data2, Group2, mean)
+tapply(Data2, Group2, sd)
+```
+
+```{r anova07}
+aov2 <- aov(Data2 ~ Group2)
+aov2
+summary(aov2)
+hov2 <- bartlett.test(Data2 ~ Group2)
+hov2
+```
+
+This time neither test statisitc is significant (both have p-values greater than 0.05), lending little support for rejecting the two null hypotheses That there is no difference in the means or variances among groups).
+
+### Example 3 -- significant differences in means, but variances are not significantly different ###
+
+This example illustrates a case where the *F*-statistic is large enough to be significant, but where the null hypothesis of sigificant differences in group variances can not be rejected.
+
+
+```{r anova08}
+boxplot(Data3 ~ Group3, ylim=c(-10,50), main="ANOVA Example 3")
+tapply(Data3, Group3, mean)
+tapply(Data3, Group3, sd)
+```
+
+```{r anova09}
+aov3 <- aov(Data3 ~ Group3)
+aov3
+summary(aov3)
+hov3 <- bartlett.test(Data3 ~ Group3)
+hov3
+```
+
+This example is like example 1, and is intended to be campared with the next example.
+
+### Example 4 -- similar means as in Example 4, but larger group variances ###
+
+```{r anova10}
+boxplot(Data4 ~ Group4, ylim=c(-10,50), main="ANOVA Example 4")
+tapply(Data4, Group4, mean)
+tapply(Data4, Group4, sd)
+```
+
+```{r anova11}
+aov4 <- aov(Data4 ~ Group4)
+aov4
+summary(aov4)
+hov4 <- bartlett.test(Data4 ~ Group4)
+hov4
+```
+
+Example 4 shows how (relative to Example 3) the presence of larger within-group variances here reduces the apparent significance of the *F* statistic (to the point of non-significance).  It is harder to demonstrate differences among means when the variability within groups is larger. 
+
+### Example 5 -- means not significantly different, but the variances are ###
+
+This last example demonstrates a situation that often arises in practice--the variabilty of two groups of data may differ more than the means do.  (This could be more scientifically meaningful that obsrving a simple difference among means.)
+
+```{r anova12}
+boxplot(Data5 ~ Group5, ylim=c(-10,50), main="ANOVA Example 5")
+tapply(Data5, Group5, mean)
+tapply(Data5, Group5, sd)
+```
+
+```{r anova13}
+aov5 <- aov(Data5 ~ Group5)
+aov5
+summary(aov5)
+hov5 <- bartlett.test(Data5 ~ Group5)
+hov5
+```
+
+In practice, one would proceed by discussing the analysis of variance anyway (even though its assumptions are violated), because that's what people do!
+
+[[Back to top]](lec11.html)
+
+
+#Readings#
+
+- Owen (*The R Guide*):  section 7.2; 
+- Rossiter (*Introduction ... ITC*):  section 4.17.1

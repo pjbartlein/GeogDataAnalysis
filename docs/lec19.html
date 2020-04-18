@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>High-resolution and high-dimension data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="SI-md-08.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Geographic Data Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="lec01.html">Introduction to the course</a>
+    </li>
+    <li>
+      <a href="lec02.html">Univariate plots</a>
+    </li>
+    <li>
+      <a href="lec03.html">Bivariate plots</a>
+    </li>
+    <li>
+      <a href="lec04.html">Descriptive statistics</a>
+    </li>
+    <li>
+      <a href="lec05.html">Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ggplot2.html">ggplot2 versions of basic plots</a>
+    </li>
+    <li>
+      <a href="lec06.html">Maps in R</a>
+    </li>
+    <li>
+      <a href="lec07.html">Geospatial analysis in R</a>
+    </li>
+    <li>
+      <a href="lec08.html">Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="lec09.html">Reference distributions</a>
+    </li>
+    <li>
+      <a href="lec10.html">Statistical inference</a>
+    </li>
+    <li>
+      <a href="lec11.html">Analysis of variance</a>
+    </li>
+    <li>
+      <a href="lec12.html">Regression analysis</a>
+    </li>
+    <li>
+      <a href="lec13.html">More regression analysis</a>
+    </li>
+    <li>
+      <a href="lec14.html">Nonparametric regression</a>
+    </li>
+    <li>
+      <a href="lec15.html">GLMs, GAMs, and CARTs</a>
+    </li>
+    <li>
+      <a href="lec16.html">Principal components and factor analyses</a>
+    </li>
+    <li>
+      <a href="lec17.html">MANOVA and discriminant analysis</a>
+    </li>
+    <li>
+      <a href="lec18.html">Multivariate distances and cluster analysis</a>
+    </li>
+    <li>
+      <a href="lec19.html">High-resolution and high-dimension data</a>
+    </li>
+    <li>
+      <a href="lec20.html">Analysis and visualization of large raster data sets</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Exercises</li>
+    <li>
+      <a href="ex01.html">Exercise 01 -- Getting R and RStudio</a>
+    </li>
+    <li>
+      <a href="ex02.html">Exercise 02 -- Univariate plots</a>
+    </li>
+    <li>
+      <a href="ex03.html">Exercise 03 -- Bivariate plots and descriptive statistics</a>
+    </li>
+    <li>
+      <a href="ex04.html">Exercise 04 -- Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ex05.html">Exercise 05 -- Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="ex06.html">Exercise 06 -- CI's, t-tests, ANOVA</a>
+    </li>
+    <li>
+      <a href="ex07.html">Exercise 07 -- Regression analysis</a>
+    </li>
+    <li>
+      <a href="ex08.html">Exercise 08 -- Multivariate analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="packages-and-data.html">Packages and data</a>
+    </li>
+    <li>
+      <a href="vm_inst.html">Virtual machine instructions</a>
+    </li>
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="datasets.html">Datasets</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">High-resolution and high-dimension data</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#enhanced-standard-displays"><span class="toc-section-number">2</span> Enhanced standard displays</a><ul>
+<li><a href="#visualizing-high-resolution-data-sets-using-enhanced-versions-of-standard-displays"><span class="toc-section-number">2.1</span> Visualizing high-resolution data sets using enhanced versions of standard displays</a></li>
+<li><a href="#transparency"><span class="toc-section-number">2.2</span> Transparency</a></li>
+</ul></li>
+<li><a href="#the-iplots-package-transparency-and-linked-plots"><span class="toc-section-number">3</span> The iplots package: transparency and linked plots</a><ul>
+<li><a href="#installation"><span class="toc-section-number">3.1</span> Installation</a><ul>
+<li><a href="#windows"><span class="toc-section-number">3.1.1</span> Windows</a></li>
+<li><a href="#mac-os-x"><span class="toc-section-number">3.1.2</span> Mac OS X</a></li>
+</ul></li>
+<li><a href="#scatter-plot-maps"><span class="toc-section-number">3.2</span> Scatter-plot maps</a></li>
+<li><a href="#linked-interactive-plots-and-brushing"><span class="toc-section-number">3.3</span> Linked interactive plots and “brushing”</a><ul>
+<li><a href="#linked-plots-with-continuous-variables"><span class="toc-section-number">3.3.1</span> Linked plots with continuous variables</a></li>
+<li><a href="#linked-plots-with-categorical-variables"><span class="toc-section-number">3.3.2</span> Linked plots with categorical variables</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#high-density-plots-with-the-tabplot-package"><span class="toc-section-number">4</span> High-density plots with the <code>tabplot</code> package</a><ul>
+<li><a href="#read-and-map-the-north-american-modern-pollen-data-set"><span class="toc-section-number">4.1</span> Read and map the North American modern pollen data set</a></li>
+<li><a href="#the-plots"><span class="toc-section-number">4.2</span> The plots</a></li>
+</ul></li>
+<li><a href="#interactive-visualization-of-a-raster-brick"><span class="toc-section-number">5</span> Interactive visualization of a raster brick</a></li>
+<li><a href="#readings"><span class="toc-section-number">6</span> Readings</a></li>
+</ul>
+</div>
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<p>
+<span style="color: #FF0040;">NOTE: Not yet revised for Spring 2020</span>
+</p>
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>There has been a rapid increase in the availability of data sets that may contain thousands of observations (high-resolution, i.e. high-density or high-frequency data sets) and tens or hundreds of variables or attributes (high-dimension). Such data sets arise from:</p>
+<ul>
+<li>satellite remote sensing and other remote-sensing methods (e.g. hyperspectral methods)</li>
+<li>comprehensive censuses and other polling activities</li>
+<li>synthesis databases of existing data sets</li>
+<li>“reanalysis” sets of climatological variables that may consist of multiple observations per day over spans of multiple decades</li>
+<li>climate-model simulations of past, present and future climates</li>
+<li>grid-point and other forms of data exported from GIS-managed data sets.</li>
+</ul>
+<p>Although computing resources now permit the rapid production of such data sets, there is still a need for visualizing and understanding the results, and in many contexts, the analysis of the data sets is lagging the production of the data. Several approaches are evolving::</p>
+<ul>
+<li>methods for visualizing many hundreds or thousands (or more) data points using “conventional” approaches, with about a million points now (2010’s) considered to represent a “large” data set.</li>
+<li>methods for examining “linked” displays (usually interactively) that allow individual observations to be tracked across multiple views of a data</li>
+<li>special-purpose analysis methods for dealing with high-resolution (density or frequency) data sets</li>
+<li>traditional and novel methods for dealing with high-dimensional data sets (i.e. those with many variables, or more variables than observations)</li>
+</ul>
+<p>In <code>R</code>, some of these approaches are implemented in the <code>R</code> <code>iplots</code>, <code>mvtsplots</code> and <code>tabplots</code> packages, and by appropriate modification of commonplace displays like scatterplots and parallel coordinate plots included in packages available on <a href="http://cran.us.r-project.org/"><code>CRAN</code></a>, plus others available in the <a href="http://www.bioconductor.org/"><code>Bioconductor</code></a> packages as extensions of traditional mulitivariate approaches motivated by large data sets produced in the various biomedical fields.</p>
+</div>
+<div id="enhanced-standard-displays" class="section level1">
+<h1><span class="header-section-number">2</span> Enhanced standard displays</h1>
+<p>The techniques for the display and interactive analysis of high-resolution and high-dimension data sets are rapidly developing. The approaches illustrated here make use of the <code>iplots</code> and <code>tabplot</code> packages, plus some enhanced variations of basic plots.</p>
+<div id="visualizing-high-resolution-data-sets-using-enhanced-versions-of-standard-displays" class="section level2">
+<h2><span class="header-section-number">2.1</span> Visualizing high-resolution data sets using enhanced versions of standard displays</h2>
+<p>The display of high resolution data (in addition to the standard approach of simply mapping it) can be illustrated using a set of climate station data for the western United States, consisting of 3728 observations of 15 variables. Although these data are not of extremely high resolution (or high dimension), they illustrate the general ideas.</p>
+<p>Begin by loading the appropriate packages and reading the data, along with a shape file that is used to quickly map the data.</p>
+<p>Data: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/wus_pratio.csv">[wus_pratio.csv]</a> Shapefile components: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/wus.shp">[wus.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/wus.dbf">[wus.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/wus.shx">[wus.shx]</a></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(maptools) <span class="co"># loads sp library too</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(rgeos)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(RColorBrewer) <span class="co"># creates nice color schemes</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(classInt) <span class="co"># finds class intervals for continuous variables</span></a></code></pre></div>
+<p>Here’s a simple map of the station locations. The following code produces a standard map with the stations represented by dots. One technique to avoid overplotting is simply reducing the character size using the <code>cex</code> argument.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># map of precipitation stations</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">plot</span>(wus.shp, <span class="dt">lwd=</span><span class="dv">3</span>, <span class="dt">col=</span><span class="st">&quot;gray&quot;</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">points</span>(wus_pratio<span class="op">$</span>lon, wus_pratio<span class="op">$</span>lat, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.8</span>)</a></code></pre></div>
+<p><img src="lec19_files/figure-html/hd03-1.png" width="1800" /></p>
+<p>In what follows, we’ll want to examine the large-scale patterns of the seasonality (summer-wet vs. winter-wet) of precipitation. The data consist of monthly precipitation ratios, or the average precipitation for a particular month and station divided by the average annual total precipitation. This has the effect of removing the very large imprint of elevation on precipitation totals. The ratio of July to January precipitation provides a single overall description of precipitation seasonality.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># a second map with some colors</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">wus_pratio<span class="op">$</span>pjulpjan &lt;-<span class="st"> </span>wus_pratio<span class="op">$</span>pjulpann<span class="op">/</span>wus_pratio<span class="op">$</span>pjanpann  <span class="co"># pann values cancel out</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">nclr &lt;-<span class="st"> </span><span class="dv">10</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(nclr,<span class="st">&quot;PRGn&quot;</span>) </a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">class &lt;-<span class="st"> </span><span class="kw">classIntervals</span>(wus_pratio<span class="op">$</span>pjulpjan, nclr, <span class="dt">style=</span><span class="st">&quot;fixed&quot;</span>,</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">  <span class="dt">fixedBreaks=</span><span class="kw">c</span>(<span class="fl">9999.0</span>, <span class="fl">10.0</span>, <span class="fl">5.0</span>, <span class="fl">2.0</span>, <span class="fl">1.25</span>, <span class="fl">1.0</span>, <span class="fl">.800</span>, <span class="fl">.500</span>, <span class="fl">.200</span>, </a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">    <span class="fl">.100</span>, <span class="fl">0.0</span>))</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">colcode &lt;-<span class="st"> </span><span class="kw">findColours</span>(class, plotclr)</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="kw">plot</span>(wus.shp)</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="kw">points</span>(wus_pratio<span class="op">$</span>lon, wus_pratio<span class="op">$</span>lat, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span>colcode, <span class="dt">main=</span><span class="st">&quot;Jan/Jul Precipitation&quot;</span>)</a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="kw">legend</span>(<span class="op">-</span><span class="dv">125</span>,<span class="fl">33.5</span>, <span class="dt">legend=</span><span class="kw">names</span>(<span class="kw">attr</span>(colcode, <span class="st">&quot;table&quot;</span>)),</a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">  <span class="dt">fill=</span><span class="kw">attr</span>(colcode, <span class="st">&quot;palette&quot;</span>), <span class="dt">cex=</span><span class="fl">0.6</span>, <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>)</a></code></pre></div>
+<p><img src="lec19_files/figure-html/hd04-1.png" width="1800" /></p>
+</div>
+<div id="transparency" class="section level2">
+<h2><span class="header-section-number">2.2</span> Transparency</h2>
+<p>A simple scatter plot (below, left) showing the relationship between January and July precipitation ratios illustrates how the crowding of points makes interpretation difficult. The crowding can be overcome by plotting transparent symbols specified using the “alpha channel” of the color for individual points (below, right).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># plot January vs. July precipitation ratios</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfcol=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co"># opaque symbols</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>pjanpann, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">1.25</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co"># transparent symbols</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>pjanpann, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">1.25</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>, <span class="fl">.2</span>))</a></code></pre></div>
+<p><img src="lec19_files/figure-html/hd05-1.png" width="3000" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
+<p>When there are a lot of points, sometimes the graphics capability of the GUIs are taxed, and it is more efficient to make a .pdf image directly.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># transparent symbols using the pdf() device </span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">pdf</span>(<span class="dt">file=</span><span class="st">&quot;highres_enhanced_plot01.pdf&quot;</span>)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>pjanpann, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">1.25</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>, <span class="fl">.2</span>))</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw">dev.off</span>()</a></code></pre></div>
+<p>It’s easy to see how the transparency of the symbols provides a visual measure of the density of points in the various regions in the space represented by the scatter plot. A set of stripcharts illustrates the same principle.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># stripcharts -- opaque symbols</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfcol=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">stripchart</span>(wus_pratio<span class="op">$</span>pjanpann, <span class="dt">xlab=</span><span class="st">&quot;PJan/Pann&quot;</span>, <span class="dt">method=</span><span class="st">&quot;overplot&quot;</span>, <span class="dt">pch=</span><span class="dv">15</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="kw">stripchart</span>(wus_pratio<span class="op">$</span>pjanpann, <span class="dt">xlab=</span><span class="st">&quot;PJan/Pann&quot;</span>, <span class="dt">method=</span><span class="st">&quot;stack&quot;</span>, <span class="dt">pch=</span><span class="dv">15</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</a></code></pre></div>
+<p><img src="lec19_files/figure-html/hd08-1.png" width="3000" /></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">opar &lt;-<span class="st"> </span>par</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># stripcharts -- alpha-channel transparency</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfcol=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw">stripchart</span>(wus_pratio<span class="op">$</span>pjanpann, <span class="dt">xlab=</span><span class="st">&quot;PJan/Pann&quot;</span>, <span class="dt">method=</span><span class="st">&quot;overplot&quot;</span>, <span class="dt">pch=</span><span class="dv">15</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">0.1</span>))</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw">stripchart</span>(wus_pratio<span class="op">$</span>pjanpann, <span class="dt">xlab=</span><span class="st">&quot;PJan/Pann&quot;</span>, <span class="dt">method=</span><span class="st">&quot;stack&quot;</span>, <span class="dt">pch=</span><span class="dv">15</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">0.1</span>))</a></code></pre></div>
+<p><img src="lec19_files/figure-html/hd09-1.png" width="3000" /></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
+<p>Over the region as a whole, the interesting question is the roles location and elevation may play in the seasonality of precipitation. The following plots show that the dependence of precipitation seasonality on elevation is rather complicated.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># seasonal precipitation vs. elevation</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfcol=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>elev, wus_pratio<span class="op">$</span>pjanpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="fl">0.1</span>))</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>elev, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="fl">0.1</span>))</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>elev, wus_pratio<span class="op">$</span>pjulpjan, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="fl">0.1</span>))</a></code></pre></div>
+<p><img src="lec19_files/figure-html/hd10-1.png" width="3000" /></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
+<p><a href="lec19.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="the-iplots-package-transparency-and-linked-plots" class="section level1">
+<h1><span class="header-section-number">3</span> The iplots package: transparency and linked plots</h1>
+<p>The <code>iplots</code> package provides another way of producing “alpha-channel” plots (plus more, as will be illustrated below).</p>
+<div id="installation" class="section level2">
+<h2><span class="header-section-number">3.1</span> Installation</h2>
+<p>The <code>iplots</code> package was designed to run in a “third-party” GUI called <code>JGR</code> which handles the execution of the Java-language plotting routines. The installation of <code>JGR</code> on Windows is pretty straightforward, but a little tricky on the Mac.</p>
+<div id="windows" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> Windows</h3>
+<p>On Windows, download and install the <code>iplots</code> package as usual. (Also install the <code>rJava</code> package; other necessary packages should be automatically installed). Then load the <code>rJava</code> and <code>iplots</code> packages as usual.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">library</span>(rJava)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">library</span>(iplots)</a></code></pre></div>
+</div>
+<div id="mac-os-x" class="section level3">
+<h3><span class="header-section-number">3.1.2</span> Mac OS X</h3>
+<p>On the Mac, the installation is a little more involved, <code>iplots</code> is run through an “IDE/script editor”&quot; called <code>JGR</code>, which combines a script editor and console window, and resembles the usual Mac OS X R GUI. <code>JGR</code> was built using an older version of Java (Java 6), and the appropriate “runtime environment” (currently Java for OS X 2015-001) has be downloaded from Apple and installed.</p>
+<p>Go to <a href="https://support.apple.com/kb/DL1572?locale=en_US">https://support.apple.com/kb/DL1572?locale=en_US</a>, and click on the “Download” button, and follow instructions.</p>
+<p>(Note: Apple recommends keeping Java up to date. To download the current Java run-time environment (JRE) from Oracle.</p>
+<ul>
+<li>Go to <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">[http://www.oracle.com/technetwork/java/javase/downloads/index.html]</a>. Click on the JRE Download button, follow the instructions, and eventually download and install <code>jre-8u121-macosx-x64.dmg</code> (or the most current version). Then<br />
+</li>
+<li>Open a terminal window and type or copy and paste the following (including the quotes <code>&quot;</code>):<br />
+<code>export JAVA_HOME=&quot;/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home&quot;</code></li>
+<li>Check the installation by typing <code>java -version</code> and you should see <code>java version &quot;1.8.0_121-b13&quot;</code>)</li>
+</ul>
+<p>Then download <code>JGR</code> and the appropriate libraries:</p>
+<ul>
+<li>Go to <a href="http://rforge.net/JGR/files/">[http://rforge.net/JGR/files/]</a> and download <code>JGR-1.8.dmg</code> (at the time of this writing), and then open the disk image and install it by copying it to your Applications folder. (Note that there is a <code>JGR</code> application (<code>JGR.app</code>) and the <code>JGR</code> <code>R</code> package; they’re not the same thing, and both need to be installed.)</li>
+<li>install <code>JGR-1.8.dmg</code> (you may have to deal with Mac security restrictions)</li>
+<li>Install the necessary packages the usual way (i.e. <code>install.packages(c(&quot;rJava&quot;, &quot;JavaGD&quot;, &quot;iplots&quot;))</code>)</li>
+</ul>
+<p>Then, to run <code>JGR</code>:</p>
+<ul>
+<li>load the <code>JGR</code> package by typing <code>library(JGR)</code>; some warnings will be produced.</li>
+<li>Then start <code>JGR</code> by typing <code>JGR()</code> in the <code>R</code> or <code>RStudio</code> console window. (It’s ok to quit <code>R</code> or <code>RStudio</code> at this point.)</li>
+<li>switch to the <code>JGR</code> app.</li>
+<li>use the <code>JGR</code> <code>Workspace</code> menu to load a workspace, or paste the following into the bottom pane of the <code>JGR</code> app:</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">url</span>(<span class="st">&quot;https://pjbartlein.github.io/GeogDataAnalysis/data/Rdata/geog495.RData&quot;</span>)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">load</span>(<span class="dt">file=</span>con)</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">close</span>(con)</a></code></pre></div>
+<p>(<code>JRG</code> maintains its own workspace (and <code>.RData</code> file), distinct from the one maintained by RStudio.)</p>
+</div>
+</div>
+<div id="scatter-plot-maps" class="section level2">
+<h2><span class="header-section-number">3.2</span> Scatter-plot maps</h2>
+<p>Here’s the <code>iplots</code> version of the scatter-plot map. Note the size of the symbols can be controlled by the up and down arrow keys, and the transparency by the right and left arrow keys.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">attach</span>(wus_pratio)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co"># simple scatter plot iplots version with transparency</span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co"># use arrow keys to control transparency and symbol size</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="kw">iplot</span>(elev,pjanpann, <span class="dt">xlab=</span><span class="st">&quot;elev&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;pjanpann&quot;</span>) </a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="kw">detach</span>(wus_pratio)</a></code></pre></div>
+<p><img src="images/iplot011.png" /></p>
+<p><a href="lec19.html">[Back to top]</a></p>
+</div>
+<div id="linked-interactive-plots-and-brushing" class="section level2">
+<h2><span class="header-section-number">3.3</span> Linked interactive plots and “brushing”</h2>
+<p>Linked plots are those in which multiple plots are generated and viewed, and particular observations are flagged or “brushed” to call attention to them in each of the individual plots. The iplots package provides an easy way to create a small number of linked plots. The data set used here (precipitation ratios in the region around Yellowstone National Park) is a subset of the larger data set, and facilitates a more rapid demonstration. The function <code>ipcp()</code> creates a parallel-coordinates plot, while the function <code>iplot()</code> in this instance creates a crude map. After the plots are created, the mouse can be used to draw a rectangular selection region that “lights up” points in both plots.</p>
+<p>Note: If you get a “Data length mismatch” dialog box warning when executing the code below, reply “Yes”.</p>
+<div id="linked-plots-with-continuous-variables" class="section level3">
+<h3><span class="header-section-number">3.3.1</span> Linked plots with continuous variables</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># linked interactive plots -- brushing</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co"># example with Yellowstone region pratios iplots version</span></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw">attach</span>(yellpratio)</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="kw">names</span>(yellpratio)</a></code></pre></div>
+<pre><code>##  [1] &quot;Lat&quot;   &quot;Lon&quot;   &quot;Elev&quot;  &quot;APJan&quot; &quot;APFeb&quot; &quot;APMar&quot; &quot;APApr&quot; &quot;APMay&quot; &quot;APJun&quot; &quot;APJul&quot; &quot;APAug&quot; &quot;APSep&quot;
+## [13] &quot;APOct&quot; &quot;APNov&quot; &quot;APDec&quot;</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># parallel coordinate plot plus scatter plot map</span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">ipcp</span>(yellpratio) <span class="co"># use arrow keys to control transparency</span></a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="kw">iplot</span>(Lon, Lat) <span class="co"># use arrow keys to control symbol size</span></a></code></pre></div>
+<p>Here, stations with low winter precipitation ratios were selected on the parallel coordinates plot, and the corresponding locations are shown on the scatter-plot map.</p>
+<p><img src="figures_iplots/iplot021.png" /> <img src="images/iplot022.png" /></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">detach</span>(yellpratio)</a></code></pre></div>
+<p>Here’s a second example using the higher-density western U.S. precipitation ratios:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># example with the higher-density western U.S. pratios</span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">attach</span>(wus_pratio) </a></code></pre></div>
+<pre><code>## The following objects are masked _by_ .GlobalEnv:
+## 
+##     lat, lon</code></pre>
+<pre><code>## The following object is masked from package:spData:
+## 
+##     elev</code></pre>
+<pre><code>## The following objects are masked from orstationc:
+## 
+##     elev, lat, lon</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co"># parallel coordiate plot plus scatter plot map</span></a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="kw">ipcp</span>(wus_pratio) <span class="co"># use arrow keys to control transparency</span></a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="kw">iplot</span>(lon, lat) <span class="co"># use arrow keys to control symbol size</span></a></code></pre></div>
+<p>In these linked plots, the stations in western Oregon and Washington were selected on the map, and the parallel coordinates plot shows their precipitation “regimes”.</p>
+<p><img src="images/iplot031.png" /> <img src="images/iplot032.png" /></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw">detach</span>(wus_pratio)</a></code></pre></div>
+</div>
+<div id="linked-plots-with-categorical-variables" class="section level3">
+<h3><span class="header-section-number">3.3.2</span> Linked plots with categorical variables</h3>
+<p>Data sets that contain a mixture of categorical or factor variables and ordinal or ratio-scale “continuous” variables can also be visualized, as illustrated by the Summit Cr. data set. Here the “continuous” variables (<code>CumLen</code> and <code>WidthWS</code>) appear in boxplots and scatter plots (right), with <code>WidthWS</code> on the y-axis, and <code>Reach</code> or <code>CumLen</code> on the x-axis, while the categorical variables, <code>Reach</code> and <code>HU</code> are summarized by traditional bar plots and mosaic plots.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># linked plots -- Summit Cr. data set, including categorical variables</span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="kw">attach</span>(sumcr)</a>
+<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="kw">imosaic</span>(<span class="kw">data.frame</span>(Reach,HU))</a>
+<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="kw">ibar</span>(HU)</a>
+<a class="sourceLine" id="cb26-5" data-line-number="5"><span class="kw">ibar</span>(Reach)</a>
+<a class="sourceLine" id="cb26-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb26-7" data-line-number="7"><span class="co"># add a scatter plot</span></a>
+<a class="sourceLine" id="cb26-8" data-line-number="8"><span class="kw">iplot</span>(CumLen, WidthWS)</a>
+<a class="sourceLine" id="cb26-9" data-line-number="9"><span class="kw">iplot.opt</span>(<span class="dt">col=</span><span class="kw">unclass</span>(Reach)<span class="op">+</span><span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb26-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb26-11" data-line-number="11"><span class="co"># add a boxplot</span></a>
+<a class="sourceLine" id="cb26-12" data-line-number="12"><span class="kw">ibox</span>(WidthWS, Reach)</a></code></pre></div>
+<p>On the plots below, pools (<code>P</code>) in the exclosure reach (<code>B</code>) were highlighted in the mosaic plot, and appear in red on the other plots.</p>
+<p><img src="images/iplot041.png" /> <img src="images/iplot042.png" /> <img src="images/iplot043.png" /><br />
+<img src="images/iplot044.png" /> <img src="images/iplot045.png" /></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">detach</span>(sumcr)</a></code></pre></div>
+<p><a href="lec19.html">[Back to top]</a></p>
+</div>
+</div>
+</div>
+<div id="high-density-plots-with-the-tabplot-package" class="section level1">
+<h1><span class="header-section-number">4</span> High-density plots with the <code>tabplot</code> package</h1>
+<p>The “tableplot” is an interesting visualization method that can be useful for discovering large-scale patterns in the covariations among a small (&lt; 15) set or subset of variables, which can be either continuous or categorical. The basic idea is to organize the rows of a data set along an axis of increasing or decreasing values of a continuous variable or the different “levels” of a categorical variable. A reduction in the density of the data is achieved by binning multiple rows of the data and plotting bin averages (or frequencies) of the variables. As in all compositing techniques, if there a consistent response in the other variables to the variable selected to organize the rows, then this will emerge, otherwise inconsistent responses will wash each other out, and no apparent pattern will be evident in the plots of the other variables.</p>
+<p>This example makes use of a data set of 4360 modern pollen samples for North America, from Whitmore et al. (2005, <em>Quaternary Science Reviews</em>). The variables include the location and elevation of each sample, the relative abundances of the 12 most-abundant pollen types (transformed by taking square roots), and two categorical variables, Federova et al. (1994) vegetation types and USGS land-cover types from satellite remote-sensing data (see Whitmore et al. 2005 for details). This data set provides an interesting example, inasmuch as the resulting tableplots are reminiscent of “downcore”-plotted pollen diagrams.</p>
+<div id="read-and-map-the-north-american-modern-pollen-data-set" class="section level2">
+<h2><span class="header-section-number">4.1</span> Read and map the North American modern pollen data set</h2>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># read the North American modern pollen data</span></a>
+<a class="sourceLine" id="cb28-2" data-line-number="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Dropbox/DataVis/working/data/csv_files/&quot;</span></a>
+<a class="sourceLine" id="cb28-3" data-line-number="3">csv_name &lt;-<span class="st"> &quot;NAmodpol.csv&quot;</span></a>
+<a class="sourceLine" id="cb28-4" data-line-number="4">csv_file &lt;-<span class="st"> </span><span class="kw">paste</span>(csv_path, csv_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb28-5" data-line-number="5">napol &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_file) <span class="co"># takes a while</span></a>
+<a class="sourceLine" id="cb28-6" data-line-number="6"><span class="kw">str</span>(napol)</a></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    4630 obs. of  17 variables:
+##  $ Lon    : num  -70 -79.2 -57 -85.5 -73.3 ...
+##  $ Lat    : num  61 46 52.5 36 45.5 ...
+##  $ Elev   : int  153 240 200 305 114 648 124 106 497 330 ...
+##  $ Alnus  : num  0 0.162 0 0.388 0 0 0.281 0.271 0.061 0 ...
+##  $ Artem  : num  0.109 0 0 0 0.051 0.041 0 0 0.061 0.047 ...
+##  $ Aster  : num  0.044 0 0 0.097 0 0.041 0 0.059 0.115 0 ...
+##  $ Betula : num  0.372 0.695 0.264 0.087 0.563 0.733 0.568 0.594 0.277 0.656 ...
+##  $ ChenoAm: num  0 0 0 0.061 0 0 0.057 0 0.061 0.047 ...
+##  $ Cupress: num  0 0 0 0.043 0.089 0.082 0.269 0.059 0 0.081 ...
+##  $ Cyper  : num  0.377 0 0.105 0.115 0.103 0.041 0 0 0.061 0.066 ...
+##  $ Picea  : num  0.118 0 0 0.097 0.051 0.058 0 0.059 0.13 0.047 ...
+##  $ Pinus  : num  0.204 0.53 0.075 0.221 0.352 0.158 0.207 0.345 0.233 0.203 ...
+##  $ Poaceae: num  0.109 0 0.091 0.184 0.073 0.187 0.275 0.196 0.241 0.197 ...
+##  $ Quercus: num  0 0.132 0 0.423 0.192 0.058 0.269 0.177 0.274 0.123 ...
+##  $ Salix  : num  0.166 0.094 0.075 0.061 0.051 0.058 0.081 0.084 0.075 0.047 ...
+##  $ Fed    : Factor w/ 11 levels &quot;99&quot;,&quot;Arctic&quot;,..: 8 5 3 6 5 5 6 5 6 5 ...
+##  $ USGS21 : Factor w/ 17 levels &quot;lc1&quot;,&quot;lc10&quot;,&quot;lc11&quot;,..: 10 5 5 14 13 5 3 4 3 3 ...</code></pre>
+<p>Map the pollen site locations:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">library</span>(maps)</a>
+<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="kw">plot</span>(napol<span class="op">$</span>Lat <span class="op">~</span><span class="st"> </span>napol<span class="op">$</span>Lon, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
+<a class="sourceLine" id="cb30-3" data-line-number="3"><span class="kw">map</span>(<span class="st">&quot;world&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;gray&quot;</span>)</a>
+<a class="sourceLine" id="cb30-4" data-line-number="4"><span class="kw">points</span>(napol<span class="op">$</span>Lat <span class="op">~</span><span class="st"> </span>napol<span class="op">$</span>Lon, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.6</span>, <span class="dt">col=</span><span class="st">&quot;darkgreen&quot;</span>)</a></code></pre></div>
+<p><img src="lec19_files/figure-html/hd31-1.png" width="1800" /></p>
+<!-- ## Tableplots ## -->
+<!-- Load the `tabplot` package.  Note that `tabplot` loads some other packages (`ffbase`, `ff`, `bit`, etc.) that allow for efficient processing of large data sets and replace some of the functions in the `base` package.  It might be good to restart R after using the `tabplot` package. -->
+<!-- ```{r hd32, message=FALSE} -->
+<!-- library(tabplot) -->
+<!-- ``` -->
+<!-- Here's a simple tableplot, with the observations arranged by latitude (`sortCol="Lat"`) and linear scales specified for all continuous variables (`scales="lin"`, the `tabplot()` function attempts to find a suitable scale for each variable, but here the pollen variables were all transformed prior to the analysis, and so we want to suppress further transformation here). -->
+<!-- (Note that it just happens that the resulting plot looks like a standard pollen diagram--this isn't designed in any way.) -->
+<!-- ```{r hd33, echo=TRUE, fig.width=10, eval=FALSE} -->
+<!-- tableplot(napol, sortCol="Lat", scales="lin") -->
+<!-- ``` -->
+<!-- ```{r hd34, fig.width=9, message=FALSE, echo=FALSE} -->
+<!-- suppressWarnings(tableplot(napol, sortCol="Lat", scales="lin")) -->
+<!-- ``` -->
+<!-- It's possible to see broad trends in all of the pollen types, as well as in the frequency of different vegetation types as a function of latitude. -->
+<!-- Each bin the above plot represents a bin that, in this case, holds 46 observations, and what is plotted as bars in each column  is the bin-average or frequency for those observations. Here's a second plot like the first, using more bins: -->
+<!-- ```{r hd35, echo=TRUE, eval=FALSE} -->
+<!-- tableplot(napol, sortCol="Lat", scales="lin", nBins=200) -->
+<!-- ``` -->
+<!-- ```{r hd36, fig.width=9, message=FALSE, echo=FALSE} -->
+<!-- suppressWarnings(tableplot(napol, sortCol="Lat", scales="lin", nBins=200)) -->
+<!-- ``` -->
+<!-- The same broad-scale patterns are evident in this plot, suggesting that the approach is robust with respect to the number of bins.  The next plot using the abundance of *Picea* (spruce to organize the data): -->
+<!-- ```{r hd37, echo=TRUE, eval=FALSE} -->
+<!-- tableplot(napol, sortCol="Picea", scales="lin", nBins=100) -->
+<!-- ``` -->
+<!-- ```{r hd38, fig.width=9, message=FALSE, echo=FALSE} -->
+<!-- suppressWarnings(tableplot(napol, sortCol="Picea", scales="lin", nBins=100)) -->
+<!-- ``` -->
+<!-- The plot shows that *Aremisia* (sagebrush) pollen has a similar profile to *Picea* and both tend to be high at high elevation and low (western) longitudes.  The next plot using one of the categorical variables to organize the data. -->
+<!-- ```{r hd39, echo=TRUE, eval=FALSE} -->
+<!-- tableplot(napol, sortCol="Fed", scales="lin", nBins=100) -->
+<!-- ``` -->
+<!-- ```{r hd40, fig.width=9, message=FALSE, echo=FALSE} -->
+<!-- suppressWarnings(tableplot(napol, sortCol="Fed", scales="lin", nBins=100)) -->
+<!-- ``` -->
+<!-- The blockiness of the different profiles shows that the individual vegetation types have distinctive mixtures of the different pollen types. -->
+<!-- [[Back to top]](lec19.html) -->
+<!-- # Plotting multivariate/multiple time series # -->
+<!-- Although the tableplots above happened to look like conventional pollen diagrams, which were a comparatively early attempt to visualize multivariate data, the data displayed by the `tableplot()` function does not necessarily need to be a series.  The next example illustrates a display method in which the data *do* form a series, in this case pollen data again, only this time for a single site, which form a multivariate time series. -->
+<!-- ## Read the Carp L. pollen data ## -->
+<!-- The data here come from a long pollen record from Carp L., in Washington State.  (Whitlock, C.L., et al. (2000) *Palaeogeography Palaeoclimatology Palaeoecology* 155(1-2):7-29 DOI: 10.1016/S0031-0182(99)00092-9).  Pollen data are "long-tailed" and so the data were transformed earlier by taking the square root of the pollen percentages. -->
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># read Carp L. pollen data (transformed to square-roots)</span></a>
+<a class="sourceLine" id="cb31-2" data-line-number="2">csvpath &lt;-<span class="st"> &quot;/Users/bartlein/Dropbox/DataVis/working/data/csv_files/&quot;</span></a>
+<a class="sourceLine" id="cb31-3" data-line-number="3">csvname &lt;-<span class="st"> &quot;carp96t.csv&quot;</span> <span class="co"># square-root transformed data</span></a>
+<a class="sourceLine" id="cb31-4" data-line-number="4">carp &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">paste</span>(csvpath, csvname, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
+<a class="sourceLine" id="cb31-5" data-line-number="5"><span class="kw">summary</span>(carp)</a></code></pre></div>
+<pre><code>##      Depth            Age                 IS        Dippine         Happine          undpine     
+##  Min.   : 1.30   Min.   :  0.3983   3      :47   Min.   :0.000   Min.   :0.0000   Min.   :1.629  
+##  1st Qu.: 7.15   1st Qu.: 25.1045   1      :31   1st Qu.:1.220   1st Qu.:0.5585   1st Qu.:4.351  
+##  Median :12.80   Median : 57.6462   2      :24   Median :2.033   Median :1.1830   Median :5.827  
+##  Mean   :12.48   Mean   : 58.5209   4      :23   Mean   :2.048   Mean   :1.1933   Mean   :5.653  
+##  3rd Qu.:17.65   3rd Qu.: 89.0536   5a     :18   3rd Qu.:2.813   3rd Qu.:1.7915   3rd Qu.:7.021  
+##  Max.   :23.15   Max.   :124.9092   5c     :15   Max.   :5.247   Max.   :3.3850   Max.   :9.145  
+##                                     (Other):41                                                   
+##      Picea           Abies          Pseudotsug       Juniperus           Thet            Tmert       
+##  Min.   :0.000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
+##  1st Qu.:0.681   1st Qu.:0.5655   1st Qu.:0.0000   1st Qu.:0.2950   1st Qu.:0.0000   1st Qu.:0.0000  
+##  Median :1.141   Median :0.8230   Median :0.5010   Median :0.5790   Median :0.4650   Median :0.0000  
+##  Mean   :1.252   Mean   :0.8382   Mean   :0.5850   Mean   :0.7792   Mean   :0.5844   Mean   :0.2315  
+##  3rd Qu.:1.802   3rd Qu.:1.0780   3rd Qu.:0.8375   3rd Qu.:1.0180   3rd Qu.:0.9345   3rd Qu.:0.4485  
+##  Max.   :3.741   Max.   :2.1440   Max.   :2.7850   Max.   :3.7170   Max.   :2.6690   Max.   :1.0670  
+##                                                                                                      
+##    Taxusbrev           Alnus             Arubra          Corylus           Betula           Salix       
+##  Min.   :0.00000   Min.   :0.00000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
+##  1st Qu.:0.00000   1st Qu.:0.00000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000  
+##  Median :0.00000   Median :0.00000   Median :0.4980   Median :0.0000   Median :0.0000   Median :0.3470  
+##  Mean   :0.02918   Mean   :0.06538   Mean   :0.5741   Mean   :0.2122   Mean   :0.2167   Mean   :0.2940  
+##  3rd Qu.:0.00000   3rd Qu.:0.00000   3rd Qu.:0.8970   3rd Qu.:0.4130   3rd Qu.:0.4745   3rd Qu.:0.5355  
+##  Max.   :0.84100   Max.   :1.02100   Max.   :3.1130   Max.   :1.7150   Max.   :1.0210   Max.   :1.1700  
+##                                                                                                         
+##     Fraxinus         Quercus          Poaceae        Artemisia        Ambrosia         Ivaciliat       
+##  Min.   :0.0000   Min.   :0.0000   Min.   :0.553   Min.   :0.000   Min.   :0.00000   Min.   :0.000000  
+##  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:1.862   1st Qu.:3.205   1st Qu.:0.00000   1st Qu.:0.000000  
+##  Median :0.0000   Median :0.3550   Median :2.824   Median :4.605   Median :0.00000   Median :0.000000  
+##  Mean   :0.0344   Mean   :0.6227   Mean   :2.954   Mean   :4.377   Mean   :0.07275   Mean   :0.002111  
+##  3rd Qu.:0.0000   3rd Qu.:0.8030   3rd Qu.:4.071   3rd Qu.:5.891   3rd Qu.:0.00000   3rd Qu.:0.000000  
+##  Max.   :0.7670   Max.   :3.5530   Max.   :5.951   Max.   :8.121   Max.   :0.81700   Max.   :0.420000  
+##                                                                                                        
+##    Chenopodii    
+##  Min.   :0.0000  
+##  1st Qu.:0.3665  
+##  Median :0.5350  
+##  Mean   :0.6872  
+##  3rd Qu.:0.8965  
+##  Max.   :3.9650  
+## </code></pre>
+</div>
+<div id="the-plots" class="section level2">
+<h2><span class="header-section-number">4.2</span> The plots</h2>
+<p>The idea behind the <code>mvtsplots()</code> package (and function) is to use color to reveal underlying patterns in the data. The first plot shows the “raw” data, simply coded for each pollen taxon independently from low (magenta) to high (green). The plots on the margins are of boxplots for the individual series (right), and a time series of the median values across all series (bottom), which attempt to summarize the overall level of the series.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">library</span>(mvtsplot)</a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="kw">mvtsplot</span>(carp[, <span class="dv">4</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="lec19_files/figure-html/mvtsplots01-1.png" width="2100" /></p>
+<p>Plotted this way, one begins to get an idea of some organization to the data along the time axis. The plot is a little noisy, and can be simplified by smoothing the individual series.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">mvtsplot</span>(carp[, <span class="dv">4</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">smooth.df=</span><span class="dv">25</span>, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="lec19_files/figure-html/mtvsplot02-1.png" width="2100" /></p>
+<p>Further simplification can be gotten by “normalizing” the data, transforming and assigning colors based on the range of values in each series individually.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="kw">mvtsplot</span>(carp[, <span class="dv">4</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">smooth.df=</span><span class="dv">2</span>, <span class="dt">norm=</span><span class="st">&quot;internal&quot;</span>, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="lec19_files/figure-html/mtvsplot03-1.png" width="2100" /></p>
+<p>The color field now shows that the data are well organized in time, which can be verified by adding a plot of the variable <code>IS</code> i.e. the MIS (Marine Isotopic Stage) to the plot (on the last row).</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw">mvtsplot</span>(carp[, <span class="dv">3</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">smooth.df=</span><span class="dv">2</span>, <span class="dt">norm=</span><span class="st">&quot;internal&quot;</span>, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="lec19_files/figure-html/mvtsplot04-1.png" width="2100" /></p>
+<p><a href="lec19.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="interactive-visualization-of-a-raster-brick" class="section level1">
+<h1><span class="header-section-number">5</span> Interactive visualization of a raster brick</h1>
+<p>In addition to the tools for visualizing rasters provided by the <code>rasterVis</code> package (including Hovmöller and horizon plots–<a href="week04-raster.html">[<code>raster</code> package examples]</a>), the <code>maptools</code> package provides a way of interactively visualizing raster bricks, by displaying three individual Hovmöller plots, arranged to look like a brick.</p>
+<p>Load the required packages</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="co"># load packages</span></a>
+<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="kw">library</span>(maptools)</a>
+<a class="sourceLine" id="cb37-3" data-line-number="3"><span class="kw">library</span>(raster)</a>
+<a class="sourceLine" id="cb37-4" data-line-number="4"><span class="kw">library</span>(rasterVis)</a>
+<a class="sourceLine" id="cb37-5" data-line-number="5"><span class="kw">library</span>(RColorBrewer)</a>
+<a class="sourceLine" id="cb37-6" data-line-number="6"><span class="kw">library</span>(mapview)</a></code></pre></div>
+<p>Read a world shapefile to overlay on simple <code>levelplot()</code> maps for orientation.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="co"># read world.shp</span></a>
+<a class="sourceLine" id="cb38-2" data-line-number="2">shp_path &lt;-<span class="st"> &quot;/Users/bartlein/Dropbox/DataVis/working/data/shp_files/world2013/&quot;</span></a>
+<a class="sourceLine" id="cb38-3" data-line-number="3">shp_name &lt;-<span class="st"> &quot;world2013.shp&quot;</span> </a>
+<a class="sourceLine" id="cb38-4" data-line-number="4">shp_file &lt;-<span class="st"> </span><span class="kw">paste</span>(shp_path, shp_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb38-5" data-line-number="5">world.shp &lt;-<span class="st"> </span><span class="kw">readShapeLines</span>(shp_file,<span class="dt">proj4string=</span><span class="kw">CRS</span>(<span class="st">&quot;+proj=longlat&quot;</span>))</a></code></pre></div>
+<p>The data come from a “transient” (i.e. continuous in time as opposed to a “snapshot”) climate simulation <a href="http://www.cgd.ucar.edu/ccr/TraCE/">[TraCE-21ka data]</a> (Z. Liu, B. Otto-Bliesner et al., 2009, Transient simulation of Last Deglaciation with a new mechanism for Bolling-Allerod warming. Science 325:310-314). The simulation spans the past 22,000 years, and what is analyzed here is decadal averages.</p>
+<p>Read the data, and also “rotate” it so the longitudes run from -180 to +180:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="co"># read TraCE21-ka transient climate-model simulation decadal data</span></a>
+<a class="sourceLine" id="cb39-2" data-line-number="2">tr21dec_path &lt;-<span class="st"> &quot;/Users/bartlein/Dropbox/DataVis/working/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb39-3" data-line-number="3">tr21dec_name &lt;-<span class="st"> &quot;Trace21_TREFHT_anm2.nc&quot;</span></a>
+<a class="sourceLine" id="cb39-4" data-line-number="4">tr21dec_file &lt;-<span class="st"> </span><span class="kw">paste</span>(tr21dec_path, tr21dec_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb39-5" data-line-number="5">tas_anm_ann &lt;-<span class="st"> </span><span class="kw">brick</span>(tr21dec_file, <span class="dt">varname=</span><span class="st">&quot;tas_anm_ann&quot;</span>, <span class="dt">band=</span><span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2204</span>))</a>
+<a class="sourceLine" id="cb39-6" data-line-number="6">tas_anm_ann</a></code></pre></div>
+<pre><code>## class      : RasterBrick 
+## dimensions : 48, 96, 4608, 2204  (nrow, ncol, ncell, nlayers)
+## resolution : 3.75, 3.708898  (x, y)
+## extent     : -1.875, 358.125, -89.01354, 89.01354  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## source     : /Users/bartlein/Dropbox/DataVis/working/data/nc_files/Trace21_TREFHT_anm2.nc 
+## names      : X22, X21.99, X21.98, X21.97, X21.96, X21.95, X21.94, X21.93, X21.92, X21.91, X21.9, X21.89, X21.88, X21.87, X21.86, ... 
+## z-value    : -0.03, 22 (min, max)
+## varname    : tas_anm_ann</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">tas_anm_ann &lt;-<span class="st"> </span><span class="kw">rotate</span>(tas_anm_ann)</a></code></pre></div>
+<p>Even though the data have a decadal time step, there still are a lot of layers. Subset the brick by taking every tenth observation.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1">tas2 &lt;-<span class="st"> </span><span class="kw">subset</span>(tas_anm_ann, <span class="dt">subset=</span><span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">2201</span>, <span class="dt">by=</span><span class="dv">10</span>))</a>
+<a class="sourceLine" id="cb42-2" data-line-number="2">tas2</a></code></pre></div>
+<pre><code>## class      : RasterStack 
+## dimensions : 48, 96, 4608, 221  (nrow, ncol, ncell, nlayers)
+## resolution : 3.75, 3.708898  (x, y)
+## extent     : -178.125, 181.875, -89.01354, 89.01354  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## names      :         X22,       X21.9,       X21.8,       X21.7,       X21.6,       X21.5,       X21.4,       X21.3,       X21.2,       X21.1,         X21,       X20.9,       X20.8,       X20.7,       X20.6, ... 
+## min values : -29.7942562, -30.0634670, -29.7796078, -29.9451656, -29.4976559, -29.6770687, -29.4736080, -29.7500515, -30.2059383, -30.2687893, -30.0374050, -30.3951168, -29.9945583, -30.1629086, -30.3428860, ... 
+## max values :   7.3065739,   7.4843855,   8.7410126,   7.2156219,   8.2437897,   7.4258270,   7.3160954,   7.9923038,   8.8214312,   6.9421635,   7.4098454,   8.1890507,   7.5809784,   7.0558414,   7.2613068, ...</code></pre>
+<p>Set up for mapping, and plot the first layer, just to get oriented.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span>(<span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))))</a>
+<a class="sourceLine" id="cb44-2" data-line-number="2">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">40</span>,<span class="op">-</span><span class="dv">10</span>,<span class="op">-</span><span class="dv">5</span>,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>)</a>
+<a class="sourceLine" id="cb44-3" data-line-number="3">col &lt;-<span class="st"> </span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))</a>
+<a class="sourceLine" id="cb44-4" data-line-number="4">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(<span class="kw">subset</span>(tas2,<span class="dv">1</span>), <span class="dt">at=</span>cutpts, <span class="dt">margin=</span><span class="ot">FALSE</span>, <span class="dt">par.settings=</span>mapTheme)</a>
+<a class="sourceLine" id="cb44-5" data-line-number="5">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world.shp, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.5</span>))</a></code></pre></div>
+<p><img src="lec19_files/figure-html/tr21%20levelplot-1.png" width="2100" /></p>
+<p>Now get the “cubeplot”</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="kw">cubeView</span>(tas2, <span class="dt">at=</span>cutpts, <span class="dt">col.regions=</span>col)</a></code></pre></div>
+<p>Here’s a link to the cubeplot on the server: <a href="http://geog.uoregon.edu/bartlein/courses/geog490/tr21cube.html">[http://geog.uoregon.edu/bartlein/courses/geog490/tr21cube.html]</a></p>
+<p><a href="lec19.html">[Back to top]</a></p>
+</div>
+<div id="readings" class="section level1">
+<h1><span class="header-section-number">6</span> Readings</h1>
+<ul>
+<li>Section 6.4 in James, G., et al. (2013) <em>An Introduction to Statistical Learning</em>, Springer. (Search by title for the eBook version on the UO Library page <a href="http://library.uoregon.edu">[http://library.uoregon.edu]</a>.)</li>
+<li>Chapter 18 in Hastie, T. et al., (2009) <em>The Elements of Statistical Learning</em>, Springer. (Search by title of the eBook version on the UO Library page <a href="http://library.uoregon.edu">[http://library.uoregon.edu]</a>.) This is a technical discussion of the problems that arise in analyzing high-dimension data. (Note, the link seems to be currently slightly broken–you may have to search again for the title once on the Springer Link web page. Look for the 2009 edition.)</li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

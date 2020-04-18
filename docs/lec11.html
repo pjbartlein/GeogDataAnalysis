@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Analysis of variance</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="SI-md-08.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Geographic Data Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="lec01.html">Introduction to the course</a>
+    </li>
+    <li>
+      <a href="lec02.html">Univariate plots</a>
+    </li>
+    <li>
+      <a href="lec03.html">Bivariate plots</a>
+    </li>
+    <li>
+      <a href="lec04.html">Descriptive statistics</a>
+    </li>
+    <li>
+      <a href="lec05.html">Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ggplot2.html">ggplot2 versions of basic plots</a>
+    </li>
+    <li>
+      <a href="lec06.html">Maps in R</a>
+    </li>
+    <li>
+      <a href="lec07.html">Geospatial analysis in R</a>
+    </li>
+    <li>
+      <a href="lec08.html">Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="lec09.html">Reference distributions</a>
+    </li>
+    <li>
+      <a href="lec10.html">Statistical inference</a>
+    </li>
+    <li>
+      <a href="lec11.html">Analysis of variance</a>
+    </li>
+    <li>
+      <a href="lec12.html">Regression analysis</a>
+    </li>
+    <li>
+      <a href="lec13.html">More regression analysis</a>
+    </li>
+    <li>
+      <a href="lec14.html">Nonparametric regression</a>
+    </li>
+    <li>
+      <a href="lec15.html">GLMs, GAMs, and CARTs</a>
+    </li>
+    <li>
+      <a href="lec16.html">Principal components and factor analyses</a>
+    </li>
+    <li>
+      <a href="lec17.html">MANOVA and discriminant analysis</a>
+    </li>
+    <li>
+      <a href="lec18.html">Multivariate distances and cluster analysis</a>
+    </li>
+    <li>
+      <a href="lec19.html">High-resolution and high-dimension data</a>
+    </li>
+    <li>
+      <a href="lec20.html">Analysis and visualization of large raster data sets</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Exercises</li>
+    <li>
+      <a href="ex01.html">Exercise 01 -- Getting R and RStudio</a>
+    </li>
+    <li>
+      <a href="ex02.html">Exercise 02 -- Univariate plots</a>
+    </li>
+    <li>
+      <a href="ex03.html">Exercise 03 -- Bivariate plots and descriptive statistics</a>
+    </li>
+    <li>
+      <a href="ex04.html">Exercise 04 -- Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ex05.html">Exercise 05 -- Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="ex06.html">Exercise 06 -- CI's, t-tests, ANOVA</a>
+    </li>
+    <li>
+      <a href="ex07.html">Exercise 07 -- Regression analysis</a>
+    </li>
+    <li>
+      <a href="ex08.html">Exercise 08 -- Multivariate analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="packages-and-data.html">Packages and data</a>
+    </li>
+    <li>
+      <a href="vm_inst.html">Virtual machine instructions</a>
+    </li>
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="datasets.html">Datasets</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Analysis of variance</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#examples-of-analysis-of-variance"><span class="toc-section-number">2</span> Examples of analysis of variance</a><ul>
+<li><a href="#one-way-analysis-of-variance-k-groups-of-observations"><span class="toc-section-number">2.1</span> One-way analysis of variance, <em>k</em>-groups of observations</a><ul>
+<li><a href="#example-1-significant-differences-in-the-means-but-variances-are-not-significantly-different"><span class="toc-section-number">2.1.1</span> Example 1 – Significant differences in the means, but variances are not significantly different</a></li>
+<li><a href="#example-2-means-not-significantly-different-and-variances-not-significantly-different"><span class="toc-section-number">2.1.2</span> Example 2 – means not significantly different, and variances not significantly different</a></li>
+<li><a href="#example-3-significant-differences-in-means-but-variances-are-not-significantly-different"><span class="toc-section-number">2.1.3</span> Example 3 – significant differences in means, but variances are not significantly different</a></li>
+<li><a href="#example-4-similar-means-as-in-example-4-but-larger-group-variances"><span class="toc-section-number">2.1.4</span> Example 4 – similar means as in Example 4, but larger group variances</a></li>
+<li><a href="#example-5-means-not-significantly-different-but-the-variances-are"><span class="toc-section-number">2.1.5</span> Example 5 – means not significantly different, but the variances are</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<p>
+<span style="color: #FF0040;">NOTE: Not yet revised for Spring 2020</span>
+</p>
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>“Analysis of variance” (or ANOVA) is designed to test hypotheses about the equality of two or more group means, and gets its name from the idea of judging the apparent differences among the means of the groups of observations relative to the <em>variance</em> of the individual groups.</p>
+<p>The basic underlying idea is to compare the variability of the observations <em>among</em> groups to the variability <em>within</em> groups:</p>
+<ul>
+<li>if the variability among groups is small (relative to the variability within groups), this lends support to a null hypothesis that the means of the different groups are identical (i.e. that they don’t differ from on another); but</li>
+<li>if the variability among groups is large (relative to the variability within groups), this discredits the null hypothesis, and lends support for the alternative hypothesis (i.e. that the means <em>do</em> differ).</li>
+</ul>
+<p>There are some assumptions that underlie the application of analysis of variance, and which, if violated, add uncertainty to the results. The assumptions are:</p>
+<ul>
+<li>there are three or more independent groups of data;</li>
+<li>within each group, the values of the variables are normally distributed;</li>
+<li>the variances of each group are equal;</li>
+<li>the dependent or response variables are measured on an interval or ratio scale.</li>
+</ul>
+<p>Analysis of variance for testing for the equality of k mean values is a special case of a set of techniques known as linear modeling, which also includes regression analysis, a future topic.</p>
+</div>
+<div id="examples-of-analysis-of-variance" class="section level1">
+<h1><span class="header-section-number">2</span> Examples of analysis of variance</h1>
+<div id="one-way-analysis-of-variance-k-groups-of-observations" class="section level2">
+<h2><span class="header-section-number">2.1</span> One-way analysis of variance, <em>k</em>-groups of observations</h2>
+<p>The basic analysis of variance involves one nominal or ordinal scale variable that can be used to place each observation into two or more groups, along with a single response variable. The analysis can be viewed as determining whether knowledge of the group that a particular observation falls in will allow a better idea of the expected value of the response variable to be gained than in the absence of that knowledge.</p>
+<ul>
+<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/anova.pdf">[definition]</a></li>
+<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/images/aov.gif">[the null and alternative hypothesis]</a></li>
+</ul>
+<p>There are several approaches for evaluating the reasonableness of the assumption of homogeneity of variance. A simple one is Bartlett’s test:</p>
+<ul>
+<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/bartlett.pdf">[a test for homogeneity of variance]</a></li>
+</ul>
+<p>Here is an example data set: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/anovadat.csv">[anovadat.csv]</a></p>
+<p>In R’s implementation of the <code>aov()</code> function the group membership is expected to be represented by a “<code>factor</code>”. If the data set is being read in here, the group-membership variables will have to be converted to factors. (They are alread factors in the <code>geog495.Rdata</code> workspace, so if that’s how the data were read in the next step can be skipped.)</p>
+<p>After reading the data using <code>read.csv()</code> as usual (e.g. <code>anovadat &lt;- read.csv(&quot;anovadat.csv&quot;)</code>), convert the integer group-membership variables to factors as follows:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">anovadat[,<span class="st">&#39;Group1&#39;</span>]&lt;-<span class="kw">as.factor</span>(anovadat[,<span class="st">&#39;Group1&#39;</span>])</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">anovadat[,<span class="st">&#39;Group2&#39;</span>]&lt;-<span class="kw">as.factor</span>(anovadat[,<span class="st">&#39;Group2&#39;</span>])</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">anovadat[,<span class="st">&#39;Group3&#39;</span>]&lt;-<span class="kw">as.factor</span>(anovadat[,<span class="st">&#39;Group3&#39;</span>])</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">anovadat[,<span class="st">&#39;Group4&#39;</span>]&lt;-<span class="kw">as.factor</span>(anovadat[,<span class="st">&#39;Group4&#39;</span>])</a></code></pre></div>
+<p>That the conversion has properly taken place can be confirmed by looking at the structure of the data frame.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">str</span>(anovadat)</a></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    750 obs. of  10 variables:
+##  $ Data1 : num  7.59 10.03 6.77 9.64 9.44 ...
+##  $ Group1: Factor w/ 3 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Data2 : num  12.4 11 11.7 10.8 11.2 ...
+##  $ Group2: Factor w/ 3 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;: 2 3 2 2 2 1 2 1 2 3 ...
+##  $ Data3 : num  8.85 11.58 7.97 7.94 6.76 ...
+##  $ Group3: Factor w/ 3 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Data4 : num  11.97 -4.21 7.4 2.16 6.99 ...
+##  $ Group4: Factor w/ 3 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Data5 : num  11 13.3 26.6 13.4 13.4 ...
+##  $ Group5: int  0 0 0 0 0 0 0 0 0 0 ...</code></pre>
+<p>The appropriate reference distribution in the case of analysis of variance is the <em>F</em>-distribution. The <em>F</em> distribution has two parameters, the between-groups degrees of freedom, <em>k</em>, and the residual degrees of freedom, <em>N-k</em>:</p>
+<p>Here is a plot of the pdf (probability density function) of the <em>F</em> distribution for the following examples:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">k &lt;-<span class="st"> </span><span class="dv">3</span>         <span class="co"># number of groups</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">750</span>       <span class="co"># number of observations</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">10</span>,<span class="dt">by=</span><span class="fl">0.1</span>)</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">df1 &lt;-<span class="st"> </span>k<span class="dv">-1</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">df2 &lt;-<span class="st"> </span>n<span class="op">-</span>k</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">pdf_f &lt;-<span class="st"> </span><span class="kw">df</span>(x,df1,df2)</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="kw">plot</span>(pdf_f <span class="op">~</span><span class="st"> </span>x, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
+<p><img src="lec11_files/figure-html/anova01-1.png" width="2100" /></p>
+<p>See the guide for interpreting p-values for reference: <a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/interpstats.pdf">short guide to interpreting test statistics, p-values, and significance</a></p>
+<div id="example-1-significant-differences-in-the-means-but-variances-are-not-significantly-different" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Example 1 – Significant differences in the means, but variances are not significantly different</h3>
+<p>In this example, the <code>boxplot()</code> function is used to get a quick impression of the distribution of the data, and the <code>tapply()</code> function is used to get the mean and standard deviation for each group of observations.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">attach</span>(anovadat)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">boxplot</span>(Data1 <span class="op">~</span><span class="st"> </span>Group1, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">10</span>,<span class="dv">50</span>), <span class="dt">main=</span><span class="st">&quot;ANOVA Example 1&quot;</span>)</a></code></pre></div>
+<p><img src="lec11_files/figure-html/anova02-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">tapply</span>(Data1, Group1, mean)</a></code></pre></div>
+<pre><code>##         1         2         3 
+##  9.414936 10.319060  9.912563</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">tapply</span>(Data1, Group1, sd)</a></code></pre></div>
+<pre><code>##        1        2        3 
+## 2.134628 1.960280 2.219063</code></pre>
+<p>At first glance, the groups don’t look all that different, but changing the y-axis limits can change that perception.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">boxplot</span>(Data1 <span class="op">~</span><span class="st"> </span>Group1, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">20</span>), <span class="dt">main=</span><span class="st">&quot;ANOVA Example 1&quot;</span>)</a></code></pre></div>
+<p><img src="lec11_files/figure-html/anova03-1.png" width="2100" /></p>
+<p>The <code>aov()</code> function does the analysis, and stores the results in an object, named here as <code>aov1</code>; similarly, the <code>bartlett.test()</code> test stores the results of the homogenetiy of variance test in the object <code>hov1</code>. Both ‘aov1’ and ‘hov1’ are printed out, and <code>aov1</code> is further summarized using the <code>summary()</code> function.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">aov1 &lt;-<span class="st"> </span><span class="kw">aov</span>(Data1 <span class="op">~</span><span class="st"> </span>Group1)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">aov1</a></code></pre></div>
+<pre><code>## Call:
+##    aov(formula = Data1 ~ Group1)
+## 
+## Terms:
+##                   Group1 Residuals
+## Sum of Squares   102.526  3317.570
+## Deg. of Freedom        2       747
+## 
+## Residual standard error: 2.107414
+## Estimated effects may be unbalanced</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">summary</span>(aov1)</a></code></pre></div>
+<pre><code>##              Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## Group1        2    103   51.26   11.54 1.16e-05 ***
+## Residuals   747   3318    4.44                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">hov1 &lt;-<span class="st"> </span><span class="kw">bartlett.test</span>(Data1 <span class="op">~</span><span class="st"> </span>Group1)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">hov1</a></code></pre></div>
+<pre><code>## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  Data1 by Group1
+## Bartlett&#39;s K-squared = 3.9368, df = 2, p-value = 0.1397</code></pre>
+<p>The “signifcance” of the test statistics (<em>F</em> in the case of analysis of variance and <em>K^2</em> in the case of the homogeneity of variance test) can be judged by their <em>p</em>-values, or the probablility that the particular value of a test statistic is consistent with values that might arise by chance if the null hypotheses were true. In the case of the <em>F</em> statistic in analysis of variance, the <em>p</em>-value is 0.0091, which implies that the value of the <em>F</em> statistic (6.83) would be highly unusual (occurring only 91 times out of 10,000) if the null hypothesis of no differences in the means among groups was true. We thus have support for rejecting the null hypothesis of no difference among the mean values of the groups of observations, and accepting the alternative hypothesis (i.e. that the means are not equal).</p>
+<p>In contrast, the <em>p</em>-value for the homogeneity of variance test, 0.1397, is large enough (i.e. greater than 0.05) to suggest that there is little support for rejecting the null hypothesis that the variances of the data in the individual groups is equal.</p>
+<p>There are set of diagnostic plots that can be used to check the assumptions, as well as to gain some more information on the (potential differences) among groups.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw">plot</span>(aov1)</a></code></pre></div>
+<p><img src="lec11_files/figure-html/anoma05-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</a></code></pre></div>
+</div>
+<div id="example-2-means-not-significantly-different-and-variances-not-significantly-different" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> Example 2 – means not significantly different, and variances not significantly different</h3>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">boxplot</span>(Data2 <span class="op">~</span><span class="st"> </span>Group2, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">10</span>,<span class="dv">50</span>), <span class="dt">main=</span><span class="st">&quot;ANOVA Example 2&quot;</span>)</a></code></pre></div>
+<p><img src="lec11_files/figure-html/anova06-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">tapply</span>(Data2, Group2, mean)</a></code></pre></div>
+<pre><code>##         1         2         3 
+##  9.910154 10.229525 10.005028</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">tapply</span>(Data2, Group2, sd)</a></code></pre></div>
+<pre><code>##        1        2        3 
+## 2.003634 2.078035 1.862050</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">aov2 &lt;-<span class="st"> </span><span class="kw">aov</span>(Data2 <span class="op">~</span><span class="st"> </span>Group2)</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2">aov2</a></code></pre></div>
+<pre><code>## Call:
+##    aov(formula = Data2 ~ Group2)
+## 
+## Terms:
+##                    Group2 Residuals
+## Sum of Squares    13.3155 2934.0670
+## Deg. of Freedom         2       747
+## 
+## Residual standard error: 1.981868
+## Estimated effects may be unbalanced</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">summary</span>(aov2)</a></code></pre></div>
+<pre><code>##              Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Group2        2   13.3   6.658   1.695  0.184
+## Residuals   747 2934.1   3.928</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">hov2 &lt;-<span class="st"> </span><span class="kw">bartlett.test</span>(Data2 <span class="op">~</span><span class="st"> </span>Group2)</a>
+<a class="sourceLine" id="cb28-2" data-line-number="2">hov2</a></code></pre></div>
+<pre><code>## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  Data2 by Group2
+## Bartlett&#39;s K-squared = 3.1134, df = 2, p-value = 0.2108</code></pre>
+<p>This time neither test statisitc is significant (both have p-values greater than 0.05), lending little support for rejecting the two null hypotheses That there is no difference in the means or variances among groups).</p>
+</div>
+<div id="example-3-significant-differences-in-means-but-variances-are-not-significantly-different" class="section level3">
+<h3><span class="header-section-number">2.1.3</span> Example 3 – significant differences in means, but variances are not significantly different</h3>
+<p>This example illustrates a case where the <em>F</em>-statistic is large enough to be significant, but where the null hypothesis of sigificant differences in group variances can not be rejected.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">boxplot</span>(Data3 <span class="op">~</span><span class="st"> </span>Group3, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">10</span>,<span class="dv">50</span>), <span class="dt">main=</span><span class="st">&quot;ANOVA Example 3&quot;</span>)</a></code></pre></div>
+<p><img src="lec11_files/figure-html/anova08-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw">tapply</span>(Data3, Group3, mean)</a></code></pre></div>
+<pre><code>##        1        2        3 
+## 9.260285 8.086719 9.839427</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">tapply</span>(Data3, Group3, sd)</a></code></pre></div>
+<pre><code>##        1        2        3 
+## 2.016659 2.001333 2.026067</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">aov3 &lt;-<span class="st"> </span><span class="kw">aov</span>(Data3 <span class="op">~</span><span class="st"> </span>Group3)</a>
+<a class="sourceLine" id="cb35-2" data-line-number="2">aov3</a></code></pre></div>
+<pre><code>## Call:
+##    aov(formula = Data3 ~ Group3)
+## 
+## Terms:
+##                    Group3 Residuals
+## Sum of Squares   398.7207 3032.1206
+## Deg. of Freedom         2       747
+## 
+## Residual standard error: 2.014712
+## Estimated effects may be unbalanced</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">summary</span>(aov3)</a></code></pre></div>
+<pre><code>##              Df Sum Sq Mean Sq F value Pr(&gt;F)    
+## Group3        2  398.7  199.36   49.12 &lt;2e-16 ***
+## Residuals   747 3032.1    4.06                   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1">hov3 &lt;-<span class="st"> </span><span class="kw">bartlett.test</span>(Data3 <span class="op">~</span><span class="st"> </span>Group3)</a>
+<a class="sourceLine" id="cb39-2" data-line-number="2">hov3</a></code></pre></div>
+<pre><code>## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  Data3 by Group3
+## Bartlett&#39;s K-squared = 0.038197, df = 2, p-value = 0.9811</code></pre>
+<p>This example is like example 1, and is intended to be campared with the next example.</p>
+</div>
+<div id="example-4-similar-means-as-in-example-4-but-larger-group-variances" class="section level3">
+<h3><span class="header-section-number">2.1.4</span> Example 4 – similar means as in Example 4, but larger group variances</h3>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="kw">boxplot</span>(Data4 <span class="op">~</span><span class="st"> </span>Group4, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">10</span>,<span class="dv">50</span>), <span class="dt">main=</span><span class="st">&quot;ANOVA Example 4&quot;</span>)</a></code></pre></div>
+<p><img src="lec11_files/figure-html/anova10-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="kw">tapply</span>(Data4, Group4, mean)</a></code></pre></div>
+<pre><code>##        1        2        3 
+## 9.380276 8.497999 8.970932</code></pre>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="kw">tapply</span>(Data4, Group4, sd)</a></code></pre></div>
+<pre><code>##        1        2        3 
+## 7.711973 7.856867 7.008895</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1">aov4 &lt;-<span class="st"> </span><span class="kw">aov</span>(Data4 <span class="op">~</span><span class="st"> </span>Group4)</a>
+<a class="sourceLine" id="cb46-2" data-line-number="2">aov4</a></code></pre></div>
+<pre><code>## Call:
+##    aov(formula = Data4 ~ Group4)
+## 
+## Terms:
+##                   Group4 Residuals
+## Sum of Squares     97.47  42412.04
+## Deg. of Freedom        2       747
+## 
+## Residual standard error: 7.535018
+## Estimated effects may be unbalanced</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="kw">summary</span>(aov4)</a></code></pre></div>
+<pre><code>##              Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Group4        2     97   48.74   0.858  0.424
+## Residuals   747  42412   56.78</code></pre>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1">hov4 &lt;-<span class="st"> </span><span class="kw">bartlett.test</span>(Data4 <span class="op">~</span><span class="st"> </span>Group4)</a>
+<a class="sourceLine" id="cb50-2" data-line-number="2">hov4</a></code></pre></div>
+<pre><code>## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  Data4 by Group4
+## Bartlett&#39;s K-squared = 3.6496, df = 2, p-value = 0.1612</code></pre>
+<p>Example 4 shows how (relative to Example 3) the presence of larger within-group variances here reduces the apparent significance of the <em>F</em> statistic (to the point of non-significance). It is harder to demonstrate differences among means when the variability within groups is larger.</p>
+</div>
+<div id="example-5-means-not-significantly-different-but-the-variances-are" class="section level3">
+<h3><span class="header-section-number">2.1.5</span> Example 5 – means not significantly different, but the variances are</h3>
+<p>This last example demonstrates a situation that often arises in practice–the variabilty of two groups of data may differ more than the means do. (This could be more scientifically meaningful that obsrving a simple difference among means.)</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1"><span class="kw">boxplot</span>(Data5 <span class="op">~</span><span class="st"> </span>Group5, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">10</span>,<span class="dv">50</span>), <span class="dt">main=</span><span class="st">&quot;ANOVA Example 5&quot;</span>)</a></code></pre></div>
+<p><img src="lec11_files/figure-html/anova12-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="kw">tapply</span>(Data5, Group5, mean)</a></code></pre></div>
+<pre><code>##        0        1 
+## 14.87515 14.83058</code></pre>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="kw">tapply</span>(Data5, Group5, sd)</a></code></pre></div>
+<pre><code>##        0        1 
+## 5.097586 9.459906</code></pre>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1">aov5 &lt;-<span class="st"> </span><span class="kw">aov</span>(Data5 <span class="op">~</span><span class="st"> </span>Group5)</a>
+<a class="sourceLine" id="cb57-2" data-line-number="2">aov5</a></code></pre></div>
+<pre><code>## Call:
+##    aov(formula = Data5 ~ Group5)
+## 
+## Terms:
+##                   Group5 Residuals
+## Sum of Squares      0.33  35249.67
+## Deg. of Freedom        1       748
+## 
+## Residual standard error: 6.864782
+## Estimated effects may be unbalanced</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="kw">summary</span>(aov5)</a></code></pre></div>
+<pre><code>##              Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Group5        1      0    0.33   0.007  0.933
+## Residuals   748  35250   47.13</code></pre>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1">hov5 &lt;-<span class="st"> </span><span class="kw">bartlett.test</span>(Data5 <span class="op">~</span><span class="st"> </span>Group5)</a>
+<a class="sourceLine" id="cb61-2" data-line-number="2">hov5</a></code></pre></div>
+<pre><code>## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  Data5 by Group5
+## Bartlett&#39;s K-squared = 137.14, df = 1, p-value &lt; 2.2e-16</code></pre>
+<p>In practice, one would proceed by discussing the analysis of variance anyway (even though its assumptions are violated), because that’s what people do!</p>
+<p><a href="lec11.html">[Back to top]</a></p>
+<p>#Readings#</p>
+<ul>
+<li>Owen (<em>The R Guide</em>): section 7.2;</li>
+<li>Rossiter (<em>Introduction … ITC</em>): section 4.17.1</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

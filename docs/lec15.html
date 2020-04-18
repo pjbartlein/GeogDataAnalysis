@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>GLMs, GAMs, and CARTs</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="SI-md-08.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Geographic Data Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="lec01.html">Introduction to the course</a>
+    </li>
+    <li>
+      <a href="lec02.html">Univariate plots</a>
+    </li>
+    <li>
+      <a href="lec03.html">Bivariate plots</a>
+    </li>
+    <li>
+      <a href="lec04.html">Descriptive statistics</a>
+    </li>
+    <li>
+      <a href="lec05.html">Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ggplot2.html">ggplot2 versions of basic plots</a>
+    </li>
+    <li>
+      <a href="lec06.html">Maps in R</a>
+    </li>
+    <li>
+      <a href="lec07.html">Geospatial analysis in R</a>
+    </li>
+    <li>
+      <a href="lec08.html">Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="lec09.html">Reference distributions</a>
+    </li>
+    <li>
+      <a href="lec10.html">Statistical inference</a>
+    </li>
+    <li>
+      <a href="lec11.html">Analysis of variance</a>
+    </li>
+    <li>
+      <a href="lec12.html">Regression analysis</a>
+    </li>
+    <li>
+      <a href="lec13.html">More regression analysis</a>
+    </li>
+    <li>
+      <a href="lec14.html">Nonparametric regression</a>
+    </li>
+    <li>
+      <a href="lec15.html">GLMs, GAMs, and CARTs</a>
+    </li>
+    <li>
+      <a href="lec16.html">Principal components and factor analyses</a>
+    </li>
+    <li>
+      <a href="lec17.html">MANOVA and discriminant analysis</a>
+    </li>
+    <li>
+      <a href="lec18.html">Multivariate distances and cluster analysis</a>
+    </li>
+    <li>
+      <a href="lec19.html">High-resolution and high-dimension data</a>
+    </li>
+    <li>
+      <a href="lec20.html">Analysis and visualization of large raster data sets</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Exercises</li>
+    <li>
+      <a href="ex01.html">Exercise 01 -- Getting R and RStudio</a>
+    </li>
+    <li>
+      <a href="ex02.html">Exercise 02 -- Univariate plots</a>
+    </li>
+    <li>
+      <a href="ex03.html">Exercise 03 -- Bivariate plots and descriptive statistics</a>
+    </li>
+    <li>
+      <a href="ex04.html">Exercise 04 -- Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ex05.html">Exercise 05 -- Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="ex06.html">Exercise 06 -- CI's, t-tests, ANOVA</a>
+    </li>
+    <li>
+      <a href="ex07.html">Exercise 07 -- Regression analysis</a>
+    </li>
+    <li>
+      <a href="ex08.html">Exercise 08 -- Multivariate analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="packages-and-data.html">Packages and data</a>
+    </li>
+    <li>
+      <a href="vm_inst.html">Virtual machine instructions</a>
+    </li>
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="datasets.html">Datasets</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">GLMs, GAMs, and CARTs</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#generalized-linear-models-glms"><span class="toc-section-number">2</span> Generalized Linear Models (GLMs)</a><ul>
+<li><a href="#ols-regression"><span class="toc-section-number">2.1</span> OLS regression</a></li>
+<li><a href="#glm-regression"><span class="toc-section-number">2.2</span> GLM regression</a></li>
+<li><a href="#a-second-glm-model"><span class="toc-section-number">2.3</span> A second GLM model</a></li>
+</ul></li>
+<li><a href="#another-glm-example"><span class="toc-section-number">3</span> Another GLM example</a><ul>
+<li><a href="#simple-model-no-interaction"><span class="toc-section-number">3.1</span> Simple model, no interaction</a></li>
+<li><a href="#a-second-model-with-interaction"><span class="toc-section-number">3.2</span> A second model, with interaction</a></li>
+</ul></li>
+<li><a href="#generalized-additive-models-gams"><span class="toc-section-number">4</span> Generalized Additive Models (GAMs)</a><ul>
+<li><a href="#a-simple-example"><span class="toc-section-number">4.1</span> A simple example</a></li>
+</ul></li>
+<li><a href="#classification-and-regression-trees-carts"><span class="toc-section-number">5</span> Classification and regression trees (CARTs)</a><ul>
+<li><a href="#a-regression-tree-example"><span class="toc-section-number">5.1</span> A regression-tree example</a></li>
+<li><a href="#a-maptree-example"><span class="toc-section-number">5.2</span> A “Maptree” example</a></li>
+</ul></li>
+<li><a href="#readings"><span class="toc-section-number">6</span> Readings</a></li>
+</ul>
+</div>
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<p>
+<span style="color: #FF0040;">NOTE: Not yet revised for Spring 2020</span>
+</p>
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>There are a number of extensions or alternative approaches for building regression-like models for circumstances when the (fairly restrictive) set of assumptions that underlie the use of ordinary least squares for fitting the regression model may be violated (e.g. binary response variables, nonlinearizable relationships, etc.) These alternative approaches are not simply workarounds, but are useful in their own right for exploring or describing relationships between a response variable and several predictors.</p>
+</div>
+<div id="generalized-linear-models-glms" class="section level1">
+<h1><span class="header-section-number">2</span> Generalized Linear Models (GLMs)</h1>
+<p>Generalized linear models (GLMSs) can be considered a general case of the “General Linear Model” that underlies analysis of variance and regression (and note the subtle distinction between “Generalized” and “General”). GLMs (pronounced “glims”) relax many of the assumptions that underly OLS (Ordinary Least Squares) regression, such as the assumption that the residuals are “i.i.d. normal” (independent, indentically (normally) distributed random (i.e. not autocorrelate) variables). Datasets in which the response variable is binary (0 or 1), a proportion or fraction, or a count usually automatically violate that assumption.</p>
+<p>GLMs consist of a linear predictor (that looks like an ordinary regression equation), that together with a “link fucntion”, describes the distribution of the response variable (which may be one of several from the family of exponential distributions). When the distribution of the dependent variable is gaussian (i.e. normal), and the link function is just the identity function, the model is equivalent to the standard regression model.</p>
+<p>GLMs have a <em>family</em> attribute that describes the distribution of the errors (residuals) which includes, but is not limited to the normal distribution assumed in OLS regression, and a <em>link function</em> that describes the relationship of the response to the predictor variables. In fitting GLMs, a quantity called the <em>deviance</em> is minimized, and is similar to the sum-of-squares of deviations that is minimized in OLS regression.</p>
+<p>This example uses data from Chuck Gottfried’s master’s thesis (Gottfried, C.E., 1992. Residential wood heating and urban air quality : evaluation of a voluntary wood-heating curtailment program. MA Thesis, University of Oregon, Department of Geography, 83 p.) <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/burn.csv">[burn.csv]</a>.</p>
+<p>The objective this study was to understand the controls of woodstove use in Lane County (i.e. the proprotion of wood-stove chimneys that were “hot” (<code>hotp</code>) during a particular survey). The potential predictor variables included various meteorological variables, like the dew-point temperature (<code>dewpt</code>), where high values (relative to air temperature) indicate generally cool, damp conditions, as well as the binary variable that indicated whether a wood-stove-use curtailment advisory was issued (to reduce air pollution during cool, stable, foggy conditions).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Gottfried MS Thesis data (UO Dept. Geography)</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">attach</span>(burn)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">names</span>(burn)</a></code></pre></div>
+<pre><code>##  [1] &quot;day&quot;    &quot;hot&quot;    &quot;total&quot;  &quot;hotp&quot;   &quot;tmin&quot;   &quot;tmax&quot;   &quot;degday&quot; &quot;trange&quot; &quot;precip&quot; &quot;dewpt&quot;  &quot;wind&quot;  
+## [12] &quot;rh7pm&quot;  &quot;rhmin&quot;  &quot;adv&quot;    &quot;week&quot;   &quot;api&quot;    &quot;wx&quot;     &quot;sky&quot;</code></pre>
+<p>As always, the first thing to do is to examine the data:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># examine variables</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">pairs</span>(<span class="kw">cbind</span>(hotp,tmin,tmax,degday,trange,precip,dewpt,wind,api,adv))</a></code></pre></div>
+<p><img src="lec15_files/figure-html/glm03-1.png" width="2100" /></p>
+<p>The matrix scatter plots suggest that minimum temperature <code>tmin</code> and dewpoint temperature <code>dewpt</code> are correlated with the proportion of wood stoves in use <code>hotp</code>, e.g.:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">plot</span>(hotp <span class="op">~</span><span class="st"> </span>dewpt)</a></code></pre></div>
+<p><img src="lec15_files/figure-html/glm04-1.png" width="2100" /></p>
+<div id="ols-regression" class="section level2">
+<h2><span class="header-section-number">2.1</span> OLS regression</h2>
+<p>Here’s a standard OLS (linear) regression model with <code>hotp</code> as the response and <code>dewpt</code> as the predictor:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># linear model</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">burn.lm1 &lt;-<span class="st"> </span><span class="kw">lm</span>(hotp <span class="op">~</span><span class="st"> </span>dewpt)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">burn.lm1</a></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = hotp ~ dewpt)
+## 
+## Coefficients:
+## (Intercept)        dewpt  
+##     0.35904     -0.01832</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">summary</span>(burn.lm1)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = hotp ~ dewpt)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.09616 -0.05801 -0.01558  0.05591  0.19037 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.359043   0.018911  18.986  &lt; 2e-16 ***
+## dewpt       -0.018318   0.004136  -4.429  0.00011 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.07255 on 31 degrees of freedom
+## Multiple R-squared:  0.3875, Adjusted R-squared:  0.3678 
+## F-statistic: 19.61 on 1 and 31 DF,  p-value: 0.0001096</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># diagnostic plots</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw">plot</span>(burn.lm1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>))</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw">hist</span>(burn.lm1<span class="op">$</span>residuals, <span class="dt">breaks=</span><span class="dv">20</span>)</a></code></pre></div>
+<p><img src="lec15_files/figure-html/glm05-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
+<p>Note that the histogram (lower-right plot) is nothing like one that resembles a normal distribution–it looks like there are actually two distinct modes.</p>
+<p>The regression line superficially looks fine (left below) but if plotted over a larger range (right) shows that unreasonable proporations (greater than 1.0, and less than 0.0) could result.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># plot regression line</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw">plot</span>(hotp <span class="op">~</span><span class="st"> </span>dewpt, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="kw">abline</span>(burn.lm1)</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co"># plot regression line again -- larger range</span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="kw">plot</span>(hotp <span class="op">~</span><span class="st"> </span>dewpt, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">40</span>,<span class="dv">40</span>))</a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="kw">abline</span>(burn.lm1)</a></code></pre></div>
+<p><img src="lec15_files/figure-html/glm06-1.png" width="3900" /></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
+</div>
+<div id="glm-regression" class="section level2">
+<h2><span class="header-section-number">2.2</span> GLM regression</h2>
+<p>A genearlized linear model can be fit using the <code>glm()</code> function. Because the response here is a proportion (based on a number of individual binary (burn/noburn) observations, the appropriate family is the “binomial” with a “logit” link function, and each observation weighted by the total number of chimneys that were measured.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># generalized linear model</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">burn.glm1 &lt;-<span class="st"> </span><span class="kw">glm</span>(hotp <span class="op">~</span><span class="st"> </span>dewpt, <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>), <span class="dt">weights=</span>total)</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">burn.glm1</a></code></pre></div>
+<pre><code>## 
+## Call:  glm(formula = hotp ~ dewpt, family = binomial(link = &quot;logit&quot;), 
+##     weights = total)
+## 
+## Coefficients:
+## (Intercept)        dewpt  
+##    -0.59544     -0.08773  
+## 
+## Degrees of Freedom: 32 Total (i.e. Null);  31 Residual
+## Null Deviance:       462.1 
+## Residual Deviance: 283.9     AIC: 489.5</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">summary</span>(burn.glm1)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = hotp ~ dewpt, family = binomial(link = &quot;logit&quot;), 
+##     weights = total)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -4.4475  -2.2278  -0.4553   2.4243   8.3543  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -0.595440   0.028934  -20.58   &lt;2e-16 ***
+## dewpt       -0.087731   0.006688  -13.12   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 462.07  on 32  degrees of freedom
+## Residual deviance: 283.93  on 31  degrees of freedom
+## AIC: 489.54
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># diagnostic plots</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="kw">plot</span>(burn.glm1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>))</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="kw">hist</span>(burn.glm1<span class="op">$</span>residuals, <span class="dt">breaks=</span><span class="dv">20</span>)</a></code></pre></div>
+<p><img src="lec15_files/figure-html/glm07-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
+<p>Note that the regression diagnostic plots are much better “behaved” than previously. Get predicted values for a range of <code>dewpt</code> values for plotting:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># evaluate predicted values</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">new.dewpt &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">40</span>,<span class="dv">40</span>,.<span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">newdata &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">dewpt=</span>new.dewpt)</a>
+<a class="sourceLine" id="cb19-4" data-line-number="4">hotp.pred1 &lt;-<span class="st"> </span><span class="kw">predict</span>(burn.glm1,newdata,<span class="dt">type=</span><span class="st">&quot;resp&quot;</span>)</a></code></pre></div>
+<p>Here’s the regression line generated by the <code>glm()</code> function–note that it is curvilinear, and approaches the possible limits of a proportion (0 and 1) asymptotically.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># plot regression line</span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3"><span class="kw">plot</span>(hotp <span class="op">~</span><span class="st"> </span>dewpt, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb20-4" data-line-number="4"><span class="kw">lines</span>(hotp.pred1 <span class="op">~</span><span class="st"> </span>new.dewpt, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb20-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb20-6" data-line-number="6"><span class="co"># plot regression line again</span></a>
+<a class="sourceLine" id="cb20-7" data-line-number="7"><span class="kw">plot</span>(hotp <span class="op">~</span><span class="st"> </span>dewpt, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">40</span>,<span class="dv">40</span>))</a>
+<a class="sourceLine" id="cb20-8" data-line-number="8"><span class="kw">lines</span>(hotp.pred1 <span class="op">~</span><span class="st"> </span>new.dewpt, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
+<p><img src="lec15_files/figure-html/glm09-1.png" width="3900" /></p>
+</div>
+<div id="a-second-glm-model" class="section level2">
+<h2><span class="header-section-number">2.3</span> A second GLM model</h2>
+<p>Inspection of the matrix scatter plot also suggested that the issuance of a “no-use” advisory (<code>adv</code> = 0 if no advisory issued, <code>adv</code> = 1 if issued) is also correlated with the proportion of stoves in use (in a perverse way, more stoves were in use when a no-burn advisory was issued than when not, which might be expected because the meteorological conditions that lead to the issuance of an advisory are just those when a nice fire would be, nice. Look at the correlations with an interaction (<code>dewpt*adv</code>) between dewpoint and the issuance of an advisory. (Note that in the R formula <code>dewpt*adv</code> means generate the set of predictors <code>dewpt</code>, <code>adv</code>, and <code>dewpt*adv</code>, and <em>not</em> simply include the product between <code>dewpt</code> and <code>adv</code>).</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># generalized linear model -- two predictors</span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">burn.glm2 &lt;-<span class="st"> </span><span class="kw">glm</span>(hotp <span class="op">~</span><span class="st"> </span>dewpt<span class="op">*</span>adv, <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>), <span class="dt">weights=</span>total)</a>
+<a class="sourceLine" id="cb21-3" data-line-number="3">burn.glm2</a></code></pre></div>
+<pre><code>## 
+## Call:  glm(formula = hotp ~ dewpt * adv, family = binomial(link = &quot;logit&quot;), 
+##     weights = total)
+## 
+## Coefficients:
+## (Intercept)        dewpt          adv    dewpt:adv  
+##    -0.68873     -0.07166      0.21729     -0.08965  
+## 
+## Degrees of Freedom: 32 Total (i.e. Null);  29 Residual
+## Null Deviance:       462.1 
+## Residual Deviance: 268.6     AIC: 478.2</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">summary</span>(burn.glm2)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = hotp ~ dewpt * adv, family = binomial(link = &quot;logit&quot;), 
+##     weights = total)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -5.0478  -1.5868  -0.4386   1.6336   8.1552  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -0.688733   0.051599 -13.348  &lt; 2e-16 ***
+## dewpt       -0.071659   0.008667  -8.268  &lt; 2e-16 ***
+## adv          0.217289   0.066957   3.245 0.001174 ** 
+## dewpt:adv   -0.089646   0.023509  -3.813 0.000137 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 462.07  on 32  degrees of freedom
+## Residual deviance: 268.57  on 29  degrees of freedom
+## AIC: 478.18
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<p>The two models can be compared by doing an “analysis of deviance” in a parallel fashion to an analysis of variance. If large, the <code>Deviance</code> value signals that the second model is better than the first, as it is here.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># compare models</span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw">anova</span>(burn.glm1,burn.glm2,<span class="dt">test=</span><span class="st">&quot;Chi&quot;</span>)</a></code></pre></div>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model 1: hotp ~ dewpt
+## Model 2: hotp ~ dewpt * adv
+##   Resid. Df Resid. Dev Df Deviance  Pr(&gt;Chi)    
+## 1        31     283.93                          
+## 2        29     268.57  2   15.359 0.0004623 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The two models can also be compared using their AIC (Akaike Information Criterion) values, a statistic that trades off the goodness of fit of a model against the number of parameters that have to be estimated. In general, we favor a model with a lower AIC. The first model has an AIC value of 489.5402389, while the second has a lower value of 478.1815388, and so is preferred on this basis as well.</p>
+<p>Finally, plot some of regression lines</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="co"># evaluate predicted values</span></a>
+<a class="sourceLine" id="cb27-2" data-line-number="2">new.dewpt &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">40</span>,<span class="dv">40</span>,.<span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb27-3" data-line-number="3">new.adv0 &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="kw">length</span>(new.dewpt))</a>
+<a class="sourceLine" id="cb27-4" data-line-number="4">newdata.adv0 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">dewpt=</span>new.dewpt, <span class="dt">adv=</span>new.adv0)</a>
+<a class="sourceLine" id="cb27-5" data-line-number="5">hotp.pred2.adv0 &lt;-<span class="st"> </span><span class="kw">predict</span>(burn.glm2, newdata.adv0, <span class="dt">type=</span><span class="st">&quot;resp&quot;</span>)</a>
+<a class="sourceLine" id="cb27-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb27-7" data-line-number="7">new.adv1 &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>,<span class="kw">length</span>(new.dewpt))</a>
+<a class="sourceLine" id="cb27-8" data-line-number="8">newdata.adv1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">dewpt=</span>new.dewpt, <span class="dt">adv=</span>new.adv1)</a>
+<a class="sourceLine" id="cb27-9" data-line-number="9">hotp.pred2.adv1 &lt;-<span class="st"> </span><span class="kw">predict</span>(burn.glm2, newdata.adv1, <span class="dt">type=</span><span class="st">&quot;resp&quot;</span>)</a>
+<a class="sourceLine" id="cb27-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb27-11" data-line-number="11">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb27-12" data-line-number="12"><span class="co"># plot regression lines</span></a>
+<a class="sourceLine" id="cb27-13" data-line-number="13"><span class="kw">plot</span>(hotp <span class="op">~</span><span class="st"> </span>dewpt, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb27-14" data-line-number="14"><span class="kw">lines</span>(hotp.pred2.adv0 <span class="op">~</span><span class="st"> </span>new.dewpt, <span class="dt">col=</span><span class="st">&quot;green&quot;</span>)</a>
+<a class="sourceLine" id="cb27-15" data-line-number="15"><span class="kw">lines</span>(hotp.pred2.adv1 <span class="op">~</span><span class="st"> </span>new.dewpt, <span class="dt">col=</span><span class="st">&quot;magenta&quot;</span>)</a>
+<a class="sourceLine" id="cb27-16" data-line-number="16"><span class="kw">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&quot;no advisory&quot;</span>, <span class="st">&quot;advisory&quot;</span>), <span class="dt">lty =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">lwd =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb27-17" data-line-number="17">    <span class="dt">cex =</span> <span class="dv">1</span>, <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;green&quot;</span>, <span class="st">&quot;magenta&quot;</span>))</a>
+<a class="sourceLine" id="cb27-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb27-19" data-line-number="19"><span class="co"># plot regression lines again</span></a>
+<a class="sourceLine" id="cb27-20" data-line-number="20"><span class="kw">plot</span>(hotp <span class="op">~</span><span class="st"> </span>dewpt, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">40</span>,<span class="dv">40</span>))</a>
+<a class="sourceLine" id="cb27-21" data-line-number="21"><span class="kw">lines</span>(hotp.pred2.adv0 <span class="op">~</span><span class="st"> </span>new.dewpt, <span class="dt">col=</span><span class="st">&quot;green&quot;</span>)</a>
+<a class="sourceLine" id="cb27-22" data-line-number="22"><span class="kw">lines</span>(hotp.pred2.adv1 <span class="op">~</span><span class="st"> </span>new.dewpt, <span class="dt">col=</span><span class="st">&quot;magenta&quot;</span>)</a>
+<a class="sourceLine" id="cb27-23" data-line-number="23"><span class="kw">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&quot;no advisory&quot;</span>, <span class="st">&quot;advisory&quot;</span>), <span class="dt">lty =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">lwd =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb27-24" data-line-number="24">    <span class="dt">cex =</span> <span class="dv">1</span>, <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;green&quot;</span>, <span class="st">&quot;magenta&quot;</span>))</a></code></pre></div>
+<p><img src="lec15_files/figure-html/glm12-1.png" width="3900" /></p>
+<p>The interpretation is straightforward: as the dew point temperature falls, the liklihood of using a woodstove increases, and it increase faster if a no-burn advisory was issued.</p>
+<p>Here is everything on a single scatter diagram:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># plot all</span></a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">plot</span>(hotp <span class="op">~</span><span class="st"> </span>dewpt, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">40</span>,<span class="dv">40</span>))</a>
+<a class="sourceLine" id="cb28-3" data-line-number="3"><span class="kw">abline</span>(burn.lm1)</a>
+<a class="sourceLine" id="cb28-4" data-line-number="4"><span class="kw">lines</span>(hotp.pred1 <span class="op">~</span><span class="st"> </span>new.dewpt, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb28-5" data-line-number="5"><span class="kw">lines</span>(hotp.pred2.adv0 <span class="op">~</span><span class="st"> </span>new.dewpt, <span class="dt">col=</span><span class="st">&quot;green&quot;</span>)</a>
+<a class="sourceLine" id="cb28-6" data-line-number="6"><span class="kw">lines</span>(hotp.pred2.adv1 <span class="op">~</span><span class="st"> </span>new.dewpt, <span class="dt">col=</span><span class="st">&quot;magenta&quot;</span>)</a>
+<a class="sourceLine" id="cb28-7" data-line-number="7"><span class="kw">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&quot;OLS&quot;</span>, <span class="st">&quot;GLM&quot;</span>, <span class="st">&quot;GLM no advisory&quot;</span>, <span class="st">&quot;GLM advisory&quot;</span>), <span class="dt">lty =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">lwd =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb28-8" data-line-number="8">    <span class="dt">cex =</span> <span class="dv">1</span>, <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;magenta&quot;</span>))</a></code></pre></div>
+<p><img src="lec15_files/figure-html/glm13-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">detach</span>(burn)</a></code></pre></div>
+<p><a href="lec15.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="another-glm-example" class="section level1">
+<h1><span class="header-section-number">3</span> Another GLM example</h1>
+<p>This second example of GLMs using a data set and code from Crawley, M.J. (2013) <em>The R Book</em>, Wiley. <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/island.csv">[island.csv]</a></p>
+<p>The data describe the controls of the indcidence (presence or absence) of a particular bird species on a set of islands, and such controls as the area of the island, its isolation, presence of predators, etc. Such <em>binary response</em> data sets occur frequently in practice, and OLS regression is not appropriate for a number of reasons.</p>
+<p>First, look at the data.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># examine variables</span></a>
+<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="kw">attach</span>(island)</a>
+<a class="sourceLine" id="cb30-3" data-line-number="3"><span class="kw">pairs</span>(<span class="kw">cbind</span>(incidence,area,isolation,quality,enemy,competitors))</a></code></pre></div>
+<p><img src="lec15_files/figure-html/glm202-1.png" width="2100" /> Compare two models for <code>incidence</code>, one a simple model with <code>area</code> and <code>isolation</code> as predictors, and the other, a model that includes those predictors with interaction.</p>
+<div id="simple-model-no-interaction" class="section level2">
+<h2><span class="header-section-number">3.1</span> Simple model, no interaction</h2>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># simple model</span></a>
+<a class="sourceLine" id="cb31-2" data-line-number="2">island.glm1&lt;-<span class="kw">glm</span>(incidence<span class="op">~</span>area<span class="op">+</span>isolation, binomial)</a>
+<a class="sourceLine" id="cb31-3" data-line-number="3"><span class="kw">summary</span>(island.glm1)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = incidence ~ area + isolation, family = binomial)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.8189  -0.3089   0.0490   0.3635   2.1192  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)   
+## (Intercept)   6.6417     2.9218   2.273  0.02302 * 
+## area          0.5807     0.2478   2.344  0.01909 * 
+## isolation    -1.3719     0.4769  -2.877  0.00401 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 68.029  on 49  degrees of freedom
+## Residual deviance: 28.402  on 47  degrees of freedom
+## AIC: 34.402
+## 
+## Number of Fisher Scoring iterations: 6</code></pre>
+<p>The model can be visualized by generating a grid of values of the predictor variables, and “pluggin in” those values to the fitted model using the <code>predict()</code> function, and displaying the results as a perspective plot.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">new.area &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from=</span><span class="dv">0</span>, <span class="dt">to=</span><span class="dv">10</span>, <span class="dt">len=</span><span class="dv">40</span>); new.isolation &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from=</span><span class="op">-</span><span class="dv">2</span>, <span class="dt">to=</span><span class="dv">12</span>, <span class="dt">len=</span><span class="dv">40</span>)</a>
+<a class="sourceLine" id="cb33-2" data-line-number="2">new.x &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">area=</span>new.area, <span class="dt">isolation=</span>new.isolation)</a>
+<a class="sourceLine" id="cb33-3" data-line-number="3">island.glm1.sfc  &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">predict</span>(island.glm1, new.x, <span class="dt">type=</span><span class="st">&quot;response&quot;</span>),<span class="dv">40</span>,<span class="dv">40</span>)</a>
+<a class="sourceLine" id="cb33-4" data-line-number="4"><span class="kw">persp</span>(new.area, new.isolation, island.glm1.sfc, <span class="dt">theta=</span><span class="op">-</span><span class="dv">150</span>, <span class="dt">phi=</span><span class="dv">20</span>, <span class="dt">d=</span><span class="fl">1.5</span>, </a>
+<a class="sourceLine" id="cb33-5" data-line-number="5">  <span class="dt">col=</span><span class="st">&quot;gray&quot;</span>, <span class="dt">ticktype=</span><span class="st">&quot;detailed&quot;</span>,  <span class="dt">zlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">xlab=</span><span class="st">&quot;Area&quot;</span>, </a>
+<a class="sourceLine" id="cb33-6" data-line-number="6">  <span class="dt">ylab=</span><span class="st">&quot;Isolation&quot;</span>, <span class="dt">zlab =</span> <span class="st">&quot;Species Incidence&quot;</span>)</a></code></pre></div>
+<p><img src="lec15_files/figure-html/unnamed-chunk-1-1.png" width="2100" /></p>
+</div>
+<div id="a-second-model-with-interaction" class="section level2">
+<h2><span class="header-section-number">3.2</span> A second model, with interaction</h2>
+<p>Here’s a second model, that allows for interaction between <code>area</code> and <code>isolation</code>:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="co"># interaction</span></a>
+<a class="sourceLine" id="cb34-2" data-line-number="2">island.glm2&lt;-<span class="kw">glm</span>(incidence<span class="op">~</span>area<span class="op">*</span>isolation, binomial)</a>
+<a class="sourceLine" id="cb34-3" data-line-number="3"><span class="kw">summary</span>(island.glm2)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = incidence ~ area * isolation, family = binomial)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -1.84481  -0.33295   0.02027   0.34581   2.01591  
+## 
+## Coefficients:
+##                Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept)      4.0313     7.1747   0.562    0.574
+## area             1.3807     2.1373   0.646    0.518
+## isolation       -0.9422     1.1689  -0.806    0.420
+## area:isolation  -0.1291     0.3389  -0.381    0.703
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 68.029  on 49  degrees of freedom
+## Residual deviance: 28.252  on 46  degrees of freedom
+## AIC: 36.252
+## 
+## Number of Fisher Scoring iterations: 7</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">island.glm2.sfc  &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">predict</span>(island.glm2, new.x, <span class="dt">type=</span><span class="st">&quot;response&quot;</span>),<span class="dv">40</span>,<span class="dv">40</span>)</a>
+<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="kw">persp</span>(new.area, new.isolation, island.glm1.sfc, <span class="dt">theta=</span><span class="op">-</span><span class="dv">150</span>, <span class="dt">phi=</span><span class="dv">20</span>, <span class="dt">d=</span><span class="fl">1.5</span>, </a>
+<a class="sourceLine" id="cb36-3" data-line-number="3">  <span class="dt">col=</span><span class="st">&quot;gray&quot;</span>, <span class="dt">ticktype=</span><span class="st">&quot;detailed&quot;</span>,  <span class="dt">zlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">xlab=</span><span class="st">&quot;Area&quot;</span>, </a>
+<a class="sourceLine" id="cb36-4" data-line-number="4">  <span class="dt">ylab=</span><span class="st">&quot;Isolation&quot;</span>, <span class="dt">zlab =</span> <span class="st">&quot;Species Incidence&quot;</span>)</a></code></pre></div>
+<p><img src="lec15_files/figure-html/unnamed-chunk-2-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="co"># compare models</span></a>
+<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="kw">anova</span>(island.glm1,island.glm2,<span class="dt">test=</span><span class="st">&quot;Chi&quot;</span>)</a></code></pre></div>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model 1: incidence ~ area + isolation
+## Model 2: incidence ~ area * isolation
+##   Resid. Df Resid. Dev Df Deviance Pr(&gt;Chi)
+## 1        47     28.402                     
+## 2        46     28.252  1  0.15043   0.6981</code></pre>
+<p>The comparison here suggests that the simpler model is better. This could also be expected because in the simpler model, the <em>z</em>-statistic test of the significance of the regression coefficients shows that the coefficients of <code>area</code> and <code>isolation</code> are both significant, whereas in the second model, none of the coefficeints are significant.</p>
+<p>Another way to look at the relationships is via two bivariate models:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1">island.glma&lt;-<span class="kw">glm</span>(incidence <span class="op">~</span><span class="st"> </span>area, binomial)</a>
+<a class="sourceLine" id="cb39-2" data-line-number="2"><span class="kw">summary</span>(island.glma)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = incidence ~ area, family = binomial)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.5709  -0.9052   0.3183   0.6588   1.8424  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  -2.1554     0.7545  -2.857 0.004278 ** 
+## area          0.6272     0.1861   3.370 0.000753 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 68.029  on 49  degrees of freedom
+## Residual deviance: 50.172  on 48  degrees of freedom
+## AIC: 54.172
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">island.glmi&lt;-<span class="kw">glm</span>(incidence <span class="op">~</span><span class="st"> </span>isolation, binomial)</a>
+<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="kw">summary</span>(island.glmi)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = incidence ~ isolation, family = binomial)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.8537  -0.3590   0.1168   0.6272   1.5476  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   8.5223     2.4511   3.477 0.000507 ***
+## isolation    -1.3416     0.3926  -3.417 0.000633 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 68.029  on 49  degrees of freedom
+## Residual deviance: 36.640  on 48  degrees of freedom
+## AIC: 40.64
+## 
+## Number of Fisher Scoring iterations: 6</code></pre>
+<p>Take a look at two scatter plots with fitted curves using <code>area</code> and <code>isolation</code> as individual predictors.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb43-2" data-line-number="2">xv&lt;-<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">9</span>,<span class="fl">0.01</span>)</a>
+<a class="sourceLine" id="cb43-3" data-line-number="3">yv&lt;-<span class="kw">predict</span>(island.glma,<span class="kw">list</span>(<span class="dt">area=</span>xv),<span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb43-4" data-line-number="4"><span class="kw">plot</span>(area,incidence)</a>
+<a class="sourceLine" id="cb43-5" data-line-number="5"><span class="kw">lines</span>(xv,yv, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb43-6" data-line-number="6">xv2&lt;-<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">10</span>,<span class="fl">0.1</span>)</a>
+<a class="sourceLine" id="cb43-7" data-line-number="7">yv2&lt;-<span class="kw">predict</span>(island.glmi,<span class="kw">list</span>(<span class="dt">isolation=</span>xv2),<span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb43-8" data-line-number="8"><span class="kw">plot</span>(isolation,incidence)</a>
+<a class="sourceLine" id="cb43-9" data-line-number="9"><span class="kw">lines</span>(xv2,yv2, <span class="dt">lwd=</span><span class="dv">2</span>)</a></code></pre></div>
+<p><img src="lec15_files/figure-html/glm205-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</a></code></pre></div>
+<p><a href="lec15.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="generalized-additive-models-gams" class="section level1">
+<h1><span class="header-section-number">4</span> Generalized Additive Models (GAMs)</h1>
+<p>Generalized additive models implement an overall strategy for relaxing the assumption that the relationships between the response variable and predictor variables are linear, by allowing the forms of the relationship to be determined by the data, in a manner analogous to using loess to describe the relationship.</p>
+<p>Generalized additive models (GAMs) in some ways can be considered to be the general case of regression analysis, with GLMs being a special case that allows for different kinds of responses (e.g. binary, counts, proportions, as well as “continuous” interval- or ratio-scale data), and OLS regression being a very special case where the residuals are i.i.d. normal, and the relationships between responses and predictors are linear. GAMs are quite flexible, making no assumptions of the forms of the relationships between the response and predictors.</p>
+<p>This simple example of GAMs using a data set and code from This second example of GLMs using a data set and code from Crawley, M.J. (2013) <em>The R Book</em>, Wiley: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/ozone.csv">[ozone.csv]</a> The <code>ozone</code> data set is one of the classical data sets that has been used in illustrating analyses is S and R.</p>
+<p>Look at the data:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="kw">attach</span>(ozone.data)</a></code></pre></div>
+<pre><code>## The following object is masked from package:maps:
+## 
+##     ozone</code></pre>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="kw">pairs</span>(ozone.data, <span class="dt">panel=</span><span class="cf">function</span>(x,y) {<span class="kw">points</span>(x,y); <span class="kw">lines</span>(<span class="kw">lowess</span>(x,y), <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)})</a></code></pre></div>
+<p><img src="lec15_files/figure-html/gam02-1.png" width="2100" /></p>
+<div id="a-simple-example" class="section level2">
+<h2><span class="header-section-number">4.1</span> A simple example</h2>
+<p>Fit a GAM using the <code>gam</code> package, with <code>ozone</code> levels as the response and solar radiation (<code>rad</code>), temperature (<code>temp</code>) and wind speed (<code>wind</code>) as predictors.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="co"># load Hastie &amp; Tibshirani-style GAM package</span></a>
+<a class="sourceLine" id="cb48-2" data-line-number="2"><span class="kw">library</span>(gam)</a></code></pre></div>
+<pre><code>## Loading required package: splines</code></pre>
+<pre><code>## Loading required package: foreach</code></pre>
+<pre><code>## Loaded gam 1.16.1</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1">ozone.gam1 &lt;-<span class="st"> </span><span class="kw">gam</span>(ozone <span class="op">~</span><span class="st"> </span><span class="kw">s</span>(rad)<span class="op">+</span><span class="kw">s</span>(temp)<span class="op">+</span><span class="kw">s</span>(wind))</a></code></pre></div>
+<pre><code>## Warning in model.matrix.default(mt, mf, contrasts): non-list contrasts argument ignored</code></pre>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="kw">summary</span>(ozone.gam1)</a></code></pre></div>
+<pre><code>## 
+## Call: gam(formula = ozone ~ s(rad) + s(temp) + s(wind))
+## Deviance Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -45.691 -10.047  -3.345   7.987  73.117 
+## 
+## (Dispersion Parameter for gaussian family taken to be 303.0415)
+## 
+##     Null Deviance: 121801.9 on 110 degrees of freedom
+## Residual Deviance: 29698.08 on 98.0001 degrees of freedom
+## AIC: 963.4174 
+## 
+## Number of Local Scoring Iterations: 2 
+## 
+## Anova for Parametric Effects
+##           Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## s(rad)     1  14374   14374  47.432 5.491e-10 ***
+## s(temp)    1  37222   37222 122.829 &lt; 2.2e-16 ***
+## s(wind)    1  11464   11464  37.830 1.681e-08 ***
+## Residuals 98  29698     303                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Anova for Nonparametric Effects
+##             Npar Df Npar F     Pr(F)    
+## (Intercept)                             
+## s(rad)            3 2.0549 0.1111824    
+## s(temp)           3 6.6740 0.0003796 ***
+## s(wind)           3 9.2619 1.887e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Note that in GAMs there is no “regression equation” that is produced. Instead, the sense of the relationships between the response and individual predictors is illustrated using “partial residual plots” for individual predictors that show the relationship between that predictor and the differences (residuals) of a prediction of the response using all other predictors.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb56-2" data-line-number="2"><span class="kw">plot</span>(ozone.gam1, <span class="dt">resid=</span>T, <span class="dt">pch=</span><span class="dv">16</span>)</a>
+<a class="sourceLine" id="cb56-3" data-line-number="3">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
+<p><img src="lec15_files/figure-html/gam04-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="co"># check for interactions</span></a>
+<a class="sourceLine" id="cb57-2" data-line-number="2">wt&lt;-wind<span class="op">*</span>temp</a>
+<a class="sourceLine" id="cb57-3" data-line-number="3">ozone.gam2 &lt;-<span class="st"> </span><span class="kw">gam</span>(ozone<span class="op">~</span><span class="kw">s</span>(temp)<span class="op">+</span><span class="kw">s</span>(wind)<span class="op">+</span><span class="kw">s</span>(rad)<span class="op">+</span><span class="kw">s</span>(wt))</a></code></pre></div>
+<pre><code>## Warning in model.matrix.default(mt, mf, contrasts): non-list contrasts argument ignored</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="kw">summary</span>(ozone.gam2)</a></code></pre></div>
+<pre><code>## 
+## Call: gam(formula = ozone ~ s(temp) + s(wind) + s(rad) + s(wt))
+## Deviance Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -46.541  -9.176  -2.512   7.342  65.089 
+## 
+## (Dispersion Parameter for gaussian family taken to be 288.6379)
+## 
+##     Null Deviance: 121801.9 on 110 degrees of freedom
+## Residual Deviance: 27132.03 on 94.0002 degrees of freedom
+## AIC: 961.3863 
+## 
+## Number of Local Scoring Iterations: 8 
+## 
+## Anova for Parametric Effects
+##           Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## s(temp)    1  46069   46069 159.607 &lt; 2.2e-16 ***
+## s(wind)    1  11625   11625  40.276 7.705e-09 ***
+## s(rad)     1   3694    3694  12.797  0.000551 ***
+## s(wt)      1   3270    3270  11.331  0.001106 ** 
+## Residuals 94  27132     289                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Anova for Nonparametric Effects
+##             Npar Df  Npar F     Pr(F)    
+## (Intercept)                              
+## s(temp)           3  8.4243 5.133e-05 ***
+## s(wind)           3 11.3053 2.125e-06 ***
+## s(rad)            3  2.0415   0.11335    
+## s(wt)             3  3.1162   0.02984 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb61-2" data-line-number="2"><span class="kw">plot</span>(ozone.gam2, <span class="dt">resid=</span>T, <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
+<p><img src="lec15_files/figure-html/gam05-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="co"># compare models</span></a>
+<a class="sourceLine" id="cb63-2" data-line-number="2"><span class="kw">anova</span>(ozone.gam1,ozone.gam2,<span class="dt">test=</span><span class="st">&quot;F&quot;</span>)</a></code></pre></div>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model 1: ozone ~ s(rad) + s(temp) + s(wind)
+## Model 2: ozone ~ s(temp) + s(wind) + s(rad) + s(wt)
+##   Resid. Df Resid. Dev     Df Deviance      F  Pr(&gt;F)  
+## 1        98      29698                                 
+## 2        94      27132 3.9998   2566.1 2.2226 0.07238 .
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The F statistic is not very large (which is indicated by its <em>p</em>-value), but the partial residual plots show evidence of a strong effect of including the <code>wind x temp</code> interaction, and that term is significant in the regression equation, so it might be scientifically reasonable to include it.</p>
+<p><a href="lec15.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="classification-and-regression-trees-carts" class="section level1">
+<h1><span class="header-section-number">5</span> Classification and regression trees (CARTs)</h1>
+<p>CARTs implement a much different approach for describing the relationship between a continuous or categorical response variable and several predictor variables that makes few assumptions about the nature of the relationship. Instead of an equation (or an R object that is “equation-like” in the sense of turning some plugged-in values of predictor variable values into estimates of the response using the R <code>predict()</code> function), a tree-structure reminiscent of a “binomial key” is constructed, and is used to arrive at a prediction of the response variable at the tip of a branch. When applied to categorical variables, a “classification tree” results, and when applied to continuous variables, a “regression tree” is produced.</p>
+<p>This example comes from Crawley, M.J. (2013) <em>The R Book</em>, Wiley.</p>
+<div id="a-regression-tree-example" class="section level2">
+<h2><span class="header-section-number">5.1</span> A regression-tree example</h2>
+<p>The easiest way to visualize what a regrssion tree looks like and does is to simply produce one:</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="kw">library</span>(tree)</a>
+<a class="sourceLine" id="cb65-2" data-line-number="2">ozone.tree1 &lt;-<span class="kw">tree</span>(ozone<span class="op">~</span>.,<span class="dt">data=</span>ozone.data)</a>
+<a class="sourceLine" id="cb65-3" data-line-number="3"><span class="kw">plot</span>(ozone.tree1,<span class="dt">type=</span><span class="st">&quot;u&quot;</span>)</a>
+<a class="sourceLine" id="cb65-4" data-line-number="4"><span class="kw">text</span>(ozone.tree1)</a></code></pre></div>
+<p><img src="lec15_files/figure-html/cart02-1.png" width="2100" /></p>
+<p>The <code>tree()</code> function produces what amounts to an (upside down) decision tree, where (starting at the top) each level and branch the values of a specific variable are examined, and a decsion is made as to which branch to take based on whether the value of that variable exceeds some threshold, or does not. The values at the tip of each branch show the values of the response variable that prevail under the conditions indicated by the individual branches that were followed.</p>
+<p>A second example from Crawley (2013) <a href="(https://pjbartlein.github.io/GeogDataAnalysis/data/csv/Pollute.csv)">[Pollute.csv]</a></p>
+<p>Look at the data:</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1"><span class="kw">attach</span>(Pollute)</a>
+<a class="sourceLine" id="cb66-2" data-line-number="2"><span class="kw">pairs</span>(Pollute, <span class="dt">panel=</span><span class="cf">function</span>(x,y) {<span class="kw">points</span>(x,y); <span class="kw">lines</span>(<span class="kw">lowess</span>(x,y))})</a></code></pre></div>
+<p><img src="lec15_files/figure-html/cart03-1.png" width="2100" /></p>
+<p>Regression tree for <code>SO2Conc</code></p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1">SO2Conc.tree1 &lt;-<span class="st"> </span><span class="kw">tree</span>(SO2Conc <span class="op">~</span><span class="st"> </span>. , Pollute)</a>
+<a class="sourceLine" id="cb67-2" data-line-number="2"><span class="kw">plot</span>(SO2Conc.tree1)</a>
+<a class="sourceLine" id="cb67-3" data-line-number="3"><span class="kw">text</span>(SO2Conc.tree1)</a></code></pre></div>
+<p><img src="lec15_files/figure-html/cart04-1.png" width="2100" /></p>
+<p>Printing the object created by <code>tree()</code> provides a text description of the tree and branches:</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1"><span class="kw">print</span>(SO2Conc.tree1)</a></code></pre></div>
+<pre><code>## node), split, n, deviance, yval
+##       * denotes terminal node
+## 
+##  1) root 41 22040 30.05  
+##    2) Industry &lt; 748 36 11260 24.92  
+##      4) Population &lt; 190 7  4096 43.43 *
+##      5) Population &gt; 190 29  4187 20.45  
+##       10) Wetdays &lt; 108 11    96 12.00 *
+##       11) Wetdays &gt; 108 18  2826 25.61  
+##         22) Temp &lt; 59.35 13  1895 29.69  
+##           44) Wind &lt; 9.65 8  1213 33.88 *
+##           45) Wind &gt; 9.65 5   318 23.00 *
+##         23) Temp &gt; 59.35 5   152 15.00 *
+##    3) Industry &gt; 748 5  3002 67.00 *</code></pre>
+<p>The variables and their threshold values are determined by “partitioning” the observations that remain at each step into two groups that maximize the between group variance. This can be illustrated as follows for the first split, where a threhold value of 748 for <code>Industry</code> maximizes the distinctiveness of the two groups.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1">xcut &lt;-<span class="st"> </span><span class="dv">748</span></a>
+<a class="sourceLine" id="cb70-2" data-line-number="2"><span class="kw">plot</span>(SO2Conc <span class="op">~</span><span class="st"> </span>Industry)</a>
+<a class="sourceLine" id="cb70-3" data-line-number="3"><span class="kw">lines</span>(<span class="kw">c</span>(xcut,xcut),<span class="kw">c</span>(<span class="kw">min</span>(SO2Conc),<span class="kw">max</span>(SO2Conc)), <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">lty=</span><span class="st">&quot;dashed&quot;</span>)</a>
+<a class="sourceLine" id="cb70-4" data-line-number="4">m1 &lt;-<span class="st"> </span><span class="kw">mean</span>(SO2Conc[Industry <span class="op">&lt;</span><span class="st"> </span>xcut])</a>
+<a class="sourceLine" id="cb70-5" data-line-number="5">m2 &lt;-<span class="st"> </span><span class="kw">mean</span>(SO2Conc[Industry <span class="op">&gt;=</span><span class="st"> </span>xcut])</a>
+<a class="sourceLine" id="cb70-6" data-line-number="6"><span class="kw">lines</span>(<span class="kw">c</span>(<span class="dv">0</span>,xcut),<span class="kw">c</span>(m1,m1), <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb70-7" data-line-number="7"><span class="kw">lines</span>(<span class="kw">c</span>(xcut,<span class="kw">max</span>(Industry)),<span class="kw">c</span>(m2,m2), <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a></code></pre></div>
+<p><img src="lec15_files/figure-html/cart06-1.png" width="2100" /></p>
+</div>
+<div id="a-maptree-example" class="section level2">
+<h2><span class="header-section-number">5.2</span> A “Maptree” example</h2>
+<p>Denis White (OSU/EPA in Corvallis) developed a package that allows the results of a recursive partitioning and regression tree (“RPART”, same thing as CART…) to be mapped. Here the data consist of bird species distributions and environmental variables for Oregon, and the tree-like partioning derives clusters of data points (hexagonal grid boxes) with similar attributes, and <code>maptree</code> maps them.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1"><span class="kw">library</span>(maptree)</a>
+<a class="sourceLine" id="cb71-2" data-line-number="2"><span class="kw">data</span>(oregon.env.vars, oregon.grid, oregon.border)</a>
+<a class="sourceLine" id="cb71-3" data-line-number="3"><span class="kw">names</span>(oregon.env.vars)</a></code></pre></div>
+<pre><code>##  [1] &quot;bird.spp&quot;  &quot;x&quot;         &quot;y&quot;         &quot;jan.temp&quot;  &quot;jul.temp&quot;  &quot;rng.temp&quot;  &quot;ann.ppt&quot;   &quot;min.elev&quot; 
+##  [9] &quot;rng.elev&quot;  &quot;max.slope&quot;</code></pre>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" data-line-number="1"><span class="kw">attach</span>(oregon.env.vars)</a></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1"><span class="co"># regression tree of Oregon environmental variables</span></a>
+<a class="sourceLine" id="cb74-2" data-line-number="2">model.tree1 &lt;-<span class="st"> &quot;bird.spp ~ jan.temp+jul.temp+rng.temp+ann.ppt+min.elev+rng.elev+max.slope&quot;</span></a>
+<a class="sourceLine" id="cb74-3" data-line-number="3">bird.tree1 &lt;-<span class="st"> </span><span class="kw">rpart</span>(model.tree1)</a>
+<a class="sourceLine" id="cb74-4" data-line-number="4"><span class="kw">plot</span>(bird.tree1)</a>
+<a class="sourceLine" id="cb74-5" data-line-number="5"><span class="kw">text</span>(bird.tree1)</a></code></pre></div>
+<p><img src="lec15_files/figure-html/maptr3-1.png" width="2100" /></p>
+<p>“Pruning” (as on a real tree) removes some long, dangly branches…</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" data-line-number="1"><span class="co"># prune the tree</span></a>
+<a class="sourceLine" id="cb75-2" data-line-number="2">group &lt;-<span class="st"> </span><span class="kw">group.tree</span>(<span class="kw">clip.rpart</span>(<span class="kw">rpart</span>(model.tree1), <span class="dt">best=</span><span class="dv">7</span>))</a>
+<a class="sourceLine" id="cb75-3" data-line-number="3"><span class="kw">plot</span>(<span class="kw">clip.rpart</span>(<span class="kw">rpart</span>(model.tree1), <span class="dt">best=</span><span class="dv">7</span>))</a>
+<a class="sourceLine" id="cb75-4" data-line-number="4"><span class="kw">text</span>(<span class="kw">clip.rpart</span>(<span class="kw">rpart</span>(model.tree1), <span class="dt">best=</span><span class="dv">7</span>))</a></code></pre></div>
+<p><img src="lec15_files/figure-html/maptr4-1.png" width="2100" /></p>
+<p>The following code plots the clusters…</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" data-line-number="1"><span class="co"># plot the regression tree</span></a>
+<a class="sourceLine" id="cb76-2" data-line-number="2"><span class="kw">names</span>(group) &lt;-<span class="st"> </span><span class="kw">row.names</span>(oregon.env.vars)</a>
+<a class="sourceLine" id="cb76-3" data-line-number="3"><span class="kw">map.groups</span>(oregon.grid, <span class="dt">group=</span>group)</a>
+<a class="sourceLine" id="cb76-4" data-line-number="4"><span class="kw">map.key</span> (<span class="fl">0.05</span>, <span class="fl">0.6</span>, <span class="dt">labels=</span><span class="kw">as.character</span>(<span class="kw">seq</span>(<span class="dv">6</span>)),<span class="dt">pch=</span><span class="dv">19</span>, <span class="dt">head=</span><span class="st">&quot;node&quot;</span>)</a>
+<a class="sourceLine" id="cb76-5" data-line-number="5"><span class="kw">lines</span>(oregon.border)</a></code></pre></div>
+<p><img src="lec15_files/figure-html/maptr5-1.png" width="2100" /></p>
+<p>… and redraws the tree to serve as a legend for the map.</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" data-line-number="1"><span class="kw">draw.tree</span> (<span class="kw">clip.rpart</span>(<span class="kw">rpart</span>(model.tree1), <span class="dt">best=</span><span class="dv">7</span>), <span class="dt">nodeinfo=</span><span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb77-2" data-line-number="2">     <span class="dt">units=</span><span class="st">&quot;species&quot;</span>, <span class="dt">cases=</span><span class="st">&quot;cells&quot;</span>, <span class="dt">cex=</span>.<span class="dv">7</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">digits=</span><span class="dv">0</span>)</a></code></pre></div>
+<p><img src="lec15_files/figure-html/maptr6-1.png" width="2100" /></p>
+<p><a href="lec15.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="readings" class="section level1">
+<h1><span class="header-section-number">6</span> Readings</h1>
+<p>GLMs, GAMs and CARTs are well covered in Chapters 13-18 and 23 in Crawley, M.J. (2013) <em>The R Book</em>, Wiley. To get to the book, visit <a href="http://library.uoregon.edu">http://library.uoregon.edu</a>, login, and search for the 2013 edition of the book.<br />
+Here’s a direct link, once you’re logged on: <a href="http://onlinelibrary.wiley.com/book/10.1002/9781118448908">http://onlinelibrary.wiley.com/book/10.1002/9781118448908</a></p>
+<p>Kuhnert &amp; Venebles (An Introduction…): p. 141-168, 169-178, 259-300; Maindonald (Using R…): ch. 9</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

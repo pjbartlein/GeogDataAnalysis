@@ -1,0 +1,225 @@
+---
+title: "Exercise 6"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: no
+    toc_float: false
+    collapsed: no
+    css: html-md-01.css
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+**Geography 4/595:  Geographic Data Analysis**  
+**Winter 2019**
+
+**Exercise 6:  Reference Distributions and Significance Testing (Confidence Intervals, t-tests, and Analysis of Variance)**  
+**Finish by Monday February 25th**
+
+**1.  Introduction**
+
+The objective of this exercise is to use R to make some statistical inferences about the significance of particular data values, statistics derived from data, or of the observed differences between the means of groups of observations.
+
+**2. Confidence Interval for the Mean**
+
+The first part of the exercise uses the Specmap data set.  (It's probably already in your workspace, but if not here's a link: [[specmap.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/specmap.csv))   These data consist of three columns: 1) the age (in ka (kiloanno =1000 yrs)) of 783 observations of δ<sup>18</sup>O values (oxygen-isotope values that indicate the size of the continental ice sheets, with positive values indicating large, and negative values small, ice sheets), and insolation (incoming solar radiation, expressed as differences from present values in July at 65<sup>o</sup>N in Wm<sup>-2</sup>) for about the past 800,000 years. The first row in the data set is the present (0 ka)  and row 783 represents the values for 782,000 years before present (782 ka).  The last glacial maximum occurred around 20 ka.
+
+It's always a good idea to take a look at data before starting any analyses. Here we want to look at δ<sup>18</sup>O and insolation, each as a function of age (time), and so conventionally, the variable `Age` should appear on the X-axis, and  `O18` or `Insol` on the Y-axis.   Because both the oxygen-isotope and insolation data are time series, a 2-D Line Plot (or line plot of X-Y pairs) of both insolation and δ18O values will quickly display the data  (Hint:  Because the Y-axis variables have differing scales, putting both on the same plot would lead to a plot that is difficult to interpret, so it would be better to produce two separate plots.)
+
+>Q1:  Describe the characteristic pattern of variation through time shared by both series (e.g. do they seem to vary in a random way, or do they vary more systematically with one another?).
+
+Next, take a look at the distribution of δ<sup>18</sup>O, using a histogram or density plot, as in Exercise 2:
+
+> Q2:  What does the distribution of δ<sup>18</sup>O look like? (Normal or not? If not, how far away from normal-looking does it appear? How easy is it to tell by simply "eyeballing" the histogram?)
+
+How unusual is the present-day value of δ<sup>18</sup>O (-2.09)? Are current conditions representative of those that prevailed, on average, throughout the part of the Quaternary represented by these data, or are they relatively unusual? To get an idea of how representative or unusual the present is, compare its value to a 90% confidence interval for the mean of the whole series. If the present value falls outside of that interval, then that would suggest that the present value would not be a good estimate of the long-term average δ<sup>18</sup>O, or conversely, that the long-term average δ<sup>18</sup>O is quite different from the present value.
+
+The following code will get a 0.95 (or 95%) confidence interval for the mean δ<sup>18</sup>O, 
+
+```{r echo=TRUE, eval=FALSE}
+attach(specmap)
+# statistics
+O18_mean <- mean(O18)
+O18_sd <- sd(O18)
+O18_npts <- length(O18)
+O18_semean <- O18_sd/sqrt(O18_npts)
+print(c(O18_mean, O18_sd, O18_npts, O18_semean))
+
+# confidence intervals
+O18_upperCI <- O18_mean + 2*O18_semean
+O18_lowerCI <- O18_mean - 2*O18_semean
+print(c(O18_lowerCI, O18_mean, O18_upperCI))
+```
+
+>Q3:  Does the present (0 ka) value of δ<sup>18</sup>O fall inside or outside of the .95 or 95% confidence interval for the mean of δ<sup>18</sup>O? How about the value 1000 years ago (1 ka, row 2)? How far back in the record does one have to go to find the first δ<sup>18</sup>O value that would not be considered significantly different from the long-term mean? (Hint: just look at the numbers in a `View()` window.  Also, you will have to mentally interpolate between values.  For example, the δ<sup>18</sup>O at 2 ka is -1.91, and that at 3ka is -1.83, so at any time between 2ka and 3ka the value of δ<sup>18</sup>O is somewhere between -1.91 and -1.83.)
+
+Getting the standard error and confidence limits for a number of variables would quickly become tedious.  `R` allows (and encourages) the creation of functions that can be "reused" for different variables.  The following is such a function (`descr()`) that describes a variable:
+
+```{r echo=TRUE, eval=FALSE}
+# function for describing a variable
+# usage:  descr(x), where x is the name of a variable
+descr <- function(x) {
+    x_mean <- mean(x); cat(" Mean=", x_mean, "\n")
+    x_sd <- sd(x); cat(" StdDev=", x_sd, "\n")
+    x_npts <- length(x); cat(" n=", x_npts, "\n")
+    x_semean <- x_sd/sqrt(x_npts); cat("SE Mean=", x_semean, "\n")
+    x_upperCI <- x_mean + 2*x_semean; cat(" Upper=", x_upperCI, "\n")
+    x_lowerCI <- x_mean - 2*x_semean; cat(" Lower=", x_lowerCI, "\n")
+    cat(" ", "\n")
+    }
+```
+
+Copy and paste the function into `R` (making sure you include the last curly bracket).  Nothing will happen, but the function can now be used as follows:
+
+```{r echo=TRUE, eval=FALSE}
+descr(O18)
+descr(Insol)
+```
+
+**3. Probability Plots**
+
+The question concerning how well an observed distribution matches the normal distribution (Q2 above) can be answered more directly using a graphical display called a "quantile plot" or "QQ" plot.   The normal probability plot (what R calls a QQ Normal (`qqnorm()` plot) is a scatter diagram containing the values of a particular variable (plotted along the x-axis) and the values that would be returned by the cumulative density function (cdf) of a normal distribution with the same mean and standard deviation as the variable under consideration (plotted along the y-axis). The idea is that if the data really are normally distributed, then the normal probability plot should appear as a straight line, and as the distribution gets less-and-less normal, the normal probability plot will become more-and-more nonlinear.
+
+Get a normal probability plot or QQ Normal plot for the δ<sup>18</sup>O data:
+
+```{r echo=TRUE, eval=FALSE}
+# qqnorm plot with a line
+qqnorm(O18)
+qqline(O18)  
+
+# histogram and density plot for comparison
+hist(O18, breaks=40, probability=T)
+lines(density(O18))
+```
+
+>Q4:  What does the normal probability plot indicate about the distributions of δ<sup>18</sup>O values? Does the pattern of the points on the plot suggest anything about the way in which the observed distribution of δ<sup>18</sup>O departs from the normal distribution (if it indeed does)?  Repeat the above analysis for insolation (`Insol`).  Which variable appears to be closest to one that is normally distributed?
+
+**4. Two-Sample Difference-of-Means Tests (t-tests)**
+
+The question of whether two groups of observations are similar often arises.  Similarity between groups of observations could be indicated by differences in the descriptive statistics of each group, in group-wise descriptive plots or in the distributions of variables. The most common index of "differentness" of groups of observations is provided by a comparison of the means of particular variables among the groups of observations. The test statistic that is appropriate for comparing two means is the t-statistic, which can be thought of as a "scaled" difference between two means, where the observed difference between two means is scaled by an estimate of the uncertainty in or variability of the the means.
+
+Download and read the data set [[orsim.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/orsim.csv) (and call it `orsim` in R). This data set includes climate values (January and July temperature and precipitation) simulated by a regional climate model for present, and for potential future conditions when the concentration of carbon dioxide in the atmosphere has doubled, for a set of model grid points that cover Oregon. The variables named `TJan1x`, `TJul1`x, `PJan1x` and `PJul1x` are the simulated present values of temperature (`T`) and precipitation (`P`), while the variables with "`2x`" in their names are those for the "doubled CO2 scenarios" that are intended to describe the climate of the next century.
+
+Use one of the mapping procedures described in previous exercises to get an impression of the basic pattern of climate over Oregon.  Note that the grid pattern in this particular data set is not parallel to the graticule (lat/lon lines).  Check to make sure the Oregon county outlines shape files (`orotl.shp`) are available; if not, see Part 2 of Exercise 4.  Here's some code:  
+
+```{r echo=TRUE, eval=FALSE}
+# load the appropriate packages
+library(maptools) # also loads sp
+library(rgeos)
+library(RColorBrewer)
+
+# read the data file (if not already in the workspace)
+orsim <- read.csv("orsim.csv")
+
+# attach the dataframe
+attach(orsim)
+
+# plot the shapefile, and then the temperature "anomalies" (differences) as points
+plot(orotl.shp, xlim=c(-125,-114))
+
+# set up for plotting the points
+plotvar <- TJan2x-TJan1x
+nclr <- 8
+plotclr <- brewer.pal(nclr,"PuOr")
+plotclr <- plotclr[nclr:1] # reorder colors
+brks <- round(seq(-8,+8,by=2), digits=1)
+colornum <- findInterval(plotvar, brks, all.inside=T)
+colorcode <- plotclr[colornum]
+
+# now the points
+points(orsim$Lon, orsim$Lat, pch=16, col=colorcode, cex=2)
+points(orsim$Lon, orsim$Lat, cex=2)
+legend(-116, 44, legend=leglabs(brks), fill=plotclr, cex=0.6, bty="n")
+```
+
+Note the `plotvar` assignment computes the difference between the 1x and 2x CO2 simulations.  Also note that for temperature, it makes sense to reorder the colors, so that blue is low and orange is high, while for precipitation, the unreordered sequence orange for low and blue for high works better.  The line `plotclr <- plotclr[nclr:1]` does the reordering.  Comment it out (with a `#`) if you don't want to reorder, remove the `#` if you do.
+
+How would a doubling of carbon dioxide in the atmosphere affect temperature over Oregon? From what we already know about the greenhouse effect, atmospheric change, and basic climatology, we can suspect that the temperatures will increase with an increase in carbon dioxide. The question is, are the simulated temperatures for the "enhanced greenhouse"-situation significantly higher than those for present?
+
+A two-sample *t*-test can be performed as follows: 
+
+```{r echo=TRUE, eval=FALSE}
+# t-tests among groups with different variances
+boxplot(TJan2x, TJan1x)
+print(mean(TJan2x)-mean(TJan1x)) # the temperature difference
+tt_TJan <- t.test(TJan2x, TJan1x)
+tt_TJan
+```
+
+>Q5: What is the value of the *t*-statistic for a comparison of the simulated present and potential future January mean temperature over Oregon? Is this value large enough to be significant?  (Hint:  examine the *p*-value.)
+
+In performing a t-test, the "default" null hypothesis, Ho, is that the means of the two groups of observations are equal, and the alternative hypothesis (Ha) is that the are not. A more explicit alternative hypothesis can be stated when, as is the case for this climate data, we expect the mean of one group (the present in this case) to be smaller than the mean of the other group (the doubled carbon dioxide scenario). In such a situation, where the potential sign of the difference between group means is known, a more "decisive" test can be made, by adopting a different, "one-sided" alternative hypothesis:
+
+For January precipitation (`PJan1x` and `PJan2x`) test the hypotheses that `PJan1x` and `PJan2x` are equal and that `PJan1x` is less than `PJan2x`.
+
+```{r echo=TRUE, eval=FALSE}
+# two-tailed test
+boxplot(PJan2x, PJan1x)
+mean(PJan2x)-mean(PJan1x)
+tt_PJan_1 <- t.test(PJan2x, PJan1x)
+tt_PJan_1
+
+# one-tailed test
+boxplot(PJan2x, PJan1x)
+mean(PJan2x)-mean(PJan1x)
+tt_PJan_2 <- t.test(PJan2x, PJan1x, alternative="greater")
+tt_PJan_2
+```
+
+>Q6:  Is future winter precipitation (`PJan2x`) the same as present (`PJan1x`), or is it significantly greater than present?
+
+**5. Analysis of Variance**
+
+Many times, more than two groups of observations exist. Although it is possible to compare pairs of groups of observations, what often happens is that some comparisons appear significant, some don’t, and it may be difficult to reach an overall conclusion about whether the groups jointly are significantly different. The procedure known as "analysis of variance" (ANOVA) allows a single overall measure of the difference in the means among more than two groups to be computed. The statistic generated in an analysis of variance is the *F*-statistic, which is a measure of the variability among groups of data relative to the variability within groups -- as the group means become more distinct, the *F*-statistic increases in size, while as the groups become more internally variable, the *F*-statistic decreases.
+
+Download and read in the Scandinavian EU Preference Vote data [[`scanvote.csv`]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/scanvote.csv) if it's not already in your workspace (call it `scanvote` in R, and attach it). These data describe the percentages of votes in favor of membership in the European Union (Yes(%)), by administrative district in Finland, Norway, and Sweden, collected by Alec Murphy.  As always, plot the data first.  A boxplot or stripchart by country would be good (e.g. `boxplot(Yes ~ Country)`).  Use the `descr()` function from section 1 above and `tapply()` to calculate standard errors of the mean for each country, e.g.:
+
+```{r echo=TRUE, eval=FALSE}
+attach(scanvote)
+tapply(Yes, Country, descr)
+```
+
+Examine the text output and the plots to see how distinct the groups (countries) appear, and compare the means and standard errors of the mean to check the similarity of the means among countries.
+
+Now do an analysis of variance: 
+
+```{r echo=TRUE, eval=FALSE}
+# anova
+aov1 <- aov(Yes ~ Country)
+aov1
+summary(aov1)
+```
+
+The *F*-statistic has as its reference distribution, the *F*-distribution (no surprise there). The *F*-distribution varies considerably with the number of groups and the number of observations within groups, and is not as easily visualized as the normal or *t*-distributions. 
+
+Also do the homogeneity of variance test.
+
+```{r echo=TRUE, eval=FALSE}
+hov1 <- bartlett.test(Yes ~ Country)
+hov1
+```
+
+>Q7: What is the value of the *F*-statistic, and how unusual is this value for the analysis of variance of these data? (Hint, look at the *p*-value, right next to the *F* statistic, lablelled `Pr(>F)`.) Are the variances similar among groups?  What does this suggest about the difference among countries in preference for joining the EU?
+
+(See the short guide to interpreting test statistics, *p*-values, and significance for information on interpreting p-values [[link]](https://pjbartlein.github.io/GeogDataAnalysis/topics/interpstats.pdf). 
+
+There is an interesting summary plot of an analysis of variance object that provides further visualization of the differences among groups
+
+```{r echo=TRUE, eval=FALSE}
+plot(aov1)
+```
+
+Finally, download and read in the Summit Cr. geomorphic data project [[`sumcr.csv`]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sumcr.csv) if you don't already have it, and do an analysis of variance on water-surface width (`WidthWS`), with group membership determined by `Reach`. Compare the extent of overlap of the confidence intervals for the group means and the values of the *F*-statistics for this analysis, and the previous one on preferences. You should see how the size of the *F*-statistic reflects the distinctiveness of the groups.
+
+>Q8 Decribe the results.  Do water-surface widths differ significantly among reaches?
+
+**6.  What to hand in**
+
+Hand in the answers to the above questions, plus the plot you made of the Scandinavian vote data.

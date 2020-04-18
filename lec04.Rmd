@@ -1,0 +1,284 @@
+---
+title: "Descriptive statistics"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
+# Introduction #
+
+There are a number of descriptive statistics that, like descriptive plots, provide basic information on the nature of a particular variable or set of variables.  A statistic is simply a number that summarizes or represents a set of observations of a particular variable.  
+
+Before describing the statistics, it will be helpful to look at the summation operator and
+
+- [summation notation](https://pjbartlein.github.io/GeogDataAnalysis/topics/summation.pdf)
+
+# Univariate descriptive statistics# 
+
+In general, descriptive statistics--like the univariate descriptive plots--can be classified into three groups, those that measure 1) central tendency or location of a set of numbers, 2) variability or dispersion, and 3) the shape of the distribution.  The univariate descriptive statistics can be thought of as companions to the univariate descriptive plots.  The best way to develop an idea of what the statistics are summarizing or attempting to convey is to always produce a descriptive plot first.
+
+## Measures of Central Tendency ##
+
+Mode
+
+- definition: the most frequent class interval
+
+Median
+
+- definition: 50th percentile, center point
+
+Mean or Average
+
+- [definition and properties of the mean](https://pjbartlein.github.io/GeogDataAnalysis/topics/mean.pdf)
+
+Choosing a measure of central tendency
+
+- [symmetric distributions](https://pjbartlein.github.io/GeogDataAnalysis/images/symdist1.gif)
+- [asymmetric distributions
+](https://pjbartlein.github.io/GeogDataAnalysis/images/asymdist1.gif)
+
+## Measures of Variability, Scale or Dispersion ##
+
+Range
+
+- definition: (maximum value - minimum value)
+
+Interquartile range
+
+- definition: (75th percentile - 25th percentile) (i.e., width of the box in a boxplot)
+
+Variance and standard deviation
+
+- [definitions](https://pjbartlein.github.io/GeogDataAnalysis/topics/variance.pdf)
+
+Coefficient of variation
+
+- [definition](https://pjbartlein.github.io/GeogDataAnalysis/topics/coeffvar.pdf)
+
+## Measures of the shapes of distributions ##
+
+Skewness and kurtosis
+
+- [definitions](https://pjbartlein.github.io/GeogDataAnalysis/topics/moments.pdf)
+
+[[Back to top]](lec04.html)
+
+# Univariate descriptive statistics -- examples ##
+
+Descriptive statistics can be most easily obtained in R using the `summary()` function.  The summary command is generic in the sense that object or "argument" of the function could be anything.  If the argument is a data frame, `summary()` returns descriptive statistics for each variable, whereas if the argument is a single variable, `summary()` just returns the descriptive statistics for that variable.
+
+Data files for these examples (download to the working directory and read in):
+[[scanvote.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/scanvote.csv)
+[[specmap.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/specmap.csv)
+
+```{r load, echo=FALSE, cache=FALSE}
+load(".Rdata")
+```
+Summarize the `scanvote` data frame.  (Note that it is not necessary to attach the data frame if the whole thing is being summarized.)
+
+```{r summary}
+# dataframe summary
+summary(scanvote) 
+```
+
+Individual descriptive statistics can be obtained using the following, self-explaining functions:
+
+`mean()`, `median()`, `max()`, `min()`, `range()`, `var()`, `sd()`, `quantile()`, `fivenum()`, `length()`, `which.max()`, `which.min()`  
+
+The easiest way to illustrate what these functions do is to apply them to individual variables and see what they produce.  
+
+Descriptive statistics for individual groups of observations can be obtained using the `tapply()` function.  For example,
+
+```{r tapply, message=FALSE}
+# attach dataframe
+attach(scanvote)
+
+# mean of Yes by Country
+tapply(Yes, Country, mean)
+```
+
+The `tapply()` function applies a particular function, `mean()` in this case, to groups of observations (specified here by the `Country` argument), of the variable `Yes`.
+
+```{r tapply1}
+# summary by Country
+tapply(Yes, Country, summary)
+```
+
+Detach the `scanvote` data frame before continuing.
+
+```{r, eval=FALSE}
+# detach the scanvote dataframe
+detach(scanvote)
+```
+
+Here's a second example, summarizing the variable `WidthWS` in the Summit Cr. data frame.  Note that here the dataframe was not attached prior to executing the code, and so the variables must be indicated by their "full" names (e.g. `sumcr$WidthWS`):
+
+```{r tapply2}
+tapply(sumcr$WidthWS, sumcr$Reach, mean)
+```
+
+The upstream and downstream grazed reaches (A and C, respecively) have wider stream cross sections than does the exclosure reach (B).
+
+[[Back to top]](lec04.html)
+
+# Bivariate Descriptive Statistics# 
+
+A frequent goal in data analysis is to efficiently describe or measure the strength of relationships between variables, or to detect associations between factors used to set up a cross tabulation.  A related goal may be to determine which variables are related in a predictive sense to a particular response variable, or put another way, to learn how best to predict future values of a response variable.  Correlation (and regression analysis), along with measures of association constructed from tables,  provide the means for constructing and displaying such relationships.
+
+Bivariate descriptive statistics allow the strength dependence of the relationship displayed in a scatter plot to be efficiently summarized, in much the same way that the univariate descriptive statistics provide efficient summaries of the information evident in univariate plots, but the form of the relationship and possible external influences are best detected using descriptive plots, or by specific analyses like regression.
+
+## Correlation and covariance ##
+
+The correlation coefficient is a simple descriptive statistic that measures the strength of the linear relationship between two interval- or ratio-scale variables (as opposed to categorical, or nominal-scale variables), as might be visualized in a scatter plot.  The value of the correlation coefficient, usually symbolized as r, ranges from -1 (for a perfect negative (or inverse) correlation) to +1 for a perfect positive (or direct) correlation.
+
+Data files for these examples (download to the working directory and read in):
+[[cities.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/cities.csv)
+[[sumcr.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sumcr.csv)
+[[sierra.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sierra.csv)
+[[orstationc.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/orstationc.csv)
+
+## Correlation coefficients ##
+
+[[Correlation definition]](https://pjbartlein.github.io/GeogDataAnalysis/topics/correlation.pdf)  
+
+[[Illustrations of the strength of the correlation]](https://pjbartlein.github.io/GeogDataAnalysis/images/corr.gif)
+
+Produce examples of 
+- a scatter plot matrix (a graphical summary)
+- the covariance matrix (numerical summary)
+- the correlation matrix (numerical summary)
+
+```{r covandcor}
+# bivariate descriptive statistics with the cities dataframe
+attach(cities)
+plot(cities[,2:12], pch=16, cex=0.6)  # scatter plot matrix, omit city name
+cov(cities[,2:12])   # covariance matrix
+cor(cities[,2:12])   # correlation matrix
+detach(cities)
+```
+
+## Correlation coefficients only measure *linear* relationships
+
+An important issue in the calculation and interpretation of correlations and covariances is that they only measure or describe linear relationships.  This can be illustrated by  the relationship between water surface width and downstream distance at Summit Cr.:
+
+```{r sumcr}
+# scatter plot with smooth
+attach(sumcr)
+plot(CumLen, WidthWS)
+lines(lowess(CumLen, WidthWS), col="blue", lwd=2)
+```
+
+The relationship is obviously non-linear, but strong (reflecting the among-reach differences in `WidthWS` seen earlier).  What about the correlation?
+
+```{r cor}
+cor(CumLen, WidthWS)
+```
+
+Does the correlation coefficient make any sense here?
+ 
+[[Back to top]](lec04.html)
+
+# The *X<sup>2</sup>* (Chi-square) measure of association (for categorical data) #
+
+Categorical data are data that take on discreet values corresponding to the particular class interval that observations of ordinal-, interval-, or ratio-scale variables fall in or the particular group membership of nominal-scale variables.  Before applying a particular descriptive statistic, it's always good to plot the data.
+
+## Descriptive plots for categorical data--mosaic plots ##
+
+Categorical or group-membership data ("factors" in R)  are often summarized in tables, the cells of which indicate absolute or relative frequencies of different combinations of the levels of the factors.  There are several approaches for visualizing the contents of a table.
+
+First, summarize the data in a table (sometimes called a "cross-tab" or "cross-tabulation" table):
+
+```{r, echo=FALSE}
+# attach the sumcr dataframe
+attach(sumcr)
+```
+
+```{r table}
+# descriptive plots for categorical data
+ReachHU_table <- table(Reach, HU)   # tabluate Reach and HU data
+ReachHU_table
+```
+
+Next, produce several summary plots based on the table:
+```{r crosstabPlots}
+dotchart(ReachHU_table)
+barplot(ReachHU_table)
+mosaicplot(ReachHU_table, color=T)
+```
+
+[[Back to top]](lec04.html)
+
+## The Chi-square statistic ##
+
+The *X<sup>2</sup>* statistic measures the strength of association between two categorical variables (nominal- or ordinal-scale variables, summarized by a cross-tabulation, a table that shows the frequency of occurrence of observations with particular combinations of the levels of two (or more) variables.
+
+[[Chi-squared definition]](https://pjbartlein.github.io/GeogDataAnalysis/topics/chisq.pdf)
+
+Calculate the *X2* statistic for the `ReachHU` table.
+
+```{r chisq_calc}
+# Chi-squared statistic
+ReachHU_table <- table(Reach,HU)
+ReachHU_table
+chisq.test(ReachHU_table)
+```
+
+The `p-value` reported here provides a way of inferring whether or not there is a relationship between the row and column variables in the table, and will be explained more later.  In practice the value here is rather large, which provides support for rejecting the notion that there is no relationship between `Reach` and `HU`.
+
+```{r detach_sumcr2}
+detach(sumcr)
+```
+
+To further illustrate the application of the X2 test, the Sierra Nevada reconstructed climate data and the Oregon climate-station data can be converted to categorical (ordinal-scale) data, and the following scripts employed
+
+```{r sierra}
+# crosstab & Chi-square -- Sierra Nevada TSum and PWin groups
+attach(sierra)
+plot(PWin, TSum)
+PWin_group <- cut(PWin, 3) 
+TSum_group <- cut(TSum, 3)
+TSumPWin_table <- table(TSum_group, PWin_group)
+TSumPWin_table
+chisq.test(TSumPWin_table)
+detach(sierra)
+```
+
+```{r orstationc}
+# crosstab & Chi-square -- Oregon station elevation and tann
+attach(orstationc)
+plot(elev, tann)
+elev_group <- cut(elev, 3)
+tann_group <- cut(tann, 3)
+elevtann_table <- table(elev_group, tann_group)
+elevtann_table
+chisq.test(elevtann_table)
+```
+
+## The Chi-square distribution ##
+
+Quick look at the appropriate Chi-square distribution:
+
+```{r chisq-dist}
+x <- seq(0, 25, by = .1)
+pdf <- dchisq(x, 4)
+plot(pdf ~ x, type="l")
+```
+
+#Readings#
+
+- Owen (*The R Guide*):  Sec. 5.1
+- Rossiter (*Introduction ... ITC*):  section 4.14
+- Rogerson (*Statistical Methods*):  section 1.4!
+
+[[Back to top]](lec04.html)
