@@ -723,95 +723,90 @@ $(document).ready(function () {
 <p>The following plots explore the seasonality of precipitation in the Yellowstone region. This first plot uses glyphs to show the values of twelve monthly precipitation variables as “spokes” of a wheel, where each variable is plotted relative to its overall range. The first block of code below sets things up, and the <code>stars()</code> function does the plotting.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">library</span>(sf)</a></code></pre></div>
 <pre><code>## Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">attach</span>(yellpratio)</a></code></pre></div>
-<pre><code>## The following object is masked _by_ .GlobalEnv:
-## 
-##     Lon2</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co"># simple map</span></a>
-<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="co"># read and plot shapefiles</span></a>
-<a class="sourceLine" id="cb24-3" data-line-number="3">ynp_state_sf &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/ynpstate.shp&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">attach</span>(yell_pratio)</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb22-3" data-line-number="3"><span class="co"># simple map</span></a>
+<a class="sourceLine" id="cb22-4" data-line-number="4"><span class="co"># read and plot shapefiles</span></a>
+<a class="sourceLine" id="cb22-5" data-line-number="5">ynp_state_sf &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/ynpstate.shp&quot;</span>)</a></code></pre></div>
 <pre><code>## Reading layer `ynpstate&#39; from data source `/Users/bartlein/Documents/geog495/data/shp/ynpstate.shp&#39; using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 3 features and 1 field
 ## geometry type:  LINESTRING
 ## dimension:      XY
 ## bbox:           xmin: -112.2967 ymin: 42.69208 xmax: -107.7095 ymax: 46.22544
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +ellps=WGS84 +no_defs</code></pre>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(ynp_state_sf))</a>
-<a class="sourceLine" id="cb26-2" data-line-number="2">ynprivers_sf &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/ynprivers.shp&quot;</span>)</a></code></pre></div>
+## CRS:            4326</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(ynp_state_sf))</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2">ynprivers_sf &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/ynprivers.shp&quot;</span>)</a></code></pre></div>
 <pre><code>## Reading layer `ynprivers&#39; from data source `/Users/bartlein/Documents/geog495/data/shp/ynprivers.shp&#39; using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 4 features and 1 field
 ## geometry type:  LINESTRING
 ## dimension:      XY
 ## bbox:           xmin: -112.2967 ymin: 42.69208 xmax: -107.7095 ymax: 46.22544
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +ellps=WGS84 +no_defs</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(ynprivers_sf), <span class="dt">add =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb28-2" data-line-number="2">ynplk_sf &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/ynplk.shp&quot;</span>)</a></code></pre></div>
+## CRS:            4326</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(ynprivers_sf), <span class="dt">add =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb26-2" data-line-number="2">ynplk_sf &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/ynplk.shp&quot;</span>)</a></code></pre></div>
 <pre><code>## Reading layer `ynplk&#39; from data source `/Users/bartlein/Documents/geog495/data/shp/ynplk.shp&#39; using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 1 feature and 1 field
 ## geometry type:  LINESTRING
 ## dimension:      XY
 ## bbox:           xmin: -110.566 ymin: 44.29883 xmax: -110.1902 ymax: 44.56021
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +ellps=WGS84 +no_defs</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(ynplk_sf), <span class="dt">add =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="kw">points</span>(Lon, Lat, <span class="dt">pch=</span><span class="dv">3</span>, <span class="dt">cex=</span><span class="fl">0.6</span>)</a>
-<a class="sourceLine" id="cb30-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb30-4" data-line-number="4"><span class="co"># stars plot for precipitation ratios</span></a>
-<a class="sourceLine" id="cb30-5" data-line-number="5">col.red &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="st">&quot;red&quot;</span>,<span class="kw">length</span>(orstationc[,<span class="dv">1</span>]))</a>
-<a class="sourceLine" id="cb30-6" data-line-number="6"><span class="kw">stars</span>(yellpratio[,<span class="dv">4</span><span class="op">:</span><span class="dv">15</span>], <span class="dt">locations=</span><span class="kw">as.matrix</span>(<span class="kw">cbind</span>(Lon, Lat)),</a>
-<a class="sourceLine" id="cb30-7" data-line-number="7"><span class="dt">col.stars=</span>col.red, <span class="dt">len=</span><span class="fl">0.2</span>, <span class="dt">lwd=</span><span class="dv">1</span>, <span class="dt">key.loc=</span><span class="kw">c</span>(<span class="op">-</span><span class="fl">111.5</span>,<span class="fl">42.5</span>), <span class="dt">labels=</span><span class="ot">NULL</span>, <span class="dt">add=</span>T)</a></code></pre></div>
+## CRS:            4326</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(ynplk_sf), <span class="dt">add =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">points</span>(Lon, Lat, <span class="dt">pch=</span><span class="dv">3</span>, <span class="dt">cex=</span><span class="fl">0.6</span>)</a>
+<a class="sourceLine" id="cb28-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb28-4" data-line-number="4"><span class="co"># stars plot for precipitation ratios</span></a>
+<a class="sourceLine" id="cb28-5" data-line-number="5">col.red &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="st">&quot;red&quot;</span>,<span class="kw">length</span>(orstationc[,<span class="dv">1</span>]))</a>
+<a class="sourceLine" id="cb28-6" data-line-number="6"><span class="kw">stars</span>(yell_pratio[,<span class="dv">4</span><span class="op">:</span><span class="dv">15</span>], <span class="dt">locations=</span><span class="kw">as.matrix</span>(<span class="kw">cbind</span>(Lon, Lat)),</a>
+<a class="sourceLine" id="cb28-7" data-line-number="7"><span class="dt">col.stars=</span>col.red, <span class="dt">len=</span><span class="fl">0.2</span>, <span class="dt">lwd=</span><span class="dv">1</span>, <span class="dt">key.loc=</span><span class="kw">c</span>(<span class="op">-</span><span class="fl">111.5</span>,<span class="fl">42.5</span>), <span class="dt">labels=</span><span class="ot">NULL</span>, <span class="dt">add=</span>T)</a></code></pre></div>
 <p><img src="lec05_files/figure-html/plot19-1.png" width="2100" /></p>
 <p>Here the stars wind up looking more like fans. The legend indicates that stations with fans that open out to the right are stations with winter precipitation maxima (like in the southwestern portion of the region) while those that open toward the left have summer precipitation maxima (like in the southeastern portion of the region).</p>
 <p>The next examples show a couple of conditioning plots (coplots), that illustrate the relationship between January and July precipitation, as varies (is conditioned on) with elevation. The first block of code does some set up.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># create some conditioning variables</span></a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">Elevation &lt;-<span class="st"> </span><span class="kw">equal.count</span>(Elev,<span class="dv">4</span>,.<span class="dv">25</span>)</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3">Latitude &lt;-<span class="st"> </span><span class="kw">equal.count</span>(Lat,<span class="dv">2</span>,.<span class="dv">25</span>)</a>
-<a class="sourceLine" id="cb31-4" data-line-number="4">Longitude &lt;-<span class="st"> </span><span class="kw">equal.count</span>(Lon,<span class="dv">2</span>,.<span class="dv">25</span>)</a>
-<a class="sourceLine" id="cb31-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb31-6" data-line-number="6"><span class="co"># January vs July Precipitation Ratios by Elevation</span></a>
-<a class="sourceLine" id="cb31-7" data-line-number="7">plot2 &lt;-<span class="st"> </span><span class="kw">xyplot</span>(APJan <span class="op">~</span><span class="st"> </span>APJul <span class="op">|</span><span class="st"> </span>Elevation,</a>
-<a class="sourceLine" id="cb31-8" data-line-number="8">    <span class="dt">layout =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb31-9" data-line-number="9">    <span class="dt">panel =</span> <span class="cf">function</span>(x, y) {</a>
-<a class="sourceLine" id="cb31-10" data-line-number="10">        <span class="kw">panel.grid</span>(<span class="dt">v=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb31-11" data-line-number="11">        <span class="kw">panel.xyplot</span>(x, y)</a>
-<a class="sourceLine" id="cb31-12" data-line-number="12">        <span class="kw">panel.loess</span>(x, y, <span class="dt">span =</span> <span class="fl">1.0</span>, <span class="dt">degree =</span> <span class="dv">1</span>, <span class="dt">family=</span><span class="st">&quot;symmetric&quot;</span>)</a>
-<a class="sourceLine" id="cb31-13" data-line-number="13">        <span class="kw">panel.abline</span>(<span class="kw">lm</span>(y<span class="op">~</span>x))</a>
-<a class="sourceLine" id="cb31-14" data-line-number="14">    },</a>
-<a class="sourceLine" id="cb31-15" data-line-number="15">    <span class="dt">xlab =</span> <span class="st">&quot;APJul&quot;</span>,</a>
-<a class="sourceLine" id="cb31-16" data-line-number="16">    <span class="dt">ylab =</span> <span class="st">&quot;APJan&quot;</span>)</a>
-<a class="sourceLine" id="cb31-17" data-line-number="17"><span class="kw">print</span>(plot2, <span class="dt">position=</span><span class="kw">c</span>(<span class="dv">0</span>,.<span class="dv">375</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">more=</span>T)</a>
-<a class="sourceLine" id="cb31-18" data-line-number="18"><span class="kw">print</span>(<span class="kw">plot</span>(Elevation), <span class="dt">position=</span><span class="kw">c</span>(.<span class="dv">1</span>,<span class="fl">0.0</span>,.<span class="dv">9</span>,.<span class="dv">4</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="co"># create some conditioning variables</span></a>
+<a class="sourceLine" id="cb29-2" data-line-number="2">Elevation &lt;-<span class="st"> </span><span class="kw">equal.count</span>(Elev,<span class="dv">4</span>,.<span class="dv">25</span>)</a>
+<a class="sourceLine" id="cb29-3" data-line-number="3">Latitude &lt;-<span class="st"> </span><span class="kw">equal.count</span>(Lat,<span class="dv">2</span>,.<span class="dv">25</span>)</a>
+<a class="sourceLine" id="cb29-4" data-line-number="4">Longitude &lt;-<span class="st"> </span><span class="kw">equal.count</span>(Lon,<span class="dv">2</span>,.<span class="dv">25</span>)</a>
+<a class="sourceLine" id="cb29-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb29-6" data-line-number="6"><span class="co"># January vs July Precipitation Ratios by Elevation</span></a>
+<a class="sourceLine" id="cb29-7" data-line-number="7">plot2 &lt;-<span class="st"> </span><span class="kw">xyplot</span>(APJan <span class="op">~</span><span class="st"> </span>APJul <span class="op">|</span><span class="st"> </span>Elevation,</a>
+<a class="sourceLine" id="cb29-8" data-line-number="8">    <span class="dt">layout =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb29-9" data-line-number="9">    <span class="dt">panel =</span> <span class="cf">function</span>(x, y) {</a>
+<a class="sourceLine" id="cb29-10" data-line-number="10">        <span class="kw">panel.grid</span>(<span class="dt">v=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb29-11" data-line-number="11">        <span class="kw">panel.xyplot</span>(x, y)</a>
+<a class="sourceLine" id="cb29-12" data-line-number="12">        <span class="kw">panel.loess</span>(x, y, <span class="dt">span =</span> <span class="fl">1.0</span>, <span class="dt">degree =</span> <span class="dv">1</span>, <span class="dt">family=</span><span class="st">&quot;symmetric&quot;</span>)</a>
+<a class="sourceLine" id="cb29-13" data-line-number="13">        <span class="kw">panel.abline</span>(<span class="kw">lm</span>(y<span class="op">~</span>x))</a>
+<a class="sourceLine" id="cb29-14" data-line-number="14">    },</a>
+<a class="sourceLine" id="cb29-15" data-line-number="15">    <span class="dt">xlab =</span> <span class="st">&quot;APJul&quot;</span>,</a>
+<a class="sourceLine" id="cb29-16" data-line-number="16">    <span class="dt">ylab =</span> <span class="st">&quot;APJan&quot;</span>)</a>
+<a class="sourceLine" id="cb29-17" data-line-number="17"><span class="kw">print</span>(plot2, <span class="dt">position=</span><span class="kw">c</span>(<span class="dv">0</span>,.<span class="dv">375</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">more=</span>T)</a>
+<a class="sourceLine" id="cb29-18" data-line-number="18"><span class="kw">print</span>(<span class="kw">plot</span>(Elevation), <span class="dt">position=</span><span class="kw">c</span>(.<span class="dv">1</span>,<span class="fl">0.0</span>,.<span class="dv">9</span>,.<span class="dv">4</span>))</a></code></pre></div>
 <p><img src="lec05_files/figure-html/plot20-1.png" width="2100" /></p>
 <p>The plot shows that the relationship between January and July precipitation indeed varies with elevation. At low elevations, there is proportionally lower January precipitation for the same July values (lower two panels on the lattice plot), but at higher elevations, there is proportionally more (top two panels). This relationship points to some orographic (i.e. related to the elevation of the mountains) amplification of the winter precipitation.</p>
 <p>The next plot shows the variation of the relationship between January and July precipitation as it varies spatially.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co"># January vs July Precipitation Ratios by Latitude and Longitude</span></a>
-<a class="sourceLine" id="cb32-2" data-line-number="2">plot3 &lt;-<span class="st"> </span><span class="kw">xyplot</span>(APJan <span class="op">~</span><span class="st"> </span>APJul <span class="op">|</span><span class="st"> </span>Latitude<span class="op">*</span>Longitude,</a>
-<a class="sourceLine" id="cb32-3" data-line-number="3">    <span class="dt">layout =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb32-4" data-line-number="4">    <span class="dt">panel =</span> <span class="cf">function</span>(x, y) {</a>
-<a class="sourceLine" id="cb32-5" data-line-number="5">        <span class="kw">panel.grid</span>(<span class="dt">v=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb32-6" data-line-number="6">        <span class="kw">panel.xyplot</span>(x, y)</a>
-<a class="sourceLine" id="cb32-7" data-line-number="7">        <span class="kw">panel.loess</span>(x, y, <span class="dt">span =</span> <span class="fl">.8</span>, <span class="dt">degree =</span> <span class="dv">1</span>, <span class="dt">family=</span><span class="st">&quot;gaussian&quot;</span>)</a>
-<a class="sourceLine" id="cb32-8" data-line-number="8">        <span class="kw">panel.abline</span>(<span class="kw">lm</span>(y<span class="op">~</span>x))</a>
-<a class="sourceLine" id="cb32-9" data-line-number="9">    },</a>
-<a class="sourceLine" id="cb32-10" data-line-number="10">    <span class="dt">xlab =</span> <span class="st">&quot;APJul&quot;</span>,</a>
-<a class="sourceLine" id="cb32-11" data-line-number="11">    <span class="dt">ylab =</span> <span class="st">&quot;APJan&quot;</span>)</a>
-<a class="sourceLine" id="cb32-12" data-line-number="12"><span class="kw">print</span>(plot3)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># January vs July Precipitation Ratios by Latitude and Longitude</span></a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">plot3 &lt;-<span class="st"> </span><span class="kw">xyplot</span>(APJan <span class="op">~</span><span class="st"> </span>APJul <span class="op">|</span><span class="st"> </span>Latitude<span class="op">*</span>Longitude,</a>
+<a class="sourceLine" id="cb30-3" data-line-number="3">    <span class="dt">layout =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb30-4" data-line-number="4">    <span class="dt">panel =</span> <span class="cf">function</span>(x, y) {</a>
+<a class="sourceLine" id="cb30-5" data-line-number="5">        <span class="kw">panel.grid</span>(<span class="dt">v=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb30-6" data-line-number="6">        <span class="kw">panel.xyplot</span>(x, y)</a>
+<a class="sourceLine" id="cb30-7" data-line-number="7">        <span class="kw">panel.loess</span>(x, y, <span class="dt">span =</span> <span class="fl">.8</span>, <span class="dt">degree =</span> <span class="dv">1</span>, <span class="dt">family=</span><span class="st">&quot;gaussian&quot;</span>)</a>
+<a class="sourceLine" id="cb30-8" data-line-number="8">        <span class="kw">panel.abline</span>(<span class="kw">lm</span>(y<span class="op">~</span>x))</a>
+<a class="sourceLine" id="cb30-9" data-line-number="9">    },</a>
+<a class="sourceLine" id="cb30-10" data-line-number="10">    <span class="dt">xlab =</span> <span class="st">&quot;APJul&quot;</span>,</a>
+<a class="sourceLine" id="cb30-11" data-line-number="11">    <span class="dt">ylab =</span> <span class="st">&quot;APJan&quot;</span>)</a>
+<a class="sourceLine" id="cb30-12" data-line-number="12"><span class="kw">print</span>(plot3)</a></code></pre></div>
 <p><img src="lec05_files/figure-html/plot21-1.png" width="2100" /></p>
 <p>Notice that the steepest curve lies in the panel representing the southwestern part of the region (low latitude and low longitude, i.e. the bottom left panel), which suggests that winter (January) precipitation is relatively more import there, which is also apparent on the stars plot above.</p>
 <p>Next, the general idea that seems to be emerging, that there variations within the region of the relative importance of summer and winter precipitation can be explored by a parallel-coordinate plot, that allow different precipitation “regimes” to be detected by the appearance of distinct “bundles” of curves.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co"># Parallel plot of precipitation ratios</span></a>
-<a class="sourceLine" id="cb33-2" data-line-number="2">plot4 &lt;-<span class="st"> </span><span class="kw">parallelplot</span>(<span class="op">~</span>yellpratio[,<span class="dv">4</span><span class="op">:</span><span class="dv">15</span>] <span class="op">|</span><span class="st"> </span>Elevation,</a>
-<a class="sourceLine" id="cb33-3" data-line-number="3">    <span class="dt">layout =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb33-4" data-line-number="4">    <span class="dt">ylab =</span> <span class="st">&quot;Precipitation Ratios&quot;</span>)</a>
-<a class="sourceLine" id="cb33-5" data-line-number="5"><span class="kw">print</span>(plot4)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># Parallel plot of precipitation ratios</span></a>
+<a class="sourceLine" id="cb31-2" data-line-number="2">plot4 &lt;-<span class="st"> </span><span class="kw">parallelplot</span>(<span class="op">~</span>yell_pratio[,<span class="dv">4</span><span class="op">:</span><span class="dv">15</span>] <span class="op">|</span><span class="st"> </span>Elevation,</a>
+<a class="sourceLine" id="cb31-3" data-line-number="3">    <span class="dt">layout =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb31-4" data-line-number="4">    <span class="dt">ylab =</span> <span class="st">&quot;Precipitation Ratios&quot;</span>)</a>
+<a class="sourceLine" id="cb31-5" data-line-number="5"><span class="kw">print</span>(plot4)</a></code></pre></div>
 <p><img src="lec05_files/figure-html/plot22-1.png" width="2100" /></p>
 <p>Notice that at low elevations, most of the stations are behaving similarly, and showing a distinct summer precipitation maximum (and only one station seems to show a winter maximum). At high elevations, there is more variability but a general tendency for winter precipitation to dominate.</p>
 <p>Lattice plots can extend many of the basic univariate and bivariate plots. For example, a set of scatter plot matrices can be generated, for the high/low latitude and longitude slices.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="co"># Lattice plot of scatter plot matrices</span></a>
-<a class="sourceLine" id="cb34-2" data-line-number="2">plot5 &lt;-<span class="st"> </span><span class="kw">splom</span>(<span class="op">~</span><span class="kw">cbind</span>(APJan,APJul,Elev) <span class="op">|</span><span class="st"> </span>Latitude<span class="op">*</span>Longitude)</a>
-<a class="sourceLine" id="cb34-3" data-line-number="3"><span class="kw">print</span>(plot5)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co"># Lattice plot of scatter plot matrices</span></a>
+<a class="sourceLine" id="cb32-2" data-line-number="2">plot5 &lt;-<span class="st"> </span><span class="kw">splom</span>(<span class="op">~</span><span class="kw">cbind</span>(APJan,APJul,Elev) <span class="op">|</span><span class="st"> </span>Latitude<span class="op">*</span>Longitude)</a>
+<a class="sourceLine" id="cb32-3" data-line-number="3"><span class="kw">print</span>(plot5)</a></code></pre></div>
 <p><img src="lec05_files/figure-html/plot23-1.png" width="2100" /></p>
 <p>These plots provide a different prospective on the variations of precipitation across the region, but they’re consistent with what the other plots show.</p>
 </div>
@@ -821,38 +816,38 @@ $(document).ready(function () {
 <p>The <code>ggplot2</code> package can produce lattice-like multipanel plots, by “faceting”, and for spatial data provides an alternative to <code>spplot</code> in the spatial (<code>sp</code>) package. Ploting with <code>ggplot2</code> will be the focus of an upcoming lecture.</p>
 <p>The following example uses a data set of locations and elevations Oregon cirque basins (upland basins eroded by glaciers), and whether or not they are currently (early 21st century) glaciated. Whether a cirque is occupied by a glacier or not is basically determined by the trade-off between snow accumulation (and hence winter precipitation) and summer ablation (or melting, and hence summer temperature. Cirque basins not currently occupied by glaciers were, of course, occupied in the past, while those occupied today indicate where “glacier-safe” climate prevails (at least for now).</p>
 <p>In the code below, the two <code>as.factor()</code> functions are used to turn the single variable <code>cirques_sf$Glacier</code>, which has the values “<code>G</code>” and “<code>U</code>”, into two “binary” (0 or 1) variables. The variable <code>cirques_sf$Glaciated</code> will contain 1’s for glaciated cirques, and 0 otherwise (i.e. unglaciated cirques), while the variable <code>cirques_sf$Unglaciated</code> will contain 1’s for unglaciated cirques, and 0 otherwise. The two variables are obviously redundant (the elements would sum to 1 for each observation), but it makes the illustration of the method more transparent.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co"># load the ggplot2 package</span></a>
-<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a></code></pre></div>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="co"># multi-panel lattice plot</span></a>
-<a class="sourceLine" id="cb36-2" data-line-number="2">cirques_sf<span class="op">$</span>Glaciated &lt;-<span class="st"> </span><span class="kw">ifelse</span>(cirques_sf<span class="op">$</span>Glacier<span class="op">==</span><span class="st">&quot;G&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb36-3" data-line-number="3">cirques_sf<span class="op">$</span>Unglaciated &lt;-<span class="st"> </span><span class="kw">ifelse</span>(cirques_sf<span class="op">$</span>Glacier<span class="op">==</span><span class="st">&quot;U&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co"># load the ggplot2 package</span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="co"># multi-panel lattice plot</span></a>
+<a class="sourceLine" id="cb34-2" data-line-number="2">cirques_sf<span class="op">$</span>Glaciated &lt;-<span class="st"> </span><span class="kw">ifelse</span>(cirques_sf<span class="op">$</span>Glacier<span class="op">==</span><span class="st">&quot;G&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb34-3" data-line-number="3">cirques_sf<span class="op">$</span>Unglaciated &lt;-<span class="st"> </span><span class="kw">ifelse</span>(cirques_sf<span class="op">$</span>Glacier<span class="op">==</span><span class="st">&quot;U&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</a></code></pre></div>
 <p>Use the <code>ggplot()</code> function in the <code>ggplot2</code> package (note the name distinction), to produce simple map of cirque locations.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> orotl_sf) <span class="op">+</span></a>
-<a class="sourceLine" id="cb37-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(cirques_sf<span class="op">$</span>Lon, cirques_sf<span class="op">$</span>Lat), <span class="dt">size =</span> <span class="fl">2.0</span> , <span class="dt">color =</span> cirques_sf<span class="op">$</span>Glaciated <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb37-4" data-line-number="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb37-5" data-line-number="5"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> orotl_sf) <span class="op">+</span></a>
+<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(cirques_sf<span class="op">$</span>Lon, cirques_sf<span class="op">$</span>Lat), <span class="dt">size =</span> <span class="fl">2.0</span> , <span class="dt">color =</span> cirques_sf<span class="op">$</span>Glaciated <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb35-4" data-line-number="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb35-5" data-line-number="5"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
 <p><img src="lec05_files/figure-html/ggplot%201-1.png" width="2100" /></p>
 <p>It’s pretty easy to see where the glaciated cirques occur.</p>
 <p>Here are two multi-panel plots constructed using “facets”, the first plotting separate maps for glaciated and unglaciated cirques, and the second plotting cirques by region.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">ggplot</span>(cirques_sf) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> orotl_sf) <span class="op">+</span></a>
-<a class="sourceLine" id="cb38-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(Lon, Lat), <span class="dt">size =</span> <span class="fl">1.0</span> , <span class="dt">color =</span> cirques_sf<span class="op">$</span>Glaciated <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb38-4" data-line-number="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Glacier) <span class="op">+</span></a>
-<a class="sourceLine" id="cb38-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb38-6" data-line-number="6"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw">ggplot</span>(cirques_sf) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> orotl_sf) <span class="op">+</span></a>
+<a class="sourceLine" id="cb36-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(Lon, Lat), <span class="dt">size =</span> <span class="fl">1.0</span> , <span class="dt">color =</span> cirques_sf<span class="op">$</span>Glaciated <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb36-4" data-line-number="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Glacier) <span class="op">+</span></a>
+<a class="sourceLine" id="cb36-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb36-6" data-line-number="6"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
 <p><img src="lec05_files/figure-html/ggplot%202-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">ggplot</span>(cirques_sf) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb39-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> orotl_sf) <span class="op">+</span></a>
-<a class="sourceLine" id="cb39-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(Lon, Lat), <span class="dt">size =</span> <span class="fl">1.0</span> , <span class="dt">color =</span> cirques_sf<span class="op">$</span>Glaciated <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb39-4" data-line-number="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Region) <span class="op">+</span></a>
-<a class="sourceLine" id="cb39-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb39-6" data-line-number="6"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">ggplot</span>(cirques_sf) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> orotl_sf) <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(Lon, Lat), <span class="dt">size =</span> <span class="fl">1.0</span> , <span class="dt">color =</span> cirques_sf<span class="op">$</span>Glaciated <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-4" data-line-number="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Region) <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb37-6" data-line-number="6"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
 <p><img src="lec05_files/figure-html/ggplot%202-2.png" width="2100" /></p>
 <p>This way of mapping the cirques could also have been done by plotting a simple shape file, and then putting points on top, e.g.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(orotl_sf))</a>
-<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="kw">points</span>(cirques_sf<span class="op">$</span>Lon, cirques_sf<span class="op">$</span>Lat, <span class="dt">col=</span><span class="dv">3</span><span class="op">-</span><span class="kw">as.integer</span>(cirques_sf<span class="op">$</span>Glacier))</a>
-<a class="sourceLine" id="cb40-3" data-line-number="3"><span class="kw">legend</span>(<span class="op">-</span><span class="dv">118</span>, <span class="fl">43.5</span>, <span class="kw">c</span>(<span class="st">&quot;Glaciated&quot;</span>,<span class="st">&quot;Unglaciated&quot;</span>), <span class="dt">pch=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">col=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(orotl_sf))</a>
+<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="kw">points</span>(cirques_sf<span class="op">$</span>Lon, cirques_sf<span class="op">$</span>Lat, <span class="dt">col=</span><span class="dv">3</span><span class="op">-</span><span class="kw">as.integer</span>(cirques_sf<span class="op">$</span>Glacier))</a>
+<a class="sourceLine" id="cb38-3" data-line-number="3"><span class="kw">legend</span>(<span class="op">-</span><span class="dv">118</span>, <span class="fl">43.5</span>, <span class="kw">c</span>(<span class="st">&quot;Glaciated&quot;</span>,<span class="st">&quot;Unglaciated&quot;</span>), <span class="dt">pch=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">col=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a></code></pre></div>
 <p><img src="lec05_files/figure-html/plot25-1.png" width="2100" /></p>
 <p><a href="lec05.html">[Back to top]</a></p>
 </div>

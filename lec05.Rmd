@@ -294,9 +294,6 @@ Here the stars wind up looking more like fans.  The legend indicates that statio
 
 The next examples show a couple of conditioning plots (coplots), that illustrate the relationship between January and July precipitation, as varies (is conditioned on) with elevation.  The first block of code does some set up.
 
-```{r}
-detach(yell_pratio)
-```
 
 ```{r plot20}
 # create some conditioning variables
@@ -344,7 +341,7 @@ Next, the general idea that seems to be emerging, that there variations within t
 
 ```{r plot22}
 # Parallel plot of precipitation ratios
-plot4 <- parallelplot(~yellpratio[,4:15] | Elevation,
+plot4 <- parallelplot(~yell_pratio[,4:15] | Elevation,
     layout = c(4, 1),
     ylab = "Precipitation Ratios")
 print(plot4)
