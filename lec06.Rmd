@@ -78,9 +78,6 @@ wus_sp <- readOGR(shapefile)
 ```{r s2}
 class(wus_sp)
 ```
-```{r s3}
-head(wus_sp)
-```
 
 And now using the `st_read()` function in the `sf()` package:
 

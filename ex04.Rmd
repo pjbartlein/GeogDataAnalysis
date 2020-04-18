@@ -21,7 +21,7 @@ klippy::klippy(position = c('top', 'right'))
 **Spring 2020**
 
 **Exercise 4:  Multivariate Plots**  
-**Finish by  Friday, April 24th**
+**Finish by Friday, April 24**
 
 **1.  Introduction** 
 
