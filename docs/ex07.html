@@ -500,68 +500,65 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #FF0040;">NOTE: Not yet revised for Spring 2020</span>
+<span style="color: #00cc00;">NOTE: This page has been revised for Spring 2020, but may undergo further edits.</span>
 </p>
 <p><strong>Geography 4/595: Geographic Data Analysis</strong><br />
-<strong>Winter 2019</strong></p>
+<strong>Spring 2020</strong></p>
 <p><strong>Exercise 7: Regression Analysis</strong><br />
-<strong>Finish by Monday, March 4th</strong></p>
+<strong>Finish by Friday, May 22</strong></p>
 <p><strong>1. Introduction</strong></p>
 <p>The objective of this exercise is to illustrate regression analysis as well as multivariate plotting, which will be used to examine the data set that will be used in the regression analysis. The focus of the exercise is on the relationship between annual mean temperature at climate stations in Oregon and elevation and location as expressed by latitude and longitude. The specific goal will be to build a regression model that fits the response-variable data well, and does not suffer from assumption violations.</p>
-<p>Here’s a link to a .csv file containing the data: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/ortann.csv">[ortann.csv]</a>.</p>
-<p>And here are links to the components of the Oregon county outline shape files: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.shp">[orotl.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.dbf">[orotl.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.shx">[orotl.shx]</a></p>
+<p>Here’s a link to a .csv file containing the data: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/ortann_csv">[ortann_csv]</a>.</p>
+<p>And here are links to the components of the Oregon county outline shape files: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.shp">[orotl.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.dbf">[orotl.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.shx">[orotl.shx]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.prj">[orotl.prj]</a></p>
 <p>Read in the .csv file and the shapefile components if they are not already in the workspace.</p>
 <p><strong>2. Maps and scatter plots</strong></p>
-<p>The exercise will involve fitting a succession of models, the “goodness-of-fit” of which can be viewed by examining the patterns in maps of the residuals. These should show progressively less obvious patterns as the fit improves.</p>
+<p>The exercise will involve fitting a succession of models, the “goodness-of-fit” of which can be viewed by examining the patterns in maps of the residuals. These should show progressively less obvious patterns as the fit improves. Load the necessary packages:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># load the appropriate packages</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(sf)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(RColorBrewer)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(ggplot2)</a></code></pre></div>
+<p>Read the data file and shape file, if not already in the workspace.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># read the shapefile (if not already in the workspace)</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">shapefile=<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/orotl.shp&quot;</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">orotl_sf &lt;-<span class="st"> </span><span class="kw">st_read</span>(shapefile)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">plot</span>(orotl_sf)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># read the data file (if not already in the workspace)</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/csv/orsim.csv&quot;</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">ortann &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_path)</a></code></pre></div>
 <p>The first step in any regression analysis (or for that matter ANY analysis) is to look at the data. In the example below, the dependent or response variable will be annual temperature at the Oregon climate stations, and the predictors will be elevation and location (latitude and longitude). A quick way to get scatter plots is to produce a matrix plot</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">attach</span>(ortann)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">plot</span>(ortann[,<span class="dv">2</span><span class="op">:</span><span class="dv">5</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">attach</span>(ortann)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">plot</span>(ortann[,<span class="dv">2</span><span class="op">:</span><span class="dv">5</span>])</a></code></pre></div>
 <p>The square bracket selection omits the first column of the <code>ortann</code> data frame from the plot (which contains the station names).</p>
-<p>To continue, the following script will produce some maps of the data:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># load some packages</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">library</span>(maptools)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">library</span>(RColorBrewer)</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">library</span>(classInt)</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co"># Set plotting variable and get colors</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">plottitle &lt;-<span class="st"> &quot;Annual Temperature (C)&quot;</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">varname &lt;-<span class="st"> &quot;tann&quot;</span> <span class="co"># name of variable to plot</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">plotvar &lt;-<span class="st"> </span>tann <span class="co"># assignment of variable to plotvar</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">nclr &lt;-<span class="st"> </span><span class="dv">8</span> <span class="co"># number of colors</span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(nclr,<span class="st">&quot;PuOr&quot;</span>)</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">plotclr &lt;-<span class="st"> </span>plotclr[nclr<span class="op">:</span><span class="dv">1</span>] <span class="co"># reorder colors</span></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">class &lt;-<span class="st"> </span><span class="kw">classIntervals</span>(plotvar, nclr, <span class="dt">style=</span><span class="st">&quot;quantile&quot;</span>)</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">colcode &lt;-<span class="st"> </span><span class="kw">findColours</span>(class, plotclr)</a>
-<a class="sourceLine" id="cb2-15" data-line-number="15">cutpts &lt;-<span class="st"> </span><span class="kw">round</span>(class<span class="op">$</span>brks, <span class="dt">digits=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb2-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co"># Plot the shape file and the selected variable</span></a>
-<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="kw">plot</span>(orotl.shp, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="fl">124.5</span>, <span class="dv">-115</span>), <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">41</span>,<span class="dv">47</span>))</a>
-<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="co"># add points</span></a>
-<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="kw">points</span>(longitude, latitude, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span>colcode, <span class="dt">cex=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="kw">points</span>(longitude, latitude, <span class="dt">cex=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co"># add legend</span></a>
-<a class="sourceLine" id="cb2-23" data-line-number="23"><span class="kw">legend</span>(<span class="op">-</span><span class="dv">117</span>, <span class="dv">45</span>, <span class="dt">legend=</span><span class="kw">names</span>(<span class="kw">attr</span>(colcode, <span class="st">&quot;table&quot;</span>)),</a>
-<a class="sourceLine" id="cb2-24" data-line-number="24">   <span class="dt">fill=</span><span class="kw">attr</span>(colcode, <span class="st">&quot;palette&quot;</span>), <span class="dt">cex=</span><span class="fl">0.6</span>, <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb2-25" data-line-number="25"><span class="kw">title</span>(plottitle)</a></code></pre></div>
-<p>To plot maps of additional variables, only the second and third blocks of code will need to be executed again, after changing:</p>
-<ol style="list-style-type: decimal">
-<li>The title of the plot (<code>plottitle</code> – a text string in quotes)</li>
-<li>the name of the variable to plot (<code>varname</code> – e.g. <code>&quot;tann&quot;</code> – note the quotes), and</li>
-<li>the object to plot (<code>tann</code> in this example)</li>
-</ol>
-<p>It will be convenient to copy Blocks 2 and 3 into a script editor for editing. It will also be extremely useful to copy the maps to a Word document as they are created. Although we’ve looked at this data set before, it would be a good idea to look at the basic patterns again.</p>
+<p>As you proceed through the exercise, a set of maps will be generated that, except for the variables being plotted and the range of values of those variables, will be identical. That makes it efficient to construct a function for making the maps that will accommodate different variables and scales. Here is such a function, and to “install” into the workspace, simply run it at the command line.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">map_temp &lt;-<span class="st"> </span><span class="cf">function</span>(title, varname, plotvar, limits) {</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">  <span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">    </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> orotl_sf, <span class="dt">fill=</span><span class="st">&quot;grey70&quot;</span>, <span class="dt">color=</span><span class="st">&quot;black&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">data =</span> ortann, <span class="kw">aes</span>(<span class="dt">x =</span> longitude, <span class="dt">y =</span> latitude, <span class="dt">color =</span> plotvar), <span class="dt">size =</span> <span class="fl">5.0</span> ) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">    </span><span class="kw">scale_color_distiller</span>(<span class="dt">type =</span> <span class="st">&quot;div&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;RdBu&quot;</span>, <span class="dt">aesthetics =</span> <span class="st">&quot;color&quot;</span>, <span class="dt">direction =</span> <span class="dv">-1</span>,</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">                          <span class="dt">limits =</span> limits, <span class="dt">name =</span> varname) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="dt">title =</span> title) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="st">    </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">}</a></code></pre></div>
+<p>There are three arguments that must be passed to the function: 1) the map title (a string), 2) a lable for the variable (a string), 3) the name of the variable (a string), and 4) the variable-value limits (a pair of values, concatenated with <code>c()</code>)</p>
+<p>Plot the values of TJanDiff by setting the values of the arguements, and then calling the <code>map_tmp()</code> function:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># map the annual tempeature values</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">title &lt;-<span class="st"> &quot;Oregon Climate Station Data -- Annual Temperature&quot;</span>  </a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">varname &lt;-<span class="st"> &quot;Annual Temp. (C)&quot;</span> </a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">plotvar &lt;-<span class="st"> </span>tann</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">limits &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">15</span>)                    </a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="kw">map_temp</span>(title, varname, plotvar, limits)</a></code></pre></div>
 <p><strong>3. An initial “null” or “naïve” model</strong></p>
 <p>The simplest of models is one in which a single value, usually the mean, is used as the “fitted value” or prediction for each observation. This model can be thought of as a “naïve” model—the only thing the response variables “knows about” is its own mean value, and nothing about the influence of the eventual predictor variables. It might be the case that the potential predictor variables (elevation, location) have no influence on the response variable, and in such a case, the mean might be the best predictor of the values of the response variable, but a rather boring one from the perspective of explanation.</p>
 <p>The null or naive model can be fit using the lm() function that is used to fit more elaborate models.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># a null model, mean as the prediction</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">tann.lm0 &lt;-<span class="st"> </span><span class="kw">lm</span>(tann <span class="op">~</span><span class="st"> </span><span class="dv">1</span>)</a></code></pre></div>
-<p>Note the “formula” in the function above; <code>tann ~ 1</code> means “predict <code>tann</code> as a function of a constant value” (namely the mean). The <code>lm()</code> function is silent, meaning it does not produce any output itself, but it can always be examined by typing the name of the object it produces, e.g., <code>tann.lm0</code>, or by applying the <code>summary()</code> or <code>attributes()</code> functions to that object</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># plot the regression line</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">plot</span>(tann <span class="op">~</span><span class="st"> </span>elevation)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw">abline</span>(<span class="kw">abline</span>(<span class="kw">mean</span>(tann),<span class="dv">0</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># a null model, mean as the prediction</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">tann_lm0 &lt;-<span class="st"> </span><span class="kw">lm</span>(tann <span class="op">~</span><span class="st"> </span><span class="dv">1</span>)</a></code></pre></div>
+<p>Note the “formula” in the function above; <code>tann ~ 1</code> means “predict <code>tann</code> as a function of a constant value” (namely the mean). The <code>lm()</code> function is silent, meaning it does not produce any output itself, but it can always be examined by typing the name of the object it produces, e.g., <code>tann_lm0</code>, or by applying the <code>summary()</code> or <code>attributes()</code> functions to that object</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># plot the regression line</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">plot</span>(tann <span class="op">~</span><span class="st"> </span>elevation)</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">abline</span>(<span class="kw">abline</span>(<span class="kw">mean</span>(tann),<span class="dv">0</span>))</a></code></pre></div>
 <p>Here the regression line is simply a horizontal line at the mean value of the response variable. Another way of looking at this is that the slope of the regression line is 0, and the intercept is equal to the mean of the dependent or response variable.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># examine the model object</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">summary</span>(tann.lm0)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># examine the model object</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw">summary</span>(tann_lm0)</a></code></pre></div>
 <p>The <code>summary()</code> function here provides, in the case of this initial model, a somewhat overblown description of the mean and standard deviation of <code>tann</code>, which can be verified using the <code>mean()</code> and <code>sd()</code> functions.</p>
 <p>The <code>plot()</code> function with a model object as an argument provides a sequence of four diagnostic plots. These include:</p>
 <ul>
@@ -571,117 +568,135 @@ $(document).ready(function () {
 <li>Cook’s distance: spikes on this plot indicate observations that have an unusually large influence on the regression analysis.</li>
 </ul>
 <p>Before plotting, use the <code>par()</code> function to set up a 2x2 arrangement of plots.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># standard regression diagnostics (4-up)</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw">plot</span>(tann.lm0, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>))</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw">par</span>(oldpar)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># standard regression diagnostics (4-up)</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="kw">plot</span>(tann_lm0, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>))</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw">par</span>(oldpar)</a></code></pre></div>
 <p>(Note that only three plots are produced here—the leverage plot is skipped for this model, because it doesn’t make any sense.))</p>
 <p>The first use of the <code>par()</code> function sets up the RGraphics window to contain four plots on a single page, and <code>par(oldpar)</code> restores the original one-plot per page format. In the case of this “null” model, the normal QQ plot will provide information on the normality of the residuals, while the Cook’s distance plot indicates which observations have large influence on the mean.</p>
-<p>The residuals (deviations from the mean) can be referenced as <code>tann.lm0$residuals</code>. Use the code in Part 2 above to map <code>tann.lm0$residuals</code>. The first three lines of Block 2 should read (note the quotes in the assignment for <code>varname</code> and their absence in the assignment for <code>plotvar</code>–the first is a text string, and the second is the name of an object).</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">plottitle &lt;-<span class="st"> &quot;Residuals from tann.lm0 (C)&quot;</span>  </a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">varname &lt;-<span class="st"> &quot;tann.lm0$residuals&quot;</span> </a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">plotvar &lt;-<span class="st"> </span>tann.lm0<span class="op">$</span>residuals</a></code></pre></div>
+<p>The residuals (deviations from the mean) can be referenced as <code>tann_lm0$residuals</code>. Map those values. Note that line <code>limits &lt;- max(abs(tann_lm0$residuals)) * c(-1, 1)</code> figures out a good range for the values, centered on zero. First the absolute values are found, then the maximum absolute value, and then the multiplication creates a pair of values ranging from -1 times the maximum absolute value to +1 time the maximum absolute value.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># map the residuals</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">title &lt;-<span class="st"> &quot;Residuals from tann_lm0 (C)&quot;</span>  </a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">varname &lt;-<span class="st"> &quot;tann_lm0$residuals&quot;</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">plotvar &lt;-<span class="st"> </span>tann_lm0<span class="op">$</span>residuals</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">limits &lt;-<span class="st"> </span><span class="kw">max</span>(<span class="kw">abs</span>(tann_lm0<span class="op">$</span>residuals)) <span class="op">*</span><span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="kw">map_temp</span>(title, varname, plotvar, limits)</a></code></pre></div>
 <blockquote>
-<p>Q1: Compare the values and the patterns of the maps of <code>tann</code> and <code>tann.lm0$residuals</code>. How are they alike, and how are they different? (Hint: Be sure to create and examine the legends.)</p>
+<p>Q1: Compare the values and the patterns of the maps of <code>tann</code> and <code>tann_lm0$residuals</code>. How are they alike, and how are they different?</p>
 </blockquote>
-<p><strong>4. Bivariate regression</strong></p>
+<p><br> <strong>4. Bivariate regression</strong></p>
 <p>From previous analyses, it’s apparent that <code>tann</code> has a clear relationship with <code>elevation</code>, and so the successive regressions will begin using elevation as a predictor. Before fitting the regression model, explore the relationship between <code>tann and elevation</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># first regression model -- tann ~ elev</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">tann.lm1 &lt;-<span class="st"> </span><span class="kw">lm</span>(tann <span class="op">~</span><span class="st"> </span>elevation)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># first regression model -- tann ~ elev</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">tann_lm1 &lt;-<span class="st"> </span><span class="kw">lm</span>(tann <span class="op">~</span><span class="st"> </span>elevation)</a></code></pre></div>
 <p>The <code>lm()</code> function fits linear (straight-line) relationships between the response variable (<code>tann</code>) and the predictor (<code>elevation</code>). Note the formula used here: <code>tann</code> varies as a function of <code>elevation</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># plot the regression line</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw">plot</span>(tann <span class="op">~</span><span class="st"> </span>elevation)</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw">abline</span>(tann.lm1, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># plot the regression line</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">plot</span>(tann <span class="op">~</span><span class="st"> </span>elevation)</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="kw">abline</span>(tann_lm1, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
 <p>The <code>plot()</code> and <code>abline()</code> functions plot the data and draw regression line</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># examine the model object</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">summary</span>(tann.lm1)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># examine the model object</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">summary</span>(tann_lm1)</a></code></pre></div>
 <p>Note that the summary table now includes the regression coefficients and several goodness-of-fit statistics.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># standard regression diagnostics (4-up)</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw">plot</span>(tann.lm1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>))</a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="kw">par</span>(oldpar)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># standard regression diagnostics (4-up)</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="kw">plot</span>(tann_lm1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>))</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="kw">par</span>(oldpar)</a></code></pre></div>
 <p>Replot the residual scatter plot (residuals vs. fitted values), adding a lowess curve to emphasize the pattern.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># another view of the residual scatter diagram</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw">plot</span>(tann.lm1<span class="op">$</span>fitted.values, tann.lm1<span class="op">$</span>residuals)</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw">lines</span>(<span class="kw">lowess</span>(tann.lm1<span class="op">$</span>fitted.values, tann.lm1<span class="op">$</span>residuals, <span class="dt">f=</span><span class="fl">0.80</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># another view of the residual scatter diagram</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw">plot</span>(tann_lm1<span class="op">$</span>fitted.values, tann_lm1<span class="op">$</span>residuals)</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw">lines</span>(<span class="kw">lowess</span>(tann_lm1<span class="op">$</span>fitted.values, tann_lm1<span class="op">$</span>residuals, <span class="dt">f=</span><span class="fl">0.80</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <blockquote>
 <p>Q2: Examine the regression output in the console window. Is there a significant relationship between tann and elevation? What are the <em>F</em> statistic, its <em>p</em>-value, the Multiple R-Squared value, and the residual standard error? Are the intercept and slope significantly different from zero (and how do you know)?</p>
 </blockquote>
 <blockquote>
 <p>Q3: Describe the patterns on the residuals vs. fit plot and normal QQ plot. Do these plots suggest that there is no information in the residuals, or is there some kind of pattern? Are there any unusually influential observations? Is this first analysis ok, or should we consider modifying it?</p>
 </blockquote>
-<p>(I’ll answer this one–there is a distinct arch-shaped pattern on the residuals vs fit plot, nicely summarized by the loess curve, and while the points are generally linear on the residual QQ plot, they begin to drift away from the 1:1 line for residual values greater than +1. The Crater Lake and Seneca values seem to have a large influence on the regression model. It looks like for this simple model, several of the underlying assumptions have been violated, and we should consider looking for a better model.)</p>
-<p>Map the residual values from this simple linear regression model (<code>tann.lm1$residuals</code>), and compare their pattern with those of from the null model.</p>
+<p><br> (I’ll answer this one–there is a distinct arch-shaped pattern on the residuals vs fit plot, nicely summarized by the loess curve, and while the points are generally linear on the residual QQ plot, they begin to drift away from the 1:1 line for residual values greater than +1. The Crater Lake and Seneca values seem to have a large influence on the regression model. It looks like for this simple model, several of the underlying assumptions have been violated, and we should consider looking for a better model.)</p>
+<p>Map the residual values from this simple linear regression model (<code>tann_lm1$residuals</code>), and compare their pattern with those of from the null model.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># map the residuals</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">title &lt;-<span class="st"> &quot;Residuals from tann_lm1 (C)&quot;</span>  </a>
+<a class="sourceLine" id="cb17-3" data-line-number="3">varname &lt;-<span class="st"> &quot;tann_lm1$residuals&quot;</span></a>
+<a class="sourceLine" id="cb17-4" data-line-number="4">plotvar &lt;-<span class="st"> </span>tann_lm1<span class="op">$</span>residuals</a>
+<a class="sourceLine" id="cb17-5" data-line-number="5">limits &lt;-<span class="st"> </span><span class="kw">max</span>(<span class="kw">abs</span>(tann_lm0<span class="op">$</span>residuals)) <span class="op">*</span><span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="kw">map_temp</span>(title, varname, plotvar, limits)</a></code></pre></div>
+<p>Note that the map pattern of the residuals is less well organized than that for the naïve model.</p>
 <p><strong>5. Multiple regression</strong></p>
 <p>One of the assumptions that underlies regression analysis is that we have fit the right model, and one way of expressing the other assumptions that describe the properties of the residuals is that the residuals should appear free of any pattern. This is clearly not the case for the simple model, and the reason should be apparent–the relationship between tann and elevation is not linear. There are two possible solutions. One would be to fit a non-linear model, for example a parabola or quadratic curve to the relationship, but there really isn’t a physical justification for why the temperature decrease with increasing elevation should be non-linear in that particular fashion. An alternative approach is to look for additional predictors variables that might be able to account for the pattern in the residuals, and include these in a “multiple regression model.”</p>
 <p>An obvious set of additional predictor variables for this exercise is provided by latitude and longitude. (In practice, additional variables might not immediately come to mind.) Check to see whether any of the “information” (or pattern) in the residuals might be explained by latitude and longitude by constructing scatter plots with loess curves for the residuals:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># plot residuals vs. other predictors</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">plot</span>(tann.lm1<span class="op">$</span>residuals <span class="op">~</span><span class="st"> </span>longitude)</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="kw">lines</span>(<span class="kw">lowess</span>(tann.lm1<span class="op">$</span>residuals <span class="op">~</span><span class="st"> </span>longitude, <span class="dt">f=</span><span class="fl">0.80</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="kw">plot</span>(tann.lm1<span class="op">$</span>residuals <span class="op">~</span><span class="st"> </span>latitude)</a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="kw">lines</span>(<span class="kw">lowess</span>(tann.lm1<span class="op">$</span>residuals <span class="op">~</span><span class="st"> </span>latitude, <span class="dt">f=</span><span class="fl">0.80</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># plot residuals vs. other predictors</span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">plot</span>(tann_lm1<span class="op">$</span>residuals <span class="op">~</span><span class="st"> </span>longitude)</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="kw">lines</span>(<span class="kw">lowess</span>(tann_lm1<span class="op">$</span>residuals <span class="op">~</span><span class="st"> </span>longitude, <span class="dt">f=</span><span class="fl">0.80</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb18-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="kw">plot</span>(tann_lm1<span class="op">$</span>residuals <span class="op">~</span><span class="st"> </span>latitude)</a>
+<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="kw">lines</span>(<span class="kw">lowess</span>(tann_lm1<span class="op">$</span>residuals <span class="op">~</span><span class="st"> </span>latitude, <span class="dt">f=</span><span class="fl">0.80</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <blockquote>
 <p>Q4: Describe the relationships between the residuals from the linear model and latitude and longitude. (Hint: It might be good to look at the maps of residuals too.)</p>
 </blockquote>
-<p>The relationships you should have seen in the above question are important enough that we should consider including longitude and latitude as predictors in the regression model. Here’s a multiple regression model that includes location:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># second regression -- tann ~ elevation + latitude + longitude</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">tann.lm2 &lt;-<span class="st"> </span><span class="kw">lm</span>(tann <span class="op">~</span><span class="st"> </span>elevation <span class="op">+</span><span class="st"> </span>latitude <span class="op">+</span><span class="st"> </span>longitude)</a></code></pre></div>
-<p>This code creates another model object <code>tann.lm2</code>, which contains the results of the multiple regression with <code>tann</code> as the response, and <code>elevation</code>, <code>latitude</code>, and <code>longitude</code> as predictors. Examine the diagnostic plots and maps of the residuals from <code>tann.lm2</code>. (Hint remember to change all instances of the model object and variable names in the blocks of code necessary to do this.)</p>
+<p><br> The relationships you should have seen in the above question are important enough that we should consider including longitude and latitude as predictors in the regression model. Here’s a multiple regression model that includes location:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># second regression -- tann ~ elevation + latitude + longitude</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">tann_lm2 &lt;-<span class="st"> </span><span class="kw">lm</span>(tann <span class="op">~</span><span class="st"> </span>elevation <span class="op">+</span><span class="st"> </span>latitude <span class="op">+</span><span class="st"> </span>longitude)</a></code></pre></div>
+<p>This code creates another model object <code>tann_lm2</code>, which contains the results of the multiple regression with <code>tann</code> as the response, and <code>elevation</code>, <code>latitude</code>, and <code>longitude</code> as predictors. Examine the diagnostic plots and maps of the residuals from <code>tann_lm2</code>. (Hint remember to change all instances of the model object and variable names in the blocks of code necessary to do this.)</p>
 <blockquote>
-<p>Q5: Look at the summary for this model. Describe how the <em>F</em>-statistic, its <em>p</em>-value, the <em>R<sup>2</sup>, and Residual Standard Error values have changed. Are all the predictors significant (Hint: examine their </em>t*-statistics.) Are any patterns in the residuals from this model less obvious than those from the previous model? Are they completely gone?</p>
+<p>Q5: Look at the summary for this model. Describe how the <em>F</em>-statistic, its <em>p</em>-value, the <em>R<sup>2</sup></em>, and Residual Standard Error values have changed. Are all the predictors significant (Hint: examine their <em>t</em>-statistics.) Are any patterns in the residuals from this model less obvious than those from the previous model? Are they completely gone?</p>
 </blockquote>
-<p>Several other multiple regression models with elevation, latitude, and longitude as predictors, (each allowing for interactions among the predictors), in a sense create additional predictors (latitude x longitude, elevation x latitude), which in the case of spatial data as here, allow the predicted “surface” more flexibility. Here are two such interaction models:</p>
-<p>tann.lm3 &lt;- lm(tann ~ elevation + latitude*longitude)</p>
+<p><br> Several other multiple regression models with elevation, latitude, and longitude as predictors, (each allowing for interactions among the predictors), in a sense create additional predictors (latitude x longitude, elevation x latitude), which in the case of spatial data as here, allow the predicted “surface” more flexibility. Here are two such interaction models:</p>
+<p><code>tann_lm3 &lt;- lm(tann ~ elevation + latitude*longitude)</code></p>
 <p>(allows for interactions between latitude and longitude, fitting a surface slightly more complex than a simple plane).</p>
-<p>tann.lm4 &lt;- lm(tann ~ elevation<em>latitude</em>longitude)</p>
+<p><code>tann_lm4 &lt;- lm(tann ~ elevation*latitude*longitude)</code></p>
 <p>(simultaneous interactions among all three predictors)</p>
 <p>Because the exercise continues below, you might infer that fitting these more elaborate models doesn’t quite take care of the model deficiencies noted above.</p>
 <p><strong>6. Nonparametric (Loess) regression</strong></p>
 <p>It could be the case that the individual and joint relationships between <code>tann</code> and <code>elevation</code>, <code>latitude</code> and <code>longitude</code> in the previous multiple regressions aren’t quite perfectly represented by <em>linear</em> relationships. The loess fitting procedure can be generalized to more than one predictor variable, which allows the flexibility of the loess curve to be extended to the multiple regression context. In essence, the method produces a number of local regression analyses, allowing the form of the relationship to vary across the space defined by the predictor variables, which in this example, turns out to be geographical space.</p>
 <p>Fit a “local” (loess) regression model to the <code>tann</code> data, using <code>elevation</code> as a predictor:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># loess -- simplest model</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">tann.lo1 &lt;-<span class="st"> </span><span class="kw">loess</span>(tann <span class="op">~</span><span class="st"> </span>elevation, <span class="dt">span=</span><span class="fl">0.80</span>, <span class="dt">degree=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co"># examine the fit</span></a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="kw">summary</span>(tann.lo1)</a>
-<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="kw">plot</span>(tann <span class="op">~</span><span class="st"> </span>elevation)</a>
-<a class="sourceLine" id="cb15-7" data-line-number="7">hat &lt;-<span class="st"> </span><span class="kw">predict</span>(tann.lo1)</a>
-<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="kw">lines</span>(elevation[<span class="kw">order</span>(elevation)], hat[<span class="kw">order</span>(elevation)], <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="kw">cor</span>(tann, hat)<span class="op">^</span><span class="dv">2</span> </a></code></pre></div>
-<p>The extraction of information from the model object (<code>tann.lo1</code>) is a little different when fitting a loess regression model than when fitting a linear model using the <code>lm()</code> function. Because loess regression is “nonparametric” there are no regression coefficients, and <em>F</em>- and <em>t</em>-statistics are not produced; however, the goodness-of-fit of the regression can still be determined using <em>R<sup>2</sum></em> and residual standard error values. For example, the <code>cor()</code> function can be used to get the correlation between the response variable and the fitted values. Squaring this value gives a statistic comparable with the <em>R<sup>2</sum></em> values from earlier regressions.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># residual scatter diagram</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw">plot</span>(tann.lo1<span class="op">$</span>fitted, tann.lo1<span class="op">$</span>residuals)</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw">lines</span>(<span class="kw">lowess</span>(tann.lo1<span class="op">$</span>fitted, tann.lo1<span class="op">$</span>residuals, <span class="dt">f=</span><span class="fl">0.80</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co"># normal probablility plot</span></a>
-<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="kw">qqnorm</span>(tann.lo1<span class="op">$</span>residuals)</a></code></pre></div>
-<p>This block of code constructs the residual scatter diagram. Note that the fitted (predicted) values and the residuals are contained in the variables <code>tann.lo1$fitted</code>, and <code>tann.lo1$residuals</code>.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># loess -- simplest model</span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">tann_lo1 &lt;-<span class="st"> </span><span class="kw">loess</span>(tann <span class="op">~</span><span class="st"> </span>elevation, <span class="dt">span=</span><span class="fl">0.80</span>, <span class="dt">degree=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb20-4" data-line-number="4"><span class="co"># examine the fit</span></a>
+<a class="sourceLine" id="cb20-5" data-line-number="5"><span class="kw">summary</span>(tann_lo1)</a>
+<a class="sourceLine" id="cb20-6" data-line-number="6"><span class="kw">plot</span>(tann <span class="op">~</span><span class="st"> </span>elevation)</a>
+<a class="sourceLine" id="cb20-7" data-line-number="7">hat &lt;-<span class="st"> </span><span class="kw">predict</span>(tann_lo1)</a>
+<a class="sourceLine" id="cb20-8" data-line-number="8"><span class="kw">lines</span>(elevation[<span class="kw">order</span>(elevation)], hat[<span class="kw">order</span>(elevation)], <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb20-9" data-line-number="9"><span class="kw">cor</span>(tann, hat)<span class="op">^</span><span class="dv">2</span> </a></code></pre></div>
+<p>The extraction of information from the model object (<code>tann_lo1</code>) is a little different when fitting a loess regression model than when fitting a linear model using the <code>lm()</code> function. Because loess regression is “nonparametric” there are no regression coefficients, and <em>F</em>- and <em>t</em>-statistics are not produced; however, the goodness-of-fit of the regression can still be determined using <em>R<sup>2</sum></em> and residual standard error values. For example, the <code>cor()</code> function can be used to get the correlation between the response variable and the fitted values. Squaring this value gives a statistic comparable with the <em>R<sup>2</sum></em> values from earlier regressions.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># residual scatter diagram</span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw">plot</span>(tann_lo1<span class="op">$</span>fitted, tann_lo1<span class="op">$</span>residuals)</a>
+<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="kw">lines</span>(<span class="kw">lowess</span>(tann_lo1<span class="op">$</span>fitted, tann_lo1<span class="op">$</span>residuals, <span class="dt">f=</span><span class="fl">0.80</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb21-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb21-5" data-line-number="5"><span class="co"># normal probablility plot</span></a>
+<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="kw">qqnorm</span>(tann_lo1<span class="op">$</span>residuals)</a></code></pre></div>
+<p>This block of code constructs the residual scatter diagram. Note that the fitted (predicted) values and the residuals are contained in the variables <code>tann_lo1$fitted</code>, and <code>tann_lo1$residuals</code>.</p>
+<p>Map the residuals:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co"># map the residuals</span></a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">title &lt;-<span class="st"> &quot;Residuals from tann_lo1 (C)&quot;</span>  </a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">varname &lt;-<span class="st"> &quot;tann_lo1$residuals&quot;</span></a>
+<a class="sourceLine" id="cb22-4" data-line-number="4">plotvar &lt;-<span class="st"> </span>tann_lo1<span class="op">$</span>residuals</a>
+<a class="sourceLine" id="cb22-5" data-line-number="5">limits &lt;-<span class="st"> </span><span class="kw">max</span>(<span class="kw">abs</span>(tann_lo1<span class="op">$</span>residuals)) <span class="op">*</span><span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb22-6" data-line-number="6"><span class="kw">map_temp</span>(title, varname, plotvar, limits)</a></code></pre></div>
 <blockquote>
-<p>Q6: Compare the results of this regression with the first linear regression (tann.lm1), in particular compare the goodness of fit, residual scatter diagram, and map patterns of residual. Does fitting a flexible or local curve improve the fit relative to fitting a straight line?</p>
+<p>Q6: Compare the results of this regression with the first linear regression (tann_lm1), in particular compare the goodness of fit, residual scatter diagram, and map patterns of residual. Does fitting a flexible or local curve improve the fit relative to fitting a straight line?</p>
 </blockquote>
-<p>Now fit an expanded model with elevation, latitude, and longitude as predictors (equivalent to <code>tann.lm2</code>):</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># loess -- elevation, latitude, and longitude</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2">tann.lo2 &lt;-<span class="st"> </span><span class="kw">loess</span>(tann <span class="op">~</span><span class="st"> </span>elevation <span class="op">+</span><span class="st"> </span>latitude <span class="op">+</span><span class="st"> </span>longitude, <span class="dt">span=</span><span class="fl">0.80</span>, <span class="dt">degree=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb17-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="co"># examine the fit</span></a>
-<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="kw">summary</span>(tann.lo2)</a>
-<a class="sourceLine" id="cb17-6" data-line-number="6">hat &lt;-<span class="st"> </span><span class="kw">predict</span>(tann.lo2)</a>
-<a class="sourceLine" id="cb17-7" data-line-number="7"><span class="kw">cor</span>(tann, hat)<span class="op">^</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb17-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb17-9" data-line-number="9"><span class="co"># residual scatter diagram</span></a>
-<a class="sourceLine" id="cb17-10" data-line-number="10"><span class="kw">plot</span>(tann.lo2<span class="op">$</span>fitted, tann.lo2<span class="op">$</span>residuals)</a>
-<a class="sourceLine" id="cb17-11" data-line-number="11"><span class="kw">lines</span>(<span class="kw">lowess</span>(tann.lo2<span class="op">$</span>fitted, tann.lo2<span class="op">$</span>residuals, <span class="dt">f=</span><span class="fl">0.80</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb17-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb17-13" data-line-number="13"><span class="co"># normal probablility plot</span></a>
-<a class="sourceLine" id="cb17-14" data-line-number="14"><span class="kw">qqnorm</span>(tann.lo2<span class="op">$</span>residuals)</a></code></pre></div>
+<p><br> Now fit an expanded model with elevation, latitude, and longitude as predictors (equivalent to <code>tann_lm2</code>):</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co"># loess -- elevation, latitude, and longitude</span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">tann_lo2 &lt;-<span class="st"> </span><span class="kw">loess</span>(tann <span class="op">~</span><span class="st"> </span>elevation <span class="op">+</span><span class="st"> </span>latitude <span class="op">+</span><span class="st"> </span>longitude, <span class="dt">span=</span><span class="fl">0.80</span>, <span class="dt">degree=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb23-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb23-4" data-line-number="4"><span class="co"># examine the fit</span></a>
+<a class="sourceLine" id="cb23-5" data-line-number="5"><span class="kw">summary</span>(tann_lo2)</a>
+<a class="sourceLine" id="cb23-6" data-line-number="6">hat &lt;-<span class="st"> </span><span class="kw">predict</span>(tann_lo2)</a>
+<a class="sourceLine" id="cb23-7" data-line-number="7"><span class="kw">cor</span>(tann, hat)<span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb23-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb23-9" data-line-number="9"><span class="co"># residual scatter diagram</span></a>
+<a class="sourceLine" id="cb23-10" data-line-number="10"><span class="kw">plot</span>(tann_lo2<span class="op">$</span>fitted, tann_lo2<span class="op">$</span>residuals)</a>
+<a class="sourceLine" id="cb23-11" data-line-number="11"><span class="kw">lines</span>(<span class="kw">lowess</span>(tann_lo2<span class="op">$</span>fitted, tann_lo2<span class="op">$</span>residuals, <span class="dt">f=</span><span class="fl">0.80</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb23-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb23-13" data-line-number="13"><span class="co"># normal probablility plot</span></a>
+<a class="sourceLine" id="cb23-14" data-line-number="14"><span class="kw">qqnorm</span>(tann_lo2<span class="op">$</span>residuals)</a></code></pre></div>
+<p>And map the residuals again.</p>
 <blockquote>
-<p>Q7: Does the loess regression fit the <code>tann</code> data better, worse, or about the same as the multiple regression? (Note: it might be easier to answer Q7 and Q8 simultaneously.) Examine the residual scatter diagrams and QQ Normal plots. Has there been any improvement (i.e. less pattern) in the residuals of the <code>tann.lo2</code> model relative to those from the other regressions?</p>
+<p>Q7: Does the loess regression fit the <code>tann</code> data better, worse, or about the same as the multiple regression? (Note: it might be easier to answer Q7 and Q8 simultaneously.) Examine the residual scatter diagrams and QQ Normal plots. Has there been any improvement (i.e. less pattern) in the residuals of the <code>tann_lo2</code> model relative to those from the other regressions?</p>
 </blockquote>
 <blockquote>
 <p>Q8: Which of the various models seem to be the optimal one, and why do you think it is?</p>
 </blockquote>
-<p><strong>7. What to turn in</strong></p>
+<p><br> <strong>7. What to turn in</strong></p>
 <p>Turn in answers to the above questions, and one or more of the plots you generated in section 2.</p>
 <p>That’s all!</p>
 

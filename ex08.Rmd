@@ -16,12 +16,12 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
-<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
 **Geography 4/595:  Geographic Data Analysis**  
-**Winter 2019**
+**Spring 2020*
 
 **Exercise 8:  Multivariate Analysis**  
-**Finish by Thursday, March 21st**
+**Finish by Thursday, June 11**
 
 **1. Introduction**  
 
@@ -45,6 +45,16 @@ NOTE:  The variable names are the same in the two data sets, and so they both ca
 
 To start, download the .csv files to your working directory and read them into your workspace, if they're not already there
 
+```{r echo=TRUE, eval=FALSE}
+# read the streams file (if not already in the workspace)
+csv_path <- "/Users/bartlein/Documents/geog495/data/csv/streams"
+streams <- read.csv(csv_path)
+
+# read the transformed streams file (if not already in the workspace)
+csv_path <- "/Users/bartlein/Documents/geog495/data/csv/tstreams"
+tstreams <- read.csv(csv_path)
+```
+
 Get matrix scatter diagrams of the two data sets:
 
 ```{r echo=TRUE, eval=FALSE}
@@ -56,24 +66,29 @@ A few features should emerge, including the fact that for some variables, many z
 
 **3. Principal Components Analysis (PCA)**
 
-Begin by doing a simple principal components analysis on variables 3 through 13 (i.e. just the continuous variables, and not the factor Health).
+Begin by doing a simple principal components analysis on variables 3 through 13 (i.e. just the continuous variables (columns 3 through 13), and not the factor Health).  Select the variables to be analyzed, and add `rownames` to the resulting matrix.
 
 ```{r echo=TRUE, eval=FALSE}
 # principal components analysis of (transformed) NE Oregon streams data
 tstreams_matrix <- data.matrix(tstreams[,3:13])
 # rownames combining stream name and U/H
 rownames(tstreams_matrix) <- paste(as.character(tstreams[,2]), as.character(tstreams[,1]))
-
-library(psych)
-tstreams_pca <- principal(tstreams_matrix, nfactors=2, rotate="none")
 ```
 
-Columns 3 through 13 are copied into a matrix for convenience, and then the `princomp()` function does the analysis.  Now take a look at the results:
+Use the `psych` package PCA function (`principal()`) to get the principal components.
+
+```{r echo=TRUE, eval=FALSE}
+library(psych)
+tstreams_pca <- principal(tstreams_matrix, nfactors=4, rotate="none")
+```
+
+Now take a look at the results:
 
 ```{r echo=TRUE, eval=FALSE}
 # display the results
 tstreams_pca
 summary(tstreams_pca)
+VSS.scree(tstreams_matrix)
 print(loadings(tstreams_pca),cutoff=0.0)
 biplot(tstreams_pca$scores[,1:2], loadings(tstreams_pca)[,1:2],
   main="PCA Biplot -- 2 Components", cex=0.5)
@@ -82,12 +97,21 @@ biplot(tstreams_pca$scores[,1:2], loadings(tstreams_pca)[,1:2],
 Typing the name of the resulting PCA object (`tstreams_pca`) along with the application of `summary()` function produces information on the relative importance of the principal components.  Important components are generally regarded as those with variances (eigenvalues) greater than 1.0.  Printing the results of the application of the  `loadings()` function produces a table that contains the correlations between the original variables and the new components, while the `screeplot()` function gives a graphic picture of the importance of the first few components.
 
 The `biplot()` function shows both the observations (labeled by row number here) and the variables (represented by vectors) on the same display (i.e., a biplot).  
-The components of the biplot are generated this way:  The "component scores" or the values of the first two new components are first plotted as a labeled scatter diagram, where the labels above are the  (other things could be plotted, like the observation number)
+
+The components of the biplot are generated this way:  The "component scores" or the values of the first two new components are first plotted as a labeled scatter diagram, where the labels above are the rownames. (Other things could be plotted, like the observation number.)  Here is how the biplot could be generated manually:
 
 ```{r echo=TRUE, eval=FALSE}
 # biplot -- observations
 plot(tstreams_pca$scores[,1:2], type="n")
 text(tstreams_pca$scores[,1:2], labels=seq(1:length(tstreams[,1])))
+```
+
+Or another way:
+
+```{r echo=TRUE, eval=FALSE}
+# biplot -- observations
+plot(tstreams_pca$scores[,1:2], cex = 0.2)
+text(tstreams_pca$scores[,1:2], labels = rownames(tstreams_matrix), cex = 0.5)
 ```
 
 Then the vectors are drawn by overlaying a scatter plot of the loadings of the first two components:
@@ -98,26 +122,42 @@ plot(loadings(tstreams_pca)[,1:2])
 text(loadings(tstreams_pca)[,1:2], labels=colnames(tstreams_matrix))
 ```
 
-The network plot provided by the `qgraph` package can also be used to visualize the relationship between the components and the original variables.  
+The network plot provided by the `qgraph` package can also be used to visualize the relationship between the components and the original variables.  First, we'll need a function to implement the two-stage construction of such a plot.
+
+Load the `qgraph` library:
 
 ```{r echo=TRUE, eval=FALSE}
 library(qgraph)
-# qg_tstreams_pca <- qgraph(tstreams_pca) qgraph.pca() does not work for qgraph >= 1.6
-# workaround
-tstreams.pca.loadings <- loadings(tstreams_pca)
-qgraph.loadings(tstreams.pca.loadings[,1:2], posCol="darkgreen", layout="circle", negCol="darkmagenta", edge.width=1)
 ```
 
-The `qgraph()` function generates a plain plot of the loadings, where the component (loadings) are represented by the numbered circles, the variables by squares labeled by abbreviations of the variable names, and the strength and sign of the loadings by colored arrows (red = negative; green = positive; and with the width of the arrow scaled to represent the magnitude of the loadings).  A more useful version of the plot can be generated using the `layout="spring"` argument, which forces the line segments representing the loadings to be scaled inversely proportionally to the magnitude of he loadings (shorter segments represent higher loadings).  (Note that the red color indicating negative loadings is also replaced by magenta, facilitating the interpretation of the plot by color-deficient viewers.)
+Here is the function:
 
 ```{r echo=TRUE, eval=FALSE}
-#qgraph(qg_tstreams_pca, posCol="darkgreen", layout="spring", negCol="darkmagenta", edge.width=2, #arrows=FALSE)
+function(loadings_in, title) {
+  ld <- loadings(loadings_in)
+  qg_pca <- qgraph(ld, title=title, 
+                   posCol = "darkgreen", negCol = "darkmagenta", arrows = FALSE, vTrans=256)
+  qgraph(qg_pca, title=title,
+         layout = "spring", 
+         posCol = "darkgreen", negCol = "darkmagenta", arrows = FALSE,
+         node.height=0.5, node.width=0.5, vTrans=256, edge.width=0.75, label.cex=1.0,
+         width=7, height=5, normalize=TRUE, edge.width=0.75)
+}
 ```
 
->Q1: How many important components are there?  Is there a natural breakpoint between the important and less-important components?  
+The function has two arguments:  1) the object created by `principal()` (e.g. `tstreams_pca`), and 2) a title.  Get the plots:
+
+```{r echo=TRUE, eval=FALSE}
+qgraph_loadings_plot(tstreams_pca, "PCA tstreams, unrotated components")
+```
+
+The `qgraph()` function generates a plain plot of the loadings, where the component (loadings) are represented by the numbered circles, the variables by squares labeled by abbreviations of the variable names, and the strength and sign of the loadings by colored links (magenta = negative; green = positive; and with the width of the arrow scaled to represent the magnitude of the loadings).  The first plot simply arranges the components and variables around an ellipse.  A more useful version of the plot can be generated using the `layout="spring"` argument, which forces the line segments representing the loadings to be scaled inversely proportionally to the magnitude of he loadings (shorter segments represent higher loadings).  
+
+>Q1: How many important components are there?  (See the screeplot.) Is there a natural breakpoint between the important and less-important components?  Are there some variables on the `qgraph()` plot that are related only to a single component.
 
 >Q2: Does the biplot clearly reveal the “structure” in the data (i.e. groups of vectors at right-angles to one another), or is it ambiguous (vectors aimed all over the place)?  Are the locations of the individual (numbered) observations on the biplot consistent with your interpretation of the components?  (You'll have to look at the data in some way to answer the last part.)
 
+<br>
 **4. Simple Factor Analysis**
 
 Next, do a simple (unrotated) factor analysis of the same variables:  
@@ -135,16 +175,15 @@ biplot(tstreams_fa1$scores[,1:2], loadings(tstreams_fa1)[,1:2],
 And here's the `qgraph` plot:
 
 ```{r echo=TRUE, eval=FALSE}
-qg_tstreams_fa1 <- qgraph(tstreams_fa1)
-qgraph(qg_tstreams_fa1, posCol="darkgreen", layout="spring", negCol="darkmagenta", edge.width=2,
-  arrows=FALSE)
+qgraph_loadings_plot(tstreams_fa1, "Factor Analysis tstreams, unrotated components")
 ```
 
 >Q3:  Compare the results of the factor analysis to the principal components analysis.  What looks similar, what looks different?   Hint:  Focus on the the two biplots, and the relative position of the vectors and points as opposed to their absolute positions on the diagrams.  What are the basic “dimensions” of the data?  From the perspective of somebody administering a field measurement-and-monitoring program, are there any redundancies among the variables that might be eliminated?
 
+<br>
 **5. Rotated Factors**
 
-Next, we’ll rotate the factors to try to make them more interpretable.
+Next, we’ll rotate the factors to try to make them more interpretable.  It looks like the fourth component is not really important, so drop it.
 
 ```{r echo=TRUE, eval=FALSE}
 # factor analysis with rotation
@@ -154,16 +193,17 @@ tstreams_fa2
 print(loadings(tstreams_fa2),cutoff=0.7)
 biplot(tstreams_fa2$scores[,1:2], loadings(tstreams_fa2)[,1:2],
   main="PCA/Factor Analysis Biplot -- 3 Rotated Components", cex=0.5)
-
-qg_tstreams_fa2 <- qgraph(tstreams_fa2)
-qgraph(qg_tstreams_fa2, posCol="darkgreen", layout="spring", negCol="darkmagenta", edge.width=2,
-  arrows=FALSE)
 ```
 
->Q4:  How do the loadings and the biplot change?  Which result, the unrotated or the rotated factors seem more interpretable?  Hint:  a more complicated analysis might not be better.  
+```{r echo=TRUE, eval=FALSE}
+qgraph_loadings_plot(tstreams_fa2, "Factor Analysis tstreams, 3 rotated components")
+```
+
+>Q4:  How do the loadings, biplot and qgraph change?  Which result, the unrotated or the rotated factors seems more interpretable?  Hint:  a more complicated analysis might not be better.  
 
 >Q5:  What are the basic “dimensions” of the data?  From the perspective of somebody administering a field measurement and monitoring program, are there any redundancies among the variables that might be eliminated?
 
+<br>
 **6. Multivariate Analysis of Variance (MANOVA)**
 
 The status of the streams were described by the land managers in terms of their perceived “ecological health” this is coded here by the variable `Health`.  A multivariate analysis of variance is aimed at answering the question "are the healthy (`Health=H`) and "less-healthy" (`Health=U`) groups of reaches similar in their fluvial geomorphic characteristics?
@@ -220,6 +260,7 @@ Note the creation of a new temporary variable (`Y`) that makes it efficient to a
 
 >Q6:  Do the groups of observations differ significantly?  
 
+<br>
 **7. Discriminant Analysis**
 
 A discriminant analysis focuses on the issue of how two (or more) groups of observations differ (and also includes the sort of information provided by an analysis of variance on whether the groups are different).  Whereas MANOVA answers the question "are the groups different?" discriminant analysis answers the question "how are they different.)
@@ -264,6 +305,7 @@ The `predict(...)$class` function gets the group that the new discriminant funct
 
 >Q7:  How do the two groups of observations differ?  Would knowing the values of a few variables allow you to correctly classify the healthiness of streams for which stream health has yet to be measured in the field?
 
+<br>
 You can detach the streams data frame at this point.
 
 **8.  Cluster analysis**
@@ -274,14 +316,18 @@ Begin with a map, labeled by station name (see Exercise 7 for the shapefile comp
 
 ```{r echo=TRUE, eval=FALSE}
 # hierarchical clustering of Oregon climate station data
-library(maptools)
+library(sf)
 library(lattice)
 attach(orstationc)
+```
 
-plot(lon, lat, xlim=c(-125, -116), ylim=c(41,47),
-   xlab="Latitude", ylab="Longitude", type="n")
-plot(orotl.shp, add=T)
-text(lon, lat, labels=station, cex=0.6)
+Plot the station abbreviations.
+
+```{r echo=TRUE, eval=FALSE}
+# plot station abbreviations
+plot(st_geometry(orotl_sf), axes=TRUE)
+text(lon, lat, labels=station, cex=0.7, col="red")
+title("Oregon Climate Stations")
 ```
 
 Calculate a dissimilarity (distance) matrix:
@@ -311,13 +357,17 @@ The dendrogram can be inspected to get an idea of how many distinct clusters the
 # cut dendrogram and plot points in each cluster (chunk 1)
 nclust <- 3
 clusternum <- cutree(X_clusters, k=nclust)
+head(cbind(station, clusternum, as.character(Name)))
+tail(cbind(station, clusternum, as.character(Name)))
+```
 
+Plot the cluster membership.
+
+```{r echo=TRUE, eval=FALSE}
 # plot cluster membership of each station
-plot(lon, lat, xlim=c(-125, -116), ylim=c(41,47), xlab="Latitude", ylab="Longitude",
-     main=paste(as.character(nclust), "Clusters"), type="n")
-plot(orotl.shp, add=T)
-text(lon, lat, labels=clusternum)
-print(cbind(station, clusternum, as.character(Name)))
+plot(st_geometry(orotl_sf), axes=TRUE)
+text(lon, lat, labels=clusternum, col="red")
+title("Oregon Climate Stations -- 3 clusters")
 ```
 
 The `cutree()` function determines the cluster membership of each observation, and a map of the cluster membership of each station is generated.  A list of the station id's, the cluster number and name of the stations is provided by the `print()` function
@@ -348,8 +398,9 @@ cor(orstationc[5:10],cluster_dscore)
 
 The discriminant analysis here is used to answer the question "how do the clusters of stations differ climatically?"  In this case, it looks like `pann` and `tann` are the variables most closely correlated with each discriminant function, and because each of these variables are more-or-less averages of the seasonal extreme variables, that might explain why the clusters seem inhomogeneous.  
 
-The analysis can be repeated, extracting different numbers of clusters.  The easiest way to do this is to copy the three chunks of code above into a text editor, changing the assignment to `nclust` and including or excluding  before executing each chunk, one at a time.
+The analysis can be repeated, extracting different numbers of clusters.
 
 >Q8: In this first iteration, 3 clusters were identified.  Try varying this number between, say, 2 and 8 clusters.    Describe the trade-off between the number of clusters and the homogeneity of the clusters. (This is the classical "regionalization" problem in geography.)
 
+<br>
 That's it.

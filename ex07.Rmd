@@ -16,26 +16,48 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
-<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
 **Geography 4/595:  Geographic Data Analysis**  
-**Winter 2019**
+**Spring 2020**
 
 **Exercise 7:  Regression Analysis**  
-**Finish by Monday, March 4th**
+**Finish by Friday, May 22**
 
 **1. Introduction**
 
 The objective of this exercise is to illustrate regression analysis as well as multivariate plotting, which will be used to examine the data set that will be used in the regression analysis.  The focus of the exercise is on the relationship between annual mean temperature at climate stations in Oregon and elevation and location as expressed by latitude and longitude.  The specific goal will be to build a regression model that fits the response-variable data well, and does not suffer from assumption violations. 
 
-Here's a link to a .csv file containing the data:  [[ortann.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/ortann.csv).
+Here's a link to a .csv file containing the data:  [[ortann_csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/ortann_csv).
 
 And here are links to the components of the Oregon county outline shape files:  [[orotl.shp]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.shp) [[orotl.dbf]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.dbf)  [[orotl.shx]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.shx)
+[[orotl.prj]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.prj)
 
 Read in the .csv file and the shapefile components if they are not already in the workspace.
 
 **2. Maps and scatter plots**
 
-The exercise will involve fitting a succession of models, the "goodness-of-fit" of which can be viewed by examining the patterns in maps of the residuals.  These should show progressively less obvious patterns as the fit improves. 
+The exercise will involve fitting a succession of models, the "goodness-of-fit" of which can be viewed by examining the patterns in maps of the residuals.  These should show progressively less obvious patterns as the fit improves.  Load the necessary packages:
+
+```{r echo=TRUE, eval=FALSE}
+# load the appropriate packages
+library(sf)
+library(RColorBrewer)
+library(ggplot2)
+```
+
+Read the data file and shape file, if not already in the workspace.
+
+```{r echo=TRUE, eval=FALSE}
+# read the shapefile (if not already in the workspace)
+shapefile="/Users/bartlein/Documents/geog495/data/shp/orotl.shp"
+orotl_sf <- st_read(shapefile)
+plot(orotl_sf)
+```
+```{r echo=TRUE, eval=FALSE}
+# read the data file (if not already in the workspace)
+csv_path <- "/Users/bartlein/Documents/geog495/data/csv/orsim.csv"
+ortann <- read.csv(csv_path)
+```
 
 The first step in any regression analysis (or for that matter ANY analysis) is to look at the data.  In the example below, the dependent or response variable will be annual temperature at the Oregon climate stations, and the predictors will be elevation and location (latitude and longitude).  A quick way to get scatter plots is to produce a matrix plot
 
@@ -46,43 +68,32 @@ plot(ortann[,2:5])
 
 The square bracket selection omits the first column of the `ortann` data frame from the plot (which contains the station names).
 
-To continue, the following script will produce some maps of the data:
+As you proceed through the exercise, a set of maps will be generated that, except for the variables being plotted and the range of values of those variables, will be identical.  That makes it efficient to construct a function for making the maps that will accommodate different variables and scales.  Here is such a function, and to "install" into the workspace, simply run it at the command line.
 
 ```{r echo=TRUE, eval=FALSE}
-# load some packages
-library(maptools)
-library(RColorBrewer)
-library(classInt)
-
-# Set plotting variable and get colors
-plottitle <- "Annual Temperature (C)"
-varname <- "tann" # name of variable to plot
-plotvar <- tann # assignment of variable to plotvar
-nclr <- 8 # number of colors
-plotclr <- brewer.pal(nclr,"PuOr")
-plotclr <- plotclr[nclr:1] # reorder colors
-class <- classIntervals(plotvar, nclr, style="quantile")
-colcode <- findColours(class, plotclr)
-cutpts <- round(class$brks, digits=1)
-
-# Plot the shape file and the selected variable
-plot(orotl.shp, xlim=c(-124.5, -115), ylim=c(41,47))
-# add points
-points(longitude, latitude, pch=16, col=colcode, cex=2)
-points(longitude, latitude, cex=2)
-# add legend
-legend(-117, 45, legend=names(attr(colcode, "table")),
-   fill=attr(colcode, "palette"), cex=0.6, bty="n")
-title(plottitle)
+map_temp <- function(title, varname, plotvar, limits) {
+  ggplot() +
+    geom_sf(data = orotl_sf, fill="grey70", color="black") +
+    geom_point(data = ortann, aes(x = longitude, y = latitude, color = plotvar), size = 5.0 ) +
+    scale_color_distiller(type = "div", palette = "RdBu", aesthetics = "color", direction = -1,
+                          limits = limits, name = varname) +
+    labs(x = "Longitude", y = "Latitude", title = title) + 
+    theme_bw()
+}
 ```
 
-To plot maps of additional variables, only the second and third blocks of code will need to be executed again, after changing: 
+There are three arguments that must be passed to the function:  1) the map title (a string), 2) a lable for the variable (a string), 3) the name of the variable (a string), and 4) the variable-value limits (a pair of values, concatenated with `c()`)
 
-1. The title of the plot (`plottitle` -- a text string in quotes)
-2. the name of the variable to plot (`varname` -- e.g. `"tann"` -- note the quotes), and 
-3. the object to plot (`tann` in this example)
+Plot the values of TJanDiff by setting the values of the arguements, and then calling the `map_tmp()` function:
 
-It will be convenient to copy Blocks 2 and 3 into a script editor for editing.  It will also be extremely useful to copy the maps to a Word document as they are created.  Although we've looked at this data set before, it would be a good idea to look at the basic patterns again.  
+```{r echo=TRUE, eval=FALSE}
+# map the annual tempeature values
+title <- "Oregon Climate Station Data -- Annual Temperature"  
+varname <- "Annual Temp. (C)" 
+plotvar <- tann
+limits <- c(-15, 15)                    
+map_temp(title, varname, plotvar, limits)
+```
 
 **3. An initial "null" or "naïve" model**  
 
@@ -92,10 +103,10 @@ The null or naive model can be fit using the lm() function that is used to fit m
 
 ```{r echo=TRUE, eval=FALSE}
 # a null model, mean as the prediction
-tann.lm0 <- lm(tann ~ 1)
+tann_lm0 <- lm(tann ~ 1)
 ```
 
-Note the "formula" in the function above;  `tann ~ 1` means "predict `tann` as a function of a constant value" (namely the mean).  The `lm()` function is silent, meaning it does not produce any output itself, but it can always be examined by typing the name of the object it produces, e.g., `tann.lm0`, or by applying the `summary()` or `attributes()` functions to that object
+Note the "formula" in the function above;  `tann ~ 1` means "predict `tann` as a function of a constant value" (namely the mean).  The `lm()` function is silent, meaning it does not produce any output itself, but it can always be examined by typing the name of the object it produces, e.g., `tann_lm0`, or by applying the `summary()` or `attributes()` functions to that object
 
 ```{r echo=TRUE, eval=FALSE}
 # plot the regression line
@@ -107,7 +118,7 @@ Here the regression line is simply a horizontal line at the mean value of the re
 
 ```{r echo=TRUE, eval=FALSE}
 # examine the model object
-summary(tann.lm0)
+summary(tann_lm0)
 ```
 
 The `summary()` function here provides, in the case of this initial model, a somewhat overblown description of the mean and standard deviation of `tann`, which can be verified using the `mean()` and `sd()` functions.
@@ -124,7 +135,7 @@ Before plotting, use the `par()` function to set up a 2x2 arrangement of plots.
 ```{r echo=TRUE, eval=FALSE}
 # standard regression diagnostics (4-up)
 oldpar <- par(mfrow = c(2, 2))
-plot(tann.lm0, which=c(1,2,4))
+plot(tann_lm0, which=c(1,2,4))
 par(oldpar)
 ```
 
@@ -132,23 +143,27 @@ par(oldpar)
 
 The first use of the  `par()` function sets up the RGraphics window to contain four plots on a single page, and `par(oldpar)` restores the original one-plot per page format.  In the case of this "null" model, the normal QQ plot will provide information on the normality of the residuals, while the Cook's distance plot indicates which observations have large influence on the mean.
 
-The residuals (deviations from the mean) can be referenced as `tann.lm0$residuals`.  Use the code in Part 2 above to map `tann.lm0$residuals`.  The first three lines of Block 2 should read (note the quotes in the assignment for `varname` and their absence in the assignment for `plotvar`--the first is a text string, and the second is the name of an object).
+The residuals (deviations from the mean) can be referenced as `tann_lm0$residuals`.  Map those values.  Note that line `limits <- max(abs(tann_lm0$residuals)) * c(-1, 1)` figures out a good range for the values, centered on zero.  First the absolute values are found, then the maximum absolute value, and then the multiplication creates a pair of values ranging from -1 times the maximum absolute value to +1 time the maximum absolute value.
 
 ```{r echo=TRUE, eval=FALSE}
-plottitle <- "Residuals from tann.lm0 (C)"	
-varname <- "tann.lm0$residuals" 
-plotvar <- tann.lm0$residuals
+# map the residuals
+title <- "Residuals from tann_lm0 (C)"	
+varname <- "tann_lm0$residuals"
+plotvar <- tann_lm0$residuals
+limits <- max(abs(tann_lm0$residuals)) * c(-1, 1)
+map_temp(title, varname, plotvar, limits)
 ```
 
->Q1:  Compare the values and the patterns of the maps of `tann` and `tann.lm0$residuals`.  How are they alike, and how are they different?  (Hint:  Be sure to create and examine the legends.)  
+>Q1:  Compare the values and the patterns of the maps of `tann` and `tann_lm0$residuals`.  How are they alike, and how are they different?  
 
+<br>
 **4. Bivariate regression**
 
 From previous analyses, it's apparent that `tann` has a clear relationship with `elevation`, and so the successive regressions will begin using elevation as a predictor.  Before fitting the regression model, explore the relationship between `tann and elevation`. 
 
 ```{r echo=TRUE, eval=FALSE}
 # first regression model -- tann ~ elev
-tann.lm1 <- lm(tann ~ elevation)
+tann_lm1 <- lm(tann ~ elevation)
 ```
 
 The `lm()` function fits linear (straight-line) relationships between the response variable (`tann`) and the predictor (`elevation`).  Note the formula used here:  `tann` varies as a function of `elevation`. 
@@ -156,14 +171,14 @@ The `lm()` function fits linear (straight-line) relationships between the respon
 ```{r echo=TRUE, eval=FALSE}
 # plot the regression line
 plot(tann ~ elevation)
-abline(tann.lm1, col="blue")
+abline(tann_lm1, col="blue")
 ```
 
 The `plot()` and `abline()` functions plot the data and draw regression line
 
 ```{r echo=TRUE, eval=FALSE}
 # examine the model object
-summary(tann.lm1)
+summary(tann_lm1)
 ```
 
 Note that the summary table now includes the regression coefficients and several goodness-of-fit statistics.
@@ -171,7 +186,7 @@ Note that the summary table now includes the regression coefficients and several
 ```{r echo=TRUE, eval=FALSE}
 # standard regression diagnostics (4-up)
 oldpar <- par(mfrow = c(2, 2))
-plot(tann.lm1, which=c(1,2,4,5))
+plot(tann_lm1, which=c(1,2,4,5))
 par(oldpar)
 ```
 
@@ -179,17 +194,29 @@ Replot the residual scatter plot (residuals vs. fitted values), adding a lowess 
 
 ```{r echo=TRUE, eval=FALSE}
 # another view of the residual scatter diagram
-plot(tann.lm1$fitted.values, tann.lm1$residuals)
-lines(lowess(tann.lm1$fitted.values, tann.lm1$residuals, f=0.80), col="red")
+plot(tann_lm1$fitted.values, tann_lm1$residuals)
+lines(lowess(tann_lm1$fitted.values, tann_lm1$residuals, f=0.80), col="red")
 ```
 
 > Q2:  Examine the regression output in the console window.  Is there a significant relationship between tann and elevation?  What are the *F* statistic, its *p*-value, the Multiple R-Squared value, and the residual standard error?  Are the intercept and slope significantly different from zero (and how do you know)?
 
 > Q3:  Describe the patterns on the residuals vs. fit plot and normal QQ plot.  Do these plots suggest that there is no information in the residuals, or is there some kind of pattern?  Are there any unusually influential observations?  Is this first analysis ok, or should we consider modifying it?  
 
+<br>
 (I'll answer this one--there is a distinct arch-shaped pattern on the residuals vs fit plot, nicely summarized by the loess curve, and while the points are generally linear on the residual QQ plot, they begin to drift away from the 1:1 line for residual values greater than +1.  The Crater Lake and Seneca values seem to have a large influence on the regression model.  It looks like for this simple model, several of the underlying assumptions have been violated, and we should consider looking for a better model.)
 
-Map the residual values from this simple linear regression model (`tann.lm1$residuals`), and compare their pattern with those of from the null model.
+Map the residual values from this simple linear regression model (`tann_lm1$residuals`), and compare their pattern with those of from the null model.
+
+```{r echo=TRUE, eval=FALSE}
+# map the residuals
+title <- "Residuals from tann_lm1 (C)"	
+varname <- "tann_lm1$residuals"
+plotvar <- tann_lm1$residuals
+limits <- max(abs(tann_lm0$residuals)) * c(-1, 1)
+map_temp(title, varname, plotvar, limits)
+```
+
+Note that the map pattern of the residuals is less well organized than that for the naïve model.
 
 **5. Multiple regression**
 
@@ -199,33 +226,35 @@ An obvious set of additional predictor variables for this exercise is provided b
 
 ```{r echo=TRUE, eval=FALSE}
 # plot residuals vs. other predictors
-plot(tann.lm1$residuals ~ longitude)
-lines(lowess(tann.lm1$residuals ~ longitude, f=0.80), col="red")
+plot(tann_lm1$residuals ~ longitude)
+lines(lowess(tann_lm1$residuals ~ longitude, f=0.80), col="red")
 
-plot(tann.lm1$residuals ~ latitude)
-lines(lowess(tann.lm1$residuals ~ latitude, f=0.80), col="red")
+plot(tann_lm1$residuals ~ latitude)
+lines(lowess(tann_lm1$residuals ~ latitude, f=0.80), col="red")
 ```
 
 >Q4:  Describe the relationships between the residuals from the linear model and latitude and longitude.  (Hint:  It might be good to look at the maps of residuals too.)
 
+<br>
 The relationships you should have seen in the above question are important enough that we should consider including longitude and latitude as predictors in the regression model. Here's a multiple regression model that includes location:
 
 ```{r echo=TRUE, eval=FALSE}
 # second regression -- tann ~ elevation + latitude + longitude
-tann.lm2 <- lm(tann ~ elevation + latitude + longitude)
+tann_lm2 <- lm(tann ~ elevation + latitude + longitude)
 ```
 
-This code creates another model object `tann.lm2`, which contains the results of the multiple regression with `tann` as the response, and `elevation`, `latitude`, and `longitude` as predictors.   Examine the diagnostic plots and maps of the residuals from `tann.lm2`.  (Hint remember to change all instances of the model object and variable names in the blocks of code necessary to do this.)
+This code creates another model object `tann_lm2`, which contains the results of the multiple regression with `tann` as the response, and `elevation`, `latitude`, and `longitude` as predictors.   Examine the diagnostic plots and maps of the residuals from `tann_lm2`.  (Hint remember to change all instances of the model object and variable names in the blocks of code necessary to do this.)
 
->Q5:  Look at the summary for this model.  Describe how the *F*-statistic, its *p*-value, the *R<sup>2</sup>, and Residual Standard Error values have changed.  Are all the predictors significant (Hint:  examine their *t*-statistics.)   Are any patterns in the residuals from this model less obvious than those from the previous model?  Are they completely gone?
+>Q5:  Look at the summary for this model.  Describe how the *F*-statistic, its *p*-value, the *R<sup>2</sup>*, and Residual Standard Error values have changed.  Are all the predictors significant (Hint:  examine their *t*-statistics.)   Are any patterns in the residuals from this model less obvious than those from the previous model?  Are they completely gone?
 
+<br>
 Several other multiple regression models with elevation, latitude, and longitude as predictors, (each allowing for interactions among the predictors), in a sense create additional predictors (latitude x longitude, elevation x latitude), which in the case of spatial data as here, allow the predicted "surface" more flexibility.  Here are two such interaction models:
 
-  tann.lm3 <- lm(tann ~ elevation + latitude*longitude)
+  `tann_lm3 <- lm(tann ~ elevation + latitude*longitude)`
 
 (allows for interactions between latitude and longitude, fitting a surface slightly more complex than a simple plane).
 
-  tann.lm4 <- lm(tann ~ elevation*latitude*longitude)
+  `tann_lm4 <- lm(tann ~ elevation*latitude*longitude)`
 
 (simultaneous interactions among all three predictors)
 
@@ -239,54 +268,68 @@ Fit a "local" (loess) regression model to the `tann` data, using `elevation` as 
 
 ```{r echo=TRUE, eval=FALSE}
 # loess -- simplest model
-tann.lo1 <- loess(tann ~ elevation, span=0.80, degree=2)
+tann_lo1 <- loess(tann ~ elevation, span=0.80, degree=2)
 
 # examine the fit
-summary(tann.lo1)
+summary(tann_lo1)
 plot(tann ~ elevation)
-hat <- predict(tann.lo1)
+hat <- predict(tann_lo1)
 lines(elevation[order(elevation)], hat[order(elevation)], col="red")
 cor(tann, hat)^2 
 ```
 
-The extraction of information from the model object (`tann.lo1`) is a little different when fitting a loess regression model than when fitting a linear model using the `lm()` function.  Because loess regression is "nonparametric" there are no regression coefficients, and *F*- and *t*-statistics are not produced; however, the goodness-of-fit of the regression can still be determined using *R<sup>2</sum>* and residual standard error values.  For example, the `cor()` function can be  used to get the correlation between the response variable and the fitted values.  Squaring this value gives a statistic comparable with the *R<sup>2</sum>* values from earlier regressions.
+The extraction of information from the model object (`tann_lo1`) is a little different when fitting a loess regression model than when fitting a linear model using the `lm()` function.  Because loess regression is "nonparametric" there are no regression coefficients, and *F*- and *t*-statistics are not produced; however, the goodness-of-fit of the regression can still be determined using *R<sup>2</sum>* and residual standard error values.  For example, the `cor()` function can be  used to get the correlation between the response variable and the fitted values.  Squaring this value gives a statistic comparable with the *R<sup>2</sum>* values from earlier regressions.
 
 ```{r echo=TRUE, eval=FALSE}
 # residual scatter diagram
-plot(tann.lo1$fitted, tann.lo1$residuals)
-lines(lowess(tann.lo1$fitted, tann.lo1$residuals, f=0.80), col="red")
+plot(tann_lo1$fitted, tann_lo1$residuals)
+lines(lowess(tann_lo1$fitted, tann_lo1$residuals, f=0.80), col="red")
 
 # normal probablility plot
-qqnorm(tann.lo1$residuals)
+qqnorm(tann_lo1$residuals)
 ```
 
-This block of code constructs the residual scatter diagram.  Note that the fitted (predicted) values and the residuals are contained in the variables `tann.lo1$fitted`, and `tann.lo1$residuals`.
+This block of code constructs the residual scatter diagram.  Note that the fitted (predicted) values and the residuals are contained in the variables `tann_lo1$fitted`, and `tann_lo1$residuals`.
 
->Q6:  Compare the results of this regression with the first linear regression (tann.lm1), in particular compare the goodness of fit, residual scatter diagram, and map patterns of residual.  Does fitting a flexible or local curve improve the fit relative to fitting a straight line?
+Map the residuals:
 
-Now fit an expanded model with elevation, latitude, and longitude as predictors (equivalent to `tann.lm2`):
+```{r echo=TRUE, eval=FALSE}
+# map the residuals
+title <- "Residuals from tann_lo1 (C)"	
+varname <- "tann_lo1$residuals"
+plotvar <- tann_lo1$residuals
+limits <- max(abs(tann_lo1$residuals)) * c(-1, 1)
+map_temp(title, varname, plotvar, limits)
+```
+>Q6:  Compare the results of this regression with the first linear regression (tann_lm1), in particular compare the goodness of fit, residual scatter diagram, and map patterns of residual.  Does fitting a flexible or local curve improve the fit relative to fitting a straight line?
+
+<br>
+Now fit an expanded model with elevation, latitude, and longitude as predictors (equivalent to `tann_lm2`):
 
 ```{r echo=TRUE, eval=FALSE}
 # loess -- elevation, latitude, and longitude
-tann.lo2 <- loess(tann ~ elevation + latitude + longitude, span=0.80, degree=2)
+tann_lo2 <- loess(tann ~ elevation + latitude + longitude, span=0.80, degree=2)
 
 # examine the fit
-summary(tann.lo2)
-hat <- predict(tann.lo2)
+summary(tann_lo2)
+hat <- predict(tann_lo2)
 cor(tann, hat)^2
 
 # residual scatter diagram
-plot(tann.lo2$fitted, tann.lo2$residuals)
-lines(lowess(tann.lo2$fitted, tann.lo2$residuals, f=0.80), col="red")
+plot(tann_lo2$fitted, tann_lo2$residuals)
+lines(lowess(tann_lo2$fitted, tann_lo2$residuals, f=0.80), col="red")
 
 # normal probablility plot
-qqnorm(tann.lo2$residuals)
+qqnorm(tann_lo2$residuals)
 ```
 
->Q7:  Does the loess regression fit the `tann` data better, worse, or about the same as the multiple regression?  (Note:  it might be easier to answer Q7 and Q8 simultaneously.)  Examine the residual scatter diagrams and QQ Normal plots.  Has there been any improvement (i.e. less pattern) in the residuals of the `tann.lo2` model relative to those from the other regressions?
+And map the residuals again.
+
+>Q7:  Does the loess regression fit the `tann` data better, worse, or about the same as the multiple regression?  (Note:  it might be easier to answer Q7 and Q8 simultaneously.)  Examine the residual scatter diagrams and QQ Normal plots.  Has there been any improvement (i.e. less pattern) in the residuals of the `tann_lo2` model relative to those from the other regressions?
 
 >Q8:  Which of the various models seem to be the optimal one, and why do you think it is?
 
+<br>
 **7. What to turn in**
 
 Turn in answers to the above questions, and one or more of the plots you generated in section 2.
