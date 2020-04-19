@@ -170,7 +170,7 @@ ggplot() +
     labs(x = "Longitude", y = "Latitude", title = "Oregon Future Climate Simulations") 
 ```
 
-Before going on, compare the two blocks of code to see what sort of things have be changed to plot different variables (e.g. the range of values that are plotted).
+Before going on, compare the two blocks of code to see what sort of things have to be changed to plot different variables (e.g. the range of values that are plotted).
 
 How would a doubling of carbon dioxide in the atmosphere affect temperature over Oregon? From what we already know about the greenhouse effect, atmospheric change, and basic climatology, we can suspect that the temperatures will increase with an increase in carbon dioxide. The question is, are the simulated temperatures for the "enhanced greenhouse"-situation significantly higher than those for present?
 
