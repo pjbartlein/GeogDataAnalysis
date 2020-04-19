@@ -18,7 +18,7 @@ klippy::klippy(position = c('top', 'right'))
 ```
 <p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
 **Geography 4/595:  Geographic Data Analysis**  
-**Spring 2020*
+**Spring 2020**
 
 **Exercise 8:  Multivariate Analysis**  
 **Finish by Thursday, June 11**
