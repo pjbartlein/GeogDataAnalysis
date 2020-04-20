@@ -393,7 +393,7 @@ To illustrate the Moran statistic, and gain an impression of the level of spatia
 # ggplot2 map of temperature
 plotvar <- tmeanjul
 plotvar <- plotvar-mean(plotvar)
-plottitle <- "Modern Climate"
+plottitle <- "Modern Climate (mean subtracted)"
 leglable <- "tmeanjul (C)"
 ggplot() +
   geom_sf(data = midwotl_sf, fill="grey70", color="black") +
@@ -442,7 +442,7 @@ ggplot() +
   geom_sf(data = midwotl_sf, fill="grey70", color="black") +
   geom_point(data = midwtf2, aes(x = longitud, y = latitude, color = plotvar), size = 5.0 ) +
   scale_fill_gradient2(low = "blue", mid= "white", high = "red", aesthetics = 'color',
-                       limits = c(-5, 5), breaks = seq(-5, 5, by = 1), guide = 'colorbar', name = leglable) +
+                       limits = c(-3, 3), breaks = seq(-3, 3, by = 1), guide = 'colorbar', name = leglable) +
   labs(x = "Longitude", y = "Latitude", title = plottitle) 
 ```
 
@@ -492,7 +492,7 @@ ggplot() +
   geom_sf(data = midwotl_sf, fill="grey70", color="black") +
   geom_point(data = midwtf2, aes(x = longitud, y = latitude, color = plotvar), size = 5.0 ) +
   scale_fill_gradient2(low = "blue", mid= "white", high = "red", aesthetics = 'color',
-                       limits = c(-5, 5), breaks = seq(-5, 5, by = 1), guide = 'colorbar', name = leglable) +
+                       limits = c(-3, 3), breaks = seq(-3, 3, by = 1), guide = 'colorbar', name = leglable) +
   labs(x = "Longitude", y = "Latitude", title = plottitle) 
 ```
 
@@ -547,7 +547,7 @@ ggplot() +
   geom_sf(data = midwotl_sf, fill="grey70", color="black") +
   geom_point(data = midwtf2, aes(x = longitud, y = latitude, color = plotvar), size = 5.0 ) +
   scale_fill_gradient2(low = "blue", mid= "white", high = "red", aesthetics = 'color',
-                       limits = c(-5, 5), breaks = seq(-5, 5, by = 1), guide = 'colorbar', name = leglable) +
+                       limits = c(-3, 3), breaks = seq(-3, 3, by = 1), guide = 'colorbar', name = leglable) +
   labs(x = "Longitude", y = "Latitude", title = plottitle) 
 ```
 
@@ -711,9 +711,8 @@ plotlab <- as.character(round(vote_lm1$residuals, 1))
 plottitle <- "Residuals from lm1"
 ggplot()  +
   geom_sf(data = scand_prov_sf, aes(fill = vote_lm1$residuals)) +
-  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=plotlab),
-       check_overlap = TRUE, size = 3) +
-  scale_fill_gradientn(colors = pal, limits = c(-15, 15), breaks = seq(-15, 15, by = 5)) +
+  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=plotlab), size = 2) +
+  scale_fill_gradientn(colors = pal, limits = c(-20, 20), breaks = seq(-20, 20, by = 5)) +
   labs(title = plottitle, x="Longitude", y="Latitude") 
 ```
 
@@ -775,9 +774,8 @@ plotlab <- as.character(round(vote_lm2$residuals, 1))
 plottitle <- "Residuals from lm2"
 ggplot()  +
   geom_sf(data = scand_prov_sf, aes(fill = vote_lm2$residuals)) +
-  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=plotlab),
-               check_overlap = TRUE, size = 3) +
-  scale_fill_gradientn(colors = pal, limits = c(-15, 15), breaks = seq(-15, 15, by = 5)) +
+  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=plotlab), size = 3) +
+  scale_fill_gradientn(colors = pal, limits = c(-20, 20), breaks = seq(-20, 20, by = 5)) +
   labs(title = plottitle, x="Longitude", y="Latitude") 
 ```
 
@@ -825,9 +823,8 @@ plotlab <- as.character(round(vote_lm3$residuals, 1))
 plottitle <- "Residuals from lm3"
 ggplot()  +
   geom_sf(data = scand_prov_sf, aes(fill = vote_lm3$residuals)) +
-  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=plotlab),
-               check_overlap = TRUE, size = 3) +
-  scale_fill_gradientn(colors = pal, limits = c(-15, 15), breaks = seq(-15, 15, by = 5)) +
+  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=plotlab), size = 3) +
+  scale_fill_gradientn(colors = pal, limits = c(-20, 20), breaks = seq(-20, 20, by = 5)) +
   labs(title = plottitle, x="Longitude", y="Latitude") 
 ```
 
