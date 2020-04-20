@@ -397,7 +397,7 @@ plottitle <- "Modern Climate (mean subtracted)"
 leglable <- "tmeanjul (C)"
 ggplot() +
   geom_sf(data = midwotl_sf, fill="grey70", color="black") +
-  geom_point(data = midwtf2, aes(x = longitud, y = latitude, color = plotvar), size = 5) +
+  geom_point(data = midwtf2, aes(x = longitud, y = latitude, color = plotvar), size = 3) +
   scale_fill_gradient2(low = "blue", mid= "white", high = "red", aesthetics = 'color',
                        limits = c(-5, 5), breaks = seq(-5, 5, by = 1), guide = 'colorbar', name = leglable) +
   labs(x = "Longitude", y = "Latitude", title = plottitle) 
@@ -440,7 +440,7 @@ plottitle <- "Naive model residuals (C)"
 leglable <- "residuals tmeanjul_lm0"
 ggplot() +
   geom_sf(data = midwotl_sf, fill="grey70", color="black") +
-  geom_point(data = midwtf2, aes(x = longitud, y = latitude, color = plotvar), size = 5.0 ) +
+  geom_point(data = midwtf2, aes(x = longitud, y = latitude, color = plotvar), size = 3) +
   scale_fill_gradient2(low = "blue", mid= "white", high = "red", aesthetics = 'color',
                        limits = c(-3, 3), breaks = seq(-3, 3, by = 1), guide = 'colorbar', name = leglable) +
   labs(x = "Longitude", y = "Latitude", title = plottitle) 
@@ -490,7 +490,7 @@ plottitle <- "Second model residuals (C)"
 leglable <- "residuals tmeanjul_lm1"
 ggplot() +
   geom_sf(data = midwotl_sf, fill="grey70", color="black") +
-  geom_point(data = midwtf2, aes(x = longitud, y = latitude, color = plotvar), size = 5.0 ) +
+  geom_point(data = midwtf2, aes(x = longitud, y = latitude, color = plotvar), size = 3) +
   scale_fill_gradient2(low = "blue", mid= "white", high = "red", aesthetics = 'color',
                        limits = c(-3, 3), breaks = seq(-3, 3, by = 1), guide = 'colorbar', name = leglable) +
   labs(x = "Longitude", y = "Latitude", title = plottitle) 
@@ -545,7 +545,7 @@ plottitle <- "All-possible subsets model residuals (C)"
 leglable <- "residuals tmeanjul_lm3"
 ggplot() +
   geom_sf(data = midwotl_sf, fill="grey70", color="black") +
-  geom_point(data = midwtf2, aes(x = longitud, y = latitude, color = plotvar), size = 5.0 ) +
+  geom_point(data = midwtf2, aes(x = longitud, y = latitude, color = plotvar), size = 3) +
   scale_fill_gradient2(low = "blue", mid= "white", high = "red", aesthetics = 'color',
                        limits = c(-3, 3), breaks = seq(-3, 3, by = 1), guide = 'colorbar', name = leglable) +
   labs(x = "Longitude", y = "Latitude", title = plottitle) 
@@ -629,8 +629,9 @@ Plot the District (commune) names:
 # ggplot2 map of District names
 ggplot() +
   geom_sf(data = scand_prov_sf, fill=NA, color="gray") +
-  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=as.character(District)), 
-               check_overlap = TRUE, size = 3) +
+  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=as.character(District)), size = 2) +
+  coord_sf(xlim=c(2.5,32.5)) +
+  labs(x="Longitude", y="Latitude") +
   theme_bw()
 ```
 
@@ -650,10 +651,9 @@ Plot the "Yes" vote:
 pal <- brewer.pal(8, "PuOr") 
 ggplot()  +
   geom_sf(data = scand_prov_sf, aes(fill = Yes)) +
-  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=as.character(Yes)), 
-               check_overlap = TRUE, size = 3) +
+  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=as.character(Yes)), size = 2) +
   scale_fill_gradientn(colors = pal) +
-  labs(title = "Yes Vote (%)", x="Longitude", y="Latitude") 
+  labs(title = "Yes Vote (%)", x="Longitude", y="Latitude")
 ```
 
 Here's a standard scatter plot of the data, with the points labeled by Country.
@@ -774,7 +774,7 @@ plotlab <- as.character(round(vote_lm2$residuals, 1))
 plottitle <- "Residuals from lm2"
 ggplot()  +
   geom_sf(data = scand_prov_sf, aes(fill = vote_lm2$residuals)) +
-  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=plotlab), size = 3) +
+  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=plotlab), size = 2) +
   scale_fill_gradientn(colors = pal, limits = c(-20, 20), breaks = seq(-20, 20, by = 5)) +
   labs(title = plottitle, x="Longitude", y="Latitude") 
 ```
@@ -823,7 +823,7 @@ plotlab <- as.character(round(vote_lm3$residuals, 1))
 plottitle <- "Residuals from lm3"
 ggplot()  +
   geom_sf(data = scand_prov_sf, aes(fill = vote_lm3$residuals)) +
-  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=plotlab), size = 3) +
+  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=plotlab), size = 2) +
   scale_fill_gradientn(colors = pal, limits = c(-20, 20), breaks = seq(-20, 20, by = 5)) +
   labs(title = plottitle, x="Longitude", y="Latitude") 
 ```

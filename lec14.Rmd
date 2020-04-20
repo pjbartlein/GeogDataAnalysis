@@ -18,7 +18,7 @@ klippy::klippy(position = c('top', 'right'))
 ```{r load, echo=FALSE, cache=FALSE}
 load(".Rdata")
 ```
-<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
 # Introduction #
 
 Scatter-diagram smoothing (e.g. using the `lowess()` or `loess()` functions) involves drawing a smooth curve on a scatter diagram to summarize a relationship, in a fashion that makes few assumptions initially about the form or strength of the relationship.  It is related to (and is a special case of) *nonparametric regression*, in which the objective  is to represent the relationship between a response variable and one or more predictor variables, again in way that makes few assumptions about the form of the relationship.  In other words, in contrast to "standard" linear regression analysis, no assumption is made that the relationship is represented by a straight line (although one could certainly think of a straight line as a special case of nonparametric regression). 
@@ -73,14 +73,16 @@ The first examples of nonparametric regression are the familiar scatter diagram 
 
 ```{r low01, echo=FALSE, include=FALSE}
 library(RColorBrewer)
-library(sp)
+library(sf)
 ```
 
 Load some packages, and attach a data set of annual temperatures at Oregon climate stations.
 
 ```{r low02}
 library(RColorBrewer)
-library(sp)
+library(sf)
+```
+```{r}
 attach(ortann)
 names(ortann)
 ```
@@ -170,11 +172,12 @@ length(grid.latitude))
 nclr <- 8
 plotclr <- brewer.pal(nclr, "PuOr")
 plotclr <- plotclr[nclr:1] # reorder colors
-plot(orotl.shp)
+
+plot(st_geometry(orotl_sf), axes=TRUE)
 image(grid.longitude, grid.latitude, tann.z, col=plotclr, add=T)
 contour(grid.longitude, grid.latitude, tann.z, add=TRUE)
 points(longitude, latitude)
-plot(orotl.shp, add=T)
+plot(st_geometry(orotl_sf), add=T)
 ```
 
 ## Other bivariate smoothers ##
