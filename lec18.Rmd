@@ -14,7 +14,7 @@ options(width = 105)
 load(".Rdata")
 klippy::klippy(position = c('top', 'right'))
 ```
-<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
 # Introduction #
 
 There is a broad group of multivariate analyses that have as their objective the organization of individual observations (objects, sites, individuals), and these analyses are built upon the concept of multivariate distances (expressed either as similarities or dissimilarities) among the objects.
@@ -38,12 +38,17 @@ As an example of the calculation of multivariate distances, the following script
 
 The distance matrix, each element of which displays the distance between two points in "pollen space" (as opposed to geographical space) can be displayed using the `image()` function.  The looping in the code below is inefficient, but illustrates what is going on.
 
-```{r dm02, fig.width=3.5, fig.height=3}
-# calculate a Squared Chord-Distance dissimilarity matrix for
-# Midwestern pollen data
+Load some libraries:
+
+```{r}
+library(sf)
 library(lattice)
 library(RColorBrewer)
-attach(midwtf2)
+```
+
+```{r dm02, fig.width=5, fig.height=4.5}
+# calculate a Squared Chord-Distance dissimilarity matrix for
+# Midwestern pollen data
 X <- as.matrix(midwtf2[,7:21])
 nvars <- 14
 nobs <- 124
@@ -73,7 +78,7 @@ levelplot(SCDist.matrix ~ obs1*obs2, data=grid, col.regions = gray(seq(0,1,by=0.
 
 ## Mahalanobis distances ##
 
-The basic Euclidean distance treats each variable as equally important in calculating the distance.  An alternative approach is to scale the contribution of individual variables to the distance value according to the variability of each variable.  This approach is illustrated by the Mahalanobis distance, which is a measure of the distance between each observation in a multidimensional cloud of points and the centroid of the cloud.  The Mahalnobis distance D2 is given by 
+The basic Euclidean distance treats each variable as equally important in calculating the distance.  An alternative approach is to scale the contribution of individual variables to the distance value according to the variability of each variable.  This approach is illustrated by the Mahalanobis distance, which is a measure of the distance between each observation in a multidimensional cloud of points and the centroid of the cloud.  The Mahalnobis distance *D<sup>2</sup>* is given by 
 
 *D<sup>2</sup>* = **(x - m)V** <sup>-1</sup>**(x - m)**
 
@@ -112,12 +117,9 @@ X.mah <- mahalanobis(X, X.mean, X.cov, tol.inv=1e-16)
 These distances-in-pollen-space can be mapped as graduated circles, where the size of the circle is proporational to the ditance between the pollen data at each point, and the centroid or mean pollen spectrum over all of the data.
 
 ```{r md04, message=FALSE}
-# Map the study area
-library(maptools)
-library(RColorBrewer)
-
+# Map the Midwestern study area
 # plot shape file
-plot(midwotl.shp)
+plot(st_geometry(midwotl_sf), axes=TRUE)
 points(midwtf2$longitud, midwtf2$latitude, cex=10*(X.mah-min(X.mah))/(max(X.mah)-min(X.mah)))
 ```
 
@@ -128,12 +130,10 @@ The objective of MDS is to portray the relationship between objects in a multidi
 ```{r mds02, message=FALSE}
 ## Multi-dimensional scaling (MDS)
 # plot Oregon climate stations
-library(maptools)
-library(RColorBrewer)
 attach(orstationc)
 
 # plot station names as a conventional map
-plot(orotl.shp)
+plot(st_geometry(orotl_sf))
 #points(lon, lat, pch=3)
 text(lon, lat, labels=as.character(station), cex=.6)
 ```
@@ -178,7 +178,6 @@ text(X.scal$points, labels = (format(signif(midwtf2$latitude,digits=3))),
 plot(X.scal$points, type="n", main="longitude")
 text(X.scal$points, labels = (format(signif(midwtf2$longitud,digits=3))),
     cex=.6)
-detach(midwtf2)
 ```
 
 # Cluster analysis #
