@@ -534,7 +534,7 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #FF0040;">NOTE: Not yet revised for Spring 2020</span>
+<span style="color: #00cc00;">NOTE: This page has been revised for Spring 2020, but may undergo further edits.</span>
 </p>
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
@@ -986,48 +986,87 @@ The example data set for illustrating the use of regression diagnostics <a href=
 <h1><span class="header-section-number">5</span> An example of iterative diagnostic analysis</h1>
 <p><em>Multiple regression</em> is the extension of bivariate regression to the case where there are multiple predictor variables. (The case where there are multiple predictors and multiple responses is generally referred to as <em>multivariate regression</em>.) This example illustrates the development of a “transfer function” a not-ideally named approach for reconstructing past climates from fossil pollen data. The idea is to build a regression equation that illustrates the relationship between a particular climate variable as the response to a number of pollen variables as predictors using modern pollen and climate data, and then to apply this relationship “downcore” to fossil-pollen data (plugging in pollen, and getting out climate). The data set has a few issues that often arise in practice, including the fact that the pollen variables (pollen types) are themselves correlated (violating the OLS assumption of no collinearity), and the climate variables are highly spatially autocorrelated, which could lead to autocorrelation in the residuals (violating another OLS assumption, homogeneity of variance of the residual). The relationships between the climate and pollen variables are often curvilinear (violating yet another assumption, correct specification of the model).</p>
 <p>These issues will be examined using the standard diagnostic plots, as well as the Moran statistic for assessing spatial autocorrelation, and the curvilinearity/collinearity issue will be handled by transformation and “best subsets” predictor selection.</p>
-<p>Here are the data <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/midwtf2.csv">[midwtf2]</a>, and the components of a shape file for mapping the data and results <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.dbf">[.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.shx">[.shx]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.shp">[.shp]</a></p>
+<p>Here are the data <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/midwtf2.csv">[midwtf2]</a>, and the components of a shape file for mapping the data and results <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.dbf">[.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.shx">[.shx]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.shp">[.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.prj">[.prj]</a></p>
+<p>Load some libraries.</p>
 <p>Load some packages, and attach the data frame:</p>
 <div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1"><span class="co"># libraries</span></a>
-<a class="sourceLine" id="cb58-2" data-line-number="2"><span class="kw">library</span>(maptools)</a>
-<a class="sourceLine" id="cb58-3" data-line-number="3"><span class="kw">library</span>(rgeos)</a>
+<a class="sourceLine" id="cb58-2" data-line-number="2"><span class="kw">library</span>(sf)</a>
+<a class="sourceLine" id="cb58-3" data-line-number="3"><span class="kw">library</span>(ggplot2)</a>
 <a class="sourceLine" id="cb58-4" data-line-number="4"><span class="kw">library</span>(RColorBrewer)</a>
 <a class="sourceLine" id="cb58-5" data-line-number="5"><span class="kw">library</span>(spdep)</a>
-<a class="sourceLine" id="cb58-6" data-line-number="6"><span class="kw">library</span>(leaps)</a></code></pre></div>
+<a class="sourceLine" id="cb58-6" data-line-number="6"><span class="kw">library</span>(leaps)</a>
+<a class="sourceLine" id="cb58-7" data-line-number="7"><span class="kw">library</span>(ggplot2)</a></code></pre></div>
 <p>The pollen variables with numbers in their names (e.g. <code>Querc.25</code>) are transformation of the original pollen variables (<code>Quercus</code>) constructed using “power function” transformations (i.e. <code>Querc.25 &lt;- Quercus^0.25</code>) to linearize the relationships between climate and pollen (see the scatter diagrams below). The transformation parameters were chosen by inspecting individual scatter diagrams between a climate variable and pollen variable.</p>
 <div id="inspection-of-the-data" class="section level2">
 <h2><span class="header-section-number">5.1</span> Inspection of the data</h2>
 <p><em>Always</em> look at the data before running any kind of analysis. Begin by mapping the data. Get the point locations of each modern pollen (and climate) sample, and plot the distance-weighted neighbors (for calculating the Moran statistic) using a distance threshold of 100km</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="kw">attach</span>(midwtf2)</a>
-<a class="sourceLine" id="cb59-2" data-line-number="2"><span class="kw">names</span>(midwtf2)</a></code></pre></div>
+<p>Read a shapefile of outlines for the region</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="co"># read a state outline shape file</span></a>
+<a class="sourceLine" id="cb59-2" data-line-number="2">shapefile &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/shp/midwotl.shp&quot;</span></a>
+<a class="sourceLine" id="cb59-3" data-line-number="3">midwotl_sf &lt;-<span class="st"> </span><span class="kw">st_read</span>(shapefile)</a></code></pre></div>
+<pre><code>## Reading layer `midwotl&#39; from data source `/Users/bartlein/Documents/geog495/data/shp/midwotl.shp&#39; using driver `ESRI Shapefile&#39;
+## Simple feature collection with 26 features and 1 field
+## geometry type:  POLYGON
+## dimension:      XY
+## bbox:           xmin: -95.35374 ymin: 39.78763 xmax: -83.70557 ymax: 50.80387
+## CRS:            NA</code></pre>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1">midwotl_sf</a></code></pre></div>
+<pre><code>## Simple feature collection with 26 features and 1 field
+## geometry type:  POLYGON
+## dimension:      XY
+## bbox:           xmin: -95.35374 ymin: 39.78763 xmax: -83.70557 ymax: 50.80387
+## CRS:            NA
+## First 10 features:
+##    ID                       geometry
+## 1   1 POLYGON ((-94.91827 39.7876...
+## 2   2 POLYGON ((-95.3087 39.99941...
+## 3   3 POLYGON ((-91.44875 40.3719...
+## 4   4 POLYGON ((-84.80794 39.7876...
+## 5   5 POLYGON ((-84.79038 41.6974...
+## 6   6 POLYGON ((-87.79738 42.4891...
+## 7   7 POLYGON ((-91.73037 43.4995...
+## 8   8 POLYGON ((-87.03452 45.2904...
+## 9   9 POLYGON ((-83.70557 45.4088...
+## 10 10 POLYGON ((-83.70557 45.9463...</code></pre>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="kw">plot</span>(midwotl_sf) <span class="co"># plot the outline</span></a></code></pre></div>
+<p><img src="lec13_files/figure-html/unnamed-chunk-1-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(midwotl_sf), <span class="dt">axes =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="lec13_files/figure-html/unnamed-chunk-1-2.png" width="2100" /></p>
+<p>Read the data, if it’s not already in the workspace:</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="co"># read the data file (if not already in the workspace)</span></a>
+<a class="sourceLine" id="cb65-2" data-line-number="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/csv/midwtf2&quot;</span></a>
+<a class="sourceLine" id="cb65-3" data-line-number="3">midwtf2 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_path)</a></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1"><span class="kw">attach</span>(midwtf2)</a>
+<a class="sourceLine" id="cb66-2" data-line-number="2"><span class="kw">names</span>(midwtf2)</a></code></pre></div>
 <pre><code>##  [1] &quot;seqnum&quot;     &quot;latitude&quot;   &quot;longitud&quot;   &quot;tmeanjul&quot;   &quot;tmeanyr&quot;    &quot;precpyr&quot;    &quot;Picea&quot;     
 ##  [8] &quot;Abies&quot;      &quot;Juniper&quot;    &quot;Pinus&quot;      &quot;Betula&quot;     &quot;Fraxinus&quot;   &quot;Quercus&quot;    &quot;Ulmus&quot;     
 ## [15] &quot;Acer&quot;       &quot;Juglans&quot;    &quot;Carya&quot;      &quot;Tsuga&quot;      &quot;Fagus&quot;      &quot;Alnus&quot;      &quot;Herbsum&quot;   
 ## [22] &quot;Picea.50&quot;   &quot;Abies.100&quot;  &quot;Junip.100&quot;  &quot;Pinus.100&quot;  &quot;Betula.50&quot;  &quot;Frax.15&quot;    &quot;Querc.25&quot;  
 ## [29] &quot;Ulmus.25&quot;   &quot;Acer.100&quot;   &quot;Juglans.25&quot; &quot;Carya.25&quot;   &quot;Tsuga.100&quot;  &quot;Fagus.100&quot;  &quot;Alnus.100&quot; 
 ## [36] &quot;Herbs.25&quot;</code></pre>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1"><span class="co"># get point locations of modern data</span></a>
-<a class="sourceLine" id="cb61-2" data-line-number="2">midwtf2.loc=<span class="kw">cbind</span>(longitud, latitude)</a>
-<a class="sourceLine" id="cb61-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb61-4" data-line-number="4"><span class="co"># distance neighbors</span></a>
-<a class="sourceLine" id="cb61-5" data-line-number="5">d &lt;-<span class="st"> </span><span class="dv">100</span> <span class="co"># points are neighbors if locations are within d km of one another</span></a>
-<a class="sourceLine" id="cb61-6" data-line-number="6">midwtf2.neighbors.dist &lt;-<span class="st"> </span><span class="kw">dnearneigh</span>(midwtf2.loc, <span class="dv">0</span>, d, <span class="dt">longlat=</span><span class="ot">TRUE</span>) </a>
-<a class="sourceLine" id="cb61-7" data-line-number="7"><span class="kw">plot</span>(midwotl.shp)</a>
-<a class="sourceLine" id="cb61-8" data-line-number="8"><span class="kw">points</span>(midwtf2.loc)</a>
-<a class="sourceLine" id="cb61-9" data-line-number="9"><span class="kw">plot</span>(midwtf2.neighbors.dist, midwtf2.loc, <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">col=</span><span class="st">&quot;magenta&quot;</span>)</a></code></pre></div>
-<p><img src="lec13_files/figure-html/mr03-1.png" width="2100" /></p>
+<p>Plot the network of sites, and also get distance-neighbor matrix for calculating spatial autocorrelation.</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1"><span class="co"># get point locations of modern data</span></a>
+<a class="sourceLine" id="cb68-2" data-line-number="2">midwtf2_loc=<span class="kw">cbind</span>(longitud, latitude)</a></code></pre></div>
+<p>Get the distance neighbors (i.e. the contiguity matrix <strong>W</strong>)</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" data-line-number="1"><span class="co"># distance neighbors</span></a>
+<a class="sourceLine" id="cb69-2" data-line-number="2">d &lt;-<span class="st"> </span><span class="dv">100</span> <span class="co"># points are neighbors if locations are within d km of one another</span></a>
+<a class="sourceLine" id="cb69-3" data-line-number="3">midwtf2_neighbors_dist &lt;-<span class="st"> </span><span class="kw">dnearneigh</span>(midwtf2_loc, <span class="dv">0</span>, d, <span class="dt">longlat=</span><span class="ot">TRUE</span>) </a>
+<a class="sourceLine" id="cb69-4" data-line-number="4"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(midwotl_sf), <span class="dt">axes=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb69-5" data-line-number="5"><span class="kw">points</span>(midwtf2_loc)</a>
+<a class="sourceLine" id="cb69-6" data-line-number="6"><span class="kw">plot</span>(midwtf2_neighbors_dist, midwtf2_loc, <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">col=</span><span class="st">&quot;magenta&quot;</span>)</a></code></pre></div>
+<p><img src="lec13_files/figure-html/dist-1.png" width="2100" /></p>
 <p>Next, examine the data set. First plot latitude, longitude, and the climate variables relative to one another (to reveal the geographical gradients in the cliamte data).</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1"><span class="co"># examine the data set</span></a>
-<a class="sourceLine" id="cb62-2" data-line-number="2"><span class="co"># plot lat, lon and climate variables</span></a>
-<a class="sourceLine" id="cb62-3" data-line-number="3"><span class="kw">plot</span>(midwtf2[,<span class="dv">2</span><span class="op">:</span><span class="dv">6</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1"><span class="co"># examine the data set</span></a>
+<a class="sourceLine" id="cb70-2" data-line-number="2"><span class="co"># plot lat, lon and climate variables</span></a>
+<a class="sourceLine" id="cb70-3" data-line-number="3"><span class="kw">plot</span>(midwtf2[,<span class="dv">2</span><span class="op">:</span><span class="dv">6</span>])</a></code></pre></div>
 <p><img src="lec13_files/figure-html/mr04-1.png" width="2100" /></p>
 <p>Now plot July temperature (the response variable here) relative to a few (untransformed) pollen types, and note the curvilinear relationships.</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="co"># plot July temperature and selected pollen types</span></a>
-<a class="sourceLine" id="cb63-2" data-line-number="2"><span class="kw">plot</span>(midwtf2[,<span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">10</span>,<span class="dv">13</span>,<span class="dv">21</span>)])</a></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1"><span class="co"># plot July temperature and selected pollen types</span></a>
+<a class="sourceLine" id="cb71-2" data-line-number="2"><span class="kw">plot</span>(midwtf2[,<span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">10</span>,<span class="dv">13</span>,<span class="dv">21</span>)])</a></code></pre></div>
 <p><img src="lec13_files/figure-html/mr05-1.png" width="2100" /></p>
 <p>Next, plot July temperature vs. the transformed pollen types, and note how the transformations linearize the relationships.</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1"><span class="co"># plot July temperature and transformed pollen </span></a>
-<a class="sourceLine" id="cb64-2" data-line-number="2"><span class="kw">plot</span>(midwtf2[,<span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">22</span>,<span class="dv">25</span>,<span class="dv">28</span>,<span class="dv">36</span>)])</a></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" data-line-number="1"><span class="co"># plot July temperature and transformed pollen </span></a>
+<a class="sourceLine" id="cb72-2" data-line-number="2"><span class="kw">plot</span>(midwtf2[,<span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">22</span>,<span class="dv">25</span>,<span class="dv">28</span>,<span class="dv">36</span>)])</a></code></pre></div>
 <p><img src="lec13_files/figure-html/mr06-1.png" width="2100" /></p>
 </div>
 <div id="spatial-autocorrelation-of-july-temperature-values" class="section level2">
@@ -1037,31 +1076,28 @@ The example data set for illustrating the use of regression diagnostics <a href=
 <ul>
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/moran.pdf">Moran statistic details</a></li>
 </ul>
-<p>To illustrate the Moran statistic, and gain an impression of the level of spatial autocorrelation in the response (as opposed to the residuals) calculate the Moran statistic for July temperature, the response. First, map the July temperature variables:</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="co"># map tmeanjul</span></a>
-<a class="sourceLine" id="cb65-2" data-line-number="2">varname=<span class="st">&quot;tmeanjul&quot;</span></a>
-<a class="sourceLine" id="cb65-3" data-line-number="3">plotvar &lt;-<span class="st"> </span>tmeanjul</a>
-<a class="sourceLine" id="cb65-4" data-line-number="4">plotvar &lt;-<span class="st"> </span>(plotvar<span class="op">-</span><span class="kw">mean</span>(plotvar))<span class="op">/</span><span class="kw">sd</span>(plotvar)</a>
-<a class="sourceLine" id="cb65-5" data-line-number="5">nclr &lt;-<span class="st"> </span><span class="dv">8</span></a>
-<a class="sourceLine" id="cb65-6" data-line-number="6">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(nclr,<span class="st">&quot;PuOr&quot;</span>)</a>
-<a class="sourceLine" id="cb65-7" data-line-number="7">plotclr &lt;-<span class="st"> </span>plotclr[nclr<span class="op">:</span><span class="dv">1</span>] <span class="co"># reorder colors </span></a>
-<a class="sourceLine" id="cb65-8" data-line-number="8">colornum &lt;-<span class="st"> </span><span class="kw">cut</span>(plotvar, <span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span><span class="op">:</span><span class="dv">4</span>), <span class="dt">labels=</span><span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb65-9" data-line-number="9">brks &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span><span class="op">:</span><span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb65-10" data-line-number="10">color &lt;-<span class="st"> </span>plotclr[colornum]</a>
-<a class="sourceLine" id="cb65-11" data-line-number="11"><span class="kw">plot</span>(midwotl.shp)</a>
-<a class="sourceLine" id="cb65-12" data-line-number="12"><span class="kw">points</span>(longitud, latitude, <span class="dt">pch=</span><span class="kw">ifelse</span>(plotvar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>,<span class="dv">24</span>,<span class="dv">25</span>),</a>
-<a class="sourceLine" id="cb65-13" data-line-number="13">    <span class="dt">bg=</span>color, <span class="dt">cex=</span><span class="fl">1.5</span>)</a>
-<a class="sourceLine" id="cb65-14" data-line-number="14"><span class="kw">legend</span>(<span class="op">-</span><span class="fl">95.0</span>, <span class="fl">43.25</span>, <span class="dt">legend=</span><span class="kw">leglabs</span>(brks), <span class="dt">fill=</span>plotclr, <span class="dt">cex=</span><span class="fl">0.6</span>, <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>)</a></code></pre></div>
+<p>To illustrate the Moran statistic, and gain an impression of the level of spatial autocorrelation in the response (as opposed to the residuals) calculate the Moran statistic for July temperature, the response. For comparison with the residuals (which should be centered on zero), we’ll convert the July temperature values to “centered” values, by subtracting the mean. We should see the amplitude of the values diminish as the “fit” gets better and better. This is consistent with the idea of the residuals having no “pattern” or systematic variation.</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" data-line-number="1"><span class="co"># ggplot2 map of temperature</span></a>
+<a class="sourceLine" id="cb73-2" data-line-number="2">plotvar &lt;-<span class="st"> </span>tmeanjul</a>
+<a class="sourceLine" id="cb73-3" data-line-number="3">plotvar &lt;-<span class="st"> </span>plotvar<span class="op">-</span><span class="kw">mean</span>(plotvar)</a>
+<a class="sourceLine" id="cb73-4" data-line-number="4">plottitle &lt;-<span class="st"> &quot;Modern Climate&quot;</span></a>
+<a class="sourceLine" id="cb73-5" data-line-number="5">leglable &lt;-<span class="st"> &quot;tmeanjul (C)&quot;</span></a>
+<a class="sourceLine" id="cb73-6" data-line-number="6"><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb73-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> midwotl_sf, <span class="dt">fill=</span><span class="st">&quot;grey70&quot;</span>, <span class="dt">color=</span><span class="st">&quot;black&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb73-8" data-line-number="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> midwtf2, <span class="kw">aes</span>(<span class="dt">x =</span> longitud, <span class="dt">y =</span> latitude, <span class="dt">color =</span> plotvar), <span class="dt">size =</span> <span class="dv">5</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb73-9" data-line-number="9"><span class="st">  </span><span class="kw">scale_fill_gradient2</span>(<span class="dt">low =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">mid=</span> <span class="st">&quot;white&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">aesthetics =</span> <span class="st">&#39;color&#39;</span>,</a>
+<a class="sourceLine" id="cb73-10" data-line-number="10">                       <span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>), <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="dt">by =</span> <span class="dv">1</span>), <span class="dt">guide =</span> <span class="st">&#39;colorbar&#39;</span>, <span class="dt">name =</span> leglable) <span class="op">+</span></a>
+<a class="sourceLine" id="cb73-11" data-line-number="11"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="dt">title =</span> plottitle) </a></code></pre></div>
 <p><img src="lec13_files/figure-html/mr07-1.png" width="2100" /></p>
 <p>The map shows that July temperatures are quite spatially autocorrelated, which the Moran statistic confirms.</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1"><span class="co"># spatial autocorrelation of dependent variable (tmeanjul)</span></a>
-<a class="sourceLine" id="cb66-2" data-line-number="2"><span class="kw">moran.test</span>(tmeanjul, <span class="dt">zero.policy=</span>T, </a>
-<a class="sourceLine" id="cb66-3" data-line-number="3">     <span class="kw">nb2listw</span>(midwtf2.neighbors.dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1"><span class="co"># spatial autocorrelation of dependent variable (tmeanjul)</span></a>
+<a class="sourceLine" id="cb74-2" data-line-number="2"><span class="kw">moran.test</span>(tmeanjul, <span class="dt">zero.policy=</span>T, </a>
+<a class="sourceLine" id="cb74-3" data-line-number="3">     <span class="kw">nb2listw</span>(midwtf2_neighbors_dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Moran I test under randomisation
 ## 
 ## data:  tmeanjul  
-## weights: nb2listw(midwtf2.neighbors.dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
+## weights: nb2listw(midwtf2_neighbors_dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
 ##   
 ## 
 ## Moran I statistic standard deviate = 12.081, p-value &lt; 2.2e-16
@@ -1074,13 +1110,13 @@ The example data set for illustrating the use of regression diagnostics <a href=
 <div id="a-naive-model" class="section level2">
 <h2><span class="header-section-number">5.3</span> A “naive” model</h2>
 <p>The simplist model (in terms of not worrying about assumption violations, etc.) is one in which all of the potential predictor variables were included, in their “raw” or untransfomed form</p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1"><span class="co"># naive model</span></a>
-<a class="sourceLine" id="cb68-2" data-line-number="2">tmeanjul.lm0 &lt;-<span class="st"> </span><span class="kw">lm</span>(tmeanjul <span class="op">~</span><span class="st"> </span>Picea <span class="op">+</span><span class="st"> </span>Abies <span class="op">+</span><span class="st"> </span>Juniper</a>
-<a class="sourceLine" id="cb68-3" data-line-number="3">   <span class="op">+</span><span class="st"> </span>Pinus <span class="op">+</span><span class="st"> </span>Betula <span class="op">+</span><span class="st"> </span>Fraxinus <span class="op">+</span><span class="st"> </span>Quercus <span class="op">+</span><span class="st"> </span>Ulmus</a>
-<a class="sourceLine" id="cb68-4" data-line-number="4">   <span class="op">+</span><span class="st"> </span>Acer <span class="op">+</span><span class="st"> </span>Juglans <span class="op">+</span><span class="st"> </span>Carya <span class="op">+</span><span class="st"> </span>Tsuga <span class="op">+</span><span class="st"> </span>Fagus</a>
-<a class="sourceLine" id="cb68-5" data-line-number="5">   <span class="op">+</span><span class="st"> </span>Alnus <span class="op">+</span><span class="st"> </span>Herbsum)</a>
-<a class="sourceLine" id="cb68-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb68-7" data-line-number="7"><span class="kw">summary</span>(tmeanjul.lm0)</a></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" data-line-number="1"><span class="co"># naive model</span></a>
+<a class="sourceLine" id="cb76-2" data-line-number="2">tmeanjul_lm0 &lt;-<span class="st"> </span><span class="kw">lm</span>(tmeanjul <span class="op">~</span><span class="st"> </span>Picea <span class="op">+</span><span class="st"> </span>Abies <span class="op">+</span><span class="st"> </span>Juniper</a>
+<a class="sourceLine" id="cb76-3" data-line-number="3">   <span class="op">+</span><span class="st"> </span>Pinus <span class="op">+</span><span class="st"> </span>Betula <span class="op">+</span><span class="st"> </span>Fraxinus <span class="op">+</span><span class="st"> </span>Quercus <span class="op">+</span><span class="st"> </span>Ulmus</a>
+<a class="sourceLine" id="cb76-4" data-line-number="4">   <span class="op">+</span><span class="st"> </span>Acer <span class="op">+</span><span class="st"> </span>Juglans <span class="op">+</span><span class="st"> </span>Carya <span class="op">+</span><span class="st"> </span>Tsuga <span class="op">+</span><span class="st"> </span>Fagus</a>
+<a class="sourceLine" id="cb76-5" data-line-number="5">   <span class="op">+</span><span class="st"> </span>Alnus <span class="op">+</span><span class="st"> </span>Herbsum)</a>
+<a class="sourceLine" id="cb76-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb76-7" data-line-number="7"><span class="kw">summary</span>(tmeanjul_lm0)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = tmeanjul ~ Picea + Abies + Juniper + Pinus + Betula + 
@@ -1113,35 +1149,32 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Residual standard error: 0.7185 on 108 degrees of freedom
 ## Multiple R-squared:  0.8271, Adjusted R-squared:  0.8031 
 ## F-statistic: 34.45 on 15 and 108 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb70-2" data-line-number="2"><span class="kw">plot</span>(tmeanjul.lm0, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb78-2" data-line-number="2"><span class="kw">plot</span>(tmeanjul_lm0, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>))</a></code></pre></div>
 <p><img src="lec13_files/figure-html/mr10-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1"><span class="kw">par</span>(oldpar)</a></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" data-line-number="1"><span class="kw">par</span>(oldpar)</a></code></pre></div>
 <p>Map the residuals from the naive model</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" data-line-number="1"><span class="co"># map residuals</span></a>
-<a class="sourceLine" id="cb72-2" data-line-number="2">varname=<span class="st">&quot;residuals: tmeanjul.lm0&quot;</span></a>
-<a class="sourceLine" id="cb72-3" data-line-number="3">plotvar &lt;-<span class="st"> </span><span class="kw">residuals</span>(tmeanjul.lm0)</a>
-<a class="sourceLine" id="cb72-4" data-line-number="4">plotvar &lt;-<span class="st"> </span>(plotvar<span class="op">-</span><span class="kw">mean</span>(plotvar))<span class="op">/</span><span class="kw">sd</span>(plotvar)</a>
-<a class="sourceLine" id="cb72-5" data-line-number="5">nclr &lt;-<span class="st"> </span><span class="dv">8</span></a>
-<a class="sourceLine" id="cb72-6" data-line-number="6">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(nclr,<span class="st">&quot;PuOr&quot;</span>)</a>
-<a class="sourceLine" id="cb72-7" data-line-number="7">plotclr &lt;-<span class="st"> </span>plotclr[nclr<span class="op">:</span><span class="dv">1</span>] <span class="co"># reorder colors </span></a>
-<a class="sourceLine" id="cb72-8" data-line-number="8">colornum &lt;-<span class="st"> </span><span class="kw">cut</span>(plotvar, <span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span><span class="op">:</span><span class="dv">4</span>), <span class="dt">labels=</span><span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb72-9" data-line-number="9">brks &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span><span class="op">:</span><span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb72-10" data-line-number="10">color &lt;-<span class="st"> </span>plotclr[colornum]</a>
-<a class="sourceLine" id="cb72-11" data-line-number="11"><span class="kw">plot</span>(midwotl.shp)</a>
-<a class="sourceLine" id="cb72-12" data-line-number="12"><span class="kw">points</span>(longitud, latitude, <span class="dt">pch=</span><span class="kw">ifelse</span>(plotvar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>,<span class="dv">24</span>,<span class="dv">25</span>),</a>
-<a class="sourceLine" id="cb72-13" data-line-number="13">    <span class="dt">bg=</span>color, <span class="dt">cex=</span><span class="fl">1.5</span>)</a>
-<a class="sourceLine" id="cb72-14" data-line-number="14"><span class="kw">legend</span>(<span class="op">-</span><span class="fl">95.0</span>, <span class="fl">43.25</span>, <span class="dt">legend=</span><span class="kw">leglabs</span>(brks), <span class="dt">fill=</span>plotclr, <span class="dt">cex=</span><span class="fl">0.6</span>,<span class="dt">bty=</span><span class="st">&quot;n&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" data-line-number="1"><span class="co"># ggplot2 map of residuals</span></a>
+<a class="sourceLine" id="cb80-2" data-line-number="2">plotvar &lt;-<span class="st"> </span><span class="kw">residuals</span>(tmeanjul_lm0)</a>
+<a class="sourceLine" id="cb80-3" data-line-number="3">plotvar &lt;-<span class="st"> </span>plotvar<span class="op">-</span><span class="kw">mean</span>(plotvar)</a>
+<a class="sourceLine" id="cb80-4" data-line-number="4">plottitle &lt;-<span class="st"> &quot;Naive model residuals (C)&quot;</span></a>
+<a class="sourceLine" id="cb80-5" data-line-number="5">leglable &lt;-<span class="st"> &quot;residuals tmeanjul_lm0&quot;</span></a>
+<a class="sourceLine" id="cb80-6" data-line-number="6"><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb80-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> midwotl_sf, <span class="dt">fill=</span><span class="st">&quot;grey70&quot;</span>, <span class="dt">color=</span><span class="st">&quot;black&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb80-8" data-line-number="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> midwtf2, <span class="kw">aes</span>(<span class="dt">x =</span> longitud, <span class="dt">y =</span> latitude, <span class="dt">color =</span> plotvar), <span class="dt">size =</span> <span class="fl">5.0</span> ) <span class="op">+</span></a>
+<a class="sourceLine" id="cb80-9" data-line-number="9"><span class="st">  </span><span class="kw">scale_fill_gradient2</span>(<span class="dt">low =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">mid=</span> <span class="st">&quot;white&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">aesthetics =</span> <span class="st">&#39;color&#39;</span>,</a>
+<a class="sourceLine" id="cb80-10" data-line-number="10">                       <span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>), <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="dt">by =</span> <span class="dv">1</span>), <span class="dt">guide =</span> <span class="st">&#39;colorbar&#39;</span>, <span class="dt">name =</span> leglable) <span class="op">+</span></a>
+<a class="sourceLine" id="cb80-11" data-line-number="11"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="dt">title =</span> plottitle) </a></code></pre></div>
 <p><img src="lec13_files/figure-html/mr11-1.png" width="2100" /></p>
 <p>… and calculate the Moran statistic for the naive model residuals:</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" data-line-number="1"><span class="co"># Moran test</span></a>
-<a class="sourceLine" id="cb73-2" data-line-number="2"><span class="kw">moran.test</span>(<span class="kw">residuals</span>(tmeanjul.lm0), <span class="dt">zero.policy=</span>T, </a>
-<a class="sourceLine" id="cb73-3" data-line-number="3">     <span class="kw">nb2listw</span>(midwtf2.neighbors.dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" data-line-number="1"><span class="co"># Moran test</span></a>
+<a class="sourceLine" id="cb81-2" data-line-number="2"><span class="kw">moran.test</span>(<span class="kw">residuals</span>(tmeanjul_lm0), <span class="dt">zero.policy=</span>T, </a>
+<a class="sourceLine" id="cb81-3" data-line-number="3">     <span class="kw">nb2listw</span>(midwtf2_neighbors_dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Moran I test under randomisation
 ## 
-## data:  residuals(tmeanjul.lm0)  
-## weights: nb2listw(midwtf2.neighbors.dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
+## data:  residuals(tmeanjul_lm0)  
+## weights: nb2listw(midwtf2_neighbors_dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
 ##   
 ## 
 ## Moran I statistic standard deviate = 2.1997, p-value = 0.01392
@@ -1151,19 +1184,19 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ##       0.100919178      -0.008547009       0.002476578</code></pre>
 <p>There are a few troublesome issues with the naive model. The obvious one is the similarity of the standard errors of the regression coefficients, which is one of the byproducts of collinearity. Here, the pollen data are almost exactly collinear, because the pollen percentages must some to 100. (There are a few minor types omitted, so they don’t do that exactly.)</p>
 <p>The extent of collinearity can be confirmed by calculating something called the “condition number” of the matrix <strong>X<sup>T</sup>X</strong> (where <strong>X</strong> is the matrix of predictor variables), which is the ratio of the largest to smallest eigenvector of <strong>X<sup>T</sup>X</strong>. This number should be small, say less than 50 or so, and it isn’t.</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" data-line-number="1"><span class="kw">kappa</span>(tmeanjul.lm0)</a></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" data-line-number="1"><span class="kw">kappa</span>(tmeanjul_lm0)</a></code></pre></div>
 <pre><code>## [1] 813270.7</code></pre>
 </div>
 <div id="second-model-with-transformed-predictors" class="section level2">
 <h2><span class="header-section-number">5.4</span> Second model, with transformed predictors</h2>
 <p>There are two approaches for dealing with collinearity here: 1) omitting some variables, and 2) repeating the regression with the transformed values of the pollen variables (which we are inclined to do anyway):</p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" data-line-number="1"><span class="co"># a second model, transformed predictors</span></a>
-<a class="sourceLine" id="cb77-2" data-line-number="2">tmeanjul.lm1 &lt;-<span class="st"> </span><span class="kw">lm</span>(tmeanjul <span class="op">~</span><span class="st"> </span>Picea<span class="fl">.50</span> <span class="op">+</span><span class="st"> </span>Abies<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Junip<span class="fl">.100</span></a>
-<a class="sourceLine" id="cb77-3" data-line-number="3">    <span class="op">+</span><span class="st"> </span>Pinus<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Betula<span class="fl">.50</span> <span class="op">+</span><span class="st"> </span>Frax<span class="fl">.15</span> <span class="op">+</span><span class="st"> </span>Querc<span class="fl">.25</span> <span class="op">+</span><span class="st"> </span>Ulmus<span class="fl">.25</span></a>
-<a class="sourceLine" id="cb77-4" data-line-number="4">    <span class="op">+</span><span class="st"> </span>Acer<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Juglans<span class="fl">.25</span> <span class="op">+</span><span class="st"> </span>Carya<span class="fl">.25</span> <span class="op">+</span><span class="st"> </span>Tsuga<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Fagus<span class="fl">.100</span></a>
-<a class="sourceLine" id="cb77-5" data-line-number="5">    <span class="op">+</span><span class="st"> </span>Alnus<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Herbs<span class="fl">.25</span>)</a>
-<a class="sourceLine" id="cb77-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb77-7" data-line-number="7"><span class="kw">summary</span>(tmeanjul.lm1)</a></code></pre></div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" data-line-number="1"><span class="co"># a second model, transformed predictors</span></a>
+<a class="sourceLine" id="cb85-2" data-line-number="2">tmeanjul_lm1 &lt;-<span class="st"> </span><span class="kw">lm</span>(tmeanjul <span class="op">~</span><span class="st"> </span>Picea<span class="fl">.50</span> <span class="op">+</span><span class="st"> </span>Abies<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Junip<span class="fl">.100</span></a>
+<a class="sourceLine" id="cb85-3" data-line-number="3">    <span class="op">+</span><span class="st"> </span>Pinus<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Betula<span class="fl">.50</span> <span class="op">+</span><span class="st"> </span>Frax<span class="fl">.15</span> <span class="op">+</span><span class="st"> </span>Querc<span class="fl">.25</span> <span class="op">+</span><span class="st"> </span>Ulmus<span class="fl">.25</span></a>
+<a class="sourceLine" id="cb85-4" data-line-number="4">    <span class="op">+</span><span class="st"> </span>Acer<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Juglans<span class="fl">.25</span> <span class="op">+</span><span class="st"> </span>Carya<span class="fl">.25</span> <span class="op">+</span><span class="st"> </span>Tsuga<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Fagus<span class="fl">.100</span></a>
+<a class="sourceLine" id="cb85-5" data-line-number="5">    <span class="op">+</span><span class="st"> </span>Alnus<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Herbs<span class="fl">.25</span>)</a>
+<a class="sourceLine" id="cb85-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb85-7" data-line-number="7"><span class="kw">summary</span>(tmeanjul_lm1)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = tmeanjul ~ Picea.50 + Abies.100 + Junip.100 + Pinus.100 + 
@@ -1198,34 +1231,32 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Residual standard error: 0.7304 on 108 degrees of freedom
 ## Multiple R-squared:  0.8213, Adjusted R-squared:  0.7965 
 ## F-statistic:  33.1 on 15 and 108 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb79-2" data-line-number="2"><span class="kw">plot</span>(tmeanjul.lm1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb87-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb87-2" data-line-number="2"><span class="kw">plot</span>(tmeanjul_lm1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>))</a></code></pre></div>
 <p><img src="lec13_files/figure-html/mr14-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" data-line-number="1"><span class="kw">par</span>(oldpar)</a></code></pre></div>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" data-line-number="1"><span class="co"># map residuals</span></a>
-<a class="sourceLine" id="cb81-2" data-line-number="2">varname=<span class="st">&quot;residuals: tmeanjul.lm1&quot;</span></a>
-<a class="sourceLine" id="cb81-3" data-line-number="3">plotvar &lt;-<span class="st"> </span><span class="kw">residuals</span>(tmeanjul.lm1)</a>
-<a class="sourceLine" id="cb81-4" data-line-number="4">plotvar &lt;-<span class="st"> </span>(plotvar<span class="op">-</span><span class="kw">mean</span>(plotvar))<span class="op">/</span><span class="kw">sd</span>(plotvar)</a>
-<a class="sourceLine" id="cb81-5" data-line-number="5">nclr &lt;-<span class="st"> </span><span class="dv">8</span></a>
-<a class="sourceLine" id="cb81-6" data-line-number="6">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(nclr,<span class="st">&quot;PuOr&quot;</span>)</a>
-<a class="sourceLine" id="cb81-7" data-line-number="7">plotclr &lt;-<span class="st"> </span>plotclr[nclr<span class="op">:</span><span class="dv">1</span>] <span class="co"># reorder colors </span></a>
-<a class="sourceLine" id="cb81-8" data-line-number="8">colornum &lt;-<span class="st"> </span><span class="kw">cut</span>(plotvar, <span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span><span class="op">:</span><span class="dv">4</span>), <span class="dt">labels=</span><span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb81-9" data-line-number="9">brks &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span><span class="op">:</span><span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb81-10" data-line-number="10">color &lt;-<span class="st"> </span>plotclr[colornum]</a>
-<a class="sourceLine" id="cb81-11" data-line-number="11"><span class="kw">plot</span>(midwotl.shp)</a>
-<a class="sourceLine" id="cb81-12" data-line-number="12"><span class="kw">points</span>(longitud, latitude, <span class="dt">pch=</span><span class="kw">ifelse</span>(plotvar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>,<span class="dv">24</span>,<span class="dv">25</span>),</a>
-<a class="sourceLine" id="cb81-13" data-line-number="13">    <span class="dt">bg=</span>color, <span class="dt">cex=</span><span class="fl">1.5</span>)</a>
-<a class="sourceLine" id="cb81-14" data-line-number="14"><span class="kw">legend</span>(<span class="op">-</span><span class="fl">95.0</span>, <span class="fl">43.25</span>, <span class="dt">legend=</span><span class="kw">leglabs</span>(brks), <span class="dt">fill=</span>plotclr, <span class="dt">cex=</span><span class="fl">0.6</span>,</a>
-<a class="sourceLine" id="cb81-15" data-line-number="15">    <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" data-line-number="1"><span class="kw">par</span>(oldpar)</a></code></pre></div>
+<p>Map the residuals.</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" data-line-number="1"><span class="co"># ggplot2 map of residuals</span></a>
+<a class="sourceLine" id="cb89-2" data-line-number="2">plotvar &lt;-<span class="st"> </span><span class="kw">residuals</span>(tmeanjul_lm1)</a>
+<a class="sourceLine" id="cb89-3" data-line-number="3">plotvar &lt;-<span class="st"> </span>plotvar<span class="op">-</span><span class="kw">mean</span>(plotvar)</a>
+<a class="sourceLine" id="cb89-4" data-line-number="4">plottitle &lt;-<span class="st"> &quot;Second model residuals (C)&quot;</span></a>
+<a class="sourceLine" id="cb89-5" data-line-number="5">leglable &lt;-<span class="st"> &quot;residuals tmeanjul_lm1&quot;</span></a>
+<a class="sourceLine" id="cb89-6" data-line-number="6"><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb89-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> midwotl_sf, <span class="dt">fill=</span><span class="st">&quot;grey70&quot;</span>, <span class="dt">color=</span><span class="st">&quot;black&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb89-8" data-line-number="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> midwtf2, <span class="kw">aes</span>(<span class="dt">x =</span> longitud, <span class="dt">y =</span> latitude, <span class="dt">color =</span> plotvar), <span class="dt">size =</span> <span class="fl">5.0</span> ) <span class="op">+</span></a>
+<a class="sourceLine" id="cb89-9" data-line-number="9"><span class="st">  </span><span class="kw">scale_fill_gradient2</span>(<span class="dt">low =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">mid=</span> <span class="st">&quot;white&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">aesthetics =</span> <span class="st">&#39;color&#39;</span>,</a>
+<a class="sourceLine" id="cb89-10" data-line-number="10">                       <span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>), <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="dt">by =</span> <span class="dv">1</span>), <span class="dt">guide =</span> <span class="st">&#39;colorbar&#39;</span>, <span class="dt">name =</span> leglable) <span class="op">+</span></a>
+<a class="sourceLine" id="cb89-11" data-line-number="11"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="dt">title =</span> plottitle) </a></code></pre></div>
 <p><img src="lec13_files/figure-html/mr15-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" data-line-number="1"><span class="co"># Moran test</span></a>
-<a class="sourceLine" id="cb82-2" data-line-number="2"><span class="kw">moran.test</span>(<span class="kw">residuals</span>(tmeanjul.lm1), <span class="dt">zero.policy=</span>T, </a>
-<a class="sourceLine" id="cb82-3" data-line-number="3">     <span class="kw">nb2listw</span>(midwtf2.neighbors.dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
+<p>Get the Moran statistic for the residuals.</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" data-line-number="1"><span class="co"># Moran test</span></a>
+<a class="sourceLine" id="cb90-2" data-line-number="2"><span class="kw">moran.test</span>(<span class="kw">residuals</span>(tmeanjul_lm1), <span class="dt">zero.policy=</span>T, </a>
+<a class="sourceLine" id="cb90-3" data-line-number="3">     <span class="kw">nb2listw</span>(midwtf2_neighbors_dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Moran I test under randomisation
 ## 
-## data:  residuals(tmeanjul.lm1)  
-## weights: nb2listw(midwtf2.neighbors.dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
+## data:  residuals(tmeanjul_lm1)  
+## weights: nb2listw(midwtf2_neighbors_dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
 ##   
 ## 
 ## Moran I statistic standard deviate = 2.4847, p-value = 0.006484
@@ -1235,18 +1266,18 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ##       0.114991133      -0.008547009       0.002472130</code></pre>
 <p>Note that this model is better behaved in the sense of not showing strange values for the standard errors of the regresssion coefficients, and the spatial autocorrelation, while still barely significant, is lower too. Many of the <em>t</em>-tests of the regression coefficients are not significant (meaning that the null hypothesis that the regression coefficient value is 0 can not be rejected). A model with a subset of (significant) predictors can be selected using “all/best possible subsets” regression.</p>
 <p>Note that the condition number for this model is still relatively high, because, even though the predictor variables have been transformed, there is still a lot of correlation among them.</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" data-line-number="1"><span class="kw">kappa</span>(tmeanjul.lm1)</a></code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" data-line-number="1"><span class="kw">kappa</span>(tmeanjul_lm1)</a></code></pre></div>
 <pre><code>## [1] 583.5609</code></pre>
 </div>
 <div id="all-possible-subsets-regression" class="section level2">
 <h2><span class="header-section-number">5.5</span> All possible subsets regression</h2>
 <p>The <code>regsubsets()</code> function in the <code>leaps</code> package uses a clever algorithm from the field of numerical analysis to examine a large (possibly all) set regressions with subsets of the predictors.</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" data-line-number="1"><span class="co"># another model, all possible subsets regression</span></a>
-<a class="sourceLine" id="cb86-2" data-line-number="2">tmeanjul.lm2 &lt;-<span class="st"> </span><span class="kw">regsubsets</span>(tmeanjul <span class="op">~</span><span class="st"> </span>Picea<span class="fl">.50</span> <span class="op">+</span><span class="st"> </span>Abies<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Junip<span class="fl">.100</span></a>
-<a class="sourceLine" id="cb86-3" data-line-number="3">    <span class="op">+</span><span class="st"> </span>Pinus<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Betula<span class="fl">.50</span> <span class="op">+</span><span class="st"> </span>Frax<span class="fl">.15</span> <span class="op">+</span><span class="st"> </span>Querc<span class="fl">.25</span> <span class="op">+</span><span class="st"> </span>Ulmus<span class="fl">.25</span></a>
-<a class="sourceLine" id="cb86-4" data-line-number="4">    <span class="op">+</span><span class="st"> </span>Acer<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Juglans<span class="fl">.25</span> <span class="op">+</span><span class="st"> </span>Carya<span class="fl">.25</span> <span class="op">+</span><span class="st"> </span>Tsuga<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Fagus<span class="fl">.100</span></a>
-<a class="sourceLine" id="cb86-5" data-line-number="5">    <span class="op">+</span><span class="st"> </span>Alnus<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Herbs<span class="fl">.25</span>, <span class="dt">data=</span>midwtf2)</a>
-<a class="sourceLine" id="cb86-6" data-line-number="6"><span class="kw">summary</span>(tmeanjul.lm2)</a></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb94-1" data-line-number="1"><span class="co"># another model, all possible subsets regression</span></a>
+<a class="sourceLine" id="cb94-2" data-line-number="2">tmeanjul_lm2 &lt;-<span class="st"> </span><span class="kw">regsubsets</span>(tmeanjul <span class="op">~</span><span class="st"> </span>Picea<span class="fl">.50</span> <span class="op">+</span><span class="st"> </span>Abies<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Junip<span class="fl">.100</span></a>
+<a class="sourceLine" id="cb94-3" data-line-number="3">    <span class="op">+</span><span class="st"> </span>Pinus<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Betula<span class="fl">.50</span> <span class="op">+</span><span class="st"> </span>Frax<span class="fl">.15</span> <span class="op">+</span><span class="st"> </span>Querc<span class="fl">.25</span> <span class="op">+</span><span class="st"> </span>Ulmus<span class="fl">.25</span></a>
+<a class="sourceLine" id="cb94-4" data-line-number="4">    <span class="op">+</span><span class="st"> </span>Acer<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Juglans<span class="fl">.25</span> <span class="op">+</span><span class="st"> </span>Carya<span class="fl">.25</span> <span class="op">+</span><span class="st"> </span>Tsuga<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Fagus<span class="fl">.100</span></a>
+<a class="sourceLine" id="cb94-5" data-line-number="5">    <span class="op">+</span><span class="st"> </span>Alnus<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Herbs<span class="fl">.25</span>, <span class="dt">data=</span>midwtf2)</a>
+<a class="sourceLine" id="cb94-6" data-line-number="6"><span class="kw">summary</span>(tmeanjul_lm2)</a></code></pre></div>
 <pre><code>## Subset selection object
 ## Call: regsubsets.formula(tmeanjul ~ Picea.50 + Abies.100 + Junip.100 + 
 ##     Pinus.100 + Betula.50 + Frax.15 + Querc.25 + Ulmus.25 + Acer.100 + 
@@ -1290,11 +1321,11 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## 7  ( 1 ) &quot; &quot;      &quot; &quot;       &quot; &quot;       &quot; &quot;       &quot;*&quot;     
 ## 8  ( 1 ) &quot; &quot;      &quot; &quot;       &quot;*&quot;       &quot; &quot;       &quot;*&quot;</code></pre>
 <p>To get the diagnostic plots and statistics for one of the “best” models, that regression is simly rerun using the <code>lm()</code> function.</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" data-line-number="1"><span class="co"># rerun one of the best-subsets regressions</span></a>
-<a class="sourceLine" id="cb88-2" data-line-number="2">tmeanjul.lm3 &lt;-<span class="st"> </span><span class="kw">lm</span>(tmeanjul <span class="op">~</span><span class="st"> </span>Picea<span class="fl">.50</span> <span class="op">+</span><span class="st"> </span>Abies<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Betula<span class="fl">.50</span> <span class="op">+</span><span class="st"> </span>Fraxinus</a>
-<a class="sourceLine" id="cb88-3" data-line-number="3">     <span class="op">+</span><span class="st"> </span>Querc<span class="fl">.25</span> <span class="op">+</span><span class="st"> </span>Fagus<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Herbs<span class="fl">.25</span>)</a>
-<a class="sourceLine" id="cb88-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb88-5" data-line-number="5"><span class="kw">summary</span>(tmeanjul.lm3)</a></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb96-1" data-line-number="1"><span class="co"># rerun one of the best-subsets regressions</span></a>
+<a class="sourceLine" id="cb96-2" data-line-number="2">tmeanjul_lm3 &lt;-<span class="st"> </span><span class="kw">lm</span>(tmeanjul <span class="op">~</span><span class="st"> </span>Picea<span class="fl">.50</span> <span class="op">+</span><span class="st"> </span>Abies<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Betula<span class="fl">.50</span> <span class="op">+</span><span class="st"> </span>Fraxinus</a>
+<a class="sourceLine" id="cb96-3" data-line-number="3">     <span class="op">+</span><span class="st"> </span>Querc<span class="fl">.25</span> <span class="op">+</span><span class="st"> </span>Fagus<span class="fl">.100</span> <span class="op">+</span><span class="st"> </span>Herbs<span class="fl">.25</span>)</a>
+<a class="sourceLine" id="cb96-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb96-5" data-line-number="5"><span class="kw">summary</span>(tmeanjul_lm3)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = tmeanjul ~ Picea.50 + Abies.100 + Betula.50 + Fraxinus + 
@@ -1320,34 +1351,30 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Residual standard error: 0.7173 on 116 degrees of freedom
 ## Multiple R-squared:  0.8149, Adjusted R-squared:  0.8037 
 ## F-statistic: 72.96 on 7 and 116 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb90-2" data-line-number="2"><span class="kw">plot</span>(tmeanjul.lm1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb98-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb98-2" data-line-number="2"><span class="kw">plot</span>(tmeanjul_lm1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>))</a></code></pre></div>
 <p><img src="lec13_files/figure-html/mr19-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" data-line-number="1"><span class="kw">par</span>(oldpar)</a></code></pre></div>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" data-line-number="1"><span class="co"># map residuals</span></a>
-<a class="sourceLine" id="cb92-2" data-line-number="2">varname=<span class="st">&quot;residuals: tmeanjul.lm3&quot;</span></a>
-<a class="sourceLine" id="cb92-3" data-line-number="3">plotvar &lt;-<span class="st"> </span><span class="kw">residuals</span>(tmeanjul.lm3)</a>
-<a class="sourceLine" id="cb92-4" data-line-number="4">plotvar &lt;-<span class="st"> </span>(plotvar<span class="op">-</span><span class="kw">mean</span>(plotvar))<span class="op">/</span><span class="kw">sd</span>(plotvar)</a>
-<a class="sourceLine" id="cb92-5" data-line-number="5">nclr &lt;-<span class="st"> </span><span class="dv">8</span></a>
-<a class="sourceLine" id="cb92-6" data-line-number="6">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(nclr,<span class="st">&quot;PuOr&quot;</span>)</a>
-<a class="sourceLine" id="cb92-7" data-line-number="7">plotclr &lt;-<span class="st"> </span>plotclr[nclr<span class="op">:</span><span class="dv">1</span>] <span class="co"># reorder colors </span></a>
-<a class="sourceLine" id="cb92-8" data-line-number="8">colornum &lt;-<span class="st"> </span><span class="kw">cut</span>(plotvar, <span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span><span class="op">:</span><span class="dv">4</span>), <span class="dt">labels=</span><span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb92-9" data-line-number="9">brks &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span><span class="op">:</span><span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb92-10" data-line-number="10">color &lt;-<span class="st"> </span>plotclr[colornum]</a>
-<a class="sourceLine" id="cb92-11" data-line-number="11"><span class="kw">plot</span>(midwotl.shp)</a>
-<a class="sourceLine" id="cb92-12" data-line-number="12"><span class="kw">points</span>(longitud, latitude, <span class="dt">pch=</span><span class="kw">ifelse</span>(plotvar <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>,<span class="dv">24</span>,<span class="dv">25</span>),</a>
-<a class="sourceLine" id="cb92-13" data-line-number="13">    <span class="dt">bg=</span>color, <span class="dt">cex=</span><span class="fl">1.5</span>)</a>
-<a class="sourceLine" id="cb92-14" data-line-number="14"><span class="kw">legend</span>(<span class="op">-</span><span class="fl">95.0</span>, <span class="fl">43.25</span>, <span class="dt">legend=</span><span class="kw">leglabs</span>(brks), <span class="dt">fill=</span>plotclr, <span class="dt">cex=</span><span class="fl">0.6</span>,</a>
-<a class="sourceLine" id="cb92-15" data-line-number="15">    <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" data-line-number="1"><span class="kw">par</span>(oldpar)</a></code></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" data-line-number="1"><span class="co"># ggplot2 map of residuals</span></a>
+<a class="sourceLine" id="cb100-2" data-line-number="2">plotvar &lt;-<span class="st"> </span><span class="kw">residuals</span>(tmeanjul_lm3)</a>
+<a class="sourceLine" id="cb100-3" data-line-number="3">plotvar &lt;-<span class="st"> </span>plotvar<span class="op">-</span><span class="kw">mean</span>(plotvar)</a>
+<a class="sourceLine" id="cb100-4" data-line-number="4">plottitle &lt;-<span class="st"> &quot;All-possible subsets model residuals (C)&quot;</span></a>
+<a class="sourceLine" id="cb100-5" data-line-number="5">leglable &lt;-<span class="st"> &quot;residuals tmeanjul_lm3&quot;</span></a>
+<a class="sourceLine" id="cb100-6" data-line-number="6"><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb100-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> midwotl_sf, <span class="dt">fill=</span><span class="st">&quot;grey70&quot;</span>, <span class="dt">color=</span><span class="st">&quot;black&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb100-8" data-line-number="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> midwtf2, <span class="kw">aes</span>(<span class="dt">x =</span> longitud, <span class="dt">y =</span> latitude, <span class="dt">color =</span> plotvar), <span class="dt">size =</span> <span class="fl">5.0</span> ) <span class="op">+</span></a>
+<a class="sourceLine" id="cb100-9" data-line-number="9"><span class="st">  </span><span class="kw">scale_fill_gradient2</span>(<span class="dt">low =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">mid=</span> <span class="st">&quot;white&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">aesthetics =</span> <span class="st">&#39;color&#39;</span>,</a>
+<a class="sourceLine" id="cb100-10" data-line-number="10">                       <span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>), <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="dt">by =</span> <span class="dv">1</span>), <span class="dt">guide =</span> <span class="st">&#39;colorbar&#39;</span>, <span class="dt">name =</span> leglable) <span class="op">+</span></a>
+<a class="sourceLine" id="cb100-11" data-line-number="11"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="dt">title =</span> plottitle) </a></code></pre></div>
 <p><img src="lec13_files/figure-html/mr20-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" data-line-number="1"><span class="co"># Moran test</span></a>
-<a class="sourceLine" id="cb93-2" data-line-number="2"><span class="kw">moran.test</span>(<span class="kw">residuals</span>(tmeanjul.lm3), <span class="dt">zero.policy=</span>T,</a>
-<a class="sourceLine" id="cb93-3" data-line-number="3">    <span class="kw">nb2listw</span>(midwtf2.neighbors.dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb101-1" data-line-number="1"><span class="co"># Moran test</span></a>
+<a class="sourceLine" id="cb101-2" data-line-number="2"><span class="kw">moran.test</span>(<span class="kw">residuals</span>(tmeanjul_lm3), <span class="dt">zero.policy=</span>T,</a>
+<a class="sourceLine" id="cb101-3" data-line-number="3">    <span class="kw">nb2listw</span>(midwtf2_neighbors_dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Moran I test under randomisation
 ## 
-## data:  residuals(tmeanjul.lm3)  
-## weights: nb2listw(midwtf2.neighbors.dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
+## data:  residuals(tmeanjul_lm3)  
+## weights: nb2listw(midwtf2_neighbors_dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
 ##   
 ## 
 ## Moran I statistic standard deviate = 1.8408, p-value = 0.03283
@@ -1356,18 +1383,18 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Moran I statistic       Expectation          Variance 
 ##       0.082845436      -0.008547009       0.002464961</code></pre>
 <p>The condition number is now acceptably low:</p>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" data-line-number="1"><span class="kw">kappa</span>(tmeanjul.lm3)</a></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" data-line-number="1"><span class="kw">kappa</span>(tmeanjul_lm3)</a></code></pre></div>
 <pre><code>## [1] 49.40867</code></pre>
 <p>The progress of the analysis can be gauged by comparing the individual Moran statistics, which should get smaller as the model gets more refined. The Moran statistic for the data is 12.08, and this could be thought of as a “totally naive” model, where the response variable is expressed as a function of just its mean value. The naive model with all untransformed predictors does achieve a lower Moran statistic (2.197) indicating that some of the pattern in the response has indeed been accounted for by the predictors, but there are other issues with this model. The second regression including transformed predictors has a Moran statistic of 2.480, but this model too has some issues, in particular, it is “overfit”. The final model, the result of the best-possible-subsets regression has the lowest Moran statistics too, 1.834.</p>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb97-1" data-line-number="1"><span class="co"># compare Moran tests</span></a>
-<a class="sourceLine" id="cb97-2" data-line-number="2"><span class="co"># dependent variable (tmeanjul)</span></a>
-<a class="sourceLine" id="cb97-3" data-line-number="3"><span class="kw">moran.test</span>(tmeanjul, <span class="dt">zero.policy=</span>T, </a>
-<a class="sourceLine" id="cb97-4" data-line-number="4">     <span class="kw">nb2listw</span>(midwtf2.neighbors.dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" data-line-number="1"><span class="co"># compare Moran tests</span></a>
+<a class="sourceLine" id="cb105-2" data-line-number="2"><span class="co"># dependent variable (tmeanjul)</span></a>
+<a class="sourceLine" id="cb105-3" data-line-number="3"><span class="kw">moran.test</span>(tmeanjul, <span class="dt">zero.policy=</span>T, </a>
+<a class="sourceLine" id="cb105-4" data-line-number="4">     <span class="kw">nb2listw</span>(midwtf2_neighbors_dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Moran I test under randomisation
 ## 
 ## data:  tmeanjul  
-## weights: nb2listw(midwtf2.neighbors.dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
+## weights: nb2listw(midwtf2_neighbors_dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
 ##   
 ## 
 ## Moran I statistic standard deviate = 12.081, p-value &lt; 2.2e-16
@@ -1375,14 +1402,14 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## sample estimates:
 ## Moran I statistic       Expectation          Variance 
 ##       0.592512863      -0.008547009       0.002475262</code></pre>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" data-line-number="1"><span class="co"># lm0 (naive model) no transformation, all predictors included</span></a>
-<a class="sourceLine" id="cb99-2" data-line-number="2"><span class="kw">moran.test</span>(<span class="kw">residuals</span>(tmeanjul.lm0), <span class="dt">zero.policy=</span>T,</a>
-<a class="sourceLine" id="cb99-3" data-line-number="3">    <span class="kw">nb2listw</span>(midwtf2.neighbors.dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb107-1" data-line-number="1"><span class="co"># lm0 (naive model) no transformation, all predictors included</span></a>
+<a class="sourceLine" id="cb107-2" data-line-number="2"><span class="kw">moran.test</span>(<span class="kw">residuals</span>(tmeanjul_lm0), <span class="dt">zero.policy=</span>T,</a>
+<a class="sourceLine" id="cb107-3" data-line-number="3">    <span class="kw">nb2listw</span>(midwtf2_neighbors_dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Moran I test under randomisation
 ## 
-## data:  residuals(tmeanjul.lm0)  
-## weights: nb2listw(midwtf2.neighbors.dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
+## data:  residuals(tmeanjul_lm0)  
+## weights: nb2listw(midwtf2_neighbors_dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
 ##   
 ## 
 ## Moran I statistic standard deviate = 2.1997, p-value = 0.01392
@@ -1390,14 +1417,14 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## sample estimates:
 ## Moran I statistic       Expectation          Variance 
 ##       0.100919178      -0.008547009       0.002476578</code></pre>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb101-1" data-line-number="1"><span class="co"># lm1 transformed predictors, all predictors included</span></a>
-<a class="sourceLine" id="cb101-2" data-line-number="2"><span class="kw">moran.test</span>(<span class="kw">residuals</span>(tmeanjul.lm1), <span class="dt">zero.policy=</span>T,</a>
-<a class="sourceLine" id="cb101-3" data-line-number="3">    <span class="kw">nb2listw</span>(midwtf2.neighbors.dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" data-line-number="1"><span class="co"># lm1 transformed predictors, all predictors included</span></a>
+<a class="sourceLine" id="cb109-2" data-line-number="2"><span class="kw">moran.test</span>(<span class="kw">residuals</span>(tmeanjul_lm1), <span class="dt">zero.policy=</span>T,</a>
+<a class="sourceLine" id="cb109-3" data-line-number="3">    <span class="kw">nb2listw</span>(midwtf2_neighbors_dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Moran I test under randomisation
 ## 
-## data:  residuals(tmeanjul.lm1)  
-## weights: nb2listw(midwtf2.neighbors.dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
+## data:  residuals(tmeanjul_lm1)  
+## weights: nb2listw(midwtf2_neighbors_dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
 ##   
 ## 
 ## Moran I statistic standard deviate = 2.4847, p-value = 0.006484
@@ -1405,14 +1432,14 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## sample estimates:
 ## Moran I statistic       Expectation          Variance 
 ##       0.114991133      -0.008547009       0.002472130</code></pre>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" data-line-number="1"><span class="co"># lm3 transformed predictors, best subset model</span></a>
-<a class="sourceLine" id="cb103-2" data-line-number="2"><span class="kw">moran.test</span>(<span class="kw">residuals</span>(tmeanjul.lm3), <span class="dt">zero.policy=</span>T,</a>
-<a class="sourceLine" id="cb103-3" data-line-number="3">    <span class="kw">nb2listw</span>(midwtf2.neighbors.dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" data-line-number="1"><span class="co"># lm3 transformed predictors, best subset model</span></a>
+<a class="sourceLine" id="cb111-2" data-line-number="2"><span class="kw">moran.test</span>(<span class="kw">residuals</span>(tmeanjul_lm3), <span class="dt">zero.policy=</span>T,</a>
+<a class="sourceLine" id="cb111-3" data-line-number="3">    <span class="kw">nb2listw</span>(midwtf2_neighbors_dist, <span class="dt">zero.policy=</span>T, <span class="dt">style=</span><span class="st">&quot;W&quot;</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Moran I test under randomisation
 ## 
-## data:  residuals(tmeanjul.lm3)  
-## weights: nb2listw(midwtf2.neighbors.dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
+## data:  residuals(tmeanjul_lm3)  
+## weights: nb2listw(midwtf2_neighbors_dist, zero.policy = T, style = &quot;W&quot;)  n reduced by no-neighbour observations
 ##   
 ## 
 ## Moran I statistic standard deviate = 1.8408, p-value = 0.03283
@@ -1428,93 +1455,64 @@ The example data set for illustrating the use of regression diagnostics <a href=
 <p>Sometimes a data set exists in which fitting different relationships for subsets of the observations are in order. This situation is exemplified by the Scandinavian EU preference data. The technique knows as <em>dummy-variable</em> regression allows the simulataneous calculation of separate regression lines for subsets of the data, or in the example here, for the individual countries. The regression lines can vary in either their slopes or intercepts, or both.</p>
 <p>Here are the shapefile components, which include the data: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/scand.dbf">[.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/scand.shx">[.shx]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/scand.shp">[.shp]</a></p>
 <p>Load some packages, and attach the data frame:</p>
-<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" data-line-number="1"><span class="co"># libraries</span></a>
-<a class="sourceLine" id="cb105-2" data-line-number="2"><span class="kw">library</span>(maptools)</a>
-<a class="sourceLine" id="cb105-3" data-line-number="3"><span class="kw">library</span>(rgeos)</a>
-<a class="sourceLine" id="cb105-4" data-line-number="4"><span class="kw">library</span>(RColorBrewer)</a></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" data-line-number="1"><span class="kw">library</span>(sf)</a>
+<a class="sourceLine" id="cb113-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb113-3" data-line-number="3"><span class="kw">library</span>(RColorBrewer)</a></code></pre></div>
 <div id="look-at-the-data" class="section level2">
 <h2><span class="header-section-number">6.1</span> Look at the data</h2>
-<p>First, get a reference map of the commune names:</p>
-<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb106-1" data-line-number="1"><span class="co"># get coordinates of district centroids</span></a>
-<a class="sourceLine" id="cb106-2" data-line-number="2">scand_prov.pts &lt;-<span class="st"> </span><span class="kw">coordinates</span>(scand_prov.shp)</a>
-<a class="sourceLine" id="cb106-3" data-line-number="3">District &lt;-<span class="st"> </span><span class="kw">as.character</span>(scand_prov.shp<span class="op">@</span>data<span class="op">$</span>District)</a>
-<a class="sourceLine" id="cb106-4" data-line-number="4">District</a></code></pre></div>
-<pre><code>##  [1] &quot;Lappi&quot;             &quot;Vaasa&quot;             &quot;Keski Suomi&quot;       &quot;Oulu&quot;              &quot;Kuopio&quot;           
-##  [6] &quot;Mikkeli&quot;           &quot;Pohjois Karjala&quot;   &quot;Hame&quot;              &quot;Uusimaa&quot;           &quot;Turku ja Pori&quot;    
-## [11] &quot;Ahvenanmaa&quot;        &quot;Kymi&quot;              &quot;Norrbotten&quot;        &quot;V\xe4sterbotten&quot;   &quot;J\xe4mtland&quot;      
-## [16] &quot;V\xe4sternorrland&quot; &quot;G\xe4vleborg&quot;      &quot;Uppsala&quot;           &quot;Stockholm&quot;         &quot;Kopparberg&quot;       
-## [21] &quot;V\xe4stmanland&quot;    &quot;V\xe4rmland&quot;       &quot;S\xf6dermanland&quot;   &quot;Orebro&quot;            &quot;Skaraborg&quot;        
-## [26] &quot;Osterg\xf6tland&quot;   &quot;Kalmar&quot;            &quot;G\xf6teborg&quot;       &quot;Alvsborg&quot;          &quot;J\xf6nk\xf6ping&quot;  
-## [31] &quot;Blekinge&quot;          &quot;Halland&quot;           &quot;Kronoberg&quot;         &quot;Malm\xf6hus&quot;       &quot;Kristianstad&quot;     
-## [36] &quot;Gotland&quot;           &quot;Finnmark&quot;          &quot;Troms&quot;             &quot;Nordland&quot;          &quot;Nord-Trondelag&quot;   
-## [41] &quot;Rogaland&quot;          &quot;Hordaland&quot;         &quot;Vest-Agder&quot;        &quot;More og Romsdal&quot;   &quot;Sor-Trondelag&quot;    
-## [46] &quot;Aust-Agder&quot;        &quot;Sogn og Fjordane&quot;  &quot;Oppland&quot;           &quot;Telemark&quot;          &quot;Buskerud&quot;         
-## [51] &quot;Ostfold&quot;           &quot;Hedmark&quot;           &quot;Vestfold&quot;          &quot;Akershus&quot;          &quot;Oslo&quot;</code></pre>
-<p>In this shapefile, the Scandinavian characters in the district names were represented by “escape sequences” which are intended to replace, for example, “ö” with “o”. However, these escape sequences mess up R’s ability to display the names on a plot using the <code>text()</code> function. The names can be restored by assignment:</p>
-<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb108-1" data-line-number="1">scand_prov.shp<span class="op">@</span>data<span class="op">$</span>District &lt;-<span class="st"> </span><span class="kw">c</span>(</a>
-<a class="sourceLine" id="cb108-2" data-line-number="2">  <span class="st">&quot;Lappi&quot;</span>,       <span class="st">&quot;Vaasa&quot;</span>,            <span class="st">&quot;Keski Suomi&quot;</span>,    <span class="st">&quot;Oulu&quot;</span>,        <span class="st">&quot;Kuopio&quot;</span>,            <span class="st">&quot;Mikkeli&quot;</span>,     <span class="st">&quot;Pohjois Karjala&quot;</span>,</a>
-<a class="sourceLine" id="cb108-3" data-line-number="3">  <span class="st">&quot;Hame&quot;</span>,        <span class="st">&quot;Uusimaa&quot;</span>,          <span class="st">&quot;Turku ja Pori&quot;</span>,  <span class="st">&quot;Ahvenanmaa&quot;</span>,  <span class="st">&quot;Kymi&quot;</span>,              <span class="st">&quot;Norrbotten&quot;</span>,  <span class="st">&quot;Västerbotten&quot;</span>,</a>
-<a class="sourceLine" id="cb108-4" data-line-number="4">  <span class="st">&quot;Jämtland&quot;</span>,    <span class="st">&quot;Västernorrland&quot;</span>,   <span class="st">&quot;Gävleborg&quot;</span>,      <span class="st">&quot;Uppsala&quot;</span>,     <span class="st">&quot;Stockholm&quot;</span>,         <span class="st">&quot;Kopparberg&quot;</span>,  <span class="st">&quot;Västmanland&quot;</span>,</a>
-<a class="sourceLine" id="cb108-5" data-line-number="5">  <span class="st">&quot;Värmland&quot;</span>,    <span class="st">&quot;Södermanland&quot;</span>,     <span class="st">&quot;Orebro&quot;</span>,         <span class="st">&quot;Skaraborg&quot;</span>,   <span class="st">&quot;Ostergötland&quot;</span>,      <span class="st">&quot;Kalmar&quot;</span>,      <span class="st">&quot;Göteborg&quot;</span>,</a>
-<a class="sourceLine" id="cb108-6" data-line-number="6">  <span class="st">&quot;Alvsborg&quot;</span>,    <span class="st">&quot;Jönköping&quot;</span>,        <span class="st">&quot;Blekinge&quot;</span>,       <span class="st">&quot;Halland&quot;</span>,     <span class="st">&quot;Kronoberg&quot;</span>,         <span class="st">&quot;Malmöhus&quot;</span>,    <span class="st">&quot;Kristianstad&quot;</span>,</a>
-<a class="sourceLine" id="cb108-7" data-line-number="7">  <span class="st">&quot;Gotland&quot;</span>,     <span class="st">&quot;Finnmark&quot;</span>,         <span class="st">&quot;Troms&quot;</span>,          <span class="st">&quot;Nordland&quot;</span>,    <span class="st">&quot;Nord-Trondelag&quot;</span>,    <span class="st">&quot;Rogaland&quot;</span>,    <span class="st">&quot;Hordaland&quot;</span>,</a>
-<a class="sourceLine" id="cb108-8" data-line-number="8">  <span class="st">&quot;Vest-Agder&quot;</span>,  <span class="st">&quot;More og Romsdal&quot;</span>,  <span class="st">&quot;Sor-Trondelag&quot;</span>,  <span class="st">&quot;Aust-Agder&quot;</span>,  <span class="st">&quot;Sogn og Fjordane&quot;</span>,  <span class="st">&quot;Oppland&quot;</span>,     <span class="st">&quot;Telemark&quot;</span>,</a>
-<a class="sourceLine" id="cb108-9" data-line-number="9">  <span class="st">&quot;Buskerud&quot;</span>,    <span class="st">&quot;Ostfold&quot;</span>,          <span class="st">&quot;Hedmark&quot;</span>,        <span class="st">&quot;Vestfold&quot;</span>,    <span class="st">&quot;Akershus&quot;</span>,          <span class="st">&quot;Oslo&quot;</span> )</a></code></pre></div>
-<p>Revised names:</p>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" data-line-number="1">scand_prov.shp<span class="op">@</span>data<span class="op">$</span>District</a></code></pre></div>
-<pre><code>##  [1] &quot;Lappi&quot;            &quot;Vaasa&quot;            &quot;Keski Suomi&quot;      &quot;Oulu&quot;             &quot;Kuopio&quot;          
-##  [6] &quot;Mikkeli&quot;          &quot;Pohjois Karjala&quot;  &quot;Hame&quot;             &quot;Uusimaa&quot;          &quot;Turku ja Pori&quot;   
-## [11] &quot;Ahvenanmaa&quot;       &quot;Kymi&quot;             &quot;Norrbotten&quot;       &quot;Västerbotten&quot;     &quot;Jämtland&quot;        
-## [16] &quot;Västernorrland&quot;   &quot;Gävleborg&quot;        &quot;Uppsala&quot;          &quot;Stockholm&quot;        &quot;Kopparberg&quot;      
-## [21] &quot;Västmanland&quot;      &quot;Värmland&quot;         &quot;Södermanland&quot;     &quot;Orebro&quot;           &quot;Skaraborg&quot;       
-## [26] &quot;Ostergötland&quot;     &quot;Kalmar&quot;           &quot;Göteborg&quot;         &quot;Alvsborg&quot;         &quot;Jönköping&quot;       
-## [31] &quot;Blekinge&quot;         &quot;Halland&quot;          &quot;Kronoberg&quot;        &quot;Malmöhus&quot;         &quot;Kristianstad&quot;    
-## [36] &quot;Gotland&quot;          &quot;Finnmark&quot;         &quot;Troms&quot;            &quot;Nordland&quot;         &quot;Nord-Trondelag&quot;  
-## [41] &quot;Rogaland&quot;         &quot;Hordaland&quot;        &quot;Vest-Agder&quot;       &quot;More og Romsdal&quot;  &quot;Sor-Trondelag&quot;   
-## [46] &quot;Aust-Agder&quot;       &quot;Sogn og Fjordane&quot; &quot;Oppland&quot;          &quot;Telemark&quot;         &quot;Buskerud&quot;        
-## [51] &quot;Ostfold&quot;          &quot;Hedmark&quot;          &quot;Vestfold&quot;         &quot;Akershus&quot;         &quot;Oslo&quot;</code></pre>
+<p>First, get a reference map of the commune/county/district names. Read a shapefile of Scandanavian communes.</p>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" data-line-number="1"><span class="co"># read a Scandinamvian province/county shape file</span></a>
+<a class="sourceLine" id="cb114-2" data-line-number="2">shapefile &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/shp/scand_prov.shp&quot;</span></a>
+<a class="sourceLine" id="cb114-3" data-line-number="3">scand_prov_sf &lt;-<span class="st"> </span><span class="kw">st_read</span>(shapefile)</a>
+<a class="sourceLine" id="cb114-4" data-line-number="4">scand_prov_sf</a>
+<a class="sourceLine" id="cb114-5" data-line-number="5"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(scand_prov_sf), <span class="dt">axes =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>Get the centroids of the individual districts for locating labels later:</p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" data-line-number="1"><span class="co"># get coordinates of district centroids</span></a>
+<a class="sourceLine" id="cb115-2" data-line-number="2">scand_prov_pts &lt;-<span class="st"> </span>(<span class="kw">st_centroid</span>(scand_prov_sf))</a></code></pre></div>
+<pre><code>## Warning in st_centroid.sf(scand_prov_sf): st_centroid assumes attributes are constant over geometries of
+## x</code></pre>
+<pre><code>## Warning in st_centroid.sfc(st_geometry(x), of_largest_polygon = of_largest_polygon): st_centroid does not
+## give correct centroids for longitude/latitude data</code></pre>
+<p>Ignore the warning, which alerts us to the fact that latitude and longitude are not isotropic, and so we really should be calculating centroids only with projected data.</p>
 <p>Plot the District (commune) names:</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" data-line-number="1"><span class="co"># get coordinates of district centroids</span></a>
-<a class="sourceLine" id="cb111-2" data-line-number="2">scand_prov.pts &lt;-<span class="st"> </span><span class="kw">coordinates</span>(scand_prov.shp)</a>
-<a class="sourceLine" id="cb111-3" data-line-number="3">District &lt;-<span class="st"> </span><span class="kw">as.character</span>(scand_prov.shp<span class="op">@</span>data<span class="op">$</span>District)</a>
-<a class="sourceLine" id="cb111-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb111-5" data-line-number="5"><span class="co"># plot the names</span></a>
-<a class="sourceLine" id="cb111-6" data-line-number="6"><span class="kw">plot</span>(scand_prov.shp, <span class="dt">bor=</span><span class="st">&quot;gray90&quot;</span>, <span class="dt">axes=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb111-7" data-line-number="7"><span class="kw">points</span>(scand_prov.pts, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.4</span>)</a>
-<a class="sourceLine" id="cb111-8" data-line-number="8"><span class="kw">text</span>(scand_prov.pts, <span class="dt">labels=</span>District, <span class="dt">cex=</span><span class="fl">0.5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" data-line-number="1"><span class="co"># ggplot2 map of District names</span></a>
+<a class="sourceLine" id="cb118-2" data-line-number="2"><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb118-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> scand_prov_sf, <span class="dt">fill=</span><span class="ot">NA</span>, <span class="dt">color=</span><span class="st">&quot;gray&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb118-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_sf_text</span>(<span class="dt">data =</span> scand_prov_pts, <span class="kw">aes</span>(<span class="dt">geometry=</span>geometry, <span class="dt">label=</span><span class="kw">as.character</span>(District)), </a>
+<a class="sourceLine" id="cb118-5" data-line-number="5">               <span class="dt">check_overlap =</span> <span class="ot">TRUE</span>, <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb118-6" data-line-number="6"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<pre><code>## Warning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may not give correct results for
+## longitude/latitude data</code></pre>
 <p><img src="lec13_files/figure-html/plot%20names-1.png" width="2100" /></p>
-<p>Next, extact the variable values from the shape file, and plot the yes votes. (The data are the same as those in <code>scanvote.csv</code>, but are extracted from the shapefile here to make sure that the individual values are in the same order as the polygons in the shapefile.)</p>
-<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb112-1" data-line-number="1"><span class="co"># get variable values from .dbf attributes</span></a>
-<a class="sourceLine" id="cb112-2" data-line-number="2">Y &lt;-<span class="st"> </span>scand_prov.shp<span class="op">@</span>data<span class="op">$</span>Yes</a>
-<a class="sourceLine" id="cb112-3" data-line-number="3">X &lt;-<span class="st"> </span>scand_prov.shp<span class="op">@</span>data<span class="op">$</span>Pop</a>
-<a class="sourceLine" id="cb112-4" data-line-number="4">Country &lt;-<span class="st"> </span>scand_prov.shp<span class="op">@</span>data<span class="op">$</span>Country</a>
-<a class="sourceLine" id="cb112-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb112-6" data-line-number="6"><span class="co"># plot Yes votes -- setup</span></a>
-<a class="sourceLine" id="cb112-7" data-line-number="7">plotvar &lt;-<span class="st"> </span>Y <span class="co"># gets data from shapefile .dbf</span></a>
-<a class="sourceLine" id="cb112-8" data-line-number="8">nclr &lt;-<span class="st"> </span><span class="dv">8</span></a>
-<a class="sourceLine" id="cb112-9" data-line-number="9">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(nclr,<span class="st">&quot;PuOr&quot;</span>)</a>
-<a class="sourceLine" id="cb112-10" data-line-number="10">colornum &lt;-<span class="st"> </span><span class="kw">cut</span>(plotvar, nclr, <span class="dt">labels=</span><span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb112-11" data-line-number="11">colorcode &lt;-<span class="st"> </span>plotclr[colornum]</a>
-<a class="sourceLine" id="cb112-12" data-line-number="12">brks &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">quantile</span>(plotvar, <span class="dt">probs=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span><span class="op">/</span>(nclr))), <span class="dt">digits=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb112-13" data-line-number="13">colorcode &lt;-<span class="st"> </span>plotclr[colornum]</a>
-<a class="sourceLine" id="cb112-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb112-15" data-line-number="15"><span class="co"># draw the map</span></a>
-<a class="sourceLine" id="cb112-16" data-line-number="16"><span class="kw">plot</span>(scand_prov.shp, <span class="dt">col=</span>colorcode, <span class="dt">axes=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb112-17" data-line-number="17"><span class="kw">text</span>(scand_prov.pts, <span class="dt">labels=</span>Y, <span class="dt">cex=</span>.<span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb112-18" data-line-number="18"><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="dt">legend=</span><span class="kw">leglabs</span>(brks), <span class="dt">fill=</span>plotclr, <span class="dt">cex=</span><span class="fl">0.8</span>, <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>)</a></code></pre></div>
-<p><img src="lec13_files/figure-html/dum04-1.png" width="2100" /></p>
+<p>Next, extact the variable values from the shape file, and plot the yes votes. (The data are the same as those in <code>scanvote_csv</code>, but are extracted from the shapefile here to make sure that the individual values are in the same order as the polygons in the shapefile.)</p>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" data-line-number="1"><span class="co"># get variable values from .dbf attributes</span></a>
+<a class="sourceLine" id="cb120-2" data-line-number="2">Y &lt;-<span class="st"> </span>scand_prov_sf<span class="op">$</span>Yes</a>
+<a class="sourceLine" id="cb120-3" data-line-number="3">X &lt;-<span class="st"> </span>scand_prov_sf<span class="op">$</span>Pop</a>
+<a class="sourceLine" id="cb120-4" data-line-number="4">Country &lt;-<span class="st"> </span>scand_prov_sf<span class="op">$</span>Country</a></code></pre></div>
+<p>Plot the “Yes” vote:</p>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb121-1" data-line-number="1"><span class="co"># plot Yes votes -- setup</span></a>
+<a class="sourceLine" id="cb121-2" data-line-number="2">pal &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(<span class="dv">8</span>, <span class="st">&quot;PuOr&quot;</span>) </a>
+<a class="sourceLine" id="cb121-3" data-line-number="3"><span class="kw">ggplot</span>()  <span class="op">+</span></a>
+<a class="sourceLine" id="cb121-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> scand_prov_sf, <span class="kw">aes</span>(<span class="dt">fill =</span> Yes)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb121-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_sf_text</span>(<span class="dt">data =</span> scand_prov_pts, <span class="kw">aes</span>(<span class="dt">geometry=</span>geometry, <span class="dt">label=</span><span class="kw">as.character</span>(Yes)), </a>
+<a class="sourceLine" id="cb121-6" data-line-number="6">               <span class="dt">check_overlap =</span> <span class="ot">TRUE</span>, <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb121-7" data-line-number="7"><span class="st">  </span><span class="kw">scale_fill_gradientn</span>(<span class="dt">colors =</span> pal) <span class="op">+</span></a>
+<a class="sourceLine" id="cb121-8" data-line-number="8"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Yes Vote (%)&quot;</span>, <span class="dt">x=</span><span class="st">&quot;Longitude&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Latitude&quot;</span>) </a></code></pre></div>
+<pre><code>## Warning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may not give correct results for
+## longitude/latitude data</code></pre>
+<p><img src="lec13_files/figure-html/unnamed-chunk-5-1.png" width="2100" /></p>
 <p>Here’s a standard scatter plot of the data, with the points labeled by Country.</p>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" data-line-number="1"><span class="co"># scatter plot with Country labels</span></a>
-<a class="sourceLine" id="cb113-2" data-line-number="2"><span class="kw">plot</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X), <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb113-3" data-line-number="3"><span class="kw">text</span>(<span class="kw">log10</span>(X),Y, <span class="dt">labels=</span>Country, <span class="dt">cex=</span><span class="fl">0.8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" data-line-number="1"><span class="co"># scatter plot with Country labels</span></a>
+<a class="sourceLine" id="cb123-2" data-line-number="2"><span class="kw">plot</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X), <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
+<a class="sourceLine" id="cb123-3" data-line-number="3"><span class="kw">text</span>(<span class="kw">log10</span>(X),Y, <span class="dt">labels=</span>Country, <span class="dt">cex=</span><span class="fl">0.8</span>)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/dum05-1.png" width="2100" /></p>
 </div>
 <div id="first-regression-all-data" class="section level2">
 <h2><span class="header-section-number">6.2</span> First regression, all data</h2>
 <p>The regression model for all data, considered without respect to individual country is as follows:</p>
-<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" data-line-number="1"><span class="co"># linear model, Yes ~ log10(Pop)</span></a>
-<a class="sourceLine" id="cb114-2" data-line-number="2">vote.lm1 &lt;-<span class="st"> </span><span class="kw">lm</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X))</a>
-<a class="sourceLine" id="cb114-3" data-line-number="3"><span class="kw">summary</span>(vote.lm1)</a></code></pre></div>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb124-1" data-line-number="1"><span class="co"># linear model, Yes ~ log10(Pop)</span></a>
+<a class="sourceLine" id="cb124-2" data-line-number="2">vote_lm1 &lt;-<span class="st"> </span><span class="kw">lm</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X))</a>
+<a class="sourceLine" id="cb124-3" data-line-number="3"><span class="kw">summary</span>(vote_lm1)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ log10(X))
@@ -1533,63 +1531,60 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Residual standard error: 6.261 on 53 degrees of freedom
 ## Multiple R-squared:  0.6155, Adjusted R-squared:  0.6083 
 ## F-statistic: 84.85 on 1 and 53 DF,  p-value: 1.372e-12</code></pre>
-<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb116-2" data-line-number="2"><span class="kw">plot</span>(vote.lm1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb126-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb126-2" data-line-number="2"><span class="kw">plot</span>(vote_lm1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>))</a></code></pre></div>
 <p><img src="lec13_files/figure-html/dum06-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" data-line-number="1"><span class="kw">par</span>(oldpar)</a></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" data-line-number="1"><span class="kw">par</span>(oldpar)</a></code></pre></div>
 <p>The initial regression has several issues: There is a distinct arch in the residual scatter plot, the Normal QQ plot indicates there are several outliers, and the Cook’s distance and leverage plots indicate the presence of several overly influential observations. Further examination of the results is warrented.</p>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" data-line-number="1"><span class="co"># examine the regression equation</span></a>
-<a class="sourceLine" id="cb118-2" data-line-number="2"><span class="kw">plot</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X), <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb118-3" data-line-number="3"><span class="kw">text</span>(<span class="kw">log10</span>(X),Y, <span class="dt">labels=</span>Country)</a>
-<a class="sourceLine" id="cb118-4" data-line-number="4"><span class="kw">abline</span>(vote.lm1)</a>
-<a class="sourceLine" id="cb118-5" data-line-number="5"><span class="kw">segments</span>(<span class="kw">log10</span>(X), <span class="kw">fitted</span>(vote.lm1), <span class="kw">log10</span>(X), Y)</a></code></pre></div>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb128-1" data-line-number="1"><span class="co"># examine the regression equation</span></a>
+<a class="sourceLine" id="cb128-2" data-line-number="2"><span class="kw">plot</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X), <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
+<a class="sourceLine" id="cb128-3" data-line-number="3"><span class="kw">text</span>(<span class="kw">log10</span>(X),Y, <span class="dt">labels=</span>Country)</a>
+<a class="sourceLine" id="cb128-4" data-line-number="4"><span class="kw">abline</span>(vote_lm1)</a>
+<a class="sourceLine" id="cb128-5" data-line-number="5"><span class="kw">segments</span>(<span class="kw">log10</span>(X), <span class="kw">fitted</span>(vote_lm1), <span class="kw">log10</span>(X), Y)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/dum07-1.png" width="2100" /></p>
 <p>Examination of this plot suggests that positive deviations are often contributed by communes in Finland, and negative deviations by communes in Norway. This suggests that Norwegian communes are less likely to have voted Yes, and Finnish communes more likely to have voted yes than Scandinavian communes as a group. This idea is reinforced by looking at the prediction and confidence intervals for the regression.</p>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" data-line-number="1"><span class="co"># confidence intervals</span></a>
-<a class="sourceLine" id="cb119-2" data-line-number="2">pred.data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">X=</span><span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">1151</span>,<span class="dt">by=</span><span class="dv">50</span>))</a>
-<a class="sourceLine" id="cb119-3" data-line-number="3">pred.int &lt;-<span class="st"> </span><span class="kw">predict</span>(vote.lm1, <span class="dt">int=</span><span class="st">&quot;p&quot;</span>, <span class="dt">newdata=</span>pred.data)</a>
-<a class="sourceLine" id="cb119-4" data-line-number="4">conf.int &lt;-<span class="st"> </span><span class="kw">predict</span>(vote.lm1, <span class="dt">int=</span><span class="st">&quot;c&quot;</span>, <span class="dt">newdata=</span>pred.data)</a>
-<a class="sourceLine" id="cb119-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb119-6" data-line-number="6"><span class="kw">plot</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X), <span class="dt">ylim=</span><span class="kw">range</span>(Y, pred.int, <span class="dt">na.rm=</span>T), <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb119-7" data-line-number="7"><span class="kw">text</span>(<span class="kw">log10</span>(X),Y, <span class="dt">labels=</span>Country, <span class="dt">cex=</span><span class="fl">0.7</span>)</a>
-<a class="sourceLine" id="cb119-8" data-line-number="8">pred.X &lt;-<span class="st"> </span><span class="kw">log10</span>(pred.data<span class="op">$</span>X)</a>
-<a class="sourceLine" id="cb119-9" data-line-number="9"><span class="kw">matlines</span>(pred.X, pred.int, <span class="dt">lty=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>), <span class="dt">col=</span><span class="st">&quot;black&quot;</span>)</a>
-<a class="sourceLine" id="cb119-10" data-line-number="10"><span class="kw">matlines</span>(pred.X, conf.int, <span class="dt">lty=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" data-line-number="1"><span class="co"># confidence intervals</span></a>
+<a class="sourceLine" id="cb129-2" data-line-number="2">pred_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">X=</span><span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">1151</span>,<span class="dt">by=</span><span class="dv">50</span>))</a>
+<a class="sourceLine" id="cb129-3" data-line-number="3">pred_int &lt;-<span class="st"> </span><span class="kw">predict</span>(vote_lm1, <span class="dt">int=</span><span class="st">&quot;p&quot;</span>, <span class="dt">newdata=</span>pred_data)</a>
+<a class="sourceLine" id="cb129-4" data-line-number="4">conf_int &lt;-<span class="st"> </span><span class="kw">predict</span>(vote_lm1, <span class="dt">int=</span><span class="st">&quot;c&quot;</span>, <span class="dt">newdata=</span>pred_data)</a>
+<a class="sourceLine" id="cb129-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb129-6" data-line-number="6"><span class="kw">plot</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X), <span class="dt">ylim=</span><span class="kw">range</span>(Y, pred_int, <span class="dt">na.rm=</span>T), <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
+<a class="sourceLine" id="cb129-7" data-line-number="7"><span class="kw">text</span>(<span class="kw">log10</span>(X),Y, <span class="dt">labels=</span>Country, <span class="dt">cex=</span><span class="fl">0.7</span>)</a>
+<a class="sourceLine" id="cb129-8" data-line-number="8">pred_X &lt;-<span class="st"> </span><span class="kw">log10</span>(pred_data<span class="op">$</span>X)</a>
+<a class="sourceLine" id="cb129-9" data-line-number="9"><span class="kw">matlines</span>(pred_X, pred_int, <span class="dt">lty=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>), <span class="dt">col=</span><span class="st">&quot;black&quot;</span>)</a>
+<a class="sourceLine" id="cb129-10" data-line-number="10"><span class="kw">matlines</span>(pred_X, conf_int, <span class="dt">lty=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/dum08-1.png" width="2100" /></p>
 <p>Mapping the residuals suggests the same thing–there is an obvious spatial pattern in the sign of the residuals (so obvious, that it’s not really necessary to calculate a Moran statistic).</p>
-<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" data-line-number="1"><span class="co"># map the residuals</span></a>
-<a class="sourceLine" id="cb120-2" data-line-number="2">plotvar &lt;-<span class="st"> </span>vote.lm1<span class="op">$</span>residuals <span class="co"># gets residuals</span></a>
-<a class="sourceLine" id="cb120-3" data-line-number="3">nclr &lt;-<span class="st"> </span><span class="dv">8</span></a>
-<a class="sourceLine" id="cb120-4" data-line-number="4">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(nclr,<span class="st">&quot;PuOr&quot;</span>)</a>
-<a class="sourceLine" id="cb120-5" data-line-number="5">brks &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">8</span>,<span class="dv">8</span>,<span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb120-6" data-line-number="6">colornum &lt;-<span class="st"> </span><span class="kw">findInterval</span>(plotvar, brks, <span class="dt">all.inside =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb120-7" data-line-number="7">colorcode &lt;-<span class="st"> </span>plotclr[colornum]</a>
-<a class="sourceLine" id="cb120-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb120-9" data-line-number="9"><span class="kw">plot</span>(scand_prov.shp, <span class="dt">col=</span>colorcode)</a>
-<a class="sourceLine" id="cb120-10" data-line-number="10"><span class="kw">points</span>(scand_prov.pts, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb120-11" data-line-number="11"><span class="kw">text</span>(scand_prov.pts, <span class="dt">labels=</span><span class="kw">as.character</span>(<span class="kw">round</span>(plotvar, <span class="dv">1</span>)), <span class="dt">cex=</span>.<span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb120-12" data-line-number="12"><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="dt">legend=</span><span class="kw">leglabs</span>(brks), <span class="dt">fill=</span>plotclr, <span class="dt">cex=</span><span class="fl">0.8</span>, <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb130-1" data-line-number="1"><span class="co"># map the residuals</span></a>
+<a class="sourceLine" id="cb130-2" data-line-number="2">pal &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(<span class="dv">8</span>, <span class="st">&quot;PuOr&quot;</span>) </a>
+<a class="sourceLine" id="cb130-3" data-line-number="3">plotlab &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">round</span>(vote_lm1<span class="op">$</span>residuals, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb130-4" data-line-number="4">plottitle &lt;-<span class="st"> &quot;Residuals from lm1&quot;</span></a>
+<a class="sourceLine" id="cb130-5" data-line-number="5"><span class="kw">ggplot</span>()  <span class="op">+</span></a>
+<a class="sourceLine" id="cb130-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> scand_prov_sf, <span class="kw">aes</span>(<span class="dt">fill =</span> vote_lm1<span class="op">$</span>residuals)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb130-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_sf_text</span>(<span class="dt">data =</span> scand_prov_pts, <span class="kw">aes</span>(<span class="dt">geometry=</span>geometry, <span class="dt">label=</span>plotlab),</a>
+<a class="sourceLine" id="cb130-8" data-line-number="8">       <span class="dt">check_overlap =</span> <span class="ot">TRUE</span>, <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb130-9" data-line-number="9"><span class="st">  </span><span class="kw">scale_fill_gradientn</span>(<span class="dt">colors =</span> pal, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">15</span>), <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">15</span>, <span class="dt">by =</span> <span class="dv">5</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb130-10" data-line-number="10"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> plottitle, <span class="dt">x=</span><span class="st">&quot;Longitude&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Latitude&quot;</span>) </a></code></pre></div>
+<pre><code>## Warning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may not give correct results for
+## longitude/latitude data</code></pre>
 <p><img src="lec13_files/figure-html/dum09-1.png" width="2100" /></p>
 <p>Boxplots of the response variable (<code>Y</code>) and the residuals by country also suggest the same thing.</p>
-<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb121-1" data-line-number="1">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>))</a>
-<a class="sourceLine" id="cb121-2" data-line-number="2"><span class="co"># country-effect</span></a>
-<a class="sourceLine" id="cb121-3" data-line-number="3"><span class="kw">boxplot</span>(Y <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylab=</span><span class="st">&quot;Yes&quot;</span>)</a>
-<a class="sourceLine" id="cb121-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb121-5" data-line-number="5"><span class="co"># residual grouped boxplot</span></a>
-<a class="sourceLine" id="cb121-6" data-line-number="6"><span class="kw">plot</span>(<span class="kw">residuals</span>(vote.lm1) <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>,<span class="dv">15</span>))</a>
-<a class="sourceLine" id="cb121-7" data-line-number="7">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb132-1" data-line-number="1">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>))</a>
+<a class="sourceLine" id="cb132-2" data-line-number="2"><span class="co"># country-effect</span></a>
+<a class="sourceLine" id="cb132-3" data-line-number="3"><span class="kw">boxplot</span>(Y <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylab=</span><span class="st">&quot;Yes&quot;</span>)</a>
+<a class="sourceLine" id="cb132-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb132-5" data-line-number="5"><span class="co"># residual grouped boxplot</span></a>
+<a class="sourceLine" id="cb132-6" data-line-number="6"><span class="kw">plot</span>(<span class="kw">residuals</span>(vote_lm1) <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>,<span class="dv">15</span>))</a>
+<a class="sourceLine" id="cb132-7" data-line-number="7">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
 <p><img src="lec13_files/figure-html/dum10-1.png" width="2100" /></p>
 </div>
 <div id="dummy-variable-regression-with-country-as-a-predictor" class="section level2">
 <h2><span class="header-section-number">6.3</span> Dummy variable regression, with Country as a predictor</h2>
 <p>A dummy-variable regression can be run by including <code>Country</code> as a predictor. The formula <code>Y ~ log10(X)+Country</code> specifies a regression in which separate intercept values are calculated for each country. In essence, two new variables are generated, each binary (0 or 1), one for Sweden and the other for Norway. The intercepts that are estimated work as follows: The “plain” intercept applies to the country left out (Finland), while the intercept for Sweden is that value plus the coefficient estimated for Sweden, and likewise for Norway.</p>
-<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" data-line-number="1"><span class="co"># Scandinavian EU Preference Vote -- dummy variable regression</span></a>
-<a class="sourceLine" id="cb122-2" data-line-number="2"><span class="co"># model with a factor as predictor</span></a>
-<a class="sourceLine" id="cb122-3" data-line-number="3">Y &lt;-<span class="st"> </span>scand_prov.shp<span class="op">@</span>data<span class="op">$</span>Yes</a>
-<a class="sourceLine" id="cb122-4" data-line-number="4">X &lt;-<span class="st"> </span>scand_prov.shp<span class="op">@</span>data<span class="op">$</span>Pop</a>
-<a class="sourceLine" id="cb122-5" data-line-number="5">Country &lt;-<span class="st"> </span>scand_prov.shp<span class="op">@</span>data<span class="op">$</span>Country</a>
-<a class="sourceLine" id="cb122-6" data-line-number="6">vote.lm2 &lt;-<span class="st"> </span><span class="kw">lm</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X)<span class="op">+</span>Country)</a>
-<a class="sourceLine" id="cb122-7" data-line-number="7"><span class="kw">summary</span>(vote.lm2)</a></code></pre></div>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb133-1" data-line-number="1"><span class="co"># Scandinavian EU Preference Vote -- dummy variable regression</span></a>
+<a class="sourceLine" id="cb133-2" data-line-number="2"><span class="co"># model with a factor as predictor</span></a>
+<a class="sourceLine" id="cb133-3" data-line-number="3">vote_lm2 &lt;-<span class="st"> </span><span class="kw">lm</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X)<span class="op">+</span>Country)</a>
+<a class="sourceLine" id="cb133-4" data-line-number="4"><span class="kw">summary</span>(vote_lm2)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ log10(X) + Country)
@@ -1611,52 +1606,53 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Multiple R-squared:  0.7212, Adjusted R-squared:  0.7048 
 ## F-statistic: 43.98 on 3 and 51 DF,  p-value: 3.537e-14</code></pre>
 <p>The different regression lines can be displayed as follows:</p>
-<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb124-1" data-line-number="1"><span class="co"># display the fitted lines</span></a>
-<a class="sourceLine" id="cb124-2" data-line-number="2"><span class="kw">plot</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X))</a>
-<a class="sourceLine" id="cb124-3" data-line-number="3"><span class="kw">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;N&quot;</span>,<span class="st">&quot;F&quot;</span>,<span class="st">&quot;S&quot;</span>), <span class="dt">lty=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">cex=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;purple&quot;</span>))</a>
-<a class="sourceLine" id="cb124-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb124-5" data-line-number="5"><span class="kw">lines</span>(<span class="kw">log10</span>(X)[Country<span class="op">==</span><span class="st">&quot;N&quot;</span>],<span class="kw">fitted</span>(vote.lm2)[Country<span class="op">==</span><span class="st">&quot;N&quot;</span>], <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb124-6" data-line-number="6"><span class="kw">lines</span>(<span class="kw">log10</span>(X)[Country<span class="op">==</span><span class="st">&quot;F&quot;</span>],<span class="kw">fitted</span>(vote.lm2)[Country<span class="op">==</span><span class="st">&quot;F&quot;</span>], <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a>
-<a class="sourceLine" id="cb124-7" data-line-number="7"><span class="kw">lines</span>(<span class="kw">log10</span>(X)[Country<span class="op">==</span><span class="st">&quot;S&quot;</span>],<span class="kw">fitted</span>(vote.lm2)[Country<span class="op">==</span><span class="st">&quot;S&quot;</span>], <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb135-1" data-line-number="1"><span class="co"># display the fitted lines</span></a>
+<a class="sourceLine" id="cb135-2" data-line-number="2"><span class="kw">plot</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X))</a>
+<a class="sourceLine" id="cb135-3" data-line-number="3"><span class="kw">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;N&quot;</span>,<span class="st">&quot;F&quot;</span>,<span class="st">&quot;S&quot;</span>), <span class="dt">lty=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">cex=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;purple&quot;</span>))</a>
+<a class="sourceLine" id="cb135-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb135-5" data-line-number="5"><span class="kw">lines</span>(<span class="kw">log10</span>(X)[Country<span class="op">==</span><span class="st">&quot;N&quot;</span>],<span class="kw">fitted</span>(vote_lm2)[Country<span class="op">==</span><span class="st">&quot;N&quot;</span>], <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb135-6" data-line-number="6"><span class="kw">lines</span>(<span class="kw">log10</span>(X)[Country<span class="op">==</span><span class="st">&quot;F&quot;</span>],<span class="kw">fitted</span>(vote_lm2)[Country<span class="op">==</span><span class="st">&quot;F&quot;</span>], <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb135-7" data-line-number="7"><span class="kw">lines</span>(<span class="kw">log10</span>(X)[Country<span class="op">==</span><span class="st">&quot;S&quot;</span>],<span class="kw">fitted</span>(vote_lm2)[Country<span class="op">==</span><span class="st">&quot;S&quot;</span>], <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/dum12-1.png" width="2100" /></p>
 <p>Notice that Finland has the highest intercept (34.434), while that for Sweden is lower (34.434 - 6.679), and that for Norway is lower still (34.434 - 8.609).</p>
 <p>Examine the model</p>
-<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" data-line-number="1"><span class="co"># examine the model</span></a>
-<a class="sourceLine" id="cb125-2" data-line-number="2">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb125-3" data-line-number="3"><span class="kw">plot</span>(vote.lm2, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb136-1" data-line-number="1"><span class="co"># examine the model</span></a>
+<a class="sourceLine" id="cb136-2" data-line-number="2">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb136-3" data-line-number="3"><span class="kw">plot</span>(vote_lm2, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>))</a></code></pre></div>
 <p><img src="lec13_files/figure-html/dum13-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb126-1" data-line-number="1"><span class="kw">par</span>(oldpar)</a></code></pre></div>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb137-1" data-line-number="1"><span class="kw">par</span>(oldpar)</a></code></pre></div>
 <p>The obvious arch in the residual scatter plot is much less obvious, as is the departure from normality of the residuals. There are still a few overly influential points, but their influence is reduced as well.</p>
 <p>Map the residuals:</p>
-<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" data-line-number="1"><span class="co"># map residuals</span></a>
-<a class="sourceLine" id="cb127-2" data-line-number="2">plotvar &lt;-<span class="st"> </span>vote.lm2<span class="op">$</span>residuals <span class="co"># gets residuals</span></a>
-<a class="sourceLine" id="cb127-3" data-line-number="3">nclr &lt;-<span class="st"> </span><span class="dv">8</span></a>
-<a class="sourceLine" id="cb127-4" data-line-number="4">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(nclr,<span class="st">&quot;PuOr&quot;</span>)</a>
-<a class="sourceLine" id="cb127-5" data-line-number="5">brks &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">8</span>,<span class="dv">8</span>,<span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb127-6" data-line-number="6">colornum &lt;-<span class="st"> </span><span class="kw">findInterval</span>(plotvar, brks, <span class="dt">all.inside =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb127-7" data-line-number="7">colorcode &lt;-<span class="st"> </span>plotclr[colornum]</a>
-<a class="sourceLine" id="cb127-8" data-line-number="8"><span class="kw">plot</span>(scand_prov.shp, <span class="dt">col=</span>colorcode)</a>
-<a class="sourceLine" id="cb127-9" data-line-number="9"><span class="kw">points</span>(scand_prov.pts, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb127-10" data-line-number="10"><span class="kw">text</span>(scand_prov.pts, <span class="dt">labels=</span><span class="kw">as.character</span>(<span class="kw">round</span>(plotvar, <span class="dv">1</span>)), <span class="dt">cex=</span>.<span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb127-11" data-line-number="11"><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="dt">legend=</span><span class="kw">leglabs</span>(brks), <span class="dt">fill=</span>plotclr, <span class="dt">cex=</span><span class="fl">0.8</span>, <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb138-1" data-line-number="1"><span class="co"># map residuals</span></a>
+<a class="sourceLine" id="cb138-2" data-line-number="2">pal &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(<span class="dv">8</span>, <span class="st">&quot;PuOr&quot;</span>) </a>
+<a class="sourceLine" id="cb138-3" data-line-number="3">plotlab &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">round</span>(vote_lm2<span class="op">$</span>residuals, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb138-4" data-line-number="4">plottitle &lt;-<span class="st"> &quot;Residuals from lm2&quot;</span></a>
+<a class="sourceLine" id="cb138-5" data-line-number="5"><span class="kw">ggplot</span>()  <span class="op">+</span></a>
+<a class="sourceLine" id="cb138-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> scand_prov_sf, <span class="kw">aes</span>(<span class="dt">fill =</span> vote_lm2<span class="op">$</span>residuals)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb138-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_sf_text</span>(<span class="dt">data =</span> scand_prov_pts, <span class="kw">aes</span>(<span class="dt">geometry=</span>geometry, <span class="dt">label=</span>plotlab),</a>
+<a class="sourceLine" id="cb138-8" data-line-number="8">               <span class="dt">check_overlap =</span> <span class="ot">TRUE</span>, <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb138-9" data-line-number="9"><span class="st">  </span><span class="kw">scale_fill_gradientn</span>(<span class="dt">colors =</span> pal, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">15</span>), <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">15</span>, <span class="dt">by =</span> <span class="dv">5</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb138-10" data-line-number="10"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> plottitle, <span class="dt">x=</span><span class="st">&quot;Longitude&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Latitude&quot;</span>) </a></code></pre></div>
+<pre><code>## Warning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may not give correct results for
+## longitude/latitude data</code></pre>
 <p><img src="lec13_files/figure-html/dum14-1.png" width="2100" /></p>
 <p>The obvious patterns in the residuals from the first regression are also much reduced.</p>
-<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb128-1" data-line-number="1">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>))</a>
-<a class="sourceLine" id="cb128-2" data-line-number="2"><span class="co"># country-effect</span></a>
-<a class="sourceLine" id="cb128-3" data-line-number="3"><span class="kw">boxplot</span>(Y <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylab=</span><span class="st">&quot;Yes&quot;</span>)</a>
-<a class="sourceLine" id="cb128-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb128-5" data-line-number="5"><span class="co"># residual grouped boxplot</span></a>
-<a class="sourceLine" id="cb128-6" data-line-number="6"><span class="kw">plot</span>(<span class="kw">residuals</span>(vote.lm1) <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>,<span class="dv">15</span>))</a>
-<a class="sourceLine" id="cb128-7" data-line-number="7"><span class="kw">plot</span>(<span class="kw">residuals</span>(vote.lm2) <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>,<span class="dv">15</span>))</a>
-<a class="sourceLine" id="cb128-8" data-line-number="8">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb140-1" data-line-number="1">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>))</a>
+<a class="sourceLine" id="cb140-2" data-line-number="2"><span class="co"># country-effect</span></a>
+<a class="sourceLine" id="cb140-3" data-line-number="3"><span class="kw">boxplot</span>(Y <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylab=</span><span class="st">&quot;Yes&quot;</span>)</a>
+<a class="sourceLine" id="cb140-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb140-5" data-line-number="5"><span class="co"># residual grouped boxplot</span></a>
+<a class="sourceLine" id="cb140-6" data-line-number="6"><span class="kw">plot</span>(<span class="kw">residuals</span>(vote_lm1) <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>,<span class="dv">15</span>))</a>
+<a class="sourceLine" id="cb140-7" data-line-number="7"><span class="kw">plot</span>(<span class="kw">residuals</span>(vote_lm2) <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>,<span class="dv">15</span>))</a>
+<a class="sourceLine" id="cb140-8" data-line-number="8">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
 <p><img src="lec13_files/figure-html/dum19-1.png" width="2100" /></p>
 <p>It also the case that the obvious differences in the location (i.e. the medians), and scale (the interquartile range) of the residuals (as illustrated by the boxplots) in the first regression model is reduced, bringing the residuals more in line with the assumption that they are independent and identically distributed.</p>
 </div>
 <div id="dummy-variable-regression-with-both-slope-and-intercept-varying-by-country" class="section level2">
 <h2><span class="header-section-number">6.4</span> Dummy-variable regression with both slope and intercept varying by Country</h2>
 <p>A second dummy variable regression, where both the intercept and slope vary can be specified using the model formula `Y ~ log10(X)*Country’.</p>
-<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" data-line-number="1">vote.lm3 &lt;-<span class="st"> </span><span class="kw">lm</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X)<span class="op">*</span>Country)</a>
-<a class="sourceLine" id="cb129-2" data-line-number="2"><span class="kw">summary</span>(vote.lm3)</a></code></pre></div>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb141-1" data-line-number="1">vote_lm3 &lt;-<span class="st"> </span><span class="kw">lm</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X)<span class="op">*</span>Country)</a>
+<a class="sourceLine" id="cb141-2" data-line-number="2"><span class="kw">summary</span>(vote_lm3)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ log10(X) * Country)
@@ -1680,37 +1676,38 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Multiple R-squared:  0.724,  Adjusted R-squared:  0.6959 
 ## F-statistic: 25.71 on 5 and 49 DF,  p-value: 1.24e-12</code></pre>
 <p>None of the <em>t</em>-tests of the significance of the dummy-variable terms (intercepts and slopes) are significant, and the adjusted <em>R<sup>2</sup></em> value is lower, and so this model is likely “overfitted”. Nevertheless, it’s useful to look at how both the intercepts and slopes can be made to vary amoung countries.</p>
-<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb131-1" data-line-number="1"><span class="co"># display the fitted lines</span></a>
-<a class="sourceLine" id="cb131-2" data-line-number="2"><span class="kw">plot</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X))</a>
-<a class="sourceLine" id="cb131-3" data-line-number="3"><span class="kw">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;N&quot;</span>,<span class="st">&quot;F&quot;</span>,<span class="st">&quot;S&quot;</span>), <span class="dt">lty=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">cex=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;purple&quot;</span>))</a>
-<a class="sourceLine" id="cb131-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb131-5" data-line-number="5"><span class="kw">lines</span>(<span class="kw">log10</span>(X)[Country<span class="op">==</span><span class="st">&quot;N&quot;</span>],<span class="kw">fitted</span>(vote.lm3)[Country<span class="op">==</span><span class="st">&quot;N&quot;</span>], <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb131-6" data-line-number="6"><span class="kw">lines</span>(<span class="kw">log10</span>(X)[Country<span class="op">==</span><span class="st">&quot;F&quot;</span>],<span class="kw">fitted</span>(vote.lm3)[Country<span class="op">==</span><span class="st">&quot;F&quot;</span>], <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a>
-<a class="sourceLine" id="cb131-7" data-line-number="7"><span class="kw">lines</span>(<span class="kw">log10</span>(X)[Country<span class="op">==</span><span class="st">&quot;S&quot;</span>],<span class="kw">fitted</span>(vote.lm3)[Country<span class="op">==</span><span class="st">&quot;S&quot;</span>], <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb143-1" data-line-number="1"><span class="co"># display the fitted lines</span></a>
+<a class="sourceLine" id="cb143-2" data-line-number="2"><span class="kw">plot</span>(Y <span class="op">~</span><span class="st"> </span><span class="kw">log10</span>(X))</a>
+<a class="sourceLine" id="cb143-3" data-line-number="3"><span class="kw">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;N&quot;</span>,<span class="st">&quot;F&quot;</span>,<span class="st">&quot;S&quot;</span>), <span class="dt">lty=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">cex=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;purple&quot;</span>))</a>
+<a class="sourceLine" id="cb143-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb143-5" data-line-number="5"><span class="kw">lines</span>(<span class="kw">log10</span>(X)[Country<span class="op">==</span><span class="st">&quot;N&quot;</span>],<span class="kw">fitted</span>(vote_lm3)[Country<span class="op">==</span><span class="st">&quot;N&quot;</span>], <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb143-6" data-line-number="6"><span class="kw">lines</span>(<span class="kw">log10</span>(X)[Country<span class="op">==</span><span class="st">&quot;F&quot;</span>],<span class="kw">fitted</span>(vote_lm3)[Country<span class="op">==</span><span class="st">&quot;F&quot;</span>], <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb143-7" data-line-number="7"><span class="kw">lines</span>(<span class="kw">log10</span>(X)[Country<span class="op">==</span><span class="st">&quot;S&quot;</span>],<span class="kw">fitted</span>(vote_lm3)[Country<span class="op">==</span><span class="st">&quot;S&quot;</span>], <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/dum16-1.png" width="2100" /> Map the residuals from the third model.</p>
-<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb132-1" data-line-number="1"><span class="co"># map residuals</span></a>
-<a class="sourceLine" id="cb132-2" data-line-number="2">plotvar &lt;-<span class="st"> </span>vote.lm3<span class="op">$</span>residuals <span class="co"># gets residuals</span></a>
-<a class="sourceLine" id="cb132-3" data-line-number="3">nclr &lt;-<span class="st"> </span><span class="dv">8</span></a>
-<a class="sourceLine" id="cb132-4" data-line-number="4">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(nclr,<span class="st">&quot;PuOr&quot;</span>)</a>
-<a class="sourceLine" id="cb132-5" data-line-number="5">brks &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">8</span>,<span class="dv">8</span>,<span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb132-6" data-line-number="6">colornum &lt;-<span class="st"> </span><span class="kw">findInterval</span>(plotvar, brks, <span class="dt">all.inside =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb132-7" data-line-number="7">colorcode &lt;-<span class="st"> </span>plotclr[colornum]</a>
-<a class="sourceLine" id="cb132-8" data-line-number="8"><span class="kw">plot</span>(scand_prov.shp, <span class="dt">col=</span>colorcode)</a>
-<a class="sourceLine" id="cb132-9" data-line-number="9"><span class="kw">points</span>(scand_prov.pts, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb132-10" data-line-number="10"><span class="kw">text</span>(scand_prov.pts, <span class="dt">labels=</span><span class="kw">as.character</span>(<span class="kw">round</span>(plotvar, <span class="dv">1</span>)), <span class="dt">cex=</span>.<span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb132-11" data-line-number="11"><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="dt">legend=</span><span class="kw">leglabs</span>(brks), <span class="dt">fill=</span>plotclr, <span class="dt">cex=</span><span class="fl">0.8</span>, <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb144-1" data-line-number="1"><span class="co"># map residuals</span></a>
+<a class="sourceLine" id="cb144-2" data-line-number="2">pal &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(<span class="dv">8</span>, <span class="st">&quot;PuOr&quot;</span>) </a>
+<a class="sourceLine" id="cb144-3" data-line-number="3">plotlab &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">round</span>(vote_lm3<span class="op">$</span>residuals, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb144-4" data-line-number="4">plottitle &lt;-<span class="st"> &quot;Residuals from lm3&quot;</span></a>
+<a class="sourceLine" id="cb144-5" data-line-number="5"><span class="kw">ggplot</span>()  <span class="op">+</span></a>
+<a class="sourceLine" id="cb144-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> scand_prov_sf, <span class="kw">aes</span>(<span class="dt">fill =</span> vote_lm3<span class="op">$</span>residuals)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb144-7" data-line-number="7"><span class="st">  </span><span class="kw">geom_sf_text</span>(<span class="dt">data =</span> scand_prov_pts, <span class="kw">aes</span>(<span class="dt">geometry=</span>geometry, <span class="dt">label=</span>plotlab),</a>
+<a class="sourceLine" id="cb144-8" data-line-number="8">               <span class="dt">check_overlap =</span> <span class="ot">TRUE</span>, <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb144-9" data-line-number="9"><span class="st">  </span><span class="kw">scale_fill_gradientn</span>(<span class="dt">colors =</span> pal, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">15</span>), <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">15</span>, <span class="dt">by =</span> <span class="dv">5</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb144-10" data-line-number="10"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> plottitle, <span class="dt">x=</span><span class="st">&quot;Longitude&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Latitude&quot;</span>) </a></code></pre></div>
+<pre><code>## Warning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may not give correct results for
+## longitude/latitude data</code></pre>
 <p><img src="lec13_files/figure-html/dum17-1.png" width="2100" /></p>
 <p>Look at the country effect on the residuals from the third model.</p>
-<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb133-1" data-line-number="1"><span class="co"># country-effect</span></a>
-<a class="sourceLine" id="cb133-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>))</a>
-<a class="sourceLine" id="cb133-3" data-line-number="3"><span class="kw">boxplot</span>(Y <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylab=</span><span class="st">&quot;Yes&quot;</span>)</a>
-<a class="sourceLine" id="cb133-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb133-5" data-line-number="5"><span class="co"># residual grouped boxplot</span></a>
-<a class="sourceLine" id="cb133-6" data-line-number="6"><span class="kw">plot</span>(<span class="kw">residuals</span>(vote.lm1) <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>,<span class="dv">15</span>))</a>
-<a class="sourceLine" id="cb133-7" data-line-number="7"><span class="kw">plot</span>(<span class="kw">residuals</span>(vote.lm2) <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>,<span class="dv">15</span>))</a>
-<a class="sourceLine" id="cb133-8" data-line-number="8"><span class="kw">plot</span>(<span class="kw">residuals</span>(vote.lm3) <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>,<span class="dv">15</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb146-1" data-line-number="1"><span class="co"># country-effect</span></a>
+<a class="sourceLine" id="cb146-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>))</a>
+<a class="sourceLine" id="cb146-3" data-line-number="3"><span class="kw">boxplot</span>(Y <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylab=</span><span class="st">&quot;Yes&quot;</span>)</a>
+<a class="sourceLine" id="cb146-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb146-5" data-line-number="5"><span class="co"># residual grouped boxplot</span></a>
+<a class="sourceLine" id="cb146-6" data-line-number="6"><span class="kw">plot</span>(<span class="kw">residuals</span>(vote_lm1) <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>,<span class="dv">15</span>))</a>
+<a class="sourceLine" id="cb146-7" data-line-number="7"><span class="kw">plot</span>(<span class="kw">residuals</span>(vote_lm2) <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>,<span class="dv">15</span>))</a>
+<a class="sourceLine" id="cb146-8" data-line-number="8"><span class="kw">plot</span>(<span class="kw">residuals</span>(vote_lm3) <span class="op">~</span><span class="st"> </span>Country, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">15</span>,<span class="dv">15</span>))</a></code></pre></div>
 <p><img src="lec13_files/figure-html/dum18-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb134-1" data-line-number="1">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" data-line-number="1">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
 <p>There is little difference between the third model (in which the slope and the intercept vary amoung countries) and the second, and so the “principle of parsimony” would indicate that the second model should be preferred.</p>
 <p><a href="lec13.html">[Back to top]</a></p>
 </div>

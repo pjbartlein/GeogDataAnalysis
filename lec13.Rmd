@@ -18,7 +18,7 @@ klippy::klippy(position = c('top', 'right'))
 ```{r load, echo=FALSE, cache=FALSE}
 load(".Rdata")
 ```
-<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
 # Introduction #
 
 Multiple regression is (conceptually) a simple extension of bivariate regression, in which the influence of more than one predictor variable on the response can be estimated.   For the case with two predictor variables, the analysis can be thought of as involving the fitting of a plane (as opposed to a line in the bivariate regression case), and the equations for the OLS estimates of the regression equations are only a little more complicated algebraically.  For three or more predictors, the algebra is also quite simple, but requires the use of matrix algebra.
@@ -283,25 +283,30 @@ par(oldpar)
 
 These issues will be examined using the standard diagnostic plots, as well as the Moran statistic for assessing spatial autocorrelation, and the curvilinearity/collinearity issue will be handled by transformation and "best subsets" predictor selection.  
 
-Here are the data [[midwtf2]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/midwtf2.csv), and the components of a shape file for mapping the data and results [[.dbf]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.dbf)  [[.shx]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.shx)  [[.shp]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.shp)
+Here are the data [[midwtf2]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/midwtf2.csv), and the components of a shape file for mapping the data and results [[.dbf]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.dbf)  [[.shx]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.shx)  [[.shp]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.shp) 
+[[.prj]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.prj) 
+
+Load some libraries.
 
 ```{r libraries, echo=FALSE, include=FALSE}
-library(maptools)
-library(rgeos)
+library(sf)
+library(ggplot2)
 library(RColorBrewer)
 library(spdep)
 library(leaps)
+library(ggplot2)
 ```
 
 Load some packages, and attach the data frame:
 
 ```{r mr01, eval=FALSE}
 # libraries
-library(maptools)
-library(rgeos)
+library(sf)
+library(ggplot2)
 library(RColorBrewer)
 library(spdep)
 library(leaps)
+library(ggplot2)
 ```
 
 The pollen variables with numbers in their names (e.g. `Querc.25`) are transformation of the original pollen variables (`Quercus`) constructed using "power function" transformations (i.e. `Querc.25 <- Quercus^0.25`) to linearize the relationships between climate and pollen (see the scatter diagrams below).  The transformation parameters were chosen by inspecting individual scatter diagrams between a climate variable and pollen variable.
@@ -310,19 +315,46 @@ The pollen variables with numbers in their names (e.g. `Querc.25`) are transform
 
 *Always* look at the data before running any kind of analysis. Begin by mapping the data.  Get the point locations of each modern pollen (and climate) sample, and plot the distance-weighted neighbors (for calculating the Moran statistic) using a distance threshold of 100km
 
+Read a shapefile of outlines for the region
+
+```{r}
+# read a state outline shape file
+shapefile <- "/Users/bartlein/Documents/geog495/data/shp/midwotl.shp"
+midwotl_sf <- st_read(shapefile)
+midwotl_sf
+plot(midwotl_sf) # plot the outline
+plot(st_geometry(midwotl_sf), axes = TRUE)
+```
+
+Read the data, if it's not already in the workspace:
+
+```{r, echo=TRUE, eval=FALSE}
+# read the data file (if not already in the workspace)
+csv_path <- "/Users/bartlein/Documents/geog495/data/csv/midwtf2"
+midwtf2 <- read.csv(csv_path)
+```
+
 ```{r mr03}
 attach(midwtf2)
 names(midwtf2)
+```
 
+Plot the network of sites, and also get distance-neighbor matrix for calculating spatial autocorrelation.
+
+```{r}
 # get point locations of modern data
-midwtf2.loc=cbind(longitud, latitude)
+midwtf2_loc=cbind(longitud, latitude)
+```
 
+Get the distance neighbors (i.e. the contiguity matrix **W**)
+
+```{r dist}
 # distance neighbors
 d <- 100 # points are neighbors if locations are within d km of one another
-midwtf2.neighbors.dist <- dnearneigh(midwtf2.loc, 0, d, longlat=TRUE) 
-plot(midwotl.shp)
-points(midwtf2.loc)
-plot(midwtf2.neighbors.dist, midwtf2.loc, add=TRUE, col="magenta")
+midwtf2_neighbors_dist <- dnearneigh(midwtf2_loc, 0, d, longlat=TRUE) 
+plot(st_geometry(midwotl_sf), axes=TRUE)
+points(midwtf2_loc)
+plot(midwtf2_neighbors_dist, midwtf2_loc, add=TRUE, col="magenta")
 ```
 
 Next, examine the data set.  First plot latitude, longitude, and the climate variables relative to one another (to reveal the geographical gradients in the cliamte data).
@@ -355,23 +387,20 @@ In this example, spatial autocorrelation of the residuals will the issue.  The *
 
 - [Moran statistic details](https://pjbartlein.github.io/GeogDataAnalysis/topics/moran.pdf)
 
-To illustrate the Moran statistic, and gain an impression of the level of spatial autocorrelation in the response (as opposed to the residuals) calculate the Moran statistic for July temperature, the response.  First, map the July temperature variables:
+To illustrate the Moran statistic, and gain an impression of the level of spatial autocorrelation in the response (as opposed to the residuals) calculate the Moran statistic for July temperature, the response.  For comparison with the residuals (which should be centered on zero), we'll convert the July temperature values to "centered" values, by subtracting the mean.  We should see the amplitude of the values diminish as the "fit" gets better and better.  This is consistent with the idea of the residuals having no "pattern" or systematic variation.
 
 ```{r mr07}
-# map tmeanjul
-varname="tmeanjul"
+# ggplot2 map of temperature
 plotvar <- tmeanjul
-plotvar <- (plotvar-mean(plotvar))/sd(plotvar)
-nclr <- 8
-plotclr <- brewer.pal(nclr,"PuOr")
-plotclr <- plotclr[nclr:1] # reorder colors 
-colornum <- cut(plotvar, c(-4:4), labels=FALSE)
-brks <- c(-4:4)
-color <- plotclr[colornum]
-plot(midwotl.shp)
-points(longitud, latitude, pch=ifelse(plotvar > 0,24,25),
-    bg=color, cex=1.5)
-legend(-95.0, 43.25, legend=leglabs(brks), fill=plotclr, cex=0.6, bty="n")
+plotvar <- plotvar-mean(plotvar)
+plottitle <- "Modern Climate"
+leglable <- "tmeanjul (C)"
+ggplot() +
+  geom_sf(data = midwotl_sf, fill="grey70", color="black") +
+  geom_point(data = midwtf2, aes(x = longitud, y = latitude, color = plotvar), size = 5) +
+  scale_fill_gradient2(low = "blue", mid= "white", high = "red", aesthetics = 'color',
+                       limits = c(-5, 5), breaks = seq(-5, 5, by = 1), guide = 'colorbar', name = leglable) +
+  labs(x = "Longitude", y = "Latitude", title = plottitle) 
 ```
 
 The map shows that July temperatures are quite spatially autocorrelated, which the Moran statistic confirms.
@@ -379,7 +408,7 @@ The map shows that July temperatures are quite spatially autocorrelated, which t
 ```{r mr09}
 # spatial autocorrelation of dependent variable (tmeanjul)
 moran.test(tmeanjul, zero.policy=T, 
-     nb2listw(midwtf2.neighbors.dist, zero.policy=T, style="W"))
+     nb2listw(midwtf2_neighbors_dist, zero.policy=T, style="W"))
 ```
 
 In some ways, the objective the regression analysis can be posed in terms of "taking the autocorrelation out" of July temperature.
@@ -390,42 +419,40 @@ The simplist model (in terms of not worrying about assumption violations, etc.) 
 
 ```{r mr10}
 # naive model
-tmeanjul.lm0 <- lm(tmeanjul ~ Picea + Abies + Juniper
+tmeanjul_lm0 <- lm(tmeanjul ~ Picea + Abies + Juniper
    + Pinus + Betula + Fraxinus + Quercus + Ulmus
    + Acer + Juglans + Carya + Tsuga + Fagus
    + Alnus + Herbsum)
 
-summary(tmeanjul.lm0)
+summary(tmeanjul_lm0)
 oldpar <- par(mfrow = c(2, 2))
-plot(tmeanjul.lm0, which=c(1,2,4,5))
+plot(tmeanjul_lm0, which=c(1,2,4,5))
 par(oldpar)
 ```
 
 Map the residuals from the naive model
 
 ```{r mr11}
-# map residuals
-varname="residuals: tmeanjul.lm0"
-plotvar <- residuals(tmeanjul.lm0)
-plotvar <- (plotvar-mean(plotvar))/sd(plotvar)
-nclr <- 8
-plotclr <- brewer.pal(nclr,"PuOr")
-plotclr <- plotclr[nclr:1] # reorder colors 
-colornum <- cut(plotvar, c(-4:4), labels=FALSE)
-brks <- c(-4:4)
-color <- plotclr[colornum]
-plot(midwotl.shp)
-points(longitud, latitude, pch=ifelse(plotvar > 0,24,25),
-    bg=color, cex=1.5)
-legend(-95.0, 43.25, legend=leglabs(brks), fill=plotclr, cex=0.6,bty="n")
+# ggplot2 map of residuals
+plotvar <- residuals(tmeanjul_lm0)
+plotvar <- plotvar-mean(plotvar)
+plottitle <- "Naive model residuals (C)"
+leglable <- "residuals tmeanjul_lm0"
+ggplot() +
+  geom_sf(data = midwotl_sf, fill="grey70", color="black") +
+  geom_point(data = midwtf2, aes(x = longitud, y = latitude, color = plotvar), size = 5.0 ) +
+  scale_fill_gradient2(low = "blue", mid= "white", high = "red", aesthetics = 'color',
+                       limits = c(-5, 5), breaks = seq(-5, 5, by = 1), guide = 'colorbar', name = leglable) +
+  labs(x = "Longitude", y = "Latitude", title = plottitle) 
 ```
+
 
 ... and calculate the Moran statistic for the naive model residuals:
 
 ```{r mr12}
 # Moran test
-moran.test(residuals(tmeanjul.lm0), zero.policy=T, 
-     nb2listw(midwtf2.neighbors.dist, zero.policy=T, style="W"))
+moran.test(residuals(tmeanjul_lm0), zero.policy=T, 
+     nb2listw(midwtf2_neighbors_dist, zero.policy=T, style="W"))
 ```
 
 There are a few troublesome issues with the naive model.  The obvious one is the similarity of the standard errors of the regression coefficients, which is one of the byproducts of collinearity.  Here, the pollen data are almost exactly collinear, because the pollen percentages must some to 100.  (There are a few minor types omitted, so they don't do that exactly.)
@@ -433,7 +460,7 @@ There are a few troublesome issues with the naive model.  The obvious one is the
 The extent of collinearity can be confirmed by calculating something called the "condition number" of the matrix **X<sup>T</sup>X** (where **X** is the matrix of predictor variables), which is the ratio of the largest to smallest eigenvector of **X<sup>T</sup>X**.  This number should be small, say less than 50 or so, and it isn't.
 
 ```{r mr13}
-kappa(tmeanjul.lm0)
+kappa(tmeanjul_lm0)
 ```
 
 ## Second model, with transformed predictors ##
@@ -442,44 +469,46 @@ There are two approaches for dealing with collinearity here:  1) omitting some v
 
 ```{r mr14}
 # a second model, transformed predictors
-tmeanjul.lm1 <- lm(tmeanjul ~ Picea.50 + Abies.100 + Junip.100
+tmeanjul_lm1 <- lm(tmeanjul ~ Picea.50 + Abies.100 + Junip.100
     + Pinus.100 + Betula.50 + Frax.15 + Querc.25 + Ulmus.25
     + Acer.100 + Juglans.25 + Carya.25 + Tsuga.100 + Fagus.100
     + Alnus.100 + Herbs.25)
 
-summary(tmeanjul.lm1)
+summary(tmeanjul_lm1)
 oldpar <- par(mfrow = c(2, 2))
-plot(tmeanjul.lm1, which=c(1,2,4,5))
+plot(tmeanjul_lm1, which=c(1,2,4,5))
 par(oldpar)
 ```
+
+Map the residuals.
+
 ```{r mr15}
-# map residuals
-varname="residuals: tmeanjul.lm1"
-plotvar <- residuals(tmeanjul.lm1)
-plotvar <- (plotvar-mean(plotvar))/sd(plotvar)
-nclr <- 8
-plotclr <- brewer.pal(nclr,"PuOr")
-plotclr <- plotclr[nclr:1] # reorder colors 
-colornum <- cut(plotvar, c(-4:4), labels=FALSE)
-brks <- c(-4:4)
-color <- plotclr[colornum]
-plot(midwotl.shp)
-points(longitud, latitude, pch=ifelse(plotvar > 0,24,25),
-    bg=color, cex=1.5)
-legend(-95.0, 43.25, legend=leglabs(brks), fill=plotclr, cex=0.6,
-    bty="n")
+# ggplot2 map of residuals
+plotvar <- residuals(tmeanjul_lm1)
+plotvar <- plotvar-mean(plotvar)
+plottitle <- "Second model residuals (C)"
+leglable <- "residuals tmeanjul_lm1"
+ggplot() +
+  geom_sf(data = midwotl_sf, fill="grey70", color="black") +
+  geom_point(data = midwtf2, aes(x = longitud, y = latitude, color = plotvar), size = 5.0 ) +
+  scale_fill_gradient2(low = "blue", mid= "white", high = "red", aesthetics = 'color',
+                       limits = c(-5, 5), breaks = seq(-5, 5, by = 1), guide = 'colorbar', name = leglable) +
+  labs(x = "Longitude", y = "Latitude", title = plottitle) 
 ```
+
+Get the Moran statistic for the residuals.
 ```{r mr16}
 # Moran test
-moran.test(residuals(tmeanjul.lm1), zero.policy=T, 
-     nb2listw(midwtf2.neighbors.dist, zero.policy=T, style="W"))
+moran.test(residuals(tmeanjul_lm1), zero.policy=T, 
+     nb2listw(midwtf2_neighbors_dist, zero.policy=T, style="W"))
 ```
 
 Note that this model is better behaved in the sense of not showing strange values for the standard errors of the regresssion coefficients, and the spatial autocorrelation, while still barely significant, is lower too.  Many of the *t*-tests of the regression coefficients are not significant (meaning that the null hypothesis that the regression coefficient value is 0 can not be rejected).  A model with a subset of (significant) predictors can be selected using "all/best possible subsets" regression.
 
 Note that the condition number for this model is still relatively high, because, even though the predictor variables have been transformed, there is still a lot of correlation among them.
+
 ```{r mr17}
-kappa(tmeanjul.lm1)
+kappa(tmeanjul_lm1)
 ```
 
 ## All possible subsets regression ##
@@ -488,53 +517,50 @@ The `regsubsets()` function in the `leaps` package uses a clever algorithm from 
 
 ```{r mr18}
 # another model, all possible subsets regression
-tmeanjul.lm2 <- regsubsets(tmeanjul ~ Picea.50 + Abies.100 + Junip.100
+tmeanjul_lm2 <- regsubsets(tmeanjul ~ Picea.50 + Abies.100 + Junip.100
     + Pinus.100 + Betula.50 + Frax.15 + Querc.25 + Ulmus.25
     + Acer.100 + Juglans.25 + Carya.25 + Tsuga.100 + Fagus.100
     + Alnus.100 + Herbs.25, data=midwtf2)
-summary(tmeanjul.lm2)
+summary(tmeanjul_lm2)
 ```
 
 To get the diagnostic plots and statistics for one of the "best" models, that regression is simly rerun using the `lm()` function.
 
 ```{r mr19}
 # rerun one of the best-subsets regressions
-tmeanjul.lm3 <- lm(tmeanjul ~ Picea.50 + Abies.100 + Betula.50 + Fraxinus
+tmeanjul_lm3 <- lm(tmeanjul ~ Picea.50 + Abies.100 + Betula.50 + Fraxinus
      + Querc.25 + Fagus.100 + Herbs.25)
 
-summary(tmeanjul.lm3)
+summary(tmeanjul_lm3)
 oldpar <- par(mfrow = c(2, 2))
-plot(tmeanjul.lm1, which=c(1,2,4,5))
+plot(tmeanjul_lm1, which=c(1,2,4,5))
 par(oldpar)
 ```
 
 ```{r mr20}
-# map residuals
-varname="residuals: tmeanjul.lm3"
-plotvar <- residuals(tmeanjul.lm3)
-plotvar <- (plotvar-mean(plotvar))/sd(plotvar)
-nclr <- 8
-plotclr <- brewer.pal(nclr,"PuOr")
-plotclr <- plotclr[nclr:1] # reorder colors 
-colornum <- cut(plotvar, c(-4:4), labels=FALSE)
-brks <- c(-4:4)
-color <- plotclr[colornum]
-plot(midwotl.shp)
-points(longitud, latitude, pch=ifelse(plotvar > 0,24,25),
-    bg=color, cex=1.5)
-legend(-95.0, 43.25, legend=leglabs(brks), fill=plotclr, cex=0.6,
-    bty="n")
+# ggplot2 map of residuals
+plotvar <- residuals(tmeanjul_lm3)
+plotvar <- plotvar-mean(plotvar)
+plottitle <- "All-possible subsets model residuals (C)"
+leglable <- "residuals tmeanjul_lm3"
+ggplot() +
+  geom_sf(data = midwotl_sf, fill="grey70", color="black") +
+  geom_point(data = midwtf2, aes(x = longitud, y = latitude, color = plotvar), size = 5.0 ) +
+  scale_fill_gradient2(low = "blue", mid= "white", high = "red", aesthetics = 'color',
+                       limits = c(-5, 5), breaks = seq(-5, 5, by = 1), guide = 'colorbar', name = leglable) +
+  labs(x = "Longitude", y = "Latitude", title = plottitle) 
 ```
+
 ```{r mr21}
 # Moran test
-moran.test(residuals(tmeanjul.lm3), zero.policy=T,
-    nb2listw(midwtf2.neighbors.dist, zero.policy=T, style="W"))
+moran.test(residuals(tmeanjul_lm3), zero.policy=T,
+    nb2listw(midwtf2_neighbors_dist, zero.policy=T, style="W"))
 ```
 
 The condition number is now acceptably low:
 
 ```{r mr22}
-kappa(tmeanjul.lm3)
+kappa(tmeanjul_lm3)
 ```
 
 The progress of the analysis can be gauged by comparing the individual Moran statistics, which should get smaller as the model gets more refined.  The Moran statistic for the data is 12.08, and this could be thought of as a "totally naive" model, where the response variable is expressed as a function of just its mean value.  The naive model with all untransformed predictors does achieve a lower Moran statistic (2.197) indicating that some of the pattern in the response has indeed been accounted for by the predictors, but there are other issues with this model.  The second regression including transformed predictors has a Moran statistic of 2.480, but this model too has some issues, in particular, it is "overfit".  The final model, the result of the best-possible-subsets regression has the lowest Moran statistics too, 1.834.
@@ -543,16 +569,16 @@ The progress of the analysis can be gauged by comparing the individual Moran sta
 # compare Moran tests
 # dependent variable (tmeanjul)
 moran.test(tmeanjul, zero.policy=T, 
-     nb2listw(midwtf2.neighbors.dist, zero.policy=T, style="W"))
+     nb2listw(midwtf2_neighbors_dist, zero.policy=T, style="W"))
 # lm0 (naive model) no transformation, all predictors included
-moran.test(residuals(tmeanjul.lm0), zero.policy=T,
-    nb2listw(midwtf2.neighbors.dist, zero.policy=T, style="W"))
+moran.test(residuals(tmeanjul_lm0), zero.policy=T,
+    nb2listw(midwtf2_neighbors_dist, zero.policy=T, style="W"))
 # lm1 transformed predictors, all predictors included
-moran.test(residuals(tmeanjul.lm1), zero.policy=T,
-    nb2listw(midwtf2.neighbors.dist, zero.policy=T, style="W"))
+moran.test(residuals(tmeanjul_lm1), zero.policy=T,
+    nb2listw(midwtf2_neighbors_dist, zero.policy=T, style="W"))
 # lm3 transformed predictors, best subset model
-moran.test(residuals(tmeanjul.lm3), zero.policy=T,
-    nb2listw(midwtf2.neighbors.dist, zero.policy=T, style="W"))
+moran.test(residuals(tmeanjul_lm3), zero.policy=T,
+    nb2listw(midwtf2_neighbors_dist, zero.policy=T, style="W"))
 ```
 
 [[Back to top]](lec13.html)
@@ -564,83 +590,70 @@ Sometimes a data set exists in which fitting different relationships for subsets
 Here are the shapefile components, which include the data:  [[.dbf]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/scand.dbf) [[.shx]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/scand.shx) [[.shp]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/scand.shp)
 
 ```{r dum01, echo=FALSE, include=FALSE}
-library(maptools)
-library(sp)
-library(rgeos)
+library(sf)
+library(ggplot2)
 library(RColorBrewer)
 ```
 Load some packages, and attach the data frame:
 
 ```{r dum02, eval=FALSE}
-# libraries
-library(maptools)
-library(rgeos)
+library(sf)
+library(ggplot2)
 library(RColorBrewer)
 ```
 
 ## Look at the data ##
 
-First, get a reference map of the commune names:
+First, get a reference map of the commune/county/district names.  Read a shapefile of Scandanavian communes.
+
+```{r, echo=TRUE, eval=FALSE}
+# read a Scandinamvian province/county shape file
+shapefile <- "/Users/bartlein/Documents/geog495/data/shp/scand_prov.shp"
+scand_prov_sf <- st_read(shapefile)
+scand_prov_sf
+plot(st_geometry(scand_prov_sf), axes = TRUE)
+```
+
+Get the centroids of the individual districts for locating labels later:
 
 ```{r dum03}
 # get coordinates of district centroids
-scand_prov.pts <- coordinates(scand_prov.shp)
-District <- as.character(scand_prov.shp@data$District)
-District
+scand_prov_pts <- (st_centroid(scand_prov_sf))
 ```
 
-In this shapefile, the Scandinavian characters in the district names were represented by "escape sequences" which are intended to replace, for example, "ö" with "o".  However, these escape sequences mess up R's ability to display the names on a plot using the `text()` function.  The names can be restored by assignment:  
-
-```{r replace_names}
-scand_prov.shp@data$District <- c(
-  "Lappi",       "Vaasa",            "Keski Suomi",    "Oulu",        "Kuopio",            "Mikkeli",     "Pohjois Karjala",
-  "Hame",        "Uusimaa",          "Turku ja Pori",  "Ahvenanmaa",  "Kymi",              "Norrbotten",  "Västerbotten",
-  "Jämtland",    "Västernorrland",   "Gävleborg",      "Uppsala",     "Stockholm",         "Kopparberg",  "Västmanland",
-  "Värmland",    "Södermanland",     "Orebro",         "Skaraborg",   "Ostergötland",      "Kalmar",      "Göteborg",
-  "Alvsborg",    "Jönköping",        "Blekinge",       "Halland",     "Kronoberg",         "Malmöhus",    "Kristianstad",
-  "Gotland",     "Finnmark",         "Troms",          "Nordland",    "Nord-Trondelag",    "Rogaland",    "Hordaland",
-  "Vest-Agder",  "More og Romsdal",  "Sor-Trondelag",  "Aust-Agder",  "Sogn og Fjordane",  "Oppland",     "Telemark",
-  "Buskerud",    "Ostfold",          "Hedmark",        "Vestfold",    "Akershus",          "Oslo" )
-```
-Revised names:  
-```{r}
-scand_prov.shp@data$District
-```
+Ignore the warning, which alerts us to the fact that latitude and longitude are not isotropic, and so we really should be calculating centroids only with projected data.
 
 Plot the District (commune) names:
 
 ```{r plot names}
-# get coordinates of district centroids
-scand_prov.pts <- coordinates(scand_prov.shp)
-District <- as.character(scand_prov.shp@data$District)
-
-# plot the names
-plot(scand_prov.shp, bor="gray90", axes=TRUE)
-points(scand_prov.pts, pch=16, cex=0.4)
-text(scand_prov.pts, labels=District, cex=0.5)
+# ggplot2 map of District names
+ggplot() +
+  geom_sf(data = scand_prov_sf, fill=NA, color="gray") +
+  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=as.character(District)), 
+               check_overlap = TRUE, size = 3) +
+  theme_bw()
 ```
 
-Next, extact the variable values from the shape file, and plot the yes votes.  (The data are the same as those in `scanvote.csv`, but are extracted from the shapefile here to make sure that the individual values are in the same order as the polygons in the shapefile.)
+Next, extact the variable values from the shape file, and plot the yes votes.  (The data are the same as those in `scanvote_csv`, but are extracted from the shapefile here to make sure that the individual values are in the same order as the polygons in the shapefile.)
 
 ```{r dum04}
 # get variable values from .dbf attributes
-Y <- scand_prov.shp@data$Yes
-X <- scand_prov.shp@data$Pop
-Country <- scand_prov.shp@data$Country
+Y <- scand_prov_sf$Yes
+X <- scand_prov_sf$Pop
+Country <- scand_prov_sf$Country
+```
 
+Plot the "Yes" vote:
+
+```{r}
 # plot Yes votes -- setup
-plotvar <- Y # gets data from shapefile .dbf
-nclr <- 8
-plotclr <- brewer.pal(nclr,"PuOr")
-colornum <- cut(plotvar, nclr, labels=FALSE)
-colorcode <- plotclr[colornum]
-brks <- round(quantile(plotvar, probs=seq(0,1,1/(nclr))), digits=1)
-colorcode <- plotclr[colornum]
-
-# draw the map
-plot(scand_prov.shp, col=colorcode, axes=TRUE)
-text(scand_prov.pts, labels=Y, cex=.5)
-legend("topleft", legend=leglabs(brks), fill=plotclr, cex=0.8, bty="n")
+pal <- brewer.pal(8, "PuOr") 
+ggplot()  +
+  geom_sf(data = scand_prov_sf, aes(fill = Yes)) +
+  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=as.character(Yes)), 
+               check_overlap = TRUE, size = 3) +
+  scale_fill_gradientn(colors = pal) +
+  labs(title = "Yes Vote (%)", x="Longitude", y="Latitude") 
 ```
 
 Here's a standard scatter plot of the data, with the points labeled by Country.
@@ -657,10 +670,10 @@ The regression model for all data, considered without respect to individual coun
 
 ```{r dum06}
 # linear model, Yes ~ log10(Pop)
-vote.lm1 <- lm(Y ~ log10(X))
-summary(vote.lm1)
+vote_lm1 <- lm(Y ~ log10(X))
+summary(vote_lm1)
 oldpar <- par(mfrow = c(2, 2))
-plot(vote.lm1, which=c(1,2,4,5))
+plot(vote_lm1, which=c(1,2,4,5))
 par(oldpar)
 ```
 
@@ -670,40 +683,38 @@ The initial regression has several issues:  There is a distinct arch in the resi
 # examine the regression equation
 plot(Y ~ log10(X), type="n")
 text(log10(X),Y, labels=Country)
-abline(vote.lm1)
-segments(log10(X), fitted(vote.lm1), log10(X), Y)
+abline(vote_lm1)
+segments(log10(X), fitted(vote_lm1), log10(X), Y)
 ```
 
 Examination of this plot suggests that positive deviations are often contributed by communes in Finland, and  negative deviations by communes in Norway.  This suggests that Norwegian communes are less likely to have voted Yes, and Finnish communes more likely to have voted yes than Scandinavian communes as a group.  This idea is reinforced by looking at the prediction and confidence intervals for the regression.
 
 ```{r dum08}
 # confidence intervals
-pred.data <- data.frame(X=seq(1,1151,by=50))
-pred.int <- predict(vote.lm1, int="p", newdata=pred.data)
-conf.int <- predict(vote.lm1, int="c", newdata=pred.data)
+pred_data <- data.frame(X=seq(1,1151,by=50))
+pred_int <- predict(vote_lm1, int="p", newdata=pred_data)
+conf_int <- predict(vote_lm1, int="c", newdata=pred_data)
 
-plot(Y ~ log10(X), ylim=range(Y, pred.int, na.rm=T), type="n")
+plot(Y ~ log10(X), ylim=range(Y, pred_int, na.rm=T), type="n")
 text(log10(X),Y, labels=Country, cex=0.7)
-pred.X <- log10(pred.data$X)
-matlines(pred.X, pred.int, lty=c(1,2,2), col="black")
-matlines(pred.X, conf.int, lty=c(1,2,2), col="red")
+pred_X <- log10(pred_data$X)
+matlines(pred_X, pred_int, lty=c(1,2,2), col="black")
+matlines(pred_X, conf_int, lty=c(1,2,2), col="red")
 ```
 
 Mapping the residuals suggests the same thing--there is an obvious spatial pattern in the sign of the residuals (so obvious, that it's not really necessary to calculate a Moran statistic).
 
 ```{r dum09}
 # map the residuals
-plotvar <- vote.lm1$residuals # gets residuals
-nclr <- 8
-plotclr <- brewer.pal(nclr,"PuOr")
-brks <- seq(-8,8,2)
-colornum <- findInterval(plotvar, brks, all.inside = TRUE)
-colorcode <- plotclr[colornum]
-
-plot(scand_prov.shp, col=colorcode)
-points(scand_prov.pts, type="n")
-text(scand_prov.pts, labels=as.character(round(plotvar, 1)), cex=.5)
-legend("topleft", legend=leglabs(brks), fill=plotclr, cex=0.8, bty="n")
+pal <- brewer.pal(8, "PuOr") 
+plotlab <- as.character(round(vote_lm1$residuals, 1))
+plottitle <- "Residuals from lm1"
+ggplot()  +
+  geom_sf(data = scand_prov_sf, aes(fill = vote_lm1$residuals)) +
+  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=plotlab),
+       check_overlap = TRUE, size = 3) +
+  scale_fill_gradientn(colors = pal, limits = c(-15, 15), breaks = seq(-15, 15, by = 5)) +
+  labs(title = plottitle, x="Longitude", y="Latitude") 
 ```
 
 Boxplots of the response variable (`Y`) and the residuals by country also suggest the same thing.
@@ -714,7 +725,7 @@ opar <- par(mfrow=c(1,4))
 boxplot(Y ~ Country, ylab="Yes")
 
 # residual grouped boxplot
-plot(residuals(vote.lm1) ~ Country, ylim=c(-15,15))
+plot(residuals(vote_lm1) ~ Country, ylim=c(-15,15))
 par <- opar
 ```
 
@@ -726,11 +737,8 @@ A dummy-variable regression can be run by including `Country` as a predictor.  T
 ```{r dum11}
 # Scandinavian EU Preference Vote -- dummy variable regression
 # model with a factor as predictor
-Y <- scand_prov.shp@data$Yes
-X <- scand_prov.shp@data$Pop
-Country <- scand_prov.shp@data$Country
-vote.lm2 <- lm(Y ~ log10(X)+Country)
-summary(vote.lm2)
+vote_lm2 <- lm(Y ~ log10(X)+Country)
+summary(vote_lm2)
 ```
 
 The different regression lines can be displayed as follows:
@@ -740,10 +748,9 @@ The different regression lines can be displayed as follows:
 plot(Y ~ log10(X))
 legend("bottomright", legend=c("N","F","S"), lty=c(1,1,1), lwd=2, cex=1, col=c("red","blue","purple"))
 
-lines(log10(X)[Country=="N"],fitted(vote.lm2)[Country=="N"], lwd=2, col="red")
-lines(log10(X)[Country=="F"],fitted(vote.lm2)[Country=="F"], lwd=2, col="blue")
-lines(log10(X)[Country=="S"],fitted(vote.lm2)[Country=="S"], lwd=2, col="purple")
-
+lines(log10(X)[Country=="N"],fitted(vote_lm2)[Country=="N"], lwd=2, col="red")
+lines(log10(X)[Country=="F"],fitted(vote_lm2)[Country=="F"], lwd=2, col="blue")
+lines(log10(X)[Country=="S"],fitted(vote_lm2)[Country=="S"], lwd=2, col="purple")
 ```
 
 Notice that Finland has the highest intercept (34.434), while that for Sweden is lower (34.434 - 6.679), and that for Norway is lower still (34.434 - 8.609).
@@ -753,7 +760,7 @@ Examine the model
 ```{r dum13}
 # examine the model
 oldpar <- par(mfrow = c(2, 2))
-plot(vote.lm2, which=c(1,2,4,5))
+plot(vote_lm2, which=c(1,2,4,5))
 par(oldpar)
 ```
 
@@ -763,16 +770,15 @@ Map the residuals:
 
 ```{r dum14}
 # map residuals
-plotvar <- vote.lm2$residuals # gets residuals
-nclr <- 8
-plotclr <- brewer.pal(nclr,"PuOr")
-brks <- seq(-8,8,2)
-colornum <- findInterval(plotvar, brks, all.inside = TRUE)
-colorcode <- plotclr[colornum]
-plot(scand_prov.shp, col=colorcode)
-points(scand_prov.pts, type="n")
-text(scand_prov.pts, labels=as.character(round(plotvar, 1)), cex=.5)
-legend("topleft", legend=leglabs(brks), fill=plotclr, cex=0.8, bty="n")
+pal <- brewer.pal(8, "PuOr") 
+plotlab <- as.character(round(vote_lm2$residuals, 1))
+plottitle <- "Residuals from lm2"
+ggplot()  +
+  geom_sf(data = scand_prov_sf, aes(fill = vote_lm2$residuals)) +
+  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=plotlab),
+               check_overlap = TRUE, size = 3) +
+  scale_fill_gradientn(colors = pal, limits = c(-15, 15), breaks = seq(-15, 15, by = 5)) +
+  labs(title = plottitle, x="Longitude", y="Latitude") 
 ```
 
 The obvious patterns in the residuals from the first regression are also much reduced.
@@ -783,8 +789,8 @@ opar <- par(mfrow=c(1,4))
 boxplot(Y ~ Country, ylab="Yes")
 
 # residual grouped boxplot
-plot(residuals(vote.lm1) ~ Country, ylim=c(-15,15))
-plot(residuals(vote.lm2) ~ Country, ylim=c(-15,15))
+plot(residuals(vote_lm1) ~ Country, ylim=c(-15,15))
+plot(residuals(vote_lm2) ~ Country, ylim=c(-15,15))
 par <- opar
 ```
 
@@ -795,8 +801,8 @@ It also the case that the obvious differences in the location (i.e. the medians)
 A second dummy variable regression, where both the intercept and slope vary can be specified using the model formula `Y ~ log10(X)*Country'.
 
 ```{r dum15}
-vote.lm3 <- lm(Y ~ log10(X)*Country)
-summary(vote.lm3)
+vote_lm3 <- lm(Y ~ log10(X)*Country)
+summary(vote_lm3)
 ```
 
 None of the *t*-tests of the significance of the dummy-variable terms (intercepts and slopes) are significant, and the adjusted *R<sup>2</sup>* value is lower, and so this model is likely "overfitted".  Nevertheless, it's useful to look at how both the intercepts and slopes can be made to vary amoung countries.
@@ -806,25 +812,23 @@ None of the *t*-tests of the significance of the dummy-variable terms (intercept
 plot(Y ~ log10(X))
 legend("bottomright", legend=c("N","F","S"), lty=c(1,1,1), lwd=2, cex=1, col=c("red","blue","purple"))
 
-lines(log10(X)[Country=="N"],fitted(vote.lm3)[Country=="N"], lwd=2, col="red")
-lines(log10(X)[Country=="F"],fitted(vote.lm3)[Country=="F"], lwd=2, col="blue")
-lines(log10(X)[Country=="S"],fitted(vote.lm3)[Country=="S"], lwd=2, col="purple")
-
+lines(log10(X)[Country=="N"],fitted(vote_lm3)[Country=="N"], lwd=2, col="red")
+lines(log10(X)[Country=="F"],fitted(vote_lm3)[Country=="F"], lwd=2, col="blue")
+lines(log10(X)[Country=="S"],fitted(vote_lm3)[Country=="S"], lwd=2, col="purple")
 ```
 Map the residuals from the third model.
 
 ```{r dum17}
 # map residuals
-plotvar <- vote.lm3$residuals # gets residuals
-nclr <- 8
-plotclr <- brewer.pal(nclr,"PuOr")
-brks <- seq(-8,8,2)
-colornum <- findInterval(plotvar, brks, all.inside = TRUE)
-colorcode <- plotclr[colornum]
-plot(scand_prov.shp, col=colorcode)
-points(scand_prov.pts, type="n")
-text(scand_prov.pts, labels=as.character(round(plotvar, 1)), cex=.5)
-legend("topleft", legend=leglabs(brks), fill=plotclr, cex=0.8, bty="n")
+pal <- brewer.pal(8, "PuOr") 
+plotlab <- as.character(round(vote_lm3$residuals, 1))
+plottitle <- "Residuals from lm3"
+ggplot()  +
+  geom_sf(data = scand_prov_sf, aes(fill = vote_lm3$residuals)) +
+  geom_sf_text(data = scand_prov_pts, aes(geometry=geometry, label=plotlab),
+               check_overlap = TRUE, size = 3) +
+  scale_fill_gradientn(colors = pal, limits = c(-15, 15), breaks = seq(-15, 15, by = 5)) +
+  labs(title = plottitle, x="Longitude", y="Latitude") 
 ```
 
 Look at the country effect on the residuals from the third model.
@@ -835,9 +839,9 @@ opar <- par(mfrow=c(1,4))
 boxplot(Y ~ Country, ylab="Yes")
 
 # residual grouped boxplot
-plot(residuals(vote.lm1) ~ Country, ylim=c(-15,15))
-plot(residuals(vote.lm2) ~ Country, ylim=c(-15,15))
-plot(residuals(vote.lm3) ~ Country, ylim=c(-15,15))
+plot(residuals(vote_lm1) ~ Country, ylim=c(-15,15))
+plot(residuals(vote_lm2) ~ Country, ylim=c(-15,15))
+plot(residuals(vote_lm3) ~ Country, ylim=c(-15,15))
 par <- opar
 ```
 
