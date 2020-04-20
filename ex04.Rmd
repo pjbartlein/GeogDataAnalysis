@@ -262,7 +262,7 @@ attach(cirques)
 names(cirques)
 ```
 
-The variables are an index number (`Cirque`), location (`Lat`, `Lon`), elevation in meters (`Elev`), a region indicator (which can be plotted to discover what the regions are; `Region`) and a 0/1 variable that indicates whether each cirque is occupied by a glacier (`Glacier = G`) or not (`Glacier = U`).
+The variables are an index number (`Cirque`), location (`Lat`, `Lon`), elevation in meters (`Elev`), a region indicator (which can be plotted to discover what the regions are; `Region`) and a factor (or indicator) variable that indicates whether each cirque is occupied by a glacier (`Glacier = G`) or not (`Glacier = U`).
 
 (Should you wish to also do nicer maps of these data, here are the links to the appropriate shapefile components:  [[.dbf]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/cirques.dbf) [[.shp]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/cirques.shp) [[.shx]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/cirques.shx)) [[.prj]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/cirques.prj)
 
