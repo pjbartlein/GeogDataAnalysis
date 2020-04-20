@@ -18,7 +18,7 @@ klippy::klippy(position = c('top', 'right'))
 ```{r load, echo=FALSE, cache=FALSE}
 load(".Rdata")
 ```
-<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
 # Introduction #
 
 There has been a rapid increase in the availability of data sets that may contain thousands of observations (high-resolution, i.e. high-density or high-frequency data sets) and tens or hundreds of variables or attributes (high-dimension).  Such data sets arise from:
@@ -37,7 +37,7 @@ Although computing resources now permit the rapid production of such data sets, 
 - special-purpose analysis methods for dealing with high-resolution (density or frequency) data sets
 - traditional and novel methods for dealing with high-dimensional data sets (i.e. those with many variables, or more variables than observations)
 
-In `R`, some of these approaches are implemented in the `R` `iplots`, `mvtsplots` and `tabplots` packages, and by appropriate modification of commonplace displays like scatterplots and parallel coordinate plots included in packages available on [`CRAN`](http://cran.us.r-project.org/), plus others available in the [`Bioconductor`](http://www.bioconductor.org/) packages as extensions of traditional mulitivariate approaches motivated by large data sets produced in the various biomedical fields.
+In `R`, some of these approaches are implemented in the `R` `mvtsplots` and `tabplots` packages, and by appropriate modification of commonplace displays like scatterplots and parallel coordinate plots included in packages available on [`CRAN`](http://cran.us.r-project.org/), plus others available in the [`Bioconductor`](http://www.bioconductor.org/) packages as extensions of traditional mulitivariate approaches motivated by large data sets produced in the various biomedical fields.
 
 # Enhanced standard displays #
 
@@ -45,43 +45,11 @@ The techniques for the display and interactive analysis of high-resolution and h
 
 ## Visualizing high-resolution data sets using enhanced versions of standard displays ##
 
-The display of high resolution data (in addition to the standard approach of simply mapping it) can be illustrated using a set of climate station data for the western United States, consisting of 3728 observations of 15 variables.  Although these data are not of extremely high resolution (or high dimension), they illustrate the general ideas.
+The display of high resolution data (in addition to the standard approach of simply mapping it) can be illustrated using a set of precipitation-ratio data for the western United States, consisting of 3728 observations of 15 variables.  Although these data are not of extremely high resolution (or high dimension), they illustrate the general ideas.
 
-Begin by loading the appropriate packages and  reading the data, along with a shape file that is used to quickly map the data. 
-
-Data: [[wus_pratio.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/wus_pratio.csv)     Shapefile components:  [[wus.shp]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/wus.shp) [[wus.dbf]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/wus.dbf) [[wus.shx]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/wus.shx)
-
-```{r hd02, message=FALSE}
-library(maptools) # loads sp library too
-library(rgeos)
-library(RColorBrewer) # creates nice color schemes
-library(classInt) # finds class intervals for continuous variables
-```
-
-Here's a simple map of the station locations.  The following code produces a standard map with the stations represented by dots.  One technique to avoid overplotting is simply reducing the character size using the `cex` argument.
-
-```{r hd03, fig.height=6, fig.width=6}
-# map of precipitation stations
-plot(wus.shp, lwd=3, col="gray")
-points(wus_pratio$lon, wus_pratio$lat, pch=16, cex=0.8)
-```
+The data are mappend in the lecture on *Maps in R*.
 
 In what follows, we'll want to examine the large-scale patterns of the seasonality (summer-wet vs. winter-wet) of precipitation.  The data consist of monthly precipitation ratios, or the average precipitation for a particular month and station divided by the average annual total precipitation.  This has the effect of removing the very large imprint of elevation on precipitation totals.  The ratio of July to January precipitation provides a single overall description of precipitation seasonality.
-
-```{r hd04, fig.height=6, fig.width=6}
-# a second map with some colors
-wus_pratio$pjulpjan <- wus_pratio$pjulpann/wus_pratio$pjanpann  # pann values cancel out
-nclr <- 10
-plotclr <- brewer.pal(nclr,"PRGn") 
-class <- classIntervals(wus_pratio$pjulpjan, nclr, style="fixed",
-  fixedBreaks=c(9999.0, 10.0, 5.0, 2.0, 1.25, 1.0, .800, .500, .200, 
-    .100, 0.0))
-colcode <- findColours(class, plotclr)
-plot(wus.shp)
-points(wus_pratio$lon, wus_pratio$lat, pch=16, col=colcode, main="Jan/Jul Precipitation")
-legend(-125,33.5, legend=names(attr(colcode, "table")),
-  fill=attr(colcode, "palette"), cex=0.6, bty="n")
-```
 
 ## Transparency ##
 
@@ -146,340 +114,468 @@ par <- opar
 ```
 [[Back to top]](lec19.html)
 
-# The iplots package:  transparency and linked plots #
+# Parallel coordinate plots #
 
-The `iplots` package provides another way of producing "alpha-channel" plots (plus more, as will be illustrated below).
+Parallel coordiate plots in a sense present an individual axis for each variable in a dataframe along which the individual values of the variable are plotted (usually rescaled to lie between 0 and 1), with the points for a particular observation joined by straight-line segments.  Usually the points themselves are *not* plotted to avoid clutter, but all data values (or "cells" in the dataframe) explictly appear on the plot, nearly a million of them in the example here.  Parallel coordinate plots can be generated using the `GGally` package.
 
-## Installation ## 
+## Global fire data ##
 
-The `iplots` package was designed to run in a "third-party" GUI called `JGR` which handles the execution of the Java-language plotting routines.  The installation of `JGR` on Windows is pretty straightforward, but a little tricky on the Mac.  
+The global fire data set provides a good instructional example of the development and use of parallel coordinate plots.  The input data consist of the GFEDv3.1 burned fraction (of half-degree grid cells, `gfed`), several bioclimatic variables (mean annual temperature (`mat`), mean temperature of the warmest and coldest months (`mtwa` and `mtco` respectively), growing degree days (5-deg C base, `gdd5`), annual precipitation (`map`), annual equilibrium evapotranspiration (`aet`), precipitation minus evapotranspiration (`pme`), `alpha` (P-E),lightning-strike frequency (`hmrc`), population density (`gpw`), net primary productivity (`npp`), treecover (`treecov`), and two categorical variables describing "megabiomes" and potential natural vegetation types (`megabiome` and `vegtype` respectively).
 
-### Windows ###
+Load the necessary packages:
 
-On Windows, download and install the `iplots` package as usual.  (Also install the `rJava` package; other necessary packages should be automatically installed).  Then load the `rJava` and `iplots` packages as usual.
-
-```{r hd11, message=FALSE, eval=FALSE}
-library(rJava)
-library(iplots)
+```{r  message=FALSE}
+# load packages
+library(sf)
+library(ggplot2)
+library(tidyr)
+library(GGally)
+#library(gridExtra)
 ```
 
-### Mac OS X ###
-
-On the Mac, the installation is a little more involved, `iplots` is run through an "IDE/script editor"" called `JGR`, which combines a script editor and console window, and resembles the usual Mac OS X R GUI.  `JGR` was built using an older version of Java (Java 6), and the appropriate "runtime environment" (currently Java for OS X 2015-001) has be downloaded from Apple and installed. 
-
-Go to [https://support.apple.com/kb/DL1572?locale=en_US](https://support.apple.com/kb/DL1572?locale=en_US), and click on the "Download" button, and follow instructions.
-
-(Note:  Apple recommends keeping Java up to date.  To download the current Java run-time environment (JRE) from Oracle.  
-
-- Go to [[http://www.oracle.com/technetwork/java/javase/downloads/index.html]](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  Click on the JRE Download button, follow the instructions, and eventually download and install `jre-8u121-macosx-x64.dmg` (or the most current version).  Then  
-- Open a terminal window and type or copy and paste the following (including the quotes `"`):  
-`export JAVA_HOME="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home"`
-- Check the installation by typing `java -version` and you should see `java version "1.8.0_121-b13"`)
-
-Then download `JGR` and the appropriate libraries:
-
-- Go to [[http://rforge.net/JGR/files/]](http://rforge.net/JGR/files/) and download `JGR-1.8.dmg` (at the time of this writing), and then open the disk image and install it by copying it to your Applications folder. (Note that there is a `JGR` application (`JGR.app`) and the `JGR` `R` package; they’re not the same thing, and both need to be installed.)
-- install `JGR-1.8.dmg` (you may have to deal with Mac security restrictions)
-- Install the necessary packages the usual way (i.e. `install.packages(c("rJava", "JavaGD", "iplots"))`)
-
-Then, to run `JGR`:
-
-- load the `JGR` package by typing `library(JGR)`; some warnings will be produced.
-- Then start `JGR` by typing `JGR()` in the `R` or `RStudio` console window. (It's ok to quit `R` or `RStudio` at this point.)
-- switch to the `JGR` app.
-- use the `JGR` `Workspace` menu to load a workspace, or paste the following into the bottom pane of the `JGR` app:
-
-```{r loadWorkspace, eval=FALSE, echo=TRUE}
-con <- url("https://pjbartlein.github.io/GeogDataAnalysis/data/Rdata/geog495.RData")
-load(file=con)
-close(con)
+ Read the data from an existing `.csv` file.
+ 
+```{r, echo=TRUE, eval=TRUE, results='hide'}
+# read the data -- output suppressed
+csvfile <- "/Users/bartlein/Documents/geog495/data/csv/global_fire.csv"
+gf <- read.csv(csvfile)
+str(gf)
+summary(gf)
 ```
 
-(`JRG` maintains its own workspace (and `.RData` file), distinct from the one maintained by RStudio.)
+The two categorical (i.e. factor) variables have levels arranged in the default alphabetical order.  The following code reorders the levels into something more ecologically and climatically sensible:
 
-## Scatter-plot maps ##
+```{r, echo=TRUE, eval=TRUE, results='hide'}
+# reorder megabiomes -- output suppressed
+megabiome_name <- c("TropF", "WarmF", "SavDWd", "GrsShrb", "Dsrt", "TempF", "BorF", "Tund", "None", "Ice")
+gf$megabiome <- factor(gf$megabiome, levels=megabiome_name)
 
-Here's the `iplots` version of the scatter-plot map.  Note the size of the symbols can be controlled by the up and down arrow keys, and the transparency by the right and left arrow keys.
+# reorder vegtypes
+vegtype_name <- c("TrEFW","TrDFW","TeBEFW","TeNEFW","TeDFW","BrEFW","BrDFW","EDMFW",
+                  "Savan","GrStp","ShrbD","ShrbO","Tund","Dsrt","PDRI")
+gf$vegtype <- factor(gf$vegtype, levels=vegtype_name)
 
-```{r hd12, echo=TRUE, eval=FALSE}
-attach(wus_pratio)
-# simple scatter plot iplots version with transparency
-# use arrow keys to control transparency and symbol size
-iplot(elev,pjanpann, xlab="elev", ylab="pjanpann") 
-detach(wus_pratio)
-```
-![](images/iplot011.png)
-
-[[Back to top]](lec19.html)
-
-## Linked interactive plots and "brushing" ##
-
-Linked plots are those in which multiple plots are generated and viewed, and particular observations are flagged or "brushed" to call attention to them in each of the individual plots.  The iplots package provides an easy way to create a small number of linked plots.  The data set used here (precipitation ratios in the region around Yellowstone National Park) is a subset of the larger data set, and facilitates a more rapid demonstration.  The function `ipcp()` creates a parallel-coordinates plot, while the function `iplot()` in this instance creates a crude map. After the plots are created, the mouse can be used to draw a rectangular selection region that "lights up" points in both plots.  
-
-Note:  If you get a "Data length mismatch" dialog box warning when executing the code below, reply "Yes".
-
-### Linked plots with continuous variables ##
-
-```{r hd15}
-# linked interactive plots -- brushing
-# example with Yellowstone region pratios iplots version
-attach(yellpratio)
-names(yellpratio)
+# check the new ordering of factor levels
+str(gf[16:17])
 ```
 
-```{r hd16, echo=TRUE, eval=FALSE}
-# parallel coordinate plot plus scatter plot map
-ipcp(yellpratio) # use arrow keys to control transparency
-iplot(Lon, Lat) # use arrow keys to control symbol size
+Drop the last two categories
+
+```{r}
+# drop last two categories
+mb2 <- c("TropF", "WarmF", "SavDWd", "GrsShrb", "Dsrt", "TempF", "BorF", "Tund")
+gf <- gf[gf$megabiome %in% mb2, ]
+table(gf$megabiome)
 ```
 
-Here, stations with low winter precipitation ratios were selected on the parallel coordinates plot, and the corresponding locations are shown on the scatter-plot map.
+Do the usual transformations:
 
-![](figures_iplots/iplot021.png) ![](images/iplot022.png)
+```{r, eval=TRUE, echo=FALSE, results='hide'}
+gf$hrmc <- sqrt(gf$hrmc)
+min(log10(gf$gpw[gf$gpw > 0]))
+gf$gpw <- log10(gf$gpw + 1e-10)
+gf$map <- sqrt(gf$map)
+gf$pme <- sqrt(gf$pme - min(gf$pme))
+```
+```{r, eval=FALSE, echo=TRUE}
+# transformations (output suppressed)
+hist(gf$hrmc)
+gf$hrmc <- sqrt(gf$hrmc)
+hist(gf$hrmc)
 
-```{r hd17}
-detach(yellpratio)
+hist(log10(gf$gpw[gf$gpw > 0]))
+min(log10(gf$gpw[gf$gpw > 0]))
+gf$gpw <- log10(gf$gpw + 1e-10)
+hist(gf$gpw)
+
+hist(gf$map)
+gf$map <- sqrt(gf$map)
+hist(gf$map)
+
+hist(gf$pme)
+gf$pme <- sqrt(gf$pme - min(gf$pme))
+hist(gf$pme)
 ```
 
-Here's a second example using the higher-density western U.S. precipitation ratios:
+Get a shapefile too:
 
-```{r hd18}
-# example with the higher-density western U.S. pratios
-attach(wus_pratio) 
+```{r, echo=TRUE, eval=TRUE, results='hide'}
+# read a world outlines shape file
+shp_path <- "/Users/bartlein/Documents/geog495/data/shp/"
+shp_name <- "ne_110m_admin_0_countries.shp"
+shp_file <- paste(shp_path, shp_name, sep="")
+world_sf <- read_sf(shp_file)
+```
+```{r}
+ggplot() +
+  geom_sf(data = world_sf, fill="grey70", color="black") +
+  scale_x_continuous(limits = c(-180, 180), breaks = seq(-180, 180, by=30)) +
+  scale_y_continuous(limits = c(-90, 90), breaks = seq(-90, 90, by=30)) +
+  labs(x = "Longitude", y =  "Latitude") +
+  coord_sf(expand = FALSE) + 
+  theme_bw()
 ```
 
-```{r hd19, echo=TRUE, eval=FALSE}
-# parallel coordiate plot plus scatter plot map
-ipcp(wus_pratio) # use arrow keys to control transparency
-iplot(lon, lat) # use arrow keys to control symbol size
+## Plots ##
+
+Parallel coordinate plots can be made using the `ggparcoord()` function from the `GGally` package:
+
+
+```{r, pcp01x, eval=FALSE, echo=TRUE}
+# parallel coordinate plot
+ggparcoord(data = gf[1:16],
+  scale = "uniminmax", alphaLines = 0.01) + 
+  ylab("PCP of Global Fire Data") +
+  theme_bw() +
+  theme(axis.text.x  = element_text(angle=315, vjust=1.0, hjust=0.0, size=14),
+        axis.title.x = element_blank(), 
+        axis.text.y = element_blank(), axis.ticks.y = element_blank() )
+```
+```{r, pcp01, echo=FALSE}
+# parallel coordinate plot
+pngfile <- "pcp01.png"
+png(pngfile, width=600, height=600) # open the file
+ggparcoord(data = gf[1:16],
+  scale = "uniminmax", alphaLines = 0.01) + 
+  ylab("PCP of Global Fire Data") +
+  theme_bw() +
+  theme(axis.text.x  = element_text(angle=315, vjust=1.0, hjust=0.0, size=14),
+        axis.title.x = element_blank(), 
+        axis.text.y = element_blank(), axis.ticks.y = element_blank() )
+#dev.off()
+```
+![](pcp01.png)
+
+Note the use of transparency, specified by the `alphaLines` argument.  Individual observations (gridpoints) that have similar values for each variable trace out dense bands of lines, and several distinct bands, corresponding to different "pyromes" (like biomes) can be observed.
+
+Parallel coordinate plots are most effective when paired with another display with points highlighted in one display similarly highlighted in the other.  In the case of the global fire data set the logical other display is a map. There are (at least) two ways of doing the highlighting.  Here, a particular megabiome ("BorF" -- Boreal forest/Taiga) is used.  First create a new variable that will be set to zero, except where `gf$megabiome == "BorF"`.  Then, the data are sorted so that the non-"BorF" observations get plotted first.
+
+```{r}
+# select those points with megabiome = "BorF"
+gf$select_points <- rep(0, dim(gf)[1])
+gf$select_points[gf$megabiome == "BorF"] <- 1
+gf$select_points <- as.factor(gf$select_points)
+table(gf$select_points)
 ```
 
-In these linked plots, the stations in western Oregon and Washington were selected on the map, and the parallel coordinates plot shows their precipitation "regimes".
-
-![](images/iplot031.png) ![](images/iplot032.png)
-
-```{r hd20}
-detach(wus_pratio)
+```{r pcp02x, eval=FALSE, echo=TRUE}
+# pcp
+ggparcoord(data = gf[order(gf$select_points),],
+columns = c(1:16), groupColumn = "select_points",
+scale = "uniminmax", alphaLines=0.01) + ylab("")  +
+theme_bw() + 
+theme(axis.text.x  = element_text(angle=315, vjust=1.0, hjust=0.0, size=14),
+      axis.title.x = element_blank(),
+      axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+      legend.position = "none") +
+scale_color_manual(values = c(rgb(0, 0, 0, 0.2), "red"))
 ```
 
-### Linked plots with categorical variables ###
+```{r pcp02, echo=FALSE}
+# pcp
+pngfile <- "pcp02.png"
+png(pngfile, width=600, height=600) # open the file
+ggparcoord(data = gf[order(gf$select_points),],
+columns = c(1:16), groupColumn = "select_points",
+scale = "uniminmax", alphaLines=0.01) + ylab("")  +
+theme_bw() + 
+theme(axis.text.x  = element_text(angle=315, vjust=1.0, hjust=0.0, size=14),
+      axis.title.x = element_blank(),
+      axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+      legend.position = "none") +
+scale_color_manual(values = c(rgb(0, 0, 0, 0.2), "red"))
+#dev.off()
+```
+![](pcp02.png)
 
-Data sets that contain a mixture of categorical or factor variables and ordinal or ratio-scale "continuous" variables can also be visualized, as illustrated by the Summit Cr. data set.  Here the "continuous" variables (`CumLen` and `WidthWS`) appear in boxplots and scatter plots (right), with `WidthWS` on the y-axis, and `Reach` or `CumLen` on the x-axis, while the categorical variables, `Reach` and `HU` are summarized by traditional bar plots and mosaic plots.
+Plot the points.
 
+```{r, eval=FALSE, echo=TRUE}  
+# map
+ggplot()  +
+  geom_point(data = gf, aes(x = lon, y = lat, color = select_points), size = 0.8 ) +
+  geom_sf(data = world_sf, aes(geometry=geometry), fill=NA, color="black") +
+  theme_bw() + 
+  theme(legend.position = "none") +
+  coord_sf() + scale_color_manual(values = c("gray80", "red"))
+```
+```{r, echo=FALSE}  
+# map
+pngfile <- "map02.png"
+png(pngfile, width=600, height=300) # oppen the file
 
-```{r hd22, echo=TRUE, eval=FALSE}
-# linked plots -- Summit Cr. data set, including categorical variables
-attach(sumcr)
-imosaic(data.frame(Reach,HU))
-ibar(HU)
-ibar(Reach)
+ggplot()  +
+  geom_point(data = gf, aes(x = lon, y = lat, color = select_points), size = 0.8 ) +
+  geom_sf(data = world_sf, aes(geometry=geometry), fill=NA, color="black") +
+  theme_bw() + 
+  theme(legend.position = "none") +
+  coord_sf() + scale_color_manual(values = c("gray80", "red"))
+#dev.off()
+```
+![](map02.png)
 
-# add a scatter plot
-iplot(CumLen, WidthWS)
-iplot.opt(col=unclass(Reach)+3)
+Before moving on, delete the variable `select_points` from the `gf` dataframe:
 
-# add a boxplot
-ibox(WidthWS, Reach)
+```{r}
+gf$select_points <- NULL
 ```
 
-On the plots below, pools (`P`) in the exclosure reach (`B`) were highlighted in the mosaic plot, and appear in red on the other plots.
+<hr>
+# High-density plots with the tabplot package #
 
-![](images/iplot041.png) ![](images/iplot042.png) ![](images/iplot043.png)  
-![](images/iplot044.png) ![](images/iplot045.png) 
+The "tableplot" is an interesting visualization method that can be useful for discovering large-scale patterns in the covariations among a small (< 15) set or subset of variables, which can be either continuous or categorical.  The basic idea is to organize the rows of a data set along an axis of increasing or decreasing values of a continuous variable or the different "levels" of a categorical variable.  A reduction in the density of the data is achieved by binning multiple rows of the data and plotting bin averages (or frequencies) of the variables.  As in all compositing techniques, if there a consistent response in the other variables to the variable selected to organize the rows, then this will emerge, otherwise inconsistent reponses will wash each other out, and no apparent pattern will be evident in the plots of the other variables.
 
-```{r hd23, eval=FALSE}
-detach(sumcr)
-```
+## North American modern pollen data ##
 
-[[Back to top]](lec19.html)
+This example makes use of a data set of 4360 modern pollen samples for North America, from Whitmore et al. (2005, *Quaternary Science Reviews* [https://doi.org/10.1016/j.quascirev.2005.03.005](https://doi.org/10.1016/j.quascirev.2005.03.005).  The variables include the location and elevation of each sample, the relative abundances of the 12 most-abundant pollen types (transformed by taking square roots), and two categorical variables, Federova et al. (1994) vegetation types and USGS land-cover types from satellite remote-sensing data (see Whitmore et al. 2005 for details).  This data set provides an interesting example, inasmuch as the resulting tableplots are reminiscent of "downcore"-plotted pollen diagrams.
 
-# High-density plots with the `tabplot` package #
-
-The "tableplot" is an interesting visualization method that can be useful for discovering large-scale patterns in the covariations among a small (< 15) set or subset of variables, which can be either continuous or categorical.  The basic idea is to organize the rows of a data set along an axis of increasing or decreasing values of a continuous variable or the different "levels" of a categorical variable.  A reduction in the density of the data is achieved by binning multiple rows of the data and plotting bin averages (or frequencies) of the variables.  As in all compositing techniques, if there a consistent response in the other variables to the variable selected to organize the rows, then this will emerge, otherwise inconsistent responses will wash each other out, and no apparent pattern will be evident in the plots of the other variables.
-
-This example makes use of a data set of 4360 modern pollen samples for North America, from Whitmore et al. (2005, *Quaternary Science Reviews*).  The variables include the location and elevation of each sample, the relative abundances of the 12 most-abundant pollen types (transformed by taking square roots), and two categorical variables, Federova et al. (1994) vegetation types and USGS land-cover types from satellite remote-sensing data (see Whitmore et al. 2005 for details).  This data set provides an interesting example, inasmuch as the resulting tableplots are reminiscent of "downcore"-plotted pollen diagrams.
-
-## Read and map the North American modern pollen data set ##
-
-```{r read napollen}
+```{r, read napollen}
 # read the North American modern pollen data
-csv_path <- "/Users/bartlein/Dropbox/DataVis/working/data/csv_files/"
+csv_path <- "/Users/bartlein/Documents/geog495/data/csv/"
 csv_name <- "NAmodpol.csv"
 csv_file <- paste(csv_path, csv_name, sep="")
 napol <- read.csv(csv_file) # takes a while
 str(napol)
 ```
 
-Map the pollen site locations:
-
-```{r hd31, fig.width=6, fig.height=5}
-library(maps)
-plot(napol$Lat ~ napol$Lon, type="n")
-map("world", add=TRUE, lwd=2, col="gray")
-points(napol$Lat ~ napol$Lon, pch=16, cex=0.6, col="darkgreen")
+Get a quick map of the pollen site locations:
+  
+```{r, hd31, fig.width=6, fig.height=5}
+plot(st_geometry(world_sf), xlim=c(-180, -10), ylim=c(20, 80), axes=TRUE)
+points(napol$Lat ~ napol$Lon, pch=16, cex=0.5, col="darkgreen")
 ```
 
-<!-- ## Tableplots ## -->
-<!-- Load the `tabplot` package.  Note that `tabplot` loads some other packages (`ffbase`, `ff`, `bit`, etc.) that allow for efficient processing of large data sets and replace some of the functions in the `base` package.  It might be good to restart R after using the `tabplot` package. -->
+## Plots ##
+Load the `tabplot` package.  Note that `tabplot` loads some other packages (`ffbase`, `ff`, `bit`, etc.) that allow for efficient processing of large data sets and replace some of the functions in the `base` package.  It might be good to restart R after using the `tabplot` package.
 
-<!-- ```{r hd32, message=FALSE} -->
-<!-- library(tabplot) -->
-<!-- ``` -->
+```{r, hd32, message=FALSE}
+library(tabplot)
+```
 
-<!-- Here's a simple tableplot, with the observations arranged by latitude (`sortCol="Lat"`) and linear scales specified for all continuous variables (`scales="lin"`, the `tabplot()` function attempts to find a suitable scale for each variable, but here the pollen variables were all transformed prior to the analysis, and so we want to suppress further transformation here). -->
+Here's a simple tableplot, with the observations arranged by latitude (`sortCol="Lat"`) and linear scales specified for all continuous variables (`scales="lin"`, the `tabplot()` function attempts to find a suitable scale for each variable, but here the pollen variables were all transformed prior to the analysis, and so we want to suppress further transformation here).
 
-<!-- (Note that it just happens that the resulting plot looks like a standard pollen diagram--this isn't designed in any way.) -->
+(Note that it just happens that the resulting plot looks like a standard pollen diagram--this isn't designed in any way.)
 
-<!-- ```{r hd33, echo=TRUE, fig.width=10, eval=FALSE} -->
-<!-- tableplot(napol, sortCol="Lat", scales="lin") -->
-<!-- ``` -->
-<!-- ```{r hd34, fig.width=9, message=FALSE, echo=FALSE} -->
-<!-- suppressWarnings(tableplot(napol, sortCol="Lat", scales="lin")) -->
-<!-- ``` -->
+```{r, hd33, echo=TRUE, fig.width=10, eval=FALSE}
+tableplot(napol, sortCol="Lat", scales="lin", fontsize = 8)
+```
+```{r, hd34, out.height="90%", out.width="90%", message=FALSE, echo=FALSE}
+suppressWarnings(tableplot(napol, sortCol="Lat", scales="lin", fontsize = 8))
+```
 
-<!-- It's possible to see broad trends in all of the pollen types, as well as in the frequency of different vegetation types as a function of latitude. -->
+It's possible to see broad trends in all of the pollen types, as well as in the frequency of different vegetationtypes as a function of latitude.
 
-<!-- Each bin the above plot represents a bin that, in this case, holds 46 observations, and what is plotted as bars in each column  is the bin-average or frequency for those observations. Here's a second plot like the first, using more bins: -->
+Each bin the above plot represents a bin that, in this case, holds 46 observations, and what is plotted as bars in each column  is the bin-average or frequency for those observations. Here's a second plot like the first, using more bins:
+  
+  ```{r, hd35, echo=TRUE, eval=FALSE}
+tableplot(napol, sortCol="Lat", scales="lin", nBins=200, fontsize = 8)
+```
+```{r, hd36, out.height="90%", out.width="90%", message=FALSE, echo=FALSE}
+suppressWarnings(tableplot(napol, sortCol="Lat", scales="lin", nBins=200, fontsize = 8))
+```
 
-<!-- ```{r hd35, echo=TRUE, eval=FALSE} -->
-<!-- tableplot(napol, sortCol="Lat", scales="lin", nBins=200) -->
-<!-- ``` -->
-<!-- ```{r hd36, fig.width=9, message=FALSE, echo=FALSE} -->
-<!-- suppressWarnings(tableplot(napol, sortCol="Lat", scales="lin", nBins=200)) -->
-<!-- ``` -->
+The same broad-scale patterns are evident in this plot, suggesting that the approach is robust with respect to the number of bins.  The next plot using the abundance of *Picea* (spruce to organize the data):
+  
+  ```{r, hd37, echo=TRUE, eval=FALSE}
+tableplot(napol, sortCol="Picea", scales="lin", nBins=100, , fontsize = 8)
+```
+```{r, hd38, out.height="90%", out.width="90%", message=FALSE, echo=FALSE}
+suppressWarnings(tableplot(napol, sortCol="Picea", scales="lin", nBins=100, fontsize = 8))
+```
 
-<!-- The same broad-scale patterns are evident in this plot, suggesting that the approach is robust with respect to the number of bins.  The next plot using the abundance of *Picea* (spruce to organize the data): -->
+The plot shows that *Aremisia* (sagebrush) pollen has a similar profile to *Picea* and both tend to be high at high elevation and low (western) longitudes.  The next plot using one of the categorical variables to organize the data.
 
-<!-- ```{r hd37, echo=TRUE, eval=FALSE} -->
-<!-- tableplot(napol, sortCol="Picea", scales="lin", nBins=100) -->
-<!-- ``` -->
-<!-- ```{r hd38, fig.width=9, message=FALSE, echo=FALSE} -->
-<!-- suppressWarnings(tableplot(napol, sortCol="Picea", scales="lin", nBins=100)) -->
-<!-- ``` -->
+```{r, hd39, echo=TRUE, eval=FALSE}
+tableplot(napol, sortCol="Fed", scales="lin", nBins=100, fontsize = 8)
+```
+```{r, hd40, out.height="90%", out.width="90%", message=FALSE, echo=FALSE}
+suppressWarnings(tableplot(napol, sortCol="Fed", scales="lin", nBins=100, fontsize = 8))
+```
 
-<!-- The plot shows that *Aremisia* (sagebrush) pollen has a similar profile to *Picea* and both tend to be high at high elevation and low (western) longitudes.  The next plot using one of the categorical variables to organize the data. -->
+The blockiness of the different profiles shows that the individual vegetation types have distinctive mixtures of the different pollen types.
 
-<!-- ```{r hd39, echo=TRUE, eval=FALSE} -->
-<!-- tableplot(napol, sortCol="Fed", scales="lin", nBins=100) -->
-<!-- ``` -->
-<!-- ```{r hd40, fig.width=9, message=FALSE, echo=FALSE} -->
-<!-- suppressWarnings(tableplot(napol, sortCol="Fed", scales="lin", nBins=100)) -->
-<!-- ``` -->
+## Global fire data
 
-<!-- The blockiness of the different profiles shows that the individual vegetation types have distinctive mixtures of the different pollen types. -->
+The global fire data set has roughly the same number of variables as the pollen data, but ten times the number of observations.  The number of individual observations in each bin is therefore larger, increasing the likelihood that the contents of individual bins will be more heterogeneous, with an consequent loss of overall information.
 
-<!-- [[Back to top]](lec19.html) -->
+## Plots ##
 
-<!-- # Plotting multivariate/multiple time series # -->
+To start, produce a tableplot, arranged by mean-annual temperature (`mat`), an obvious first-order preditor of biomass burning, as well as overall climate (through the dependence of the water balance on temperature via the Clausius-Clapyron relationship):
 
-<!-- Although the tableplots above happened to look like conventional pollen diagrams, which were a comparatively early attempt to visualize multivariate data, the data displayed by the `tableplot()` function does not necessarily need to be a series.  The next example illustrates a display method in which the data *do* form a series, in this case pollen data again, only this time for a single site, which form a multivariate time series. -->
+```{r, out.height="90%", out.width="90%"}
+tableplot(gf, sortCol="mat", scales="lin", fontsize = 8, pals=list(megabiome="Set8", vegtype="Set8"))
+```
 
-<!-- ## Read the Carp L. pollen data ## -->
+Overall, the trends of individual variables are relatively smooth, and it's easy to see distiguish the temperature and moisture variables (as well as the population variable `gpw`).  The vegetation-type variables `megabiome` and `vegtype` are also well sorted out along a mean annual temperature gradient.  Burned fraction (`gfed`) obviously displays a threshold-type relationshion, where values are small at low temperatures, and higher at high values of `mat`.
 
-<!-- The data here come from a long pollen record from Carp L., in Washington State.  (Whitlock, C.L., et al. (2000) *Palaeogeography Palaeoclimatology Palaeoecology* 155(1-2):7-29 DOI: 10.1016/S0031-0182(99)00092-9).  Pollen data are "long-tailed" and so the data were transformed earlier by taking the square root of the pollen percentages. -->
+Next, the tableplot is sorted by precipitation minus evapotranspiration (`pme`, or P-E):  
 
-```{r read carp}
+```{r, out.height="90%", out.width="90%"}
+tableplot(gf, sortCol="pme", scales="lin", fontsize = 8, pals=list(megabiome="Set8", vegtype="Set8"))
+```
+
+The relationship between burned fraction and P-E evident in univariate plots--the arch-shaped pattern, where burned fraction is highest at intermediate values of effective moisture--is also evident here:  as P-E monotonically incrases, burned fraction (`gfed`) rises, then falls.
+
+Finally, the tableplot can be sorted by burned fraction (`gfed`):
+
+```{r, out.height="90%", out.width="90%"}
+tableplot(gf, sortCol="gfed", scales="lin", fontsize = 8, pals=list(megabiome="Set8", vegtype="Set8"))
+```
+
+This plot confirms the existing relationships, where burned fraction broadly tracks temperature and P-E.  However the plots also reveal a distinct threshold that is apparently related to a distinct discontinuity in vegetation:  the transition beteen desert and tundra vegetation types, and grassland, shubland and forested ones.
+
+[[Back to top]](lec19.html)
+
+# Plotting multivariate/multiple time series #
+
+Although the tableplots of the North American pollen data above happened to look like conventional pollen diagrams, which were a comparatively early (over a century ago) attempt to visualize multivariate data, the data displayed by the `tableplot()` function does not necessarily need to be a series.  The next example illustrates a display method in which the data *do* form a series, in this case pollen data again, only this time for a single site, which form a multivariate time series.
+
+## Carp L. pollen data ##
+
+The data here come from a long pollen record from Carp L., in Washinton State.  (Whitlock, C.L. et al., 2000, *Palaeogeography Palaeoclimatology Palaeoecology* 155(1-2):7-29 [https://doi.org/10.1016/S0031-0182(99)00092-9] (https://doi.org/10.1016/S0031-0182\(99\)00092-9) and Whitlock, C. and P.J. Bartlein, 1997, *Nature* 388:57-61 [https://doi.org/10.1038/40380](https://doi.org/10.1038/40380).  Pollen data are "long-tailed" and so the data were transformed earlier by taking the square root of the pollen percentages.
+
+```{r, read carp}
 # read Carp L. pollen data (transformed to square-roots)
-csvpath <- "/Users/bartlein/Dropbox/DataVis/working/data/csv_files/"
+csvpath <- "/Users/bartlein/Documents/geog495/data/csv/"
 csvname <- "carp96t.csv" # square-root transformed data
 carp <- read.csv(paste(csvpath, csvname, sep=""))
 summary(carp)
 ```
 
-## The plots ##
+Pollen data (expressed as proportions or percentages of individual pollen types) vary over an order of magnitude in value, and also have long-tailed distributions.  Consequently they should be tranformed, and a useful transformation is to simply take the square root of the proportions.
+
+```{r}
+# transform 
+tcarp <- carp
+tcarp[4:25] <- sqrt(tcarp[4:25])
+names(tcarp)
+```
+
+As it appears in the spreadsheet, the data are not particularly well organized, but instead the columns are arranged according to the traditional style of pollen diagrams.  An alternative approach is to arrange the indiviual variables (pollen types) according to their affinities as they vary over the core, which can be accomplished by doing a cluster analysis on a dissimilary matrix among pollen types: taxa that vary in a similar (or inverse) fashion downcore appear adjacent to one another.
+
+```{r}
+# cluster rearrangement
+carp_heat <- heatmap(as.matrix(tcarp[4:25]), Rowv = NA, scale="none")
+attributes(carp_heat)
+carp_heat$colInd
+sort_cols <- carp_heat$colInd + 3
+```
+
+The "heatmap" (which in itself provides an interesting way to look at the data), can be used to rearrange the columns of the dataframe to put similar (or inversely similar, when one type is high the other is low) next to one another:
+
+```{r}
+# rearrange matrix
+stcarp <- tcarp
+names(stcarp)
+stcarp[4:25] <- tcarp[sort_cols]
+names(stcarp) <- c("Depth", "Age", "IS", names(tcarp)[sort_cols])
+names(stcarp)
+```
+
+## Plots ##
 
 The idea behind the `mvtsplots()` package (and function) is to use color to reveal underlying patterns in the data.  The first plot shows the "raw" data, simply coded for each pollen taxon independently from low (magenta) to high (green).  The plots on the margins are of boxplots for the individual series (right), and a time series of the median values across all series (bottom), which attempt to summarize the overall level of the series.
 
-```{r mvtsplots01}
+```{r, mvtsplots01}
 library(mvtsplot)
-mvtsplot(carp[, 4:25], xtime=carp$Age, levels=9, margin=TRUE)
+mvtsplot(stcarp[, 4:25], xtime=carp$Age, levels=9, margin=TRUE)
 ```
 
-Plotted this way, one begins to get an idea of some organization to the data along the time axis.  The plot is a little noisy, and can be simplified by smoothing the individual series.
+PLotted this way, one begins to get an idea of some organization to the data along the time axis.  The plot is a little noisy, and can be simplified by smoothing the individual series.
 
-```{r mtvsplot02}
-mvtsplot(carp[, 4:25], xtime=carp$Age, smooth.df=25, levels=9, margin=TRUE)
-
+```{r, mtvsplot02}
+mvtsplot(stcarp[, 4:25], xtime=carp$Age, smooth.df=25, levels=9, margin=TRUE)
 ```
 
 Further simplification can be gotten by "normalizing" the data, transforming and assigning colors based on the range of values in each series individually.
 
-```{r mtvsplot03}
-mvtsplot(carp[, 4:25], xtime=carp$Age, smooth.df=2, norm="internal", levels=9, margin=TRUE)
+```{r, mtvsplot03}
+mvtsplot(stcarp[, 4:25], xtime=carp$Age, smooth.df=2, norm="internal", levels=9, margin=TRUE)
 ```
 
-The color field now shows that the data are well organized in time, which can be verified by adding a plot of the variable `IS` i.e. the MIS (Marine Isotopic Stage) to the plot (on the last row).
+The color field now shows that the data are well organized in time, which can be verified by adding a plot of the variable `IS` i.e. the MIS (Marine Isotopic Stage) to the plot (on the last row).  The progression of plots can also be seen to have proceeded from a fairly chaotic pattern to one with coherent patches:
 
-```{r mvtsplot04}
-mvtsplot(carp[, 3:25], xtime=carp$Age, smooth.df=2, norm="internal", levels=9, margin=TRUE)
+```{r, mvtsplot04}
+mvtsplot(stcarp[, 3:25], xtime=carp$Age, smooth.df=2, norm="internal", levels=9, margin=TRUE)
 ```
 
 [[Back to top]](lec19.html)
 
-# Interactive visualization of a raster brick #
+# Interactive plots
 
-In addition to the tools for visualizing rasters provided by the `rasterVis` package (including Hovmöller and horizon plots--[[`raster` package examples]](week04-raster.html)), the `maptools` package provides a way of interactively visualizing raster bricks, by displaying three individual Hovmöller plots, arranged to look like a brick.
+R has a long history of attempts to develop interactive plots, usually consisting of the basic plots developed from low-dimensional data. RStudio's *Shiny* package [https://shiny.rstudio.com](https://shiny.rstudio.com) and the *Plotly R Open Source Graphics Library* [https://plot.ly/r/](https://plot.ly/r/) are examples that are rapidly developing.  An interesting plot for displaying high-dimensional data is the *cubeplot*, which is easiest to explain by looking at one.  The data here come from the *TraCE-21k* transient climate simulation from 21,000 years ago to present (at monthly resolution) (Liu, Z., et al. 2009, Science 325(5938): 310-314).  A data set of of decadal-average "anomaly" values (the difference between past and present) is examined here.
 
-Load the required packages
+## Data ##
 
-```{r cube, message=FALSE}
+The data are read and plotted using the `raster` and `rasterVis` framework.  First, load the packages:
+
+```{r cube, echo=FALSE, eval=TRUE, include=FALSE, results="hide", messages=FALSE, cache=FALSE}
 # load packages
-library(maptools)
+library(ncdf4)
 library(raster)
 library(rasterVis)
+library(maptools)
+library(latticeExtra)
 library(RColorBrewer)
-library(mapview)
+library(cubeview)
 ```
 
-Read a world shapefile to overlay on simple `levelplot()` maps for orientation.
+Read the data:
 
-```{r read world shape file, message=FALSE, warning=FALSE}
-# read world.shp
-shp_path <- "/Users/bartlein/Dropbox/DataVis/working/data/shp_files/world2013/"
-shp_name <- "world2013.shp" 
-shp_file <- paste(shp_path, shp_name, sep="")
-world.shp <- readShapeLines(shp_file,proj4string=CRS("+proj=longlat"))
-```
-
-The data come from a "transient" (i.e. continuous in time as opposed to a "snapshot") climate simulation [[TraCE-21ka data]](http://www.cgd.ucar.edu/ccr/TraCE/) (Z. Liu, B. Otto-Bliesner et al., 2009, Transient simulation of Last Deglaciation with a new mechanism for Bolling-Allerod warming. Science 325:310-314).  The simulation spans the past 22,000 years, and what is analyzed here is decadal averages.
-
-Read the data, and also "rotate" it so the longitudes run from -180 to +180:
-
-```{r read tr21, message=FALSE, warning=FALSE}
+```{r read tr21, echo=TRUE, eval=TRUE, results="hide", warning=FALSE, cache=FALSE}
 # read TraCE21-ka transient climate-model simulation decadal data
-tr21dec_path <- "/Users/bartlein/Dropbox/DataVis/working/data/nc_files/"
+tr21dec_path <- "/Users/bartlein/Documents/geog495/data/nc_files/"
 tr21dec_name <- "Trace21_TREFHT_anm2.nc"
 tr21dec_file <- paste(tr21dec_path, tr21dec_name, sep="")
 tas_anm_ann <- brick(tr21dec_file, varname="tas_anm_ann", band=seq(1:2204))
-tas_anm_ann
 tas_anm_ann <- rotate(tas_anm_ann)
+tas_anm_ann
 ```
 
-Even though the data have a decadal time step, there still are a lot of layers.  Subset the brick by taking every tenth observation.
+Even though the data is decadal resolution, it's still a lot of data, and so for this example, the data are (actually) decimated to produce century time-step decadal average values.
 
-```{r tr21 subset}
+```{r tr21 subset, echo=TRUE, cache=FALSE}
 tas2 <- subset(tas_anm_ann, subset=seq(1,2201, by=10))
-tas2
 ```
 
-Set up for mapping, and plot the first layer, just to get oriented.
+A levelplot of one slice of the the data can be used to become oriented to the geographic layout of the data:
 
-```{r tr21 levelplot}
+```{r plot setup, cache=FALSE}
 mapTheme <- rasterTheme(region=(rev(brewer.pal(10,"RdBu"))))
 cutpts <- c(-40,-10,-5,-2,-1,0,1,2,5,10,20)
 col <- rev(brewer.pal(10,"RdBu"))
 plt <- levelplot(subset(tas2,1), at=cutpts, margin=FALSE, par.settings=mapTheme)
-plt + layer(sp.lines(world.shp, col="black", lwd=0.5))
+plt + latticeExtra::layer(sp.lines(as_Spatial(world_sf), col="black", lwd=1))
 ```
 
-Now get the "cubeplot"
+## Cube plot ## 
 
-```{r tr21 cube, eval=FALSE, echo=TRUE}
+Then, the cubeplot can be produced using the `cubeview()` function from the `cubeview` package.  The plot is interactively controlled as follows (from the `cubeview()` help file:
+
+The location of the slices can be controlled by keys:
+
+- x-axis: LEFT / RIGHT arrow key
+- y-axis: DOWN / UP arrow key
+- z-axis: PAGE_DOWN / PAGE_UP key
+
+Other controls:
+
+- Press and hold left mouse-button to rotate the cube
+- Press and hold right mouse-button to move the cube
+- Spin mouse-wheel or press and hold middle mouse-button and move mouse down/up to zoom the cube
+- Press space bar to show/hide slice position guides
+
+The cubeplot, as rendered here, displays a map on the "front (or rear) face" of the brick, and Hovmöller plots on the top (or bottom) and sides.
+
+```{r tr21 cube, echo=TRUE, eval=FALSE, cache=FALSE}
 cubeView(tas2, at=cutpts, col.regions=col)
 ```
 
-Here's a link to the cubeplot on the server:  [[http://geog.uoregon.edu/bartlein/courses/geog490/tr21cube.html]](http://geog.uoregon.edu/bartlein/courses/geog490/tr21cube.html)
+![](tr21cube.png)
 
+Here is a link to the plot on the server:  [https://pjbartlein.github.io/REarthSysSci/tr21cube.html](https://pjbartlein.github.io/REarthSysSci/tr21cube.html)  
+
+[[Back to top]](lec19.html)
 [[Back to top]](lec19.html)
 
 # Readings #
