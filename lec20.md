@@ -10,17 +10,19 @@ Traditionally, such data are managed and analyzed in special-purpose software or
 
 Individual subdisciplines often have specialized formats for data storage, sometimes general or community-wide ones such as netCDF or GRIB for climate data, GeoTIFF or HDF for remote-sensing data (the latter especially for satellite data), or "proprietary" formats for specific software packages (i.e. ArcGIS).  These formats are sufficiently different from one another to make reading and writing them a less-than-automatic task.
 
-R, and S+ before it, have included libraries/packages that support the dialog between, for example, R and the GRASS open-source GIS (i.e. spgrass6).  More recently, however, the raster package in R allows the execution of many of the typical analyses that a general GIS would provide, without the need for an interface – the analysis can be done directly (and entirely) in R.  
+R, and S+ before it, have included libraries/packages that support the dialog between, for example, R and the GRASS open-source GIS (i.e. spgrass6).  More recently, however, the the `sp`, `sf`, and `raster` packages in R allows the execution of many of the typical analyses that a general GIS would provide, without the need for an interface – the analysis can be done directly (and entirely) in R.  
 
-The `raster` package can read and write many of the standard formats for handling raster data, and also has the facility for doing so without loading the entire data set into memory; this facilitates the analysis of very large data sets.  In the examples described here, data stored as netCDF files, the principle mode in which large climate and Earth-system science data sets are stored, are used to illustrate the approach for reading and writing large data sets using the `ncdf4` package and reading and analyzing data using the `raster` package, but the same basic ideas apply to, for example, HDF files read using `readGDAL()` from the `rgdal` package.
+The `raster` package can read and write many of the standard formats for handling raster data, and also has the facility for doing so without loading the entire data set into memory; this facilitates the analysis of very large data sets.  In the examples described here, data stored as netCDF files, the principle mode in which large climate and Earth-system science data sets are stored, are used to illustrate the approach for reading and writing large data sets using the `ncdf4` package and reading and analyzing data using the `raster` package, but the same basic ideas apply to, for example, HDF files read using `readGDAL()` from the `rgdal` package.  The `sp` and `sf` packages, along with `ggplot2` provide support for mapping and plotting.
 
 # Examples #
 
 Here are some examples from GEOG 4/595 (GIScience:  *R for Earth System Science*)
 
-- [netCDF in R, introduction, reading, manipulating and writing files](http://geog.uoregon.edu/bartlein/courses/geog490/week04-netCDF.html)
-- [the R raster and rasterVis packages](http://geog.uoregon.edu/bartlein/courses/geog490/week04-raster.html)
-- [raster and netCDF import and export](http://geog.uoregon.edu/bartlein/courses/geog490/week04-ncdf4-vs-raster.html)
-- [extensions of familiar multivariate methods (i.e. PCA) for dealing with hundreds or thousands of variables.](http://geog.uoregon.edu/bartlein/courses/geog490/week10-PCA_highdim.html)
+- [Earth-system science data](https://pjbartlein.github.io/REarthSysSci/ESSdata.html)
+- [netCDF in R, introduction, reading, manipulating and writing files](https://pjbartlein.github.io/REarthSysSci/netCDF.html)
+- [the R raster and rasterVis packages](https://pjbartlein.github.io/REarthSysSci/rasterVis01.html)
+- [raster and netCDF import and export](https://pjbartlein.github.io/REarthSysSci/raster_intro.html)
+- [extensions of familiar multivariate methods (i.e. PCA) for dealing with hundreds or thousands of variables.](https://pjbartlein.github.io/REarthSysSci/PCA.html)
+- [other multivariate analysis](https://pjbartlein.github.io/REarthSysSci/multivariate.html)
 
 .

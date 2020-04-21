@@ -18,7 +18,7 @@ klippy::klippy(position = c('top', 'right'))
 ```{r load, echo=FALSE, cache=FALSE}
 load(".Rdata")
 ```
-<p><span style="color: #FF0040;">NOTE:  Not yet revised for Spring 2020</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
 # Introduction #
 
 There are a number of extensions or alternative approaches for building regression-like models for circumstances when the (fairly restrictive) set of assumptions that underlie the use of ordinary least squares for fitting the regression model may be violated (e.g. binary response variables, nonlinearizable relationships, etc.)  These alternative approaches are not simply workarounds, but are useful in their own right for exploring or describing relationships between a response variable and several predictors.
