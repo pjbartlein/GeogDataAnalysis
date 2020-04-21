@@ -235,6 +235,8 @@ Here's a `ggplot2` version of a fixed class-interval map:
 ```{r s12}
 cutpts <- c(0,200,500,1000,2000,9999)
 plot_factor <- factor(findInterval(orstations_sf$pann, cutpts))
+nclr <- 5
+plotclr <- brewer.pal(nclr+1,"BuPu")[2:(nclr+1)]
 ggplot() +
   geom_sf(data = orcounty_sf, fill=NA) +
   geom_point(aes(orstations_sf$lon, orstations_sf$lat, color = plot_factor), size = 5.0, pch=16) +
