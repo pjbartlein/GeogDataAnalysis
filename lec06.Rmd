@@ -400,7 +400,6 @@ Map the outlines, and overlay the point data:
 ## ggplot2 map of pjulpjan
 ggplot() +
   geom_sf(data = na2_sf, fill=NA, color="gray") +
-  geom_sf(data = wus_sf, fill=NA) +
   geom_sf(data = wus_sf, fill=NA, color="black") +
   geom_point(aes(wus_pratio$lon, wus_pratio$lat, color = pjulpjan_factor), size = 1.0 ) +
   scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
