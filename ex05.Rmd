@@ -52,10 +52,13 @@ Read in a typical "tidy" `.csv` file, that has variables in columns and observat
 
 ```{r echo=TRUE, eval=FALSE}
 # read a .csv file using the `readr` package
-csv_file <- "/Users/bartlein/Projects/geog495/data/csv/EugeneClim-short.csv"
+csv_file <- "/Users/bartlein/Documents/geog495/data/csv/EugeneClim-short.csv"
 eugclim <- read_csv(csv_file)
 eugclim
 ```
+
+(In the above, you would substitute the path to your working directory.)
+
 
 Produce a few plots to look at the time series of individual variables, and to look at the annual cycle of each.  The first use of `plot()` below plots the time series of monthly average temperature (`tavg`), while the second illustrates what the annual cycle looks like.
 
