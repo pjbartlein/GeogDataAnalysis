@@ -25,6 +25,11 @@ This lecture focuses on two topics that underlie R's facility for reading and an
 
 Often, data are available in a format that might be efficient for one reason or another, but may not be in the *tidy* arrangement of *variables* in columns and *observations* or *cases* in rows.  Although it is possible to coerce such data into the standard rectangular or "data frame" layout, perhaps by using Excel or by simple cutting and pasting in a text editor, that approach may not be reproducible, in the sense of having a body of code that can be rerun on the same or similar data sets.  By doing the reorganization or reshaping within R, and documenting the analysis using R Markdown, the specific steps involved in the reshaping of the data can be reproduced using that documented code.  The tidying of data is supported by several packages that are elements of what Hadley Wickham (see the readings below) calls the "tidyverse" -- these packages include `readr` (for reading various kind of text data), and `dplyr` and `tidyr` for manipulation.
 
+Here are links to the RStudio cheat sheets for `readr`, `dplyr`, and `tidyr`:
+
+- `readr` and `tidyr` [[https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf]](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf)
+- `dplyr` [[https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf]](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf)
+
 The second topic *matrix algebra* can be thought of as an efficient way of documenting the specific manipulations of or operations on data that are used to develop specific data-analysis results, by representing those operations in a very efficient and elegant manner.  It is also the case, however, that matrix algebra is used in an analytical (as well as representational) sense to develop the specific statistics and their properties that are produced during an analysis.  This will be illustrated later for regression and multivariate analysis.
 
 # Data wrangling #
@@ -163,6 +168,7 @@ The arguments of the `gather()` function include 1) the table to be reshaped (`e
 The observations are not quite in the right time-series order, but they can be sorted using the `arrange()` function from the `dplyr` package:  
 
 ```{r arrange tavg2}
+# rearrange (sort)
 eugclim_alt_tavg3 <- arrange(eugclim_alt_tavg2, year)
 eugclim_alt_tavg3
 ```
@@ -170,6 +176,7 @@ eugclim_alt_tavg3
 Add a decimal year (`yrmn`) variable to the new data set, and plot.
 
 ```{r plot tavg3}
+# add decimal year value
 eugclim_alt_tavg3$yrmn <- eugclim_alt_tavg3$year + (as.integer(eugclim_alt_tavg3$month)-1)/12
 plot(eugclim_alt_tavg3$cases ~ eugclim_alt_tavg3$yrmn, type="o", pch=16, col="blue", xaxp=c(2013, 2016, 3))
 ```
@@ -189,18 +196,21 @@ eugclim_alt2
 The month values, which are now characters (which just happen to be numerals here), can be recoded to integers as follows:
 
 ```{r recode month}
+# convert integer to month
 eugclim_alt2$month <- as.integer(eugclim_alt2$month)
 ```
 
 Then the "tall" stack of data is spread into rectangular data set using the values in the `param` column:
 
 ```{r spread}
+# spread
 eugclim_alt3 <- spread(eugclim_alt2, key="param", value=cases)
 eugclim_alt3
 ```
 
 Plot the reshaped data:
 ```{r}
+# plot the reshapted data
 eugclim_alt3$yrmn <- eugclim_alt3$year + (as.integer(eugclim_alt3$month)-1)/12
 plot(eugclim_alt3$tavg ~ eugclim_alt3$yrmn, type="o", pch=16, col="red", xaxp=c(2013, 2016, 3))
 ```
@@ -280,6 +290,7 @@ eugclim$tavg_anm
 Plot the anomalies.
 
 ```{r}
+# plot anomalies
 plot(eugclim$tavg_anm ~ eugclim$yrmn, type="o", pch=16, col="green", xaxp=c(2013, 2016, 3))
 ```
 

@@ -539,6 +539,11 @@ $(document).ready(function () {
 <h1><span class="header-section-number">1</span> Introduction</h1>
 <p>This lecture focuses on two topics that underlie R’s facility for reading and analyzing data: 1) the facility for reading and transforming (i.e. <em>tidying</em>) data that may not initially be in standard “rectangular data set” form, and 2) the manipulation of arrays, vectors and matrices of data “under the hood” in the execution of various data-analysis routines. The first topic, which also has been termed “data wrangling” is also an element of the concept of “reproducible research” which aims at documenting the analysis steps and results with sufficient detail that they could be reproduced by others.</p>
 <p>Often, data are available in a format that might be efficient for one reason or another, but may not be in the <em>tidy</em> arrangement of <em>variables</em> in columns and <em>observations</em> or <em>cases</em> in rows. Although it is possible to coerce such data into the standard rectangular or “data frame” layout, perhaps by using Excel or by simple cutting and pasting in a text editor, that approach may not be reproducible, in the sense of having a body of code that can be rerun on the same or similar data sets. By doing the reorganization or reshaping within R, and documenting the analysis using R Markdown, the specific steps involved in the reshaping of the data can be reproduced using that documented code. The tidying of data is supported by several packages that are elements of what Hadley Wickham (see the readings below) calls the “tidyverse” – these packages include <code>readr</code> (for reading various kind of text data), and <code>dplyr</code> and <code>tidyr</code> for manipulation.</p>
+<p>Here are links to the RStudio cheat sheets for <code>readr</code>, <code>dplyr</code>, and <code>tidyr</code>:</p>
+<ul>
+<li><code>readr</code> and <code>tidyr</code> <a href="https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf">[https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf]</a></li>
+<li><code>dplyr</code> <a href="https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf">[https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf]</a></li>
+</ul>
 <p>The second topic <em>matrix algebra</em> can be thought of as an efficient way of documenting the specific manipulations of or operations on data that are used to develop specific data-analysis results, by representing those operations in a very efficient and elegant manner. It is also the case, however, that matrix algebra is used in an analytical (as well as representational) sense to develop the specific statistics and their properties that are produced during an analysis. This will be illustrated later for regression and multivariate analysis.</p>
 </div>
 <div id="data-wrangling" class="section level1">
@@ -790,8 +795,9 @@ $(document).ready(function () {
 ## # … with 26 more rows</code></pre>
 <p>The arguments of the <code>gather()</code> function include 1) the table to be reshaped (<code>eugclim_alt_tavg</code>), 2) the columns to be gathered together (here specified as <code>`1`:`12`</code> and note the use of the backtick (<code>`</code>) to indicate the columnn names, which in this example are character (<code>chr</code>) variables), 3) the “key” column that individual columns will be stacked up into, and 4) the values that will be stacked.</p>
 <p>The observations are not quite in the right time-series order, but they can be sorted using the <code>arrange()</code> function from the <code>dplyr</code> package:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">eugclim_alt_tavg3 &lt;-<span class="st"> </span><span class="kw">arrange</span>(eugclim_alt_tavg2, year)</a>
-<a class="sourceLine" id="cb28-2" data-line-number="2">eugclim_alt_tavg3</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># rearrange (sort)</span></a>
+<a class="sourceLine" id="cb28-2" data-line-number="2">eugclim_alt_tavg3 &lt;-<span class="st"> </span><span class="kw">arrange</span>(eugclim_alt_tavg2, year)</a>
+<a class="sourceLine" id="cb28-3" data-line-number="3">eugclim_alt_tavg3</a></code></pre></div>
 <pre><code>## # A tibble: 36 x 4
 ##     year param month cases
 ##    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
@@ -807,8 +813,9 @@ $(document).ready(function () {
 ## 10  2013 tavg  10     10.2
 ## # … with 26 more rows</code></pre>
 <p>Add a decimal year (<code>yrmn</code>) variable to the new data set, and plot.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">eugclim_alt_tavg3<span class="op">$</span>yrmn &lt;-<span class="st"> </span>eugclim_alt_tavg3<span class="op">$</span>year <span class="op">+</span><span class="st"> </span>(<span class="kw">as.integer</span>(eugclim_alt_tavg3<span class="op">$</span>month)<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span><span class="dv">12</span></a>
-<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="kw">plot</span>(eugclim_alt_tavg3<span class="op">$</span>cases <span class="op">~</span><span class="st"> </span>eugclim_alt_tavg3<span class="op">$</span>yrmn, <span class="dt">type=</span><span class="st">&quot;o&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">xaxp=</span><span class="kw">c</span>(<span class="dv">2013</span>, <span class="dv">2016</span>, <span class="dv">3</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># add decimal year value</span></a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">eugclim_alt_tavg3<span class="op">$</span>yrmn &lt;-<span class="st"> </span>eugclim_alt_tavg3<span class="op">$</span>year <span class="op">+</span><span class="st"> </span>(<span class="kw">as.integer</span>(eugclim_alt_tavg3<span class="op">$</span>month)<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span><span class="dv">12</span></a>
+<a class="sourceLine" id="cb30-3" data-line-number="3"><span class="kw">plot</span>(eugclim_alt_tavg3<span class="op">$</span>cases <span class="op">~</span><span class="st"> </span>eugclim_alt_tavg3<span class="op">$</span>yrmn, <span class="dt">type=</span><span class="st">&quot;o&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">xaxp=</span><span class="kw">c</span>(<span class="dv">2013</span>, <span class="dv">2016</span>, <span class="dv">3</span>))</a></code></pre></div>
 <p><img src="lec08_files/figure-html/plot%20tavg3-1.png" width="2100" /></p>
 <p>Looks right.</p>
 </div>
@@ -833,10 +840,12 @@ $(document).ready(function () {
 ## 10  2014 emnt  1      -4.3
 ## # … with 170 more rows</code></pre>
 <p>The month values, which are now characters (which just happen to be numerals here), can be recoded to integers as follows:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">eugclim_alt2<span class="op">$</span>month &lt;-<span class="st"> </span><span class="kw">as.integer</span>(eugclim_alt2<span class="op">$</span>month)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co"># convert integer to month</span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2">eugclim_alt2<span class="op">$</span>month &lt;-<span class="st"> </span><span class="kw">as.integer</span>(eugclim_alt2<span class="op">$</span>month)</a></code></pre></div>
 <p>Then the “tall” stack of data is spread into rectangular data set using the values in the <code>param</code> column:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">eugclim_alt3 &lt;-<span class="st"> </span><span class="kw">spread</span>(eugclim_alt2, <span class="dt">key=</span><span class="st">&quot;param&quot;</span>, <span class="dt">value=</span>cases)</a>
-<a class="sourceLine" id="cb34-2" data-line-number="2">eugclim_alt3</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="co"># spread</span></a>
+<a class="sourceLine" id="cb34-2" data-line-number="2">eugclim_alt3 &lt;-<span class="st"> </span><span class="kw">spread</span>(eugclim_alt2, <span class="dt">key=</span><span class="st">&quot;param&quot;</span>, <span class="dt">value=</span>cases)</a>
+<a class="sourceLine" id="cb34-3" data-line-number="3">eugclim_alt3</a></code></pre></div>
 <pre><code>## # A tibble: 36 x 7
 ##     year month  emnt  emxt  tavg  tmax  tmin
 ##    &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -852,8 +861,9 @@ $(document).ready(function () {
 ## 10  2013    10  -2.1  25.6  10.2  16.5   3.9
 ## # … with 26 more rows</code></pre>
 <p>Plot the reshaped data:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">eugclim_alt3<span class="op">$</span>yrmn &lt;-<span class="st"> </span>eugclim_alt3<span class="op">$</span>year <span class="op">+</span><span class="st"> </span>(<span class="kw">as.integer</span>(eugclim_alt3<span class="op">$</span>month)<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span><span class="dv">12</span></a>
-<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="kw">plot</span>(eugclim_alt3<span class="op">$</span>tavg <span class="op">~</span><span class="st"> </span>eugclim_alt3<span class="op">$</span>yrmn, <span class="dt">type=</span><span class="st">&quot;o&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">xaxp=</span><span class="kw">c</span>(<span class="dv">2013</span>, <span class="dv">2016</span>, <span class="dv">3</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="co"># plot the reshapted data</span></a>
+<a class="sourceLine" id="cb36-2" data-line-number="2">eugclim_alt3<span class="op">$</span>yrmn &lt;-<span class="st"> </span>eugclim_alt3<span class="op">$</span>year <span class="op">+</span><span class="st"> </span>(<span class="kw">as.integer</span>(eugclim_alt3<span class="op">$</span>month)<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span><span class="dv">12</span></a>
+<a class="sourceLine" id="cb36-3" data-line-number="3"><span class="kw">plot</span>(eugclim_alt3<span class="op">$</span>tavg <span class="op">~</span><span class="st"> </span>eugclim_alt3<span class="op">$</span>yrmn, <span class="dt">type=</span><span class="st">&quot;o&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">xaxp=</span><span class="kw">c</span>(<span class="dv">2013</span>, <span class="dv">2016</span>, <span class="dv">3</span>))</a></code></pre></div>
 <p><img src="lec08_files/figure-html/unnamed-chunk-2-1.png" width="2100" /> <a href="lec08.html">[Back to top]</a></p>
 </div>
 </div>
@@ -990,7 +1000,8 @@ $(document).ready(function () {
 ## [25]  2.03333333  2.06666667  0.93333333 -0.80000000  0.16666667  1.76666667  0.50000000 -0.20000000
 ## [33] -0.96666667  1.23333333 -0.40000000  1.86666667</code></pre>
 <p>Plot the anomalies.</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="kw">plot</span>(eugclim<span class="op">$</span>tavg_anm <span class="op">~</span><span class="st"> </span>eugclim<span class="op">$</span>yrmn, <span class="dt">type=</span><span class="st">&quot;o&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;green&quot;</span>, <span class="dt">xaxp=</span><span class="kw">c</span>(<span class="dv">2013</span>, <span class="dv">2016</span>, <span class="dv">3</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="co"># plot anomalies</span></a>
+<a class="sourceLine" id="cb55-2" data-line-number="2"><span class="kw">plot</span>(eugclim<span class="op">$</span>tavg_anm <span class="op">~</span><span class="st"> </span>eugclim<span class="op">$</span>yrmn, <span class="dt">type=</span><span class="st">&quot;o&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;green&quot;</span>, <span class="dt">xaxp=</span><span class="kw">c</span>(<span class="dv">2013</span>, <span class="dv">2016</span>, <span class="dv">3</span>))</a></code></pre></div>
 <p><img src="lec08_files/figure-html/unnamed-chunk-5-1.png" width="2100" /></p>
 <p><a href="lec08.html">[Back to top]</a></p>
 </div>
