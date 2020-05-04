@@ -501,7 +501,9 @@ $(document).ready(function () {
 <li><a href="#standard-error-of-the-mean-and-confidence-interval-for-the-mean"><span class="toc-section-number">2.1</span> Standard error of the mean and confidence interval for the mean</a></li>
 <li><a href="#confidence-intervals"><span class="toc-section-number">2.2</span> Confidence intervals</a></li>
 </ul></li>
-<li><a href="#simple-inferences-based-on-the-standard-error-of-the-mean"><span class="toc-section-number">3</span> Simple inferences based on the standard error of the mean</a></li>
+<li><a href="#simple-inferences-based-on-the-standard-error-of-the-mean"><span class="toc-section-number">3</span> Simple inferences based on the standard error of the mean</a><ul>
+<li><a href="#hypothesis-tests"><span class="toc-section-number">3.1</span> Hypothesis tests</a></li>
+</ul></li>
 <li><a href="#the-t-test"><span class="toc-section-number">4</span> The t-test</a><ul>
 <li><a href="#the-t-test-for-assessing-differences-in-group-means"><span class="toc-section-number">4.1</span> The <em>t</em>-test for assessing differences in group means</a></li>
 <li><a href="#differences-in-group-variances"><span class="toc-section-number">4.2</span> Differences in group variances</a></li>
@@ -694,7 +696,8 @@ $(document).ready(function () {
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/simpleinf.pdf">[simple inferential statistics]</a></li>
 </ul>
 <p><a href="lec10.html">[Back to top]</a></p>
-<p>#Hypothesis tests#</p>
+<div id="hypothesis-tests" class="section level2">
+<h2><span class="header-section-number">3.1</span> Hypothesis tests</h2>
 <p>The next step toward statistical inference is the more formal development and testing of specific hypotheses (as opposed to the rather informal inspection of descriptive plots, confidence intervals, etc.)</p>
 <p>“Hypothesis” is a word used in several contexts in data analysis or statistics:</p>
 <ul>
@@ -722,9 +725,10 @@ $(document).ready(function () {
 <li>if the significance level is small, the tested hypothesis (H<sub>o</sub>) is discredited, and we assert that a “significant result” or “significant difference” has been observed.</li>
 </ol>
 <ul>
-<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/interpstats.pdf">short guide to interpreting test statistics, p-values, and significance</a></li>
+<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/interpstats.pdf">[short guide to interpreting test statistics, <em>p</em>-values, and significance]</a></li>
 </ul>
 <p><a href="lec10.html">[Back to top]</a></p>
+</div>
 </div>
 <div id="the-t-test" class="section level1">
 <h1><span class="header-section-number">4</span> The t-test</h1>
@@ -733,10 +737,10 @@ $(document).ready(function () {
 <li>the null hypthesis is that the two mean values are equal, while the</li>
 <li>alternative hypothesis is that the means are not equal (or that one is greater than or less than the other)<br />
 </li>
-<li>the test statistic is the t-statistic</li>
-<li>the significance level or p-value is determined using the t-distribution</li>
+<li>the test statistic is the <em>t</em>-statistic</li>
+<li>the significance level or <em>p</em>-value is determined using the* <em>t</em>-distribution</li>
 </ul>
-<p>The shape of the t distribution can be visualized as follows (for df=30):</p>
+<p>The shape of the <em>t</em> distribution can be visualized as follows (for df=30):</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">3</span>,<span class="dv">3</span>, <span class="dt">by=</span>.<span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb36-2" data-line-number="2">pdf.t &lt;-<span class="st"> </span><span class="kw">dt</span>(x,<span class="dv">3</span>)</a>
 <a class="sourceLine" id="cb36-3" data-line-number="3"><span class="kw">plot</span>(pdf.t <span class="op">~</span><span class="st"> </span>x, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
@@ -747,9 +751,9 @@ $(document).ready(function () {
 <p><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/ttest.pdf">[Details of the t-test]</a></p>
 <p>There are two ways the <em>t</em>-test is implemented in practice, depending on the nature of the question being asked and hence on the nature of the null hypotheis:</p>
 <ul>
-<li>one-sample t-test (for testing the hypothesis that a sample mean is equal to a “known” or “theoretical” value), or the<br />
+<li>one-sample <em>t</em>-test (for testing the hypothesis that a sample mean is equal to a “known” or “theoretical” value), or the<br />
 </li>
-<li>two-sample t-test (for testing the hypothesis that the means of two groups of observations are identical).</li>
+<li>two-sample <em>t</em>-test (for testing the hypothesis that the means of two groups of observations are identical).</li>
 </ul>
 <p>Example data sets:</p>
 <ul>

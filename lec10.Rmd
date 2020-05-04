@@ -206,7 +206,7 @@ Here's a short discussion of simple inferential statistics:
 
 [[Back to top]](lec10.html)
 
-#Hypothesis tests#
+## Hypothesis tests ##
 
 The next step toward statistical inference is the more formal development and testing of specific hypotheses (as opposed to the rather informal inspection of descriptive plots, confidence intervals, etc.)
 
@@ -237,20 +237,20 @@ The steps in the &quot;p-value&quot; approach are:
 4. calculate the probability that a value of the test statistic as large as that observed would occur by chance if the null hypothesis were true (this probability, or _p-value_, is called the significance level).
 5. if the significance level is small, the tested hypothesis (H<sub>o</sub>) is discredited, and we assert that a &quot;significant result&quot; or &quot;significant difference&quot; has been observed.
 
-- [short guide to interpreting test statistics, p-values, and significance](https://pjbartlein.github.io/GeogDataAnalysis/topics/interpstats.pdf)
+- [[short guide to interpreting test statistics, *p*-values, and significance]](https://pjbartlein.github.io/GeogDataAnalysis/topics/interpstats.pdf)
 
 [[Back to top]](lec10.html)
 
-# The t-test#
+# The t-test #
 
 An illustration of an hypothesis test that is frequently used in practice is provided by the *t*-test, one of several "difference-of-means" tests.  The t-test (or more particularly *Student's t-test* (after the pseudonym of its author, W.S. Gosset) provides a mechanism for the simple task of testing whether there is a significant difference between two groups of observations, as reflected by differences in the means of the two groups.  In the *t*-test, two sample mean values, or a sample mean and a theoretical mean value, are compared as follows:
 
 - the null hypthesis is that the two mean values are equal, while the 
 - alternative hypothesis is that the means are not equal (or that one is greater than or less than the other)    
-- the test statistic is the t-statistic
-- the significance level or p-value is determined using the t-distribution
+- the test statistic is the *t*-statistic
+- the significance level or *p*-value is determined using the* *t*-distribution
 
-The shape of the t distribution can be visualized as follows (for df=30):
+The shape of the *t* distribution can be visualized as follows (for df=30):
 
 ```{r ttest01}
 x <- seq(-3,3, by=.1)
@@ -260,14 +260,14 @@ plot(pdf.t ~ x, type="l")
 
 You can read about the origin of Gosset's pseudonum (and his contributions to brewing) [here](http://pubs.aeaweb.org/doi/pdfplus/10.1257/jep.22.4.199).
 
-## The *t*-test for assessing differences in group means##
+## The *t*-test for assessing differences in group means ##
 
 [[Details of the t-test]](https://pjbartlein.github.io/GeogDataAnalysis/topics/ttest.pdf)
 
 There are two ways the *t*-test is implemented in practice, depending on the nature of the question being asked and hence on the nature of the null hypotheis:
 
-- one-sample t-test (for testing the hypothesis that a sample mean is equal to a "known" or "theoretical" value), or the  
-- two-sample t-test (for testing the hypothesis that the means of two groups of observations are identical).
+- one-sample *t*-test (for testing the hypothesis that a sample mean is equal to a "known" or "theoretical" value), or the  
+- two-sample *t*-test (for testing the hypothesis that the means of two groups of observations are identical).
 
 Example data sets:  
 
