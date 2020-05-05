@@ -84,6 +84,7 @@ for (n in seq(1,max.sample.size-1)) {
 Take a look at the means and the standard errors.  Note that means remain essentially constant across the range of sample sizes, while the standard errors decrease rapidly (at first) with increasing sample size.
 
 ```{r semean05}
+plot(sample.size, average.means, ylim=c(4.5, 5.5), pch=16)
 plot(sample.size, sd.means, pch=16)
 head(cbind(average.means,sd.means,sample.size))
 tail(cbind(average.means,sd.means,sample.size))
