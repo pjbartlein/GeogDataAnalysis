@@ -79,7 +79,7 @@ descr <- function(x) {
     }
 ```
 
-Copy and paste the function into RStudio (making sure you include the last curly bracket), select all of it, and run it.  Nothing will happen, but the function will appeear in the Envrironment, and can now be used as follows:
+Copy and paste the function into RStudio (making sure you include the last curly bracket), select all of it, and run it.  Nothing will happen, but the function will appeear in the Environment, and can now be used as follows:
 
 ```{r echo=TRUE, eval=FALSE}
 descr(O18)
