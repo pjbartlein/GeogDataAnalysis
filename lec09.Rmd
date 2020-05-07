@@ -11,7 +11,7 @@ output:
 
 ```{r set-options, echo=FALSE}
 options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
@@ -54,12 +54,12 @@ To answer this question, the appropriate reference distribution is the one forme
 attach(sierra)
 
 # sort and rank TSum values
-sort.TSum <- sort(TSum) # arranges values from low to high
-rank.TSum <- rank(TSum) # replaces values with rank number (1 to n)
+sort_Tsum <- sort(TSum) # arranges values from low to high
+rank_Tsum <- rank(TSum) # replaces values with rank number (1 to n)
 
 # inspect the sorted and ranked values
 # close window to exit
-sierra_sort <- data.frame(Year, TSum, rank(TSum), sort.TSum, rank(sort.TSum),
+sierra_sort <- data.frame(Year, TSum, rank(TSum), sort_Tsum, rank(sort_Tsum),
      Year[rank(TSum)])
 head(sierra_sort)
 tail(sierra_sort)
@@ -88,10 +88,10 @@ Other information can be gained by examining the empirical cumulative density fu
 
 ```{r refDist03}
 # empirical cumulative density function
-ecdf.TSum <- rank(sort.TSum)/length(TSum)
-plot(sort.TSum, ecdf.TSum, type="l")
-sierra_ecdf <- data.frame(Year, TSum, rank(TSum), sort.TSum, rank(sort.TSum),
-     Year[rank(TSum)], ecdf.TSum)
+ecdf_Tsum <- rank(sort_Tsum)/length(TSum)
+plot(sort_Tsum, ecdf_Tsum, type="l")
+sierra_ecdf <- data.frame(Year, TSum, rank(TSum), sort_Tsum, rank(sort_Tsum),
+     Year[rank(TSum)], ecdf_Tsum)
 head(sierra_ecdf); tail(sierra_ecdf)
 ```
 
@@ -194,8 +194,8 @@ Probability density function (pdf) (R/S-Plus term is Density),
 ```{r normal01}
 # probability density function
 x <- seq(-3, +3, by=.1)
-pdf.norm <- dnorm(x, mean=0, sd=1)
-plot(x, pdf.norm, type="l")
+pdf_norm<- dnorm(x, mean=0, sd=1)
+plot(x, pdf_norm, type="l")
 ```
 
 Cumulative density function (cdf) (R/S-Plus term is Probability), and
@@ -203,8 +203,8 @@ Cumulative density function (cdf) (R/S-Plus term is Probability), and
 ```{r normal02}
 # cumulative density function
 x <- seq(-3, +3, by=.1)
-cdf.norm <-pnorm(x, mean=0, sd=1)
-plot(x, cdf.norm, type="l")
+cdf_norm<-pnorm(x, mean=0, sd=1)
+plot(x, cdf_norm, type="l")
 ```
 
 Inverse cumulative density function (invcdf) (R/S-Plus term is Quantile).
@@ -212,8 +212,8 @@ Inverse cumulative density function (invcdf) (R/S-Plus term is Quantile).
 ```{r normal03}
 # inverse cumulative density function
 pr <- seq(0, 1, by=.01)
-invcdf.norm <- qnorm(pr, mean=0, sd=1)
-plot(pr, invcdf.norm, type="l")
+invcdf_norm<- qnorm(pr, mean=0, sd=1)
+plot(pr, invcdf_norm, type="l")
 ```
 
 Random numbers drawn from the normal distribution can be obtained as follows
@@ -229,7 +229,7 @@ plot(z)
 
 The Central Limit Theorem provides the explanation for the wide applicability of the normal distribution in significance testing, because it guarantees us that (providing certain assumptions are met) that statistics (like the mean) obtained by integrating (as in summing up for computing the mean) will turn out to be normally distributed, no matter what the distribution of the underlying data is.
 
-The Central Limit Theorem is a mathematical demonstration that statistics (like the mean) that are based on summations or integrations of a set of observations are normally distributed, no matter what the distribution is of the data from which samples are being drawn.  The theorem therefore assures us that the normal distribution is the appropriate reference distribution for a sample mean to be compared with, in order to judge the relative size of that sample mean.
+The Central Limit Theorem is a mathematical demonstration that statistics (like the mean) that are based on summations or integrations of a set of observations are normally distributed, no matter what the distribution is of the data from which samples are being drawn.  The theorem therefore assures us that the normal distribution is the appropriate reference distribution for a sample mean to be compared with, in order to judge the relative size of that sample mean_
 
 ### Empirical demonstration of the Central Limit Theorem ###
 
@@ -258,23 +258,23 @@ The following script generates nsamp sample means from one of these distribution
 # take repeated samples from each distribution and calculate and save means
 # repeated sampling and calculation of means
 nsamp <- 200 # number of samples
-mean.stdNormal <- matrix(1:nsamp) # matrix to hold means
-mean.Normal <- matrix(1:nsamp) # matrix to hold means
-mean.logNormal <- matrix(1:nsamp) # matrix to hold means
-mean.Uniform <- matrix(1:nsamp) # matrix to hold means
+mean_stdNormal <- matrix(1:nsamp) # matrix to hold means
+mean_normal <- matrix(1:nsamp) # matrix to hold means
+mean_logNormal <- matrix(1:nsamp) # matrix to hold means
+mean_Uniform <- matrix(1:nsamp) # matrix to hold means
 
 for (i in 1:nsamp) {
      samp <- sample(stdNormal, 30, replace=T)
-     mean.stdNormal[i] <- mean(samp)
+     mean_stdNormal[i] <- mean(samp)
 
      samp <- sample(Normal, 30, replace=T)
-     mean.Normal[i] <- mean(samp)
+     mean_normal[i] <- mean(samp)
 
      samp <- sample(logNormal, 30, replace=T)
-     mean.logNormal[i] <- mean(samp)
+     mean_logNormal[i] <- mean(samp)
 
      samp <- sample(Uniform, 30, replace=T)
-     mean.Uniform[i] <- mean(samp)
+     mean_Uniform[i] <- mean(samp)
 }
 
 ```
@@ -289,22 +289,22 @@ par(mfrow=c(2,1))
 xmax <- max(stdNormal)
 xmin <- min(stdNormal)
 hist(stdNormal, nclass=40, probability=T, xlim=c(xmin,xmax))
-hist(mean.stdNormal, nclass=40, probability=T, xlim=c(xmin,xmax))
+hist(mean_stdNormal, nclass=40, probability=T, xlim=c(xmin,xmax))
 # Normal
 xmax <- max(Normal)
 xmin <- min(Normal)
 hist(Normal, nclass=40, probability=T, xlim=c(xmin,xmax))
-hist(mean.Normal, nclass=40, probability=T, xlim=c(xmin,xmax))
+hist(mean_normal, nclass=40, probability=T, xlim=c(xmin,xmax))
 # log Normal
 xmax <- max(logNormal)
 xmin <- min(logNormal)
 hist(logNormal, nclass=40, probability=T, xlim=c(xmin,xmax))
-hist(mean.logNormal, nclass=40, probability=T, xlim=c(xmin,xmax))
+hist(mean_logNormal, nclass=40, probability=T, xlim=c(xmin,xmax))
 # Uniform
 xmax <- max(Uniform)
 xmin <- min(Uniform)
 hist(Uniform, nclass=40, probability=T, xlim=c(xmin,xmax))
-hist(mean.Uniform, nclass=40, probability=T, xlim=c(xmin,xmax))
+hist(mean_Uniform, nclass=40, probability=T, xlim=c(xmin,xmax))
 ```
 
 [[Back to top]](lec09.html)

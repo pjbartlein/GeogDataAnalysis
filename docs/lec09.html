@@ -551,15 +551,15 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">attach</span>(sierra)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># sort and rank TSum values</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">sort.TSum &lt;-<span class="st"> </span><span class="kw">sort</span>(TSum) <span class="co"># arranges values from low to high</span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">rank.TSum &lt;-<span class="st"> </span><span class="kw">rank</span>(TSum) <span class="co"># replaces values with rank number (1 to n)</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">sort_Tsum &lt;-<span class="st"> </span><span class="kw">sort</span>(TSum) <span class="co"># arranges values from low to high</span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">rank_Tsum &lt;-<span class="st"> </span><span class="kw">rank</span>(TSum) <span class="co"># replaces values with rank number (1 to n)</span></a>
 <a class="sourceLine" id="cb1-7" data-line-number="7"></a>
 <a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co"># inspect the sorted and ranked values</span></a>
 <a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co"># close window to exit</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">sierra_sort &lt;-<span class="st"> </span><span class="kw">data.frame</span>(Year, TSum, <span class="kw">rank</span>(TSum), sort.TSum, <span class="kw">rank</span>(sort.TSum),</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">sierra_sort &lt;-<span class="st"> </span><span class="kw">data.frame</span>(Year, TSum, <span class="kw">rank</span>(TSum), sort_Tsum, <span class="kw">rank</span>(sort_Tsum),</a>
 <a class="sourceLine" id="cb1-11" data-line-number="11">     Year[<span class="kw">rank</span>(TSum)])</a>
 <a class="sourceLine" id="cb1-12" data-line-number="12"><span class="kw">head</span>(sierra_sort)</a></code></pre></div>
-<pre><code>##   Year  TSum rank.TSum. sort.TSum rank.sort.TSum. Year.rank.TSum..
+<pre><code>##   Year  TSum rank.TSum. sort_Tsum rank.sort_Tsum. Year.rank.TSum..
 ## 1  800 15.68      667.0     13.68             1.0             1466
 ## 2  801 14.00       58.0     13.70             2.0              857
 ## 3  802 15.41      579.5     13.71             3.0             1378
@@ -567,7 +567,7 @@ $(document).ready(function () {
 ## 5  804 16.14      849.5     13.74             4.5             1648
 ## 6  805 16.99     1093.5     13.75             6.0             1892</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">tail</span>(sierra_sort)</a></code></pre></div>
-<pre><code>##      Year  TSum rank.TSum. sort.TSum rank.sort.TSum. Year.rank.TSum..
+<pre><code>##      Year  TSum rank.TSum. sort_Tsum rank.sort_Tsum. Year.rank.TSum..
 ## 1184 1983 16.79     1047.0     17.38          1182.5             1846
 ## 1185 1984 16.71     1018.0     17.39          1185.5             1817
 ## 1186 1985 16.68     1010.5     17.39          1185.5             1809
@@ -589,20 +589,20 @@ $(document).ready(function () {
 <h3><span class="header-section-number">2.1.2</span> What value of <code>TSum</code> is exceeded 10 percent of the time?</h3>
 <p>Other information can be gained by examining the empirical cumulative density function, which is a plot of the sorted values of <code>TSum</code> and the probability of equaling or exceeding that value in the data set</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># empirical cumulative density function</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">ecdf.TSum &lt;-<span class="st"> </span><span class="kw">rank</span>(sort.TSum)<span class="op">/</span><span class="kw">length</span>(TSum)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">plot</span>(sort.TSum, ecdf.TSum, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb7-2" data-line-number="2">ecdf_Tsum &lt;-<span class="st"> </span><span class="kw">rank</span>(sort_Tsum)<span class="op">/</span><span class="kw">length</span>(TSum)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">plot</span>(sort_Tsum, ecdf_Tsum, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
 <p><img src="lec09_files/figure-html/refDist03-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">sierra_ecdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(Year, TSum, <span class="kw">rank</span>(TSum), sort.TSum, <span class="kw">rank</span>(sort.TSum),</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">     Year[<span class="kw">rank</span>(TSum)], ecdf.TSum)</a>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">sierra_ecdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(Year, TSum, <span class="kw">rank</span>(TSum), sort_Tsum, <span class="kw">rank</span>(sort_Tsum),</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">     Year[<span class="kw">rank</span>(TSum)], ecdf_Tsum)</a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">head</span>(sierra_ecdf); <span class="kw">tail</span>(sierra_ecdf)</a></code></pre></div>
-<pre><code>##   Year  TSum rank.TSum. sort.TSum rank.sort.TSum. Year.rank.TSum..    ecdf.TSum
+<pre><code>##   Year  TSum rank.TSum. sort_Tsum rank.sort_Tsum. Year.rank.TSum..    ecdf_Tsum
 ## 1  800 15.68      667.0     13.68             1.0             1466 0.0008410429
 ## 2  801 14.00       58.0     13.70             2.0              857 0.0016820858
 ## 3  802 15.41      579.5     13.71             3.0             1378 0.0025231287
 ## 4  803 15.28      523.5     13.74             4.5             1322 0.0037846930
 ## 5  804 16.14      849.5     13.74             4.5             1648 0.0037846930
 ## 6  805 16.99     1093.5     13.75             6.0             1892 0.0050462574</code></pre>
-<pre><code>##      Year  TSum rank.TSum. sort.TSum rank.sort.TSum. Year.rank.TSum.. ecdf.TSum
+<pre><code>##      Year  TSum rank.TSum. sort_Tsum rank.sort_Tsum. Year.rank.TSum.. ecdf_Tsum
 ## 1184 1983 16.79     1047.0     17.38          1182.5             1846 0.9945332
 ## 1185 1984 16.71     1018.0     17.39          1185.5             1817 0.9970563
 ## 1186 1985 16.68     1010.5     17.39          1185.5             1809 0.9970563
@@ -684,20 +684,20 @@ $(document).ready(function () {
 <p>Probability density function (pdf) (R/S-Plus term is Density),</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># probability density function</span></a>
 <a class="sourceLine" id="cb20-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">3</span>, <span class="op">+</span><span class="dv">3</span>, <span class="dt">by=</span>.<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb20-3" data-line-number="3">pdf.norm &lt;-<span class="st"> </span><span class="kw">dnorm</span>(x, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb20-4" data-line-number="4"><span class="kw">plot</span>(x, pdf.norm, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb20-3" data-line-number="3">pdf_norm&lt;-<span class="st"> </span><span class="kw">dnorm</span>(x, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb20-4" data-line-number="4"><span class="kw">plot</span>(x, pdf_norm, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
 <p><img src="lec09_files/figure-html/normal01-1.png" width="2100" /></p>
 <p>Cumulative density function (cdf) (R/S-Plus term is Probability), and</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># cumulative density function</span></a>
 <a class="sourceLine" id="cb21-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">3</span>, <span class="op">+</span><span class="dv">3</span>, <span class="dt">by=</span>.<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb21-3" data-line-number="3">cdf.norm &lt;-<span class="kw">pnorm</span>(x, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb21-4" data-line-number="4"><span class="kw">plot</span>(x, cdf.norm, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb21-3" data-line-number="3">cdf_norm&lt;-<span class="kw">pnorm</span>(x, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb21-4" data-line-number="4"><span class="kw">plot</span>(x, cdf_norm, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
 <p><img src="lec09_files/figure-html/normal02-1.png" width="2100" /></p>
 <p>Inverse cumulative density function (invcdf) (R/S-Plus term is Quantile).</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co"># inverse cumulative density function</span></a>
 <a class="sourceLine" id="cb22-2" data-line-number="2">pr &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">by=</span>.<span class="dv">01</span>)</a>
-<a class="sourceLine" id="cb22-3" data-line-number="3">invcdf.norm &lt;-<span class="st"> </span><span class="kw">qnorm</span>(pr, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb22-4" data-line-number="4"><span class="kw">plot</span>(pr, invcdf.norm, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb22-3" data-line-number="3">invcdf_norm&lt;-<span class="st"> </span><span class="kw">qnorm</span>(pr, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb22-4" data-line-number="4"><span class="kw">plot</span>(pr, invcdf_norm, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
 <p><img src="lec09_files/figure-html/normal03-1.png" width="2100" /></p>
 <p>Random numbers drawn from the normal distribution can be obtained as follows</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co"># normally distributed random numbers</span></a>
@@ -710,7 +710,7 @@ $(document).ready(function () {
 <div id="the-central-limit-theorem" class="section level2">
 <h2><span class="header-section-number">3.2</span> The Central Limit Theorem</h2>
 <p>The Central Limit Theorem provides the explanation for the wide applicability of the normal distribution in significance testing, because it guarantees us that (providing certain assumptions are met) that statistics (like the mean) obtained by integrating (as in summing up for computing the mean) will turn out to be normally distributed, no matter what the distribution of the underlying data is.</p>
-<p>The Central Limit Theorem is a mathematical demonstration that statistics (like the mean) that are based on summations or integrations of a set of observations are normally distributed, no matter what the distribution is of the data from which samples are being drawn. The theorem therefore assures us that the normal distribution is the appropriate reference distribution for a sample mean to be compared with, in order to judge the relative size of that sample mean.</p>
+<p>The Central Limit Theorem is a mathematical demonstration that statistics (like the mean) that are based on summations or integrations of a set of observations are normally distributed, no matter what the distribution is of the data from which samples are being drawn. The theorem therefore assures us that the normal distribution is the appropriate reference distribution for a sample mean to be compared with, in order to judge the relative size of that sample mean_</p>
 <div id="empirical-demonstration-of-the-central-limit-theorem" class="section level3">
 <h3><span class="header-section-number">3.2.1</span> Empirical demonstration of the Central Limit Theorem</h3>
 <p>Generate 1000 random numbers from four different distributions, the standard normal, the normal, the log-normal and uniform distributions. Histograms of the random numbers will make it clear what the shape of the distributions are like</p>
@@ -730,23 +730,23 @@ $(document).ready(function () {
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># take repeated samples from each distribution and calculate and save means</span></a>
 <a class="sourceLine" id="cb28-2" data-line-number="2"><span class="co"># repeated sampling and calculation of means</span></a>
 <a class="sourceLine" id="cb28-3" data-line-number="3">nsamp &lt;-<span class="st"> </span><span class="dv">200</span> <span class="co"># number of samples</span></a>
-<a class="sourceLine" id="cb28-4" data-line-number="4">mean.stdNormal &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nsamp) <span class="co"># matrix to hold means</span></a>
-<a class="sourceLine" id="cb28-5" data-line-number="5">mean.Normal &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nsamp) <span class="co"># matrix to hold means</span></a>
-<a class="sourceLine" id="cb28-6" data-line-number="6">mean.logNormal &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nsamp) <span class="co"># matrix to hold means</span></a>
-<a class="sourceLine" id="cb28-7" data-line-number="7">mean.Uniform &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nsamp) <span class="co"># matrix to hold means</span></a>
+<a class="sourceLine" id="cb28-4" data-line-number="4">mean_stdNormal &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nsamp) <span class="co"># matrix to hold means</span></a>
+<a class="sourceLine" id="cb28-5" data-line-number="5">mean_normal &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nsamp) <span class="co"># matrix to hold means</span></a>
+<a class="sourceLine" id="cb28-6" data-line-number="6">mean_logNormal &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nsamp) <span class="co"># matrix to hold means</span></a>
+<a class="sourceLine" id="cb28-7" data-line-number="7">mean_Uniform &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nsamp) <span class="co"># matrix to hold means</span></a>
 <a class="sourceLine" id="cb28-8" data-line-number="8"></a>
 <a class="sourceLine" id="cb28-9" data-line-number="9"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nsamp) {</a>
 <a class="sourceLine" id="cb28-10" data-line-number="10">     samp &lt;-<span class="st"> </span><span class="kw">sample</span>(stdNormal, <span class="dv">30</span>, <span class="dt">replace=</span>T)</a>
-<a class="sourceLine" id="cb28-11" data-line-number="11">     mean.stdNormal[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
+<a class="sourceLine" id="cb28-11" data-line-number="11">     mean_stdNormal[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
 <a class="sourceLine" id="cb28-12" data-line-number="12"></a>
 <a class="sourceLine" id="cb28-13" data-line-number="13">     samp &lt;-<span class="st"> </span><span class="kw">sample</span>(Normal, <span class="dv">30</span>, <span class="dt">replace=</span>T)</a>
-<a class="sourceLine" id="cb28-14" data-line-number="14">     mean.Normal[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
+<a class="sourceLine" id="cb28-14" data-line-number="14">     mean_normal[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
 <a class="sourceLine" id="cb28-15" data-line-number="15"></a>
 <a class="sourceLine" id="cb28-16" data-line-number="16">     samp &lt;-<span class="st"> </span><span class="kw">sample</span>(logNormal, <span class="dv">30</span>, <span class="dt">replace=</span>T)</a>
-<a class="sourceLine" id="cb28-17" data-line-number="17">     mean.logNormal[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
+<a class="sourceLine" id="cb28-17" data-line-number="17">     mean_logNormal[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
 <a class="sourceLine" id="cb28-18" data-line-number="18"></a>
 <a class="sourceLine" id="cb28-19" data-line-number="19">     samp &lt;-<span class="st"> </span><span class="kw">sample</span>(Uniform, <span class="dv">30</span>, <span class="dt">replace=</span>T)</a>
-<a class="sourceLine" id="cb28-20" data-line-number="20">     mean.Uniform[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
+<a class="sourceLine" id="cb28-20" data-line-number="20">     mean_Uniform[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
 <a class="sourceLine" id="cb28-21" data-line-number="21">}</a></code></pre></div>
 <p>Histograms of the original data, as well as of the sample means can be obtained with the following script.</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="co"># histograms of data and of sample means</span></a>
@@ -756,25 +756,25 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb29-5" data-line-number="5">xmax &lt;-<span class="st"> </span><span class="kw">max</span>(stdNormal)</a>
 <a class="sourceLine" id="cb29-6" data-line-number="6">xmin &lt;-<span class="st"> </span><span class="kw">min</span>(stdNormal)</a>
 <a class="sourceLine" id="cb29-7" data-line-number="7"><span class="kw">hist</span>(stdNormal, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a>
-<a class="sourceLine" id="cb29-8" data-line-number="8"><span class="kw">hist</span>(mean.stdNormal, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a></code></pre></div>
+<a class="sourceLine" id="cb29-8" data-line-number="8"><span class="kw">hist</span>(mean_stdNormal, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a></code></pre></div>
 <p><img src="lec09_files/figure-html/central04-1.png" width="2100" /></p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># Normal</span></a>
 <a class="sourceLine" id="cb30-2" data-line-number="2">xmax &lt;-<span class="st"> </span><span class="kw">max</span>(Normal)</a>
 <a class="sourceLine" id="cb30-3" data-line-number="3">xmin &lt;-<span class="st"> </span><span class="kw">min</span>(Normal)</a>
 <a class="sourceLine" id="cb30-4" data-line-number="4"><span class="kw">hist</span>(Normal, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a>
-<a class="sourceLine" id="cb30-5" data-line-number="5"><span class="kw">hist</span>(mean.Normal, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a></code></pre></div>
+<a class="sourceLine" id="cb30-5" data-line-number="5"><span class="kw">hist</span>(mean_normal, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a></code></pre></div>
 <p><img src="lec09_files/figure-html/central04-2.png" width="2100" /></p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># log Normal</span></a>
 <a class="sourceLine" id="cb31-2" data-line-number="2">xmax &lt;-<span class="st"> </span><span class="kw">max</span>(logNormal)</a>
 <a class="sourceLine" id="cb31-3" data-line-number="3">xmin &lt;-<span class="st"> </span><span class="kw">min</span>(logNormal)</a>
 <a class="sourceLine" id="cb31-4" data-line-number="4"><span class="kw">hist</span>(logNormal, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a>
-<a class="sourceLine" id="cb31-5" data-line-number="5"><span class="kw">hist</span>(mean.logNormal, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a></code></pre></div>
+<a class="sourceLine" id="cb31-5" data-line-number="5"><span class="kw">hist</span>(mean_logNormal, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a></code></pre></div>
 <p><img src="lec09_files/figure-html/central04-3.png" width="2100" /></p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co"># Uniform</span></a>
 <a class="sourceLine" id="cb32-2" data-line-number="2">xmax &lt;-<span class="st"> </span><span class="kw">max</span>(Uniform)</a>
 <a class="sourceLine" id="cb32-3" data-line-number="3">xmin &lt;-<span class="st"> </span><span class="kw">min</span>(Uniform)</a>
 <a class="sourceLine" id="cb32-4" data-line-number="4"><span class="kw">hist</span>(Uniform, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a>
-<a class="sourceLine" id="cb32-5" data-line-number="5"><span class="kw">hist</span>(mean.Uniform, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a></code></pre></div>
+<a class="sourceLine" id="cb32-5" data-line-number="5"><span class="kw">hist</span>(mean_Uniform, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a></code></pre></div>
 <p><img src="lec09_files/figure-html/central04-4.png" width="2100" /></p>
 <p><a href="lec09.html">[Back to top]</a></p>
 </div>
