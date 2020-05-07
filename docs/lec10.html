@@ -535,108 +535,108 @@ $(document).ready(function () {
 <p>Here is a demonstration using simulated data and repeated samples of different sizes</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># generate 1000 random numbers from the normal distribution</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">npts &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">demo.mean &lt;-<span class="st"> </span><span class="dv">5</span>; demo.sd &lt;-<span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">data.values &lt;-<span class="st"> </span><span class="kw">rnorm</span>(npts, demo.mean, demo.sd)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">hist</span>(data.values); <span class="kw">mean</span>(data.values); <span class="kw">sd</span>(data.values)</a></code></pre></div>
+<a class="sourceLine" id="cb1-3" data-line-number="3">demo_mean &lt;-<span class="st"> </span><span class="dv">5</span>; demo_sd &lt;-<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">data_values &lt;-<span class="st"> </span><span class="kw">rnorm</span>(npts, demo_mean, demo_sd)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">hist</span>(data_values); <span class="kw">mean</span>(data_values); <span class="kw">sd</span>(data_values)</a></code></pre></div>
 <p><img src="lec10_files/figure-html/semean01-1.png" width="2100" /></p>
-<pre><code>## [1] 4.906464</code></pre>
-<pre><code>## [1] 2.004611</code></pre>
+<pre><code>## [1] 4.885482</code></pre>
+<pre><code>## [1] 2.000486</code></pre>
 <p>Set the number of replications <code>nreps</code> and the (maximum) sample size</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">nreps &lt;-<span class="st"> </span><span class="dv">1000</span> <span class="co"># number of replications (samples) for each sample size</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">max.sample.size &lt;-<span class="st"> </span><span class="dv">100</span> <span class="co"># number of example sample sizes</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-2" data-line-number="2">max_sample_size &lt;-<span class="st"> </span><span class="dv">100</span> <span class="co"># number of example sample sizes</span></a></code></pre></div>
 <p>Create several matrices to hold the individual replication results.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># matrix to hold means of each of the nreps samples</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">mean.samp &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nreps)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">mean_samp &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nreps)</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co"># matrices to hold means, sd’s and sample sizes for for each n</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">average.means &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>(max.sample.size<span class="dv">-1</span>))</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">sd.means &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>(max.sample.size<span class="dv">-1</span>))</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">sample.size &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>(max.sample.size<span class="dv">-1</span>))</a></code></pre></div>
-<p>Generate means for a range of sample sizes (1:max.sample.size)</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="cf">for</span> (n <span class="cf">in</span> <span class="kw">seq</span>(<span class="dv">1</span>,max.sample.size<span class="dv">-1</span>)) {</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">average_means &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>(max_sample_size<span class="dv">-1</span>))</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">sd_means &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>(max_sample_size<span class="dv">-1</span>))</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">sample_size &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>(max_sample_size<span class="dv">-1</span>))</a></code></pre></div>
+<p>Generate means for a range of sample sizes (1:max_sample_size)</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="cf">for</span> (n <span class="cf">in</span> <span class="kw">seq</span>(<span class="dv">1</span>,max_sample_size<span class="dv">-1</span>)) {</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">   <span class="co"># for each sample size generate nreps samples and get their mean</span></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3">   <span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq</span>(<span class="dv">1</span>,nreps)) {</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">         samp &lt;-<span class="st"> </span><span class="kw">sample</span>(data.values, n<span class="op">+</span><span class="dv">1</span>, <span class="dt">replace=</span>T)</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">         mean.samp[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">         samp &lt;-<span class="st"> </span><span class="kw">sample</span>(data_values, n<span class="op">+</span><span class="dv">1</span>, <span class="dt">replace=</span>T)</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">         mean_samp[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
 <a class="sourceLine" id="cb6-6" data-line-number="6">   }</a>
 <a class="sourceLine" id="cb6-7" data-line-number="7">   <span class="co"># get the average and standard deviation of the nreps means</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">   average.means[n] &lt;-<span class="st"> </span><span class="kw">apply</span>(mean.samp,<span class="dv">2</span>,mean)</a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">   sd.means[n] &lt;-<span class="st"> </span><span class="kw">apply</span>(mean.samp,<span class="dv">2</span>,sd)</a>
-<a class="sourceLine" id="cb6-10" data-line-number="10">   sample.size[n] &lt;-<span class="st"> </span>n<span class="op">+</span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">   average_means[n] &lt;-<span class="st"> </span><span class="kw">apply</span>(mean_samp,<span class="dv">2</span>,mean)</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">   sd_means[n] &lt;-<span class="st"> </span><span class="kw">apply</span>(mean_samp,<span class="dv">2</span>,sd)</a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">   sample_size[n] &lt;-<span class="st"> </span>n<span class="op">+</span><span class="dv">1</span></a>
 <a class="sourceLine" id="cb6-11" data-line-number="11">}</a></code></pre></div>
 <p>Take a look at the means and the standard errors. Note that means remain essentially constant across the range of sample sizes, while the standard errors decrease rapidly (at first) with increasing sample size.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">plot</span>(sample.size, average.means, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="fl">4.5</span>, <span class="fl">5.5</span>), <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">plot</span>(sample_size, average_means, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="fl">4.5</span>, <span class="fl">5.5</span>), <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
 <p><img src="lec10_files/figure-html/semean05-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">plot</span>(sample.size, sd.means, <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">plot</span>(sample_size, sd_means, <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
 <p><img src="lec10_files/figure-html/semean05-2.png" width="2100" /></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">head</span>(<span class="kw">cbind</span>(average.means,sd.means,sample.size))</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">head</span>(<span class="kw">cbind</span>(average_means,sd_means,sample_size))</a></code></pre></div>
 <pre><code>##          [,1]      [,2] [,3]
-## [1,] 4.882980 1.3868462    2
-## [2,] 4.895045 1.1498649    3
-## [3,] 4.922299 0.9979406    4
-## [4,] 4.882664 0.9078207    5
-## [5,] 4.935052 0.8436834    6
-## [6,] 4.941734 0.7536554    7</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">tail</span>(<span class="kw">cbind</span>(average.means,sd.means,sample.size))</a></code></pre></div>
+## [1,] 4.869145 1.3837017    2
+## [2,] 4.919966 1.1305459    3
+## [3,] 4.898501 0.9996743    4
+## [4,] 4.901989 0.8757847    5
+## [5,] 4.899534 0.8201785    6
+## [6,] 4.885380 0.7307880    7</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">tail</span>(<span class="kw">cbind</span>(average_means,sd_means,sample_size))</a></code></pre></div>
 <pre><code>##           [,1]      [,2] [,3]
-## [94,] 4.917387 0.2086091   95
-## [95,] 4.904899 0.1978738   96
-## [96,] 4.917019 0.1989712   97
-## [97,] 4.891055 0.2070056   98
-## [98,] 4.897282 0.2031153   99
-## [99,] 4.903792 0.1940056  100</code></pre>
+## [94,] 4.886368 0.2110815   95
+## [95,] 4.884759 0.2016839   96
+## [96,] 4.894875 0.1958151   97
+## [97,] 4.871323 0.1993095   98
+## [98,] 4.873961 0.2038435   99
+## [99,] 4.868781 0.1976714  100</code></pre>
 <p>Verify that the standard error of the mean is sigma/sqrt(n)</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">plot</span>(demo.sd<span class="op">/</span><span class="kw">sqrt</span>((<span class="dv">2</span><span class="op">:</span>max.sample.size)), sd.means, <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">plot</span>(demo_sd<span class="op">/</span><span class="kw">sqrt</span>((<span class="dv">2</span><span class="op">:</span>max_sample_size)), sd_means, <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
 <p><img src="lec10_files/figure-html/semean06-1.png" width="2100" /></p>
 <p>Generate some data values, this time from a uniform distribution</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># data.values from a uniform distribution</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">data.values &lt;-<span class="st"> </span><span class="kw">runif</span>(npts, <span class="dv">0</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">hist</span>(data.values); <span class="kw">mean</span>(data.values); <span class="kw">sd</span>(data.values)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># data_values from a uniform distribution</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">data_values &lt;-<span class="st"> </span><span class="kw">runif</span>(npts, <span class="dv">0</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">hist</span>(data_values); <span class="kw">mean</span>(data_values); <span class="kw">sd</span>(data_values)</a></code></pre></div>
 <p><img src="lec10_files/figure-html/semean07-1.png" width="2100" /></p>
-<pre><code>## [1] 0.4829327</code></pre>
-<pre><code>## [1] 0.2918684</code></pre>
-<p>Rescale these values so that they have the same mean (<code>demo.mean</code>) and standard deviation (<code>demo.sd</code>) as in the previous example,</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># rescale the data.values so they have a mean of demo.mean</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co"># and a standard deviation of demo.sd (standardize, then rescale)</span></a>
-<a class="sourceLine" id="cb17-3" data-line-number="3">data.values &lt;-<span class="st"> </span>(data.values<span class="op">-</span><span class="kw">mean</span>(data.values))<span class="op">/</span><span class="kw">sd</span>(data.values)</a>
-<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="kw">mean</span>(data.values); <span class="kw">sd</span>(data.values)</a></code></pre></div>
-<pre><code>## [1] 6.328004e-17</code></pre>
+<pre><code>## [1] 0.4853015</code></pre>
+<pre><code>## [1] 0.2921011</code></pre>
+<p>Rescale these values so that they have the same mean (<code>demo_mean</code>) and standard deviation (<code>demo_sd</code>) as in the previous example,</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># rescale the data_values so they have a mean of demo_mean</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co"># and a standard deviation of demo_sd (standardize, then rescale)</span></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3">data_values &lt;-<span class="st"> </span>(data_values<span class="op">-</span><span class="kw">mean</span>(data_values))<span class="op">/</span><span class="kw">sd</span>(data_values)</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="kw">mean</span>(data_values); <span class="kw">sd</span>(data_values)</a></code></pre></div>
+<pre><code>## [1] 6.652579e-17</code></pre>
 <pre><code>## [1] 1</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">data.values &lt;-<span class="st"> </span>(data.values<span class="op">*</span>demo.sd)<span class="op">+</span>demo.mean</a>
-<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">hist</span>(data.values); <span class="kw">mean</span>(data.values); <span class="kw">sd</span>(data.values)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">data_values &lt;-<span class="st"> </span>(data_values<span class="op">*</span>demo_sd)<span class="op">+</span>demo_mean</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">hist</span>(data_values); <span class="kw">mean</span>(data_values); <span class="kw">sd</span>(data_values)</a></code></pre></div>
 <p><img src="lec10_files/figure-html/semean08-1.png" width="2100" /></p>
 <pre><code>## [1] 5</code></pre>
 <pre><code>## [1] 2</code></pre>
 <p>Repeat the demonstration</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="cf">for</span> (n <span class="cf">in</span> <span class="kw">seq</span>(<span class="dv">1</span>,max.sample.size<span class="dv">-1</span>)) {</a>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="cf">for</span> (n <span class="cf">in</span> <span class="kw">seq</span>(<span class="dv">1</span>,max_sample_size<span class="dv">-1</span>)) {</a>
 <a class="sourceLine" id="cb23-2" data-line-number="2">   <span class="co"># for each sample size generate nreps samples and get their mean</span></a>
 <a class="sourceLine" id="cb23-3" data-line-number="3">   <span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq</span>(<span class="dv">1</span>,nreps)) {</a>
-<a class="sourceLine" id="cb23-4" data-line-number="4">         samp &lt;-<span class="st"> </span><span class="kw">sample</span>(data.values, n<span class="op">+</span><span class="dv">1</span>, <span class="dt">replace=</span>T)</a>
-<a class="sourceLine" id="cb23-5" data-line-number="5">         mean.samp[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
+<a class="sourceLine" id="cb23-4" data-line-number="4">         samp &lt;-<span class="st"> </span><span class="kw">sample</span>(data_values, n<span class="op">+</span><span class="dv">1</span>, <span class="dt">replace=</span>T)</a>
+<a class="sourceLine" id="cb23-5" data-line-number="5">         mean_samp[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
 <a class="sourceLine" id="cb23-6" data-line-number="6">   }</a>
 <a class="sourceLine" id="cb23-7" data-line-number="7">   <span class="co"># get the average and standard deviation of the nreps means</span></a>
-<a class="sourceLine" id="cb23-8" data-line-number="8">   average.means[n] &lt;-<span class="st"> </span><span class="kw">apply</span>(mean.samp,<span class="dv">2</span>,mean)</a>
-<a class="sourceLine" id="cb23-9" data-line-number="9">   sd.means[n] &lt;-<span class="st"> </span><span class="kw">apply</span>(mean.samp,<span class="dv">2</span>,sd)</a>
-<a class="sourceLine" id="cb23-10" data-line-number="10">   sample.size[n] &lt;-<span class="st"> </span>n<span class="op">+</span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb23-8" data-line-number="8">   average_means[n] &lt;-<span class="st"> </span><span class="kw">apply</span>(mean_samp,<span class="dv">2</span>,mean)</a>
+<a class="sourceLine" id="cb23-9" data-line-number="9">   sd_means[n] &lt;-<span class="st"> </span><span class="kw">apply</span>(mean_samp,<span class="dv">2</span>,sd)</a>
+<a class="sourceLine" id="cb23-10" data-line-number="10">   sample_size[n] &lt;-<span class="st"> </span>n<span class="op">+</span><span class="dv">1</span></a>
 <a class="sourceLine" id="cb23-11" data-line-number="11">}</a>
-<a class="sourceLine" id="cb23-12" data-line-number="12"><span class="kw">plot</span>(sample.size, sd.means, <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb23-12" data-line-number="12"><span class="kw">plot</span>(sample_size, sd_means, <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
 <p><img src="lec10_files/figure-html/semean09-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">head</span>(<span class="kw">cbind</span>(average.means,sd.means,sample.size))</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">head</span>(<span class="kw">cbind</span>(average_means,sd_means,sample_size))</a></code></pre></div>
 <pre><code>##          [,1]      [,2] [,3]
-## [1,] 5.076491 1.4218943    2
-## [2,] 4.973896 1.1748208    3
-## [3,] 5.006157 1.0423164    4
-## [4,] 5.018091 0.9066874    5
-## [5,] 5.037439 0.8329974    6
-## [6,] 4.947910 0.7866689    7</code></pre>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">tail</span>(<span class="kw">cbind</span>(average.means,sd.means,sample.size))</a></code></pre></div>
+## [1,] 5.040256 1.4365609    2
+## [2,] 5.072014 1.1364654    3
+## [3,] 4.979576 0.9994014    4
+## [4,] 4.997650 0.8747587    5
+## [5,] 5.014330 0.8533994    6
+## [6,] 5.014758 0.7700185    7</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">tail</span>(<span class="kw">cbind</span>(average_means,sd_means,sample_size))</a></code></pre></div>
 <pre><code>##           [,1]      [,2] [,3]
-## [94,] 4.993303 0.2052575   95
-## [95,] 4.999219 0.2107304   96
-## [96,] 4.996054 0.2042940   97
-## [97,] 5.005953 0.2024509   98
-## [98,] 5.007782 0.1981763   99
-## [99,] 5.007413 0.2003017  100</code></pre>
-<p>This demonstrates that the standard error of the mean is insensitive to the underlying distribution of the data.</p>
+## [94,] 4.996266 0.2020135   95
+## [95,] 5.004224 0.1943945   96
+## [96,] 5.005490 0.2034202   97
+## [97,] 5.014969 0.1967694   98
+## [98,] 4.998495 0.2016952   99
+## [99,] 4.998972 0.1974246  100</code></pre>
+<p>This demonstrates that the standard error of the mean is insensitive to the underlying distribution of the data_</p>
 </div>
 <div id="confidence-intervals" class="section level2">
 <h2><span class="header-section-number">2.2</span> Confidence intervals</h2>
@@ -658,24 +658,24 @@ $(document).ready(function () {
 ##  3rd Qu.:10.678   3rd Qu.:30.25  
 ##  Max.   :13.826   Max.   :40.00</code></pre>
 <p>The idea here is to imagine that each group of 100 observations represents one possible sample of some underlying process or information set, that might occur in practice. These hypothetical samples (which are each equally likely) provide a mechanism for illustrating the range of values of the mean that could occur simply due to natural variability of the data, and the “confidence interal” is that range of values of the mean that enclose 90% of the possible mean values.</p>
-<p>Get the means and standard errors of each group.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">group.means &lt;-<span class="st"> </span><span class="kw">tapply</span>(NormDat, Group, mean)</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">group.sd &lt;-<span class="st"> </span><span class="kw">tapply</span>(NormDat, Group, sd)</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3">group.npts &lt;-<span class="st"> </span><span class="kw">tapply</span>(NormDat, Group, length)</a>
-<a class="sourceLine" id="cb31-4" data-line-number="4">group.semean &lt;-<span class="st"> </span>(group.sd<span class="op">/</span>(<span class="kw">sqrt</span>(group.npts)))</a>
-<a class="sourceLine" id="cb31-5" data-line-number="5"><span class="kw">mean</span>(group.means)</a></code></pre></div>
+<p>Get the means and standard errors of each group_</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">group_means &lt;-<span class="st"> </span><span class="kw">tapply</span>(NormDat, Group, mean)</a>
+<a class="sourceLine" id="cb31-2" data-line-number="2">group_sd &lt;-<span class="st"> </span><span class="kw">tapply</span>(NormDat, Group, sd)</a>
+<a class="sourceLine" id="cb31-3" data-line-number="3">group_npts &lt;-<span class="st"> </span><span class="kw">tapply</span>(NormDat, Group, length)</a>
+<a class="sourceLine" id="cb31-4" data-line-number="4">group_semean &lt;-<span class="st"> </span>(group_sd<span class="op">/</span>(<span class="kw">sqrt</span>(group_npts)))</a>
+<a class="sourceLine" id="cb31-5" data-line-number="5"><span class="kw">mean</span>(group_means)</a></code></pre></div>
 <pre><code>## [1] 9.991148</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">sd</span>(group.means)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">sd</span>(group_means)</a></code></pre></div>
 <pre><code>## [1] 0.08264523</code></pre>
 <p>Plot the individual samples (top plot) and then the means, and their standard errors (bottom plot). Note the different scales on the plots.</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co"># plot means and data</span></a>
 <a class="sourceLine" id="cb35-2" data-line-number="2"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a>
 <a class="sourceLine" id="cb35-3" data-line-number="3"><span class="kw">plot</span>(Group, NormDat)</a>
-<a class="sourceLine" id="cb35-4" data-line-number="4"><span class="kw">points</span>(group.means, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>)</a>
+<a class="sourceLine" id="cb35-4" data-line-number="4"><span class="kw">points</span>(group_means, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>)</a>
 <a class="sourceLine" id="cb35-5" data-line-number="5"><span class="co"># plot means and standard errors of means</span></a>
-<a class="sourceLine" id="cb35-6" data-line-number="6"><span class="kw">plot</span>(group.means, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">9</span>, <span class="dv">11</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">xlab=</span><span class="st">&quot;Group&quot;</span>)</a>
-<a class="sourceLine" id="cb35-7" data-line-number="7"><span class="kw">points</span>(group.means <span class="op">+</span><span class="st"> </span><span class="fl">2.0</span><span class="op">*</span>group.semean , <span class="dt">pch=</span><span class="st">&quot;-&quot;</span>)</a>
-<a class="sourceLine" id="cb35-8" data-line-number="8"><span class="kw">points</span>(group.means <span class="op">-</span><span class="st"> </span><span class="fl">2.0</span><span class="op">*</span>group.semean , <span class="dt">pch=</span><span class="st">&quot;-&quot;</span>)</a>
+<a class="sourceLine" id="cb35-6" data-line-number="6"><span class="kw">plot</span>(group_means, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">9</span>, <span class="dv">11</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">xlab=</span><span class="st">&quot;Group&quot;</span>)</a>
+<a class="sourceLine" id="cb35-7" data-line-number="7"><span class="kw">points</span>(group_means <span class="op">+</span><span class="st"> </span><span class="fl">2.0</span><span class="op">*</span>group_semean , <span class="dt">pch=</span><span class="st">&quot;-&quot;</span>)</a>
+<a class="sourceLine" id="cb35-8" data-line-number="8"><span class="kw">points</span>(group_means <span class="op">-</span><span class="st"> </span><span class="fl">2.0</span><span class="op">*</span>group_semean , <span class="dt">pch=</span><span class="st">&quot;-&quot;</span>)</a>
 <a class="sourceLine" id="cb35-9" data-line-number="9"><span class="kw">abline</span>(<span class="dv">10</span>,<span class="dv">0</span>)</a></code></pre></div>
 <p><img src="lec10_files/figure-html/semean13-1.png" width="2100" /></p>
 <p>The bottom plot shows that out the 40 mean values (red dots), 2 (0.05 or 5 percent) have intervals (defined to be twice the standard error either side of the mean, black tick marks) that do not enclose the “true” value of the mean (10.0).</p>
@@ -744,8 +744,8 @@ $(document).ready(function () {
 </ul>
 <p>The shape of the <em>t</em> distribution can be visualized as follows (for df=30):</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">3</span>,<span class="dv">3</span>, <span class="dt">by=</span>.<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb37-2" data-line-number="2">pdf.t &lt;-<span class="st"> </span><span class="kw">dt</span>(x,<span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb37-3" data-line-number="3"><span class="kw">plot</span>(pdf.t <span class="op">~</span><span class="st"> </span>x, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb37-2" data-line-number="2">pdf_t &lt;-<span class="st"> </span><span class="kw">dt</span>(x,<span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb37-3" data-line-number="3"><span class="kw">plot</span>(pdf_t <span class="op">~</span><span class="st"> </span>x, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
 <p><img src="lec10_files/figure-html/ttest01-1.png" width="2100" /></p>
 <p>You can read about the origin of Gosset’s pseudonum (and his contributions to brewing) <a href="http://pubs.aeaweb.org/doi/pdfplus/10.1257/jep.22.4.199">here</a>.</p>
 <div id="the-t-test-for-assessing-differences-in-group-means" class="section level2">

@@ -11,7 +11,7 @@ output:
 
 ```{r set-options, echo=FALSE}
 options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
@@ -42,98 +42,98 @@ Here is a demonstration using simulated data and repeated samples of different s
 ```{r semean01}
 # generate 1000 random numbers from the normal distribution
 npts <- 1000
-demo.mean <- 5; demo.sd <- 2
-data.values <- rnorm(npts, demo.mean, demo.sd)
-hist(data.values); mean(data.values); sd(data.values)
+demo_mean <- 5; demo_sd <- 2
+data_values <- rnorm(npts, demo_mean, demo_sd)
+hist(data_values); mean(data_values); sd(data_values)
 ```
 
 Set the number of replications `nreps` and the (maximum) sample size
 
 ```{r semean02}
 nreps <- 1000 # number of replications (samples) for each sample size
-max.sample.size <- 100 # number of example sample sizes
+max_sample_size <- 100 # number of example sample sizes
 ```
 
 Create several matrices to hold the individual replication results.
 
 ```{r semean03}
 # matrix to hold means of each of the nreps samples
-mean.samp <- matrix(1:nreps)
+mean_samp <- matrix(1:nreps)
 # matrices to hold means, sd’s and sample sizes for for each n
-average.means <- matrix(1:(max.sample.size-1))
-sd.means <- matrix(1:(max.sample.size-1))
-sample.size <- matrix(1:(max.sample.size-1))
+average_means <- matrix(1:(max_sample_size-1))
+sd_means <- matrix(1:(max_sample_size-1))
+sample_size <- matrix(1:(max_sample_size-1))
 ```
 
-Generate means for a range of sample sizes (1:max.sample.size)
+Generate means for a range of sample sizes (1:max_sample_size)
 
 ```{r semean04}
-for (n in seq(1,max.sample.size-1)) {
+for (n in seq(1,max_sample_size-1)) {
    # for each sample size generate nreps samples and get their mean
    for (i in seq(1,nreps)) {
-         samp <- sample(data.values, n+1, replace=T)
-         mean.samp[i] <- mean(samp)
+         samp <- sample(data_values, n+1, replace=T)
+         mean_samp[i] <- mean(samp)
    }
    # get the average and standard deviation of the nreps means
-   average.means[n] <- apply(mean.samp,2,mean)
-   sd.means[n] <- apply(mean.samp,2,sd)
-   sample.size[n] <- n+1
+   average_means[n] <- apply(mean_samp,2,mean)
+   sd_means[n] <- apply(mean_samp,2,sd)
+   sample_size[n] <- n+1
 }
 ```
 
 Take a look at the means and the standard errors.  Note that means remain essentially constant across the range of sample sizes, while the standard errors decrease rapidly (at first) with increasing sample size.
 
 ```{r semean05}
-plot(sample.size, average.means, ylim=c(4.5, 5.5), pch=16)
-plot(sample.size, sd.means, pch=16)
-head(cbind(average.means,sd.means,sample.size))
-tail(cbind(average.means,sd.means,sample.size))
+plot(sample_size, average_means, ylim=c(4.5, 5.5), pch=16)
+plot(sample_size, sd_means, pch=16)
+head(cbind(average_means,sd_means,sample_size))
+tail(cbind(average_means,sd_means,sample_size))
 ```
 
 Verify that the standard error of the mean is sigma/sqrt(n)
 
 ```{r semean06}
-plot(demo.sd/sqrt((2:max.sample.size)), sd.means, pch=16)
+plot(demo_sd/sqrt((2:max_sample_size)), sd_means, pch=16)
 ```
 
 Generate some data values, this time from a uniform distribution
 
 ```{r semean07}
-# data.values from a uniform distribution
-data.values <- runif(npts, 0, 1)
-hist(data.values); mean(data.values); sd(data.values)
+# data_values from a uniform distribution
+data_values <- runif(npts, 0, 1)
+hist(data_values); mean(data_values); sd(data_values)
 ```
 
-Rescale these values so that they have the same mean (`demo.mean`) and standard deviation (`demo.sd`) as in the previous example, 
+Rescale these values so that they have the same mean (`demo_mean`) and standard deviation (`demo_sd`) as in the previous example, 
 ```{r semean08}
-# rescale the data.values so they have a mean of demo.mean
-# and a standard deviation of demo.sd (standardize, then rescale)
-data.values <- (data.values-mean(data.values))/sd(data.values)
-mean(data.values); sd(data.values)
-data.values <- (data.values*demo.sd)+demo.mean
-hist(data.values); mean(data.values); sd(data.values)
+# rescale the data_values so they have a mean of demo_mean
+# and a standard deviation of demo_sd (standardize, then rescale)
+data_values <- (data_values-mean(data_values))/sd(data_values)
+mean(data_values); sd(data_values)
+data_values <- (data_values*demo_sd)+demo_mean
+hist(data_values); mean(data_values); sd(data_values)
 ```
 
 Repeat the demonstration
 
 ```{r semean09}
-for (n in seq(1,max.sample.size-1)) {
+for (n in seq(1,max_sample_size-1)) {
    # for each sample size generate nreps samples and get their mean
    for (i in seq(1,nreps)) {
-         samp <- sample(data.values, n+1, replace=T)
-         mean.samp[i] <- mean(samp)
+         samp <- sample(data_values, n+1, replace=T)
+         mean_samp[i] <- mean(samp)
    }
    # get the average and standard deviation of the nreps means
-   average.means[n] <- apply(mean.samp,2,mean)
-   sd.means[n] <- apply(mean.samp,2,sd)
-   sample.size[n] <- n+1
+   average_means[n] <- apply(mean_samp,2,mean)
+   sd_means[n] <- apply(mean_samp,2,sd)
+   sample_size[n] <- n+1
 }
-plot(sample.size, sd.means, pch=16)
-head(cbind(average.means,sd.means,sample.size))
-tail(cbind(average.means,sd.means,sample.size))
+plot(sample_size, sd_means, pch=16)
+head(cbind(average_means,sd_means,sample_size))
+tail(cbind(average_means,sd_means,sample_size))
 ```
 
-This demonstrates that the standard error of the mean is insensitive to the underlying distribution of the data.
+This demonstrates that the standard error of the mean is insensitive to the underlying distribution of the data_
 
 ## Confidence intervals ##
 
@@ -157,15 +157,15 @@ summary(cidat)
 
 The idea here is to imagine that each group of 100 observations represents one possible sample of some underlying process or information set, that might occur in practice.  These hypothetical samples (which are each equally likely) provide a mechanism for illustrating the range of values of the mean that could occur simply due to natural variability of the data, and the "confidence interal" is that range of values of the mean that enclose 90% of the possible mean values.  
 
-Get the means and standard errors of each group.
+Get the means and standard errors of each group_
 
 ```{r semean12}
-group.means <- tapply(NormDat, Group, mean)
-group.sd <- tapply(NormDat, Group, sd)
-group.npts <- tapply(NormDat, Group, length)
-group.semean <- (group.sd/(sqrt(group.npts)))
-mean(group.means)
-sd(group.means)
+group_means <- tapply(NormDat, Group, mean)
+group_sd <- tapply(NormDat, Group, sd)
+group_npts <- tapply(NormDat, Group, length)
+group_semean <- (group_sd/(sqrt(group_npts)))
+mean(group_means)
+sd(group_means)
 ```
 
 Plot the individual samples (top plot) and then the means, and their standard errors (bottom plot).  Note the different scales on the plots.
@@ -174,11 +174,11 @@ Plot the individual samples (top plot) and then the means, and their standard er
 # plot means and data
 par(mfrow=c(2,1))
 plot(Group, NormDat)
-points(group.means, col="red", pch=16)
+points(group_means, col="red", pch=16)
 # plot means and standard errors of means
-plot(group.means, ylim=c(9, 11), col="red", pch=16, xlab="Group")
-points(group.means + 2.0*group.semean , pch="-")
-points(group.means - 2.0*group.semean , pch="-")
+plot(group_means, ylim=c(9, 11), col="red", pch=16, xlab="Group")
+points(group_means + 2.0*group_semean , pch="-")
+points(group_means - 2.0*group_semean , pch="-")
 abline(10,0)
 ```
 
@@ -255,8 +255,8 @@ The shape of the *t* distribution can be visualized as follows (for df=30):
 
 ```{r ttest01}
 x <- seq(-3,3, by=.1)
-pdf.t <- dt(x,3)
-plot(pdf.t ~ x, type="l")
+pdf_t <- dt(x,3)
+plot(pdf_t ~ x, type="l")
 ```
 
 You can read about the origin of Gosset's pseudonum (and his contributions to brewing) [here](http://pubs.aeaweb.org/doi/pdfplus/10.1257/jep.22.4.199).

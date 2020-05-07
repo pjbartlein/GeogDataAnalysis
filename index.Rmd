@@ -17,10 +17,6 @@ pdf.options(useDingbats = TRUE)
 
 ![](images/annp.png)
 
-<p><span style="color: #00cc00;">NOTE:  This is the course web page for the Spring 2020 offering of GEOG 4/595.<br>
-It is currently being updated for this quarter.
-</span></p>
-
 **GEOG 4/595: Spring 2020, Nominal Class Time 2:00-3:50 T&Th**
 
 - Topic:  Visualization and Data Analysis
