@@ -21,7 +21,7 @@ klippy::klippy(position = c('top', 'right'))
 **Spring 2020**
 
 **Exercise 6:  Reference Distributions and Significance Testing (Confidence Intervals, t-tests, and Analysis of Variance)**  
-**Finish by Friday May 5**
+**Finish by Friday May 15**
 
 **1.  Introduction**
 
