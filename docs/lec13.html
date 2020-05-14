@@ -696,8 +696,8 @@ The example data set for illustrating the use of regression diagnostics <a href=
 <h2><span class="header-section-number">4.1</span> Example 1 – no major issues</h2>
 <p>Here’s an inital regression, that shows no major issues:</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># first regression</span></a>
-<a class="sourceLine" id="cb26-2" data-line-number="2">regr.y1x1 &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data=</span>regrex3)</a>
-<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="kw">summary</span>(regr.y1x1)</a></code></pre></div>
+<a class="sourceLine" id="cb26-2" data-line-number="2">regr_y1x1 &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data=</span>regrex3)</a>
+<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="kw">summary</span>(regr_y1x1)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y1 ~ x1, data = regrex3)
@@ -717,15 +717,15 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Multiple R-squared:  0.9897, Adjusted R-squared:  0.9896 
 ## F-statistic:  9441 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">plot</span>(regr.y1x1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;First Regression&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">plot</span>(regr_y1x1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;First Regression&quot;</span>)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/rdiag03-1.png" width="2100" /></p>
 </div>
 <div id="example-2-non-significant-predictor" class="section level2">
 <h2><span class="header-section-number">4.2</span> Example 2 – non-significant predictor</h2>
 <p>One of the most common issues in regression equations is the inclusion of a predictor that is not significant, in the sense that the <code>t-test</code> of the null hypothesis that the slope parameter for that predictor is zero is not significant (i.e. there is no support for rejecting that hypthesis). Here’s a example, where <code>x2</code> is not significant:</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="co"># add a second predictor</span></a>
-<a class="sourceLine" id="cb29-2" data-line-number="2">regr.y1x1x2 &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data=</span>regrex3)</a>
-<a class="sourceLine" id="cb29-3" data-line-number="3"><span class="kw">summary</span>(regr.y1x1x2)</a></code></pre></div>
+<a class="sourceLine" id="cb29-2" data-line-number="2">regr_y1x1x2 &lt;-<span class="st"> </span><span class="kw">lm</span>(y1 <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data=</span>regrex3)</a>
+<a class="sourceLine" id="cb29-3" data-line-number="3"><span class="kw">summary</span>(regr_y1x1x2)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y1 ~ x1 + x2, data = regrex3)
@@ -746,15 +746,15 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Multiple R-squared:  0.9897, Adjusted R-squared:  0.9895 
 ## F-statistic:  4674 on 2 and 97 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="kw">plot</span>(regr.y1x1x2, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Two Predictors&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="kw">plot</span>(regr_y1x1x2, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Two Predictors&quot;</span>)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/rdiag04-1.png" width="2100" /></p>
 </div>
 <div id="example-3-outliers-present" class="section level2">
 <h2><span class="header-section-number">4.3</span> Example 3 – outliers present</h2>
 <p>Outliers frequently arise, from mechanical (coding or recording), sampling (i.e. selection of the cases or locations), or from the simple inclusion of data points that are “outside” of the domain of interest. The third example shows how the outliers can be identified in the diagnostic plots. Cases 79 and 49 standout.</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co"># outliers</span></a>
-<a class="sourceLine" id="cb32-2" data-line-number="2">regr.y2x1 &lt;-<span class="st"> </span><span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data=</span>regrex3)</a>
-<a class="sourceLine" id="cb32-3" data-line-number="3"><span class="kw">summary</span>(regr.y2x1)</a></code></pre></div>
+<a class="sourceLine" id="cb32-2" data-line-number="2">regr_y2x1 &lt;-<span class="st"> </span><span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data=</span>regrex3)</a>
+<a class="sourceLine" id="cb32-3" data-line-number="3"><span class="kw">summary</span>(regr_y2x1)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y2 ~ x1, data = regrex3)
@@ -774,15 +774,15 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Multiple R-squared:  0.979,  Adjusted R-squared:  0.9788 
 ## F-statistic:  4572 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb34-2" data-line-number="2"><span class="kw">plot</span>(regr.y2x1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Outliers&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb34-2" data-line-number="2"><span class="kw">plot</span>(regr_y2x1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Outliers&quot;</span>)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/diag05-1.png" width="2100" /></p>
 </div>
 <div id="example-4-outliers-and-an-additional-predictor" class="section level2">
 <h2><span class="header-section-number">4.4</span> Example 4 – outliers and an additional predictor</h2>
 <p>Sometimes the existence of outliers can be traced to the omission of a potentially important predictor. In this case, the inclusion of <code>x2</code> does not eliminate the outliers, and as before, the slope coefficient of <code>x2</code> is not significant.</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co"># no help for outliers</span></a>
-<a class="sourceLine" id="cb35-2" data-line-number="2">regr.y2x1x2 &lt;-<span class="st"> </span><span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data=</span>regrex3)</a>
-<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="kw">summary</span>(regr.y2x1x2)</a></code></pre></div>
+<a class="sourceLine" id="cb35-2" data-line-number="2">regr_y2x1x2 &lt;-<span class="st"> </span><span class="kw">lm</span>(y2 <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span>x2, <span class="dt">data=</span>regrex3)</a>
+<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="kw">summary</span>(regr_y2x1x2)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y2 ~ x1 + x2, data = regrex3)
@@ -803,15 +803,15 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Multiple R-squared:  0.979,  Adjusted R-squared:  0.9786 
 ## F-statistic:  2265 on 2 and 97 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="kw">plot</span>(regr.y2x1x2, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Still Outliers&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="kw">plot</span>(regr_y2x1x2, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Still Outliers&quot;</span>)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/diag06-1.png" width="2100" /></p>
 </div>
 <div id="example-5-heteroscedasticity-non-normality-of-the-residual" class="section level2">
 <h2><span class="header-section-number">4.5</span> Example 5 – heteroscedasticity (non-normality) of the residual</h2>
 <p>Heteroscedasticity, or inhomogeneity of variance can arise several ways: it can be “inherited” from the response variable in cases where that variable is not completely “explained” by the predictor variable(s), and it can also signal issues with the structure of the model. In practice, heterscedastic residuals increase the variability of the regression parameter estimates, which means that we can be less confident that the “true” values of the coeffiecients have been estimated. Heteroscedasticity is signaled by the diagnostic plots, in particular “megaphone” patterns in the residual scatterplot, and “doglegs” in the normal probability plots.</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="co"># heteroscedasticity</span></a>
-<a class="sourceLine" id="cb38-2" data-line-number="2">regr.y3x1 &lt;-<span class="st"> </span><span class="kw">lm</span>(y3 <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data=</span>regrex3)</a>
-<a class="sourceLine" id="cb38-3" data-line-number="3"><span class="kw">summary</span>(regr.y3x1)</a></code></pre></div>
+<a class="sourceLine" id="cb38-2" data-line-number="2">regr_y3x1 &lt;-<span class="st"> </span><span class="kw">lm</span>(y3 <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data=</span>regrex3)</a>
+<a class="sourceLine" id="cb38-3" data-line-number="3"><span class="kw">summary</span>(regr_y3x1)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y3 ~ x1, data = regrex3)
@@ -831,15 +831,15 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Multiple R-squared:  0.9953, Adjusted R-squared:  0.9952 
 ## F-statistic: 2.06e+04 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="kw">plot</span>(regr.y3x1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Heteroscedasticity&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="kw">plot</span>(regr_y3x1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Heteroscedasticity&quot;</span>)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/rdiag07-1.png" width="2100" /></p>
 </div>
 <div id="example-6-nonlinear-relationships" class="section level2">
 <h2><span class="header-section-number">4.6</span> Example 6 – nonlinear relationships</h2>
 <p>Standard regrssion analyses attempt to fit <em>linear</em> relationships among variables, and often that’s not a reasonable assumption to make. This example illustrates how nonlinear relationships are exposed by the residual diagnostic plots (if they haven’t already been recognized), in particular by well-organized patterns in the residual scatterplot and leverage plot.</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="co"># nonlinear relationship</span></a>
-<a class="sourceLine" id="cb41-2" data-line-number="2">regr.y4x1 &lt;-<span class="st"> </span><span class="kw">lm</span>(y4 <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data=</span>regrex3)</a>
-<a class="sourceLine" id="cb41-3" data-line-number="3"><span class="kw">summary</span>(regr.y4x1)</a></code></pre></div>
+<a class="sourceLine" id="cb41-2" data-line-number="2">regr_y4x1 &lt;-<span class="st"> </span><span class="kw">lm</span>(y4 <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data=</span>regrex3)</a>
+<a class="sourceLine" id="cb41-3" data-line-number="3"><span class="kw">summary</span>(regr_y4x1)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y4 ~ x1, data = regrex3)
@@ -859,15 +859,15 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Multiple R-squared:  0.9739, Adjusted R-squared:  0.9736 
 ## F-statistic:  3655 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb43-2" data-line-number="2"><span class="kw">plot</span>(regr.y4x1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Nonlinear Relationship&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb43-2" data-line-number="2"><span class="kw">plot</span>(regr_y4x1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Nonlinear Relationship&quot;</span>)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/rdiag08-1.png" width="2100" /></p>
 </div>
 <div id="example-7-transformation" class="section level2">
 <h2><span class="header-section-number">4.7</span> Example 7 – transformation</h2>
 <p>The usual first-order strategy for dealing with heteroscedasticity and non-linearity is to transform one or another of the variables (or both) in a bivariate regression. Here, the values of <code>y4</code> are transformed buy taking their (base 10) logarithms. Because the logs of 0 and negative numbers are undefined, the values of <code>y4</code> are adjusted to make them nonzero and positive. However, there are still major problems signalled by the regression diagnostic plots.</p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="co"># alternative nonlinear log(y4) ~ x1</span></a>
-<a class="sourceLine" id="cb44-2" data-line-number="2">regr.logy4x1 &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">log10</span>(y4<span class="op">-</span><span class="kw">min</span>(y4) <span class="op">+</span><span class="st"> </span><span class="fl">0.001</span>) <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data=</span>regrex3)</a>
-<a class="sourceLine" id="cb44-3" data-line-number="3"><span class="kw">summary</span>(regr.logy4x1)</a></code></pre></div>
+<a class="sourceLine" id="cb44-2" data-line-number="2">regr_logy4x1 &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">log10</span>(y4<span class="op">-</span><span class="kw">min</span>(y4) <span class="op">+</span><span class="st"> </span><span class="fl">0.001</span>) <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data=</span>regrex3)</a>
+<a class="sourceLine" id="cb44-3" data-line-number="3"><span class="kw">summary</span>(regr_logy4x1)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = log10(y4 - min(y4) + 0.001) ~ x1, data = regrex3)
@@ -887,15 +887,15 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Multiple R-squared:  0.6775, Adjusted R-squared:  0.6742 
 ## F-statistic: 205.9 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb46-2" data-line-number="2"><span class="kw">plot</span>(regr.logy4x1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Transformation of y&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb46-2" data-line-number="2"><span class="kw">plot</span>(regr_logy4x1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Transformation of y&quot;</span>)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/rdiag09-1.png" width="2100" /></p>
 </div>
 <div id="example-8-fitting-a-nonlinear-quadratic-function" class="section level2">
 <h2><span class="header-section-number">4.8</span> Example 8 – fitting a nonlinear (quadratic) function</h2>
 <p>An alternative approach to “linearizing” a relationship is to fit a quadratic polynomial (i.e containing the terms <em>x</em> and <em>x<sup>2</sup></em>) to the data. The <code>I()</code> function indicates that the term <code>x1^2</code> should be treated as is, and is not part of the “formula” in the <code>lm()</code> function.</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="co"># alternative nonlinear (quadratic) y4 ~ x1, x1^2</span></a>
-<a class="sourceLine" id="cb47-2" data-line-number="2">regr.y4x1x1 &lt;-<span class="st"> </span><span class="kw">lm</span>(y4 <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="kw">I</span>(x1<span class="op">^</span><span class="dv">2</span>), <span class="dt">data=</span>regrex3)</a>
-<a class="sourceLine" id="cb47-3" data-line-number="3"><span class="kw">summary</span>(regr.y4x1x1)</a></code></pre></div>
+<a class="sourceLine" id="cb47-2" data-line-number="2">regr_y4x1x1 &lt;-<span class="st"> </span><span class="kw">lm</span>(y4 <span class="op">~</span><span class="st"> </span>x1 <span class="op">+</span><span class="kw">I</span>(x1<span class="op">^</span><span class="dv">2</span>), <span class="dt">data=</span>regrex3)</a>
+<a class="sourceLine" id="cb47-3" data-line-number="3"><span class="kw">summary</span>(regr_y4x1x1)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y4 ~ x1 + I(x1^2), data = regrex3)
@@ -916,7 +916,7 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Multiple R-squared:  0.999,  Adjusted R-squared:  0.999 
 ## F-statistic: 4.93e+04 on 2 and 97 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb49-2" data-line-number="2"><span class="kw">plot</span>(regr.y4x1x1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Quadratic Polynomial&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb49-2" data-line-number="2"><span class="kw">plot</span>(regr_y4x1x1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Quadratic Polynomial&quot;</span>)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/rdiag10-1.png" width="2100" /></p>
 <p>This equation fits much better than the previous one, and show no major problems</p>
 </div>
@@ -924,8 +924,8 @@ The example data set for illustrating the use of regression diagnostics <a href=
 <h2><span class="header-section-number">4.9</span> Example 9 – model inadequacy due to a missing predictor</h2>
 <p>Here’s an example regression, where the data were generated by an equation that included <code>x2</code>. Note that there are slight megaphone and dog-leg patterns in the residual plots.</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="co"># model inadequacy, missing predictor</span></a>
-<a class="sourceLine" id="cb50-2" data-line-number="2">regr.y5x1 &lt;-<span class="st"> </span><span class="kw">lm</span>(y5 <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data=</span>regrex3)</a>
-<a class="sourceLine" id="cb50-3" data-line-number="3"><span class="kw">summary</span>(regr.y5x1)</a></code></pre></div>
+<a class="sourceLine" id="cb50-2" data-line-number="2">regr_y5x1 &lt;-<span class="st"> </span><span class="kw">lm</span>(y5 <span class="op">~</span><span class="st"> </span>x1, <span class="dt">data=</span>regrex3)</a>
+<a class="sourceLine" id="cb50-3" data-line-number="3"><span class="kw">summary</span>(regr_y5x1)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y5 ~ x1, data = regrex3)
@@ -945,17 +945,17 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Multiple R-squared:  0.8266, Adjusted R-squared:  0.8248 
 ## F-statistic: 467.2 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb52-2" data-line-number="2"><span class="kw">plot</span>(regr.y5x1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Missing Predictor&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb52-2" data-line-number="2"><span class="kw">plot</span>(regr_y5x1, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Missing Predictor&quot;</span>)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/rdiag11-1.png" width="2100" /></p>
 <p>The typical way of examining the possibility that the inclusion of another predictor may be warrented, is to examine correlations between the residual, and other potential predictors. In this case it looks like the residuals are correlated with <code>x2</code>.</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co"># check for correlation between residuals and other predictors</span></a>
 <a class="sourceLine" id="cb53-2" data-line-number="2"><span class="kw">par</span>(oldpar)</a>
-<a class="sourceLine" id="cb53-3" data-line-number="3"><span class="kw">plot</span>(regr.y5x1<span class="op">$</span>residual <span class="op">~</span><span class="st"> </span>regrex3<span class="op">$</span>x2)</a></code></pre></div>
+<a class="sourceLine" id="cb53-3" data-line-number="3"><span class="kw">plot</span>(regr_y5x1<span class="op">$</span>residual <span class="op">~</span><span class="st"> </span>regrex3<span class="op">$</span>x2)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/rdiag12-1.png" width="2100" /></p>
 <p>When <code>x2</code> is included in the model, the various diagnostic checks show no major issues, except possibly a some extra influence by points 100, 24 and 4.</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="co"># last model, y5 ~ x1 and x2</span></a>
-<a class="sourceLine" id="cb54-2" data-line-number="2">regr.y5x1x2 &lt;-<span class="st"> </span><span class="kw">lm</span>(y5 <span class="op">~</span><span class="st"> </span>x1<span class="op">+</span>x2, <span class="dt">data=</span>regrex3)</a>
-<a class="sourceLine" id="cb54-3" data-line-number="3"><span class="kw">summary</span>(regr.y5x1x2)</a></code></pre></div>
+<a class="sourceLine" id="cb54-2" data-line-number="2">regr_y5x1x2 &lt;-<span class="st"> </span><span class="kw">lm</span>(y5 <span class="op">~</span><span class="st"> </span>x1<span class="op">+</span>x2, <span class="dt">data=</span>regrex3)</a>
+<a class="sourceLine" id="cb54-3" data-line-number="3"><span class="kw">summary</span>(regr_y5x1x2)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y5 ~ x1 + x2, data = regrex3)
@@ -976,7 +976,7 @@ The example data set for illustrating the use of regression diagnostics <a href=
 ## Multiple R-squared:  0.9638, Adjusted R-squared:  0.9631 
 ## F-statistic:  1292 on 2 and 97 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1">oldpar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb56-2" data-line-number="2"><span class="kw">plot</span>(regr.y5x1x2, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Two Predictors&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb56-2" data-line-number="2"><span class="kw">plot</span>(regr_y5x1x2, <span class="dt">which=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>), <span class="dt">main=</span><span class="st">&quot;Two Predictors&quot;</span>)</a></code></pre></div>
 <p><img src="lec13_files/figure-html/rdiag13-1.png" width="2100" /></p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="kw">par</span>(oldpar)</a></code></pre></div>
 <p><a href="lec13.html">[Back to top]</a></p>
