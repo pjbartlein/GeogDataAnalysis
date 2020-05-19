@@ -553,7 +553,7 @@ $(document).ready(function () {
 <ul>
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/images/v3_7.gif">the locally weighted “fitted value” at a particular point</a></li>
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/images/v3_8.gif">what happens at the margin of the scatter diagram</a></li>
-<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/loess.pdf">the mathematics of loess</a></li>
+<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/loess_pdf">the mathematics of loess</a></li>
 </ul>
 <p>The parameters of an individual <code>loess()</code> curve:</p>
 <ul>
@@ -596,8 +596,8 @@ $(document).ready(function () {
 <h2><span class="header-section-number">3.2</span> loess()</h2>
 <p>The newer <code>loess()</code> function uses a formula to specify the response (and in its application as a scatter-diagram smoother) a single predictor variable. The <code>loess()</code> function creates an object that contains the results, and the <code>predict()</code> function retrieves the fitted values. These can then be plotted along with the response variable. However, the points must be plotted in increasing order of the predictor variable values in order for the <code>lines()</code> function to draw the line in an appropriate fashion. This is done by using the results of the <code>order()</code> function applied to the predictor variable values, and the explicit subscripting (in square brackets <code>[ ]</code>) to arrange the observations in ascending order.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># loess -- first model</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">loess.model &lt;-<span class="st"> </span><span class="kw">loess</span>(tann <span class="op">~</span><span class="st"> </span>elevation)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">loess.model</a></code></pre></div>
+<a class="sourceLine" id="cb6-2" data-line-number="2">loess_model &lt;-<span class="st"> </span><span class="kw">loess</span>(tann <span class="op">~</span><span class="st"> </span>elevation)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">loess_model</a></code></pre></div>
 <pre><code>## Call:
 ## loess(formula = tann ~ elevation)
 ## 
@@ -605,8 +605,8 @@ $(document).ready(function () {
 ## Equivalent Number of Parameters: 4.69 
 ## Residual Standard Error: 0.8758</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># second model, smoother curve</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">loess.model2 &lt;-<span class="st"> </span><span class="kw">loess</span>(tann <span class="op">~</span><span class="st"> </span>elevation, <span class="dt">span=</span><span class="fl">0.90</span>, <span class="dt">degree=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">loess.model2</a></code></pre></div>
+<a class="sourceLine" id="cb8-2" data-line-number="2">loess_model2 &lt;-<span class="st"> </span><span class="kw">loess</span>(tann <span class="op">~</span><span class="st"> </span>elevation, <span class="dt">span=</span><span class="fl">0.90</span>, <span class="dt">degree=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">loess_model2</a></code></pre></div>
 <pre><code>## Call:
 ## loess(formula = tann ~ elevation, span = 0.9, degree = 2)
 ## 
@@ -615,9 +615,9 @@ $(document).ready(function () {
 ## Residual Standard Error: 0.8752</code></pre>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># plot the curves</span></a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">plot</span>(tann <span class="op">~</span><span class="st"> </span>elevation, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.6</span>)</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">hat1 &lt;-<span class="st"> </span><span class="kw">predict</span>(loess.model)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">hat1 &lt;-<span class="st"> </span><span class="kw">predict</span>(loess_model)</a>
 <a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw">lines</span>(elevation[<span class="kw">order</span>(elevation)], hat1[<span class="kw">order</span>(elevation)], <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">hat2 &lt;-<span class="st"> </span><span class="kw">predict</span>(loess.model2)</a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">hat2 &lt;-<span class="st"> </span><span class="kw">predict</span>(loess_model2)</a>
 <a class="sourceLine" id="cb10-6" data-line-number="6"><span class="kw">lines</span>(elevation[<span class="kw">order</span>(elevation)], hat2[<span class="kw">order</span>(elevation)], <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
 <a class="sourceLine" id="cb10-7" data-line-number="7"><span class="kw">legend</span>(<span class="st">&quot;bottomleft&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;loess() model&quot;</span>, <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;span=0.667, deg=1&quot;</span>,<span class="st">&quot;span=0.9, deg=2&quot;</span>), <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">cex=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>))</a></code></pre></div>
 <p><img src="lec14_files/figure-html/low07-1.png" width="1350" /></p>
@@ -626,8 +626,8 @@ $(document).ready(function () {
 <h2><span class="header-section-number">3.3</span> loess() surfaces</h2>
 <p>A locally determined surface can be constructed using <code>loess()</code> which is not limited to a single predictor variable, by first fitting a model that illustrates the response of the response variable as a function of two (or more) location variables, and then using the <code>predict()</code> function to visualize the resulting surface:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># tann as a function of latitude and longitude (and interaction)</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">tann.loess &lt;-<span class="st"> </span><span class="kw">loess</span>(tann <span class="op">~</span><span class="st"> </span>longitude <span class="op">+</span><span class="st"> </span>latitude, <span class="dt">span=</span><span class="fl">0.3</span>)</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw">summary</span>(tann.loess)</a></code></pre></div>
+<a class="sourceLine" id="cb11-2" data-line-number="2">tann_loess &lt;-<span class="st"> </span><span class="kw">loess</span>(tann <span class="op">~</span><span class="st"> </span>longitude <span class="op">+</span><span class="st"> </span>latitude, <span class="dt">span=</span><span class="fl">0.3</span>)</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw">summary</span>(tann_loess)</a></code></pre></div>
 <pre><code>## Call:
 ## loess(formula = tann ~ longitude + latitude, span = 0.3)
 ## 
@@ -645,18 +645,18 @@ $(document).ready(function () {
 ##  parametric:  FALSE FALSE
 ## drop.square:  FALSE FALSE</code></pre>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># poor man&#39;s R-squared value</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">cor</span>(tann, tann.loess<span class="op">$</span>fitted)<span class="op">^</span><span class="dv">2</span></a></code></pre></div>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">cor</span>(tann, tann_loess<span class="op">$</span>fitted)<span class="op">^</span><span class="dv">2</span></a></code></pre></div>
 <pre><code>## [1] 0.8098961</code></pre>
 <p>Now create an interpolation “target” grid, get the predicted (i.e. interpolated) values, and plot the results.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># create an interpolation target grid to display predicted values</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">grid.longitude &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="fl">124.5000</span>, <span class="fl">-116.8333</span>, <span class="fl">.1667</span>)</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">grid.latitude &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">42.0000</span>, <span class="fl">46.1667</span>, <span class="fl">.0833</span>)</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4">grid.mar &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">longitude=</span>grid.longitude, <span class="dt">latitude=</span>grid.latitude)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">grid_longitude &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="fl">124.5000</span>, <span class="fl">-116.8333</span>, <span class="fl">.1667</span>)</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">grid_latitude &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">42.0000</span>, <span class="fl">46.1667</span>, <span class="fl">.0833</span>)</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">grid_mar &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">longitude=</span>grid_longitude, <span class="dt">latitude=</span>grid_latitude)</a>
 <a class="sourceLine" id="cb15-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co"># get the fitted (interpolated) values</span></a>
-<a class="sourceLine" id="cb15-7" data-line-number="7">tann.interp &lt;-<span class="st"> </span><span class="kw">predict</span>(tann.loess, <span class="kw">expand.grid</span>(grid.mar))</a>
-<a class="sourceLine" id="cb15-8" data-line-number="8">tann.z &lt;-<span class="st"> </span><span class="kw">matrix</span>(tann.interp, <span class="kw">length</span>(grid.longitude),</a>
-<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="kw">length</span>(grid.latitude))</a>
+<a class="sourceLine" id="cb15-7" data-line-number="7">tann_interp &lt;-<span class="st"> </span><span class="kw">predict</span>(tann_loess, <span class="kw">expand.grid</span>(grid_mar))</a>
+<a class="sourceLine" id="cb15-8" data-line-number="8">tann_z &lt;-<span class="st"> </span><span class="kw">matrix</span>(tann_interp, <span class="kw">length</span>(grid_longitude),</a>
+<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="kw">length</span>(grid_latitude))</a>
 <a class="sourceLine" id="cb15-10" data-line-number="10"></a>
 <a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co"># plot the interpolated values as shaded rectangles and contours</span></a>
 <a class="sourceLine" id="cb15-12" data-line-number="12">nclr &lt;-<span class="st"> </span><span class="dv">8</span></a>
@@ -664,8 +664,8 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb15-14" data-line-number="14">plotclr &lt;-<span class="st"> </span>plotclr[nclr<span class="op">:</span><span class="dv">1</span>] <span class="co"># reorder colors</span></a>
 <a class="sourceLine" id="cb15-15" data-line-number="15"></a>
 <a class="sourceLine" id="cb15-16" data-line-number="16"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(orotl_sf), <span class="dt">axes=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="kw">image</span>(grid.longitude, grid.latitude, tann.z, <span class="dt">col=</span>plotclr, <span class="dt">add=</span>T)</a>
-<a class="sourceLine" id="cb15-18" data-line-number="18"><span class="kw">contour</span>(grid.longitude, grid.latitude, tann.z, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="kw">image</span>(grid_longitude, grid_latitude, tann_z, <span class="dt">col=</span>plotclr, <span class="dt">add=</span>T)</a>
+<a class="sourceLine" id="cb15-18" data-line-number="18"><span class="kw">contour</span>(grid_longitude, grid_latitude, tann_z, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb15-19" data-line-number="19"><span class="kw">points</span>(longitude, latitude)</a>
 <a class="sourceLine" id="cb15-20" data-line-number="20"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(orotl_sf), <span class="dt">add=</span>T)</a></code></pre></div>
 <p><img src="lec14_files/figure-html/low10-1.png" width="2100" /></p>
@@ -681,8 +681,8 @@ $(document).ready(function () {
 <div id="least-squares-line" class="section level3">
 <h3><span class="header-section-number">3.4.1</span> Least-squares line</h3>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># first-order polynomial (i.e. a straight line)</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">linear.model &lt;-<span class="st"> </span><span class="kw">lm</span>(tann <span class="op">~</span><span class="st"> </span>elevation)</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3">linear.model</a></code></pre></div>
+<a class="sourceLine" id="cb16-2" data-line-number="2">linear_model &lt;-<span class="st"> </span><span class="kw">lm</span>(tann <span class="op">~</span><span class="st"> </span>elevation)</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3">linear_model</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = tann ~ elevation)
@@ -694,8 +694,8 @@ $(document).ready(function () {
 <div id="least-squares-polynomials" class="section level3">
 <h3><span class="header-section-number">3.4.2</span> Least-squares polynomials</h3>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># second order polynomial</span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2">poly2.model &lt;-<span class="st"> </span><span class="kw">lm</span>(tann <span class="op">~</span><span class="st"> </span>elevation<span class="op">+</span><span class="st"> </span><span class="kw">I</span>(elevation<span class="op">^</span><span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb18-3" data-line-number="3">poly2.model</a></code></pre></div>
+<a class="sourceLine" id="cb18-2" data-line-number="2">poly2_model &lt;-<span class="st"> </span><span class="kw">lm</span>(tann <span class="op">~</span><span class="st"> </span>elevation<span class="op">+</span><span class="st"> </span><span class="kw">I</span>(elevation<span class="op">^</span><span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">poly2_model</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = tann ~ elevation + I(elevation^2))
@@ -703,12 +703,12 @@ $(document).ready(function () {
 ## Coefficients:
 ##    (Intercept)       elevation  I(elevation^2)  
 ##      1.133e+01      -1.147e-03      -1.459e-06</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">poly2.hat &lt;-<span class="st"> </span><span class="kw">predict</span>(poly2.model)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">poly2_hat &lt;-<span class="st"> </span><span class="kw">predict</span>(poly2_model)</a></code></pre></div>
 </div>
 <div id="smoothing-spline" class="section level3">
 <h3><span class="header-section-number">3.4.3</span> Smoothing spline</h3>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">spline.model &lt;-<span class="st"> </span><span class="kw">smooth.spline</span>(elevation, tann)</a>
-<a class="sourceLine" id="cb21-2" data-line-number="2">spline.model</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">spline_model &lt;-<span class="st"> </span><span class="kw">smooth.spline</span>(elevation, tann)</a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">spline_model</a></code></pre></div>
 <pre><code>## Call:
 ## smooth.spline(x = elevation, y = tann)
 ## 
@@ -718,10 +718,10 @@ $(document).ready(function () {
 ## GCV: 0.800279</code></pre>
 <p>Plot the differnt smoothers</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">plot</span>(tann <span class="op">~</span><span class="st"> </span>elevation, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.6</span>)</a>
-<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="kw">abline</span>(linear.model, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="kw">lines</span>(elevation[<span class="kw">order</span>(elevation)], poly2.hat[<span class="kw">order</span>(elevation)],</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="kw">abline</span>(linear_model, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="kw">lines</span>(elevation[<span class="kw">order</span>(elevation)], poly2_hat[<span class="kw">order</span>(elevation)],</a>
 <a class="sourceLine" id="cb23-4" data-line-number="4">     <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb23-5" data-line-number="5"><span class="kw">lines</span>(spline.model, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb23-5" data-line-number="5"><span class="kw">lines</span>(spline_model, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
 <a class="sourceLine" id="cb23-6" data-line-number="6"><span class="kw">legend</span>(<span class="st">&quot;bottomleft&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;smoothers&quot;</span>, <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;linear&quot;</span>,<span class="st">&quot;polynomial&quot;</span>,<span class="st">&quot;spline&quot;</span>), <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">cex=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;purple&quot;</span>))</a></code></pre></div>
 <p><img src="lec14_files/figure-html/low14-1.png" width="1350" /> <a href="lec14.html">[Back to top]</a></p>
 </div>

@@ -57,7 +57,7 @@ The mechanics of loess:
 
 - [the locally weighted "fitted value" at a particular point](https://pjbartlein.github.io/GeogDataAnalysis/images/v3_7.gif)
 - [what happens at the margin of the scatter diagram](https://pjbartlein.github.io/GeogDataAnalysis/images/v3_8.gif)
-- [the mathematics of loess](https://pjbartlein.github.io/GeogDataAnalysis/topics/loess.pdf)
+- [the mathematics of loess](https://pjbartlein.github.io/GeogDataAnalysis/topics/loess_pdf)
 
 The parameters of an individual `loess()` curve:  
 
@@ -120,22 +120,22 @@ The newer `loess()` function uses a formula to specify the response (and in its 
 
 ```{r low05}
 # loess -- first model
-loess.model <- loess(tann ~ elevation)
-loess.model
+loess_model <- loess(tann ~ elevation)
+loess_model
 ```
 
 ```{r low06}
 # second model, smoother curve
-loess.model2 <- loess(tann ~ elevation, span=0.90, degree=2)
-loess.model2
+loess_model2 <- loess(tann ~ elevation, span=0.90, degree=2)
+loess_model2
 ```
 
 ```{r low07, fig.asp=1, fig.width=4.5}
 # plot the curves
 plot(tann ~ elevation, pch=16, cex=0.6)
-hat1 <- predict(loess.model)
+hat1 <- predict(loess_model)
 lines(elevation[order(elevation)], hat1[order(elevation)], col="red", lwd=2)
-hat2 <- predict(loess.model2)
+hat2 <- predict(loess_model2)
 lines(elevation[order(elevation)], hat2[order(elevation)], col="blue", lwd=2)
 legend("bottomleft", title = "loess() model", legend=c("span=0.667, deg=1","span=0.9, deg=2"), lwd=2, cex=1, col=c("red","blue"))
 ```
@@ -146,27 +146,27 @@ A locally determined surface can be constructed using `loess()` which is not lim
 
 ```{r low08}
 # tann as a function of latitude and longitude (and interaction)
-tann.loess <- loess(tann ~ longitude + latitude, span=0.3)
-summary(tann.loess)
+tann_loess <- loess(tann ~ longitude + latitude, span=0.3)
+summary(tann_loess)
 ```
 
 ```{r low09}
 # poor man's R-squared value
-cor(tann, tann.loess$fitted)^2
+cor(tann, tann_loess$fitted)^2
 ```
 
 Now create an interpolation "target" grid, get the predicted (i.e. interpolated) values, and plot the results.
 
 ```{r low10}
 # create an interpolation target grid to display predicted values
-grid.longitude <- seq(-124.5000, -116.8333, .1667)
-grid.latitude <- seq(42.0000, 46.1667, .0833)
-grid.mar <- list(longitude=grid.longitude, latitude=grid.latitude)
+grid_longitude <- seq(-124.5000, -116.8333, .1667)
+grid_latitude <- seq(42.0000, 46.1667, .0833)
+grid_mar <- list(longitude=grid_longitude, latitude=grid_latitude)
 
 # get the fitted (interpolated) values
-tann.interp <- predict(tann.loess, expand.grid(grid.mar))
-tann.z <- matrix(tann.interp, length(grid.longitude),
-length(grid.latitude))
+tann_interp <- predict(tann_loess, expand.grid(grid_mar))
+tann_z <- matrix(tann_interp, length(grid_longitude),
+length(grid_latitude))
 
 # plot the interpolated values as shaded rectangles and contours
 nclr <- 8
@@ -174,8 +174,8 @@ plotclr <- brewer.pal(nclr, "PuOr")
 plotclr <- plotclr[nclr:1] # reorder colors
 
 plot(st_geometry(orotl_sf), axes=TRUE)
-image(grid.longitude, grid.latitude, tann.z, col=plotclr, add=T)
-contour(grid.longitude, grid.latitude, tann.z, add=TRUE)
+image(grid_longitude, grid_latitude, tann_z, col=plotclr, add=T)
+contour(grid_longitude, grid_latitude, tann_z, add=TRUE)
 points(longitude, latitude)
 plot(st_geometry(orotl_sf), add=T)
 ```
@@ -193,33 +193,33 @@ The other scatter diagram smoothers include a straight, or "least-squares" line,
 
 ```{r low11}
 # first-order polynomial (i.e. a straight line)
-linear.model <- lm(tann ~ elevation)
-linear.model
+linear_model <- lm(tann ~ elevation)
+linear_model
 ```
 
 ### Least-squares polynomials ###
 
 ```{r low12}
 # second order polynomial
-poly2.model <- lm(tann ~ elevation+ I(elevation^2))
-poly2.model
-poly2.hat <- predict(poly2.model)
+poly2_model <- lm(tann ~ elevation+ I(elevation^2))
+poly2_model
+poly2_hat <- predict(poly2_model)
 ```
 
 ### Smoothing spline ###
 
 ```{r low13}
-spline.model <- smooth.spline(elevation, tann)
-spline.model
+spline_model <- smooth.spline(elevation, tann)
+spline_model
 ```
 Plot the differnt smoothers
 
 ```{r low14, fig.asp=1, fig.width=4.5}
 plot(tann ~ elevation, pch=16, cex=0.6)
-abline(linear.model, col="red", lwd=2)
-lines(elevation[order(elevation)], poly2.hat[order(elevation)],
+abline(linear_model, col="red", lwd=2)
+lines(elevation[order(elevation)], poly2_hat[order(elevation)],
      col="blue", lwd=2)
-lines(spline.model, col="purple", lwd=2)
+lines(spline_model, col="purple", lwd=2)
 legend("bottomleft", title = "smoothers", legend=c("linear","polynomial","spline"), lwd=2, cex=1, col=c("red","blue","purple"))
 ```
 [[Back to top]](lec14.html)
