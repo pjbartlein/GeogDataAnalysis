@@ -235,7 +235,7 @@ island_glm2<-glm(incidence~area*isolation, binomial)
 summary(island_glm2)
 
 island_glm2_sfc  <- matrix(predict(island_glm2, new_x, type="response"),40,40)
-persp(new_area, new_isolation, island_glm1_sfc, theta=-150, phi=20, d=1.5, 
+persp(new_area, new_isolation, island_glm2_sfc, theta=-150, phi=20, d=1.5, 
   col="gray", ticktype="detailed",  zlim=c(0,1), xlab="Area", 
   ylab="Isolation", zlab = "Species Incidence")
 ```
