@@ -27,7 +27,7 @@ klippy::klippy(position = c('top', 'right'))
 
 The objective of this exercise is to illustrate regression analysis as well as multivariate plotting, which will be used to examine the data set that will be used in the regression analysis.  The focus of the exercise is on the relationship between annual mean temperature at climate stations in Oregon and elevation and location as expressed by latitude and longitude.  The specific goal will be to build a regression model that fits the response-variable data well, and does not suffer from assumption violations. 
 
-Here's a link to a .csv file containing the data:  [[ortann_csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/ortann.csv).
+Here's a link to a .csv file containing the data:  [[ortann.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/ortann.csv).
 
 And here are links to the components of the Oregon county outline shape files:  [[orotl.shp]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.shp) [[orotl.dbf]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.dbf)  [[orotl.shx]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.shx)
 [[orotl.prj]](https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.prj)
