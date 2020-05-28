@@ -571,8 +571,8 @@ $(document).ready(function () {
 <p>MANOVA aims to answer the question of whether the groups differ, when all variables are considered jointly. The <code>summary.aov()</code> function displays the individual ANOVAs, but the examination of these is not a replacement for examining the individual ANOVAs in detail as above.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># MANOVA</span></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">Y &lt;-<span class="st"> </span><span class="kw">cbind</span>(DepthWS, WidthWS, WidthBF, HUAreaWS, HUAreaBF, wsgrad)</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">sumcr.mva1 &lt;-<span class="st"> </span><span class="kw">manova</span>(Y <span class="op">~</span><span class="st"> </span>Reach)</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw">summary.aov</span>(sumcr.mva1)</a></code></pre></div>
+<a class="sourceLine" id="cb9-3" data-line-number="3">sumcr_mva1 &lt;-<span class="st"> </span><span class="kw">manova</span>(Y <span class="op">~</span><span class="st"> </span>Reach)</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw">summary.aov</span>(sumcr_mva1)</a></code></pre></div>
 <pre><code>##  Response DepthWS :
 ##             Df  Sum Sq  Mean Sq F value   Pr(&gt;F)   
 ## Reach        2 0.08798 0.043990  5.9896 0.003685 **
@@ -612,7 +612,7 @@ $(document).ready(function () {
 ##             Df    Sum Sq    Mean Sq F value Pr(&gt;F)
 ## Reach        2 0.0000642 0.00003208  0.0947 0.9098
 ## Residuals   85 0.0288014 0.00033884</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">summary</span>(sumcr.mva1, <span class="dt">test=</span><span class="st">&quot;Wilks&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">summary</span>(sumcr_mva1, <span class="dt">test=</span><span class="st">&quot;Wilks&quot;</span>)</a></code></pre></div>
 <pre><code>##           Df   Wilks approx F num Df den Df    Pr(&gt;F)    
 ## Reach      2 0.22264   14.925     12    160 &lt; 2.2e-16 ***
 ## Residuals 85                                             
@@ -659,8 +659,8 @@ $(document).ready(function () {
 <p><img src="lec17_files/figure-html/da03-1.png" width="2100" /></p>
 <p>Now compute the discriminant function (using the <code>lda()</code> function from the <code>MASS</code> package). Discriminant “loadings” (correlations between the new discriminant functions and the original variables) are found simply with the <code>cor()</code> function, and the discriminant function scores for each observation are plotted using the <code>lattice()</code> function.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># discriminant analysis, coefficients and scores</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">Grazed.lda1 &lt;-<span class="st"> </span><span class="kw">lda</span>(Grazed <span class="op">~</span><span class="st"> </span>WidthWS <span class="op">+</span><span class="st"> </span>DepthWS, <span class="dt">method=</span><span class="st">&quot;moment&quot;</span>)</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">Grazed.lda1</a></code></pre></div>
+<a class="sourceLine" id="cb15-2" data-line-number="2">Grazed_lda1 &lt;-<span class="st"> </span><span class="kw">lda</span>(Grazed <span class="op">~</span><span class="st"> </span>WidthWS <span class="op">+</span><span class="st"> </span>DepthWS, <span class="dt">method=</span><span class="st">&quot;moment&quot;</span>)</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">Grazed_lda1</a></code></pre></div>
 <pre><code>## Call:
 ## lda(Grazed ~ WidthWS + DepthWS, method = &quot;moment&quot;)
 ## 
@@ -677,15 +677,15 @@ $(document).ready(function () {
 ##               LD1
 ## WidthWS -1.520426
 ## DepthWS  3.005817</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">plot</span>(Grazed.lda1)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">plot</span>(Grazed_lda1)</a></code></pre></div>
 <p><img src="lec17_files/figure-html/da04-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">Grazed.dscore &lt;-<span class="st"> </span><span class="kw">predict</span>(Grazed.lda1, <span class="dt">dimen=</span><span class="dv">1</span>)<span class="op">$</span>x</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">cor</span>(<span class="kw">cbind</span>(WidthWS, DepthWS, Grazed.dscore))</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">Grazed_dscore &lt;-<span class="st"> </span><span class="kw">predict</span>(Grazed_lda1, <span class="dt">dimen=</span><span class="dv">1</span>)<span class="op">$</span>x</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">cor</span>(<span class="kw">cbind</span>(WidthWS, DepthWS, Grazed_dscore))</a></code></pre></div>
 <pre><code>##            WidthWS    DepthWS        LD1
 ## WidthWS  1.0000000 -0.2485592 -0.9835497
 ## DepthWS -0.2485592  1.0000000  0.4194393
 ## LD1     -0.9835497  0.4194393  1.0000000</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">histogram</span>(<span class="op">~</span><span class="st"> </span>Grazed.dscore[,<span class="dv">1</span>] <span class="op">|</span><span class="st"> </span>Grazed, <span class="dt">nint=</span><span class="dv">20</span>, <span class="dt">aspect=</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">histogram</span>(<span class="op">~</span><span class="st"> </span>Grazed_dscore[,<span class="dv">1</span>] <span class="op">|</span><span class="st"> </span>Grazed, <span class="dt">nint=</span><span class="dv">20</span>, <span class="dt">aspect=</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</a></code></pre></div>
 <p><img src="lec17_files/figure-html/da04-2.png" width="2100" /></p>
 <p>The scatter plot, as well as the loadings show that <code>WidthWS</code> is the more important variable for “discriminating” the difference between the grazed and ungrazed observations.</p>
 <p>The following code plots the discriminant function on the scatter plot.</p>
@@ -694,31 +694,31 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb21-3" data-line-number="3"><span class="kw">plot</span>(WidthWS, DepthWS<span class="op">*</span><span class="dv">10</span>, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>, <span class="dt">asp=</span><span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb21-4" data-line-number="4"><span class="kw">text</span>(WidthWS, DepthWS<span class="op">*</span><span class="dv">10</span>, <span class="dt">label=</span><span class="kw">as.character</span>(Grazed), <span class="dt">cex=</span>.<span class="dv">5</span>)</a>
 <a class="sourceLine" id="cb21-5" data-line-number="5">     chw &lt;-<span class="st"> </span><span class="kw">par</span>()<span class="op">$</span>cxy[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="kw">text</span>(WidthWS<span class="op">+</span>chw, DepthWS<span class="op">*</span><span class="dv">10</span>, <span class="dt">label=</span><span class="kw">as.character</span>(<span class="kw">round</span>(Grazed.dscore,<span class="dv">2</span>)),</a>
+<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="kw">text</span>(WidthWS<span class="op">+</span>chw, DepthWS<span class="op">*</span><span class="dv">10</span>, <span class="dt">label=</span><span class="kw">as.character</span>(<span class="kw">round</span>(Grazed_dscore,<span class="dv">2</span>)),</a>
 <a class="sourceLine" id="cb21-7" data-line-number="7">     <span class="dt">cex=</span>.<span class="dv">6</span>)</a>
 <a class="sourceLine" id="cb21-8" data-line-number="8"></a>
 <a class="sourceLine" id="cb21-9" data-line-number="9"><span class="co"># DF1</span></a>
-<a class="sourceLine" id="cb21-10" data-line-number="10">slope.DF1 &lt;-<span class="st"> </span>Grazed.lda1<span class="op">$</span>scaling[<span class="dv">2</span>]<span class="op">/</span>Grazed.lda1<span class="op">$</span>scaling[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb21-11" data-line-number="11"><span class="kw">abline</span>(<span class="dv">7</span>, slope.DF1, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb21-10" data-line-number="10">slope_DF1 &lt;-<span class="st"> </span>Grazed_lda1<span class="op">$</span>scaling[<span class="dv">2</span>]<span class="op">/</span>Grazed_lda1<span class="op">$</span>scaling[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb21-11" data-line-number="11"><span class="kw">abline</span>(<span class="dv">7</span>, slope_DF1, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
 <a class="sourceLine" id="cb21-12" data-line-number="12"></a>
 <a class="sourceLine" id="cb21-13" data-line-number="13"><span class="co"># classification threshold line</span></a>
-<a class="sourceLine" id="cb21-14" data-line-number="14">slope.CL1 &lt;-<span class="st"> </span><span class="dv">-1</span><span class="op">/</span>(Grazed.lda1<span class="op">$</span>scaling[<span class="dv">2</span>]<span class="op">/</span>Grazed.lda1<span class="op">$</span>scaling[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="cb21-15" data-line-number="15">int.CL1 &lt;-<span class="st"> </span>((Grazed.lda1<span class="op">$</span>means[<span class="dv">1</span>,]<span class="op">%*%</span>Grazed.lda1<span class="op">$</span>scaling <span class="op">+</span></a>
-<a class="sourceLine" id="cb21-16" data-line-number="16"><span class="st">    </span>Grazed.lda1<span class="op">$</span>means[<span class="dv">2</span>,]<span class="op">%*%</span>Grazed.lda1<span class="op">$</span>scaling)<span class="op">/</span><span class="dv">2</span>)<span class="op">*</span></a>
-<a class="sourceLine" id="cb21-17" data-line-number="17"><span class="st">    </span>(Grazed.lda1<span class="op">$</span>scaling[<span class="dv">1</span>]<span class="op">/</span></a>
-<a class="sourceLine" id="cb21-18" data-line-number="18"><span class="st">    </span>Grazed.lda1<span class="op">$</span>scaling[<span class="dv">2</span>]<span class="op">/</span>Grazed.lda1<span class="op">$</span>scaling[<span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb21-19" data-line-number="19"><span class="kw">abline</span>(int.CL1, slope.CL1, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb21-14" data-line-number="14">slope_CL1 &lt;-<span class="st"> </span><span class="dv">-1</span><span class="op">/</span>(Grazed_lda1<span class="op">$</span>scaling[<span class="dv">2</span>]<span class="op">/</span>Grazed_lda1<span class="op">$</span>scaling[<span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb21-15" data-line-number="15">int_CL1 &lt;-<span class="st"> </span>((Grazed_lda1<span class="op">$</span>means[<span class="dv">1</span>,]<span class="op">%*%</span>Grazed_lda1<span class="op">$</span>scaling <span class="op">+</span></a>
+<a class="sourceLine" id="cb21-16" data-line-number="16"><span class="st">    </span>Grazed_lda1<span class="op">$</span>means[<span class="dv">2</span>,]<span class="op">%*%</span>Grazed_lda1<span class="op">$</span>scaling)<span class="op">/</span><span class="dv">2</span>)<span class="op">*</span></a>
+<a class="sourceLine" id="cb21-17" data-line-number="17"><span class="st">    </span>(Grazed_lda1<span class="op">$</span>scaling[<span class="dv">1</span>]<span class="op">/</span></a>
+<a class="sourceLine" id="cb21-18" data-line-number="18"><span class="st">    </span>Grazed_lda1<span class="op">$</span>scaling[<span class="dv">2</span>]<span class="op">/</span>Grazed_lda1<span class="op">$</span>scaling[<span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb21-19" data-line-number="19"><span class="kw">abline</span>(int_CL1, slope_CL1, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a></code></pre></div>
 <p><img src="lec17_files/figure-html/da5-1.png" width="2100" /></p>
-<p>The black line is the actual first discriminant function, along which the groups are maximally separated. The purple line is orthogonal to the discriminant function. Points whose <code>WidthWS</code> and <code>DepthWS</code> values plot above the line are likely to be ungrazed, while those below are more likely to be grazed.</p>
+<p>The black line is the actual first discriminant function, along which the groups are maximally separated. The purple line is orthogonal to the discriminant function. Points whose <code>WidthWS</code> and <code>DepthWS</code> values plot above the line are likely to be ungrazed, while those below are more likely to be Grazed_</p>
 </div>
 <div id="a-second-example" class="section level2">
 <h2><span class="header-section-number">3.2</span> A second example</h2>
 <p>In this second example, all three reaches are considered, along with multiple variables. Two discriminant functions are generated.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co"># second example </span></a>
 <a class="sourceLine" id="cb22-2" data-line-number="2"><span class="co"># linear discriminant analysis</span></a>
-<a class="sourceLine" id="cb22-3" data-line-number="3">Reach.lda1 &lt;-<span class="st"> </span><span class="kw">lda</span>(Reach <span class="op">~</span><span class="st"> </span>DepthWS <span class="op">+</span><span class="st"> </span>WidthWS <span class="op">+</span><span class="st"> </span>WidthBF <span class="op">+</span><span class="st"> </span>HUAreaWS <span class="op">+</span><span class="st"> </span>HUAreaBF</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">Reach_lda1 &lt;-<span class="st"> </span><span class="kw">lda</span>(Reach <span class="op">~</span><span class="st"> </span>DepthWS <span class="op">+</span><span class="st"> </span>WidthWS <span class="op">+</span><span class="st"> </span>WidthBF <span class="op">+</span><span class="st"> </span>HUAreaWS <span class="op">+</span><span class="st"> </span>HUAreaBF</a>
 <a class="sourceLine" id="cb22-4" data-line-number="4">     <span class="op">+</span><span class="st"> </span>wsgrad)</a>
-<a class="sourceLine" id="cb22-5" data-line-number="5">Reach.lda1</a></code></pre></div>
+<a class="sourceLine" id="cb22-5" data-line-number="5">Reach_lda1</a></code></pre></div>
 <pre><code>## Call:
 ## lda(Reach ~ DepthWS + WidthWS + WidthBF + HUAreaWS + HUAreaBF + 
 ##     wsgrad)
@@ -745,14 +745,14 @@ $(document).ready(function () {
 ## Proportion of trace:
 ##    LD1    LD2 
 ## 0.6295 0.3705</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">plot</span>(Reach.lda1, <span class="dt">asp=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">plot</span>(Reach_lda1, <span class="dt">asp=</span><span class="dv">1</span>)</a></code></pre></div>
 <p><img src="lec17_files/figure-html/da6-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">Reach.dscore &lt;-<span class="st"> </span><span class="kw">predict</span>(Reach.lda1, <span class="dt">dimen=</span><span class="dv">2</span>)<span class="op">$</span>x</a>
-<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw">histogram</span>(<span class="op">~</span>Reach.dscore[,<span class="dv">1</span>] <span class="op">|</span><span class="st"> </span>Reach, <span class="dt">nint=</span><span class="dv">20</span>, <span class="dt">aspect=</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">Reach_dscore &lt;-<span class="st"> </span><span class="kw">predict</span>(Reach_lda1, <span class="dt">dimen=</span><span class="dv">2</span>)<span class="op">$</span>x</a>
+<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw">histogram</span>(<span class="op">~</span>Reach_dscore[,<span class="dv">1</span>] <span class="op">|</span><span class="st"> </span>Reach, <span class="dt">nint=</span><span class="dv">20</span>, <span class="dt">aspect=</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</a></code></pre></div>
 <p><img src="lec17_files/figure-html/da6-2.png" width="2100" /></p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">histogram</span>(<span class="op">~</span>Reach.dscore[,<span class="dv">2</span>] <span class="op">|</span><span class="st"> </span>Reach, <span class="dt">nint=</span><span class="dv">20</span>, <span class="dt">aspect=</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">histogram</span>(<span class="op">~</span>Reach_dscore[,<span class="dv">2</span>] <span class="op">|</span><span class="st"> </span>Reach, <span class="dt">nint=</span><span class="dv">20</span>, <span class="dt">aspect=</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</a></code></pre></div>
 <p><img src="lec17_files/figure-html/da6-3.png" width="2100" /></p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">cor</span>(sumcr[<span class="dv">6</span><span class="op">:</span><span class="dv">11</span>],Reach.dscore)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">cor</span>(sumcr[<span class="dv">6</span><span class="op">:</span><span class="dv">11</span>],Reach_dscore)</a></code></pre></div>
 <pre><code>##                  LD1         LD2
 ## DepthWS  -0.36415064 -0.31480457
 ## WidthWS   0.90773016  0.31055407
@@ -762,9 +762,9 @@ $(document).ready(function () {
 ## wsgrad    0.02941063  0.06116015</code></pre>
 <p>The <code>Coefficients of linear discriminants</code> provide the equation for the discriminant functions, while the correlations aid in the interpretation of functions (e.g. which variables they’re correlated with).</p>
 <p>The <code>mosicplot()</code> function compares the true group membership, with that predicted by the discriminant functions. The large boxes along the diagonal of the mosaicplot show the the discriminant functions provide useful information for distinguishing among the groups.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">Reach.pred &lt;-<span class="st"> </span><span class="kw">predict</span>(Reach.lda1, <span class="dt">dimen=</span><span class="dv">2</span>)<span class="op">$</span>class</a>
-<a class="sourceLine" id="cb29-2" data-line-number="2">class.table &lt;-<span class="st"> </span><span class="kw">table</span>(Reach, Reach.pred)</a>
-<a class="sourceLine" id="cb29-3" data-line-number="3"><span class="kw">mosaicplot</span>(class.table, <span class="dt">color=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">Reach_pred &lt;-<span class="st"> </span><span class="kw">predict</span>(Reach_lda1, <span class="dt">dimen=</span><span class="dv">2</span>)<span class="op">$</span>class</a>
+<a class="sourceLine" id="cb29-2" data-line-number="2">class_table &lt;-<span class="st"> </span><span class="kw">table</span>(Reach, Reach_pred)</a>
+<a class="sourceLine" id="cb29-3" data-line-number="3"><span class="kw">mosaicplot</span>(class_table, <span class="dt">color=</span>T)</a></code></pre></div>
 <p><img src="lec17_files/figure-html/da7-1.png" width="2100" /></p>
 </div>
 </div>
