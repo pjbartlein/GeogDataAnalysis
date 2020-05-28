@@ -497,27 +497,26 @@ $(document).ready(function () {
 <div id="TOC">
 <ul>
 <li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="#properties-of-principal-components"><span class="toc-section-number">2</span> Properties of principal components</a></li>
-<li><a href="#derivation-of-principal-components-and-their-properties"><span class="toc-section-number">3</span> Derivation of principal components and their properties</a></li>
-<li><a href="#pca-examples"><span class="toc-section-number">4</span> PCA Examples</a><ul>
-<li><a href="#pca-of-a-two-variable-matrix"><span class="toc-section-number">4.1</span> PCA of a two-variable matrix</a></li>
-<li><a href="#a-second-example-using-the-large-cites-data-set"><span class="toc-section-number">4.2</span> A second example using the large-cites data set</a><ul>
-<li><a href="#examining-the-correlation-matrix"><span class="toc-section-number">4.2.1</span> Examining the correlation matrix</a></li>
-<li><a href="#pca-of-the-cities-data"><span class="toc-section-number">4.2.2</span> PCA of the cities data</a></li>
+<li><a href="#derivation-of-principal-components-and-their-properties"><span class="toc-section-number">2</span> Derivation of principal components and their properties</a></li>
+<li><a href="#pca-examples"><span class="toc-section-number">3</span> PCA Examples</a><ul>
+<li><a href="#pca-of-a-two-variable-matrix"><span class="toc-section-number">3.1</span> PCA of a two-variable matrix</a></li>
+<li><a href="#a-second-example-using-the-large-cites-data-set"><span class="toc-section-number">3.2</span> A second example using the large-cites data set</a><ul>
+<li><a href="#examining-the-correlation-matrix"><span class="toc-section-number">3.2.1</span> Examining the correlation matrix</a></li>
+<li><a href="#pca-of-the-cities-data"><span class="toc-section-number">3.2.2</span> PCA of the cities data</a></li>
 </ul></li>
-<li><a href="#rotation-of-principal-components"><span class="toc-section-number">4.3</span> “Rotation” of principal components</a></li>
+<li><a href="#rotation-of-principal-components"><span class="toc-section-number">3.3</span> “Rotation” of principal components</a></li>
 </ul></li>
-<li><a href="#factor-analyis-fa-and-pca"><span class="toc-section-number">5</span> Factor analyis (FA) and PCA</a><ul>
-<li><a href="#example-of-a-factor-analysis"><span class="toc-section-number">5.1</span> Example of a factor analysis</a></li>
+<li><a href="#factor-analyis-fa-and-pca"><span class="toc-section-number">4</span> Factor analyis (FA) and PCA</a><ul>
+<li><a href="#example-of-a-factor-analysis"><span class="toc-section-number">4.1</span> Example of a factor analysis</a></li>
 </ul></li>
-<li><a href="#a-second-example-controls-of-mid-holocene-aridity-in-eurasia"><span class="toc-section-number">6</span> A second example: Controls of mid-Holocene aridity in Eurasia</a><ul>
-<li><a href="#read-and-transform-the-data"><span class="toc-section-number">6.1</span> Read and transform the data</a></li>
-<li><a href="#correlations-among-variables"><span class="toc-section-number">6.2</span> Correlations among variables</a></li>
-<li><a href="#pca-of-the-pmip-3-data"><span class="toc-section-number">6.3</span> PCA of the PMIP 3 data</a></li>
-<li><a href="#qgraph-plot-of-the-principal-components"><span class="toc-section-number">6.4</span> qgraph plot of the principal components</a></li>
-<li><a href="#rotated-components"><span class="toc-section-number">6.5</span> Rotated components</a></li>
+<li><a href="#a-second-example-controls-of-mid-holocene-aridity-in-eurasia"><span class="toc-section-number">5</span> A second example: Controls of mid-Holocene aridity in Eurasia</a><ul>
+<li><a href="#read-and-transform-the-data"><span class="toc-section-number">5.1</span> Read and transform the data</a></li>
+<li><a href="#correlations-among-variables"><span class="toc-section-number">5.2</span> Correlations among variables</a></li>
+<li><a href="#pca-of-the-pmip-3-data"><span class="toc-section-number">5.3</span> PCA of the PMIP 3 data</a></li>
+<li><a href="#qgraph-plot-of-the-principal-components"><span class="toc-section-number">5.4</span> qgraph plot of the principal components</a></li>
+<li><a href="#rotated-components"><span class="toc-section-number">5.5</span> Rotated components</a></li>
 </ul></li>
-<li><a href="#readings"><span class="toc-section-number">7</span> Readings</a></li>
+<li><a href="#readings"><span class="toc-section-number">6</span> Readings</a></li>
 </ul>
 </div>
 
@@ -532,29 +531,15 @@ $(document).ready(function () {
 <h1><span class="header-section-number">1</span> Introduction</h1>
 <p><em>Principal components analysis (PCA)</em> is a widely used multivariate analysis method, the general aim of which is to reveal systematic covariations among a group of variables. The analysis can be motivated in a number of different ways, including (in geographical contexts) finding groups of variables that measure the same underlying dimensions of a data set, describing the basic anomaly patterns that appear in spatial data sets, or producing a general index of the common variation of a set of variables.</p>
 <ul>
-<li>Example: Davis’ boxes (<a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_data.png">data</a>, <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_boxes.png">plot</a>, <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scatter.png">scatter</a>, <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scores.png">components</a>), (Davis, J.C., 2001, <em>Statistics and Data Analysis in Geology</em>, Wiley)</li>
-<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html">Derivation of principal components</a></li>
+<li>Example: Davis’ boxes (<a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_data.png">data</a>, <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_boxes_png">plot</a>, <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scatter.png">scatter</a>, <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scores.png">components</a>), (Davis, J.C., 2001, <em>Statistics and Data Analysis in Geology</em>, Wiley)</li>
 </ul>
-</div>
-<div id="properties-of-principal-components" class="section level1">
-<h1><span class="header-section-number">2</span> Properties of principal components</h1>
-<p>Because the components are derived by solving a particular optimization problem, they naturally have some “built-in” properties that are desirable in practice (e.g. maximum variability). In addition, there are a number of other properties of the components that can be derived:</p>
-<ul>
-<li><em>variances</em> of each component, and the <em>proportion of the total variance</em> of the original variables are are given by the eigenvalues;</li>
-<li>component <em>scores</em> may be calculated, that illustrate the value of each component at each observation;</li>
-<li>component <em>loadings</em> that describe the correlation between each component and each variable may also be obtained;</li>
-<li>the <em>correlations among the original variables</em> can be reproduced by the <em>p</em>-components, as can that part of the correlations “explained” by the first q components.</li>
-<li>the <em>original data can be reproduced</em> by the <em>p</em> components, as can those parts of the original data “explained” by the first <em>q</em> components;</li>
-<li>the components can be “<em>rotated</em>” to increase the interpretability of the components.</li>
-</ul>
-<p><a href="lec16.html">[Back to top]</a></p>
 </div>
 <div id="derivation-of-principal-components-and-their-properties" class="section level1">
-<h1><span class="header-section-number">3</span> Derivation of principal components and their properties</h1>
+<h1><span class="header-section-number">2</span> Derivation of principal components and their properties</h1>
 <p>The formal derivation of principal components analysis requires the use of matix algebra.</p>
 <ul>
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.pdf">[Matrix algebra]</a></li>
-<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html">Derivation of principal components</a></li>
+<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html">[Derivation of principal components]</a></li>
 </ul>
 <p>Because the components are derived by solving a particular optimization problem, they naturally have some “built-in” properties that are desirable in practice (e.g. maximum variability). In addition, there are a number of other properties of the components that can be derived:</p>
 <ul>
@@ -568,31 +553,27 @@ $(document).ready(function () {
 <p><a href="lec16.html">[Back to top]</a></p>
 </div>
 <div id="pca-examples" class="section level1">
-<h1><span class="header-section-number">4</span> PCA Examples</h1>
+<h1><span class="header-section-number">3</span> PCA Examples</h1>
 <div id="pca-of-a-two-variable-matrix" class="section level2">
-<h2><span class="header-section-number">4.1</span> PCA of a two-variable matrix</h2>
+<h2><span class="header-section-number">3.1</span> PCA of a two-variable matrix</h2>
 <p>A classic data set for illustrating PCA is one that appears in John C. Davis’s 2002 book <em>Statistics and data analysis in geology</em>, Wiley (UO Library, QE48.8 .D38 2002). The data consist of 25 boxes or blocks with random dimensions (the long, intermediate and short axes of the boxes), plus some derived variables, like the length of the longest diagonal that can be contained within a box.</p>
-<p>Here’s the data: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/boxes.csv">[boxes.csv]</a></p>
-<ul>
-<li>Example: Davis’ boxes (<a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_data.png">data</a>, <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_boxes.png">plot</a>, <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scatter.png">scatter</a>, <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scores.png">components</a>), (Davis, J.C., 2001, <em>Statistics and Data Analysis in Geology</em>, Wiley)</li>
-<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html">Derivation of principal components</a></li>
-</ul>
+<p>Here’s the data: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/boxes_csv">[boxes_csv]</a></p>
 <p>In this example, a simple two-variable (long-axis length and diagonal length) data set is created using Davis’ artificial data.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># boxes_pca -- principal components analysis of Davis boxes data</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">boxes.matrix &lt;-<span class="st"> </span><span class="kw">data.matrix</span>(<span class="kw">cbind</span>(boxes[,<span class="dv">1</span>],boxes[,<span class="dv">4</span>]))</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">dimnames</span>(boxes.matrix) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="ot">NULL</span>, <span class="kw">cbind</span>(<span class="st">&quot;long&quot;</span>,<span class="st">&quot;diag&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co">#boxes_pca -- principal components analysis of Davis boxes data</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">boxes_matrix &lt;-<span class="st"> </span><span class="kw">data.matrix</span>(<span class="kw">cbind</span>(boxes[,<span class="dv">1</span>],boxes[,<span class="dv">4</span>]))</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">dimnames</span>(boxes_matrix) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="ot">NULL</span>, <span class="kw">cbind</span>(<span class="st">&quot;long&quot;</span>,<span class="st">&quot;diag&quot;</span>))</a></code></pre></div>
 <p>Matrix scatter plot of the data (which in this case is a single panel), and the correlation matrix:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">plot</span> (boxes.matrix)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">plot</span>(boxes_matrix)</a></code></pre></div>
 <p><img src="lec16_files/figure-html/pca03-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">cor</span>(boxes.matrix)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">cor</span>(boxes_matrix)</a></code></pre></div>
 <pre><code>##           long      diag
 ## long 1.0000000 0.9112586
 ## diag 0.9112586 1.0000000</code></pre>
 <p>PCA using the <code>princomp()</code> function from the <code>stats</code> package. The <code>loadings()</code> function extracts the <em>loadings</em> or the correlations between the input variables and the new components, and the the <code>biplot()</code> function creates a <em>biplot</em> a single figure that plots the loadings as vectors and the <em>component scores</em> as points represented by the observation numbers.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">boxes_pca &lt;-<span class="st"> </span><span class="kw">princomp</span>(boxes.matrix, <span class="dt">cor=</span>T)</a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">boxes_pca &lt;-<span class="st"> </span><span class="kw">princomp</span>(boxes_matrix, <span class="dt">cor=</span>T)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">boxes_pca</a></code></pre></div>
 <pre><code>## Call:
-## princomp(x = boxes.matrix, cor = T)
+## princomp(x = boxes_matrix, cor = T)
 ## 
 ## Standard deviations:
 ##   Comp.1   Comp.2 
@@ -605,7 +586,7 @@ $(document).ready(function () {
 ## Standard deviation     1.3824828 0.2978950
 ## Proportion of Variance 0.9556293 0.0443707
 ## Cumulative Proportion  0.9556293 1.0000000</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">print</span>(<span class="kw">loadings</span>(boxes_pca),<span class="dt">cutoff=</span><span class="fl">0.0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">print</span>(<span class="kw">loadings</span>(boxes_pca), <span class="dt">cutoff=</span><span class="fl">0.0</span>)</a></code></pre></div>
 <pre><code>## 
 ## Loadings:
 ##      Comp.1 Comp.2
@@ -618,39 +599,39 @@ $(document).ready(function () {
 ## Cumulative Var    0.5    1.0</code></pre>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">biplot</span>(boxes_pca)</a></code></pre></div>
 <p><img src="lec16_files/figure-html/pca04-1.png" width="2100" /></p>
-<p>Note the angle between the vectors–the correlation between two variables is equal to the cosine of the angle between the vectors (<em>θ</em>), or <em>r = cos(θ)</em>. Here the angle is 24.3201359, which is found by the following R code: <code>acos(cor(boxes.matrix[,1],boxes.matrix[,2]))/((2*pi)/360)</code>.</p>
+<p>Note the angle between the vectors–the correlation between two variables is equal to the cosine of the angle between the vectors (<em>θ</em>), or <em>r = cos(θ)</em>. Here the angle is 24.3201359, which is found by the following R code: <code>acos(cor(boxes_matrix[,1],boxes_matrix[,2]))/((2*pi)/360)</code>.</p>
 <p>The components can be drawn on the scatter plot as follows,</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># get parameters of component lines (after Everitt &amp; Rabe-Hesketh)</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">load &lt;-<span class="st"> </span>boxes_pca<span class="op">$</span>loadings</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">load &lt;-boxes_pca<span class="op">$</span>loadings</a>
 <a class="sourceLine" id="cb12-3" data-line-number="3">slope &lt;-<span class="st"> </span>load[<span class="dv">2</span>,]<span class="op">/</span>load[<span class="dv">1</span>,]</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">mn &lt;-<span class="st"> </span><span class="kw">apply</span>(boxes.matrix,<span class="dv">2</span>,mean)</a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">mn &lt;-<span class="st"> </span><span class="kw">apply</span>(boxes_matrix,<span class="dv">2</span>,mean)</a>
 <a class="sourceLine" id="cb12-5" data-line-number="5">intcpt &lt;-<span class="st"> </span>mn[<span class="dv">2</span>]<span class="op">-</span>(slope<span class="op">*</span>mn[<span class="dv">1</span>])</a>
 <a class="sourceLine" id="cb12-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co"># scatter plot with the two new axes added</span></a>
 <a class="sourceLine" id="cb12-8" data-line-number="8"><span class="kw">par</span>(<span class="dt">pty=</span><span class="st">&quot;s&quot;</span>) <span class="co"># square plotting frame</span></a>
-<a class="sourceLine" id="cb12-9" data-line-number="9">xlim &lt;-<span class="st"> </span><span class="kw">range</span>(boxes.matrix) <span class="co"># overall min, max</span></a>
-<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="kw">plot</span>(boxes.matrix, <span class="dt">xlim=</span>xlim, <span class="dt">ylim=</span>xlim, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>) <span class="co"># both axes same length</span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9">xlim &lt;-<span class="st"> </span><span class="kw">range</span>(boxes_matrix) <span class="co"># overall min, max</span></a>
+<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="kw">plot</span>(boxes_matrix, <span class="dt">xlim=</span>xlim, <span class="dt">ylim=</span>xlim, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>) <span class="co"># both axes same length</span></a>
 <a class="sourceLine" id="cb12-11" data-line-number="11"><span class="kw">abline</span>(intcpt[<span class="dv">1</span>],slope[<span class="dv">1</span>],<span class="dt">lwd=</span><span class="dv">2</span>) <span class="co"># first component solid line</span></a>
 <a class="sourceLine" id="cb12-12" data-line-number="12"><span class="kw">abline</span>(intcpt[<span class="dv">2</span>],slope[<span class="dv">2</span>],<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">lty=</span><span class="dv">2</span>) <span class="co"># second component dashed</span></a>
 <a class="sourceLine" id="cb12-13" data-line-number="13"><span class="kw">legend</span>(<span class="st">&quot;right&quot;</span>, <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&quot;PC 1&quot;</span>, <span class="st">&quot;PC 2&quot;</span>), <span class="dt">lty =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb12-14" data-line-number="14"></a>
 <a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co"># projections of points onto PCA 1</span></a>
-<a class="sourceLine" id="cb12-16" data-line-number="16">y1 &lt;-<span class="st"> </span>intcpt[<span class="dv">1</span>]<span class="op">+</span>slope[<span class="dv">1</span>]<span class="op">*</span>boxes.matrix[,<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb12-17" data-line-number="17">x1 &lt;-<span class="st"> </span>(boxes.matrix[,<span class="dv">2</span>]<span class="op">-</span>intcpt[<span class="dv">1</span>])<span class="op">/</span>slope[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb12-18" data-line-number="18">y2 &lt;-<span class="st"> </span>(y1<span class="op">+</span>boxes.matrix[,<span class="dv">2</span>])<span class="op">/</span><span class="fl">2.0</span></a>
-<a class="sourceLine" id="cb12-19" data-line-number="19">x2 &lt;-<span class="st"> </span>(x1<span class="op">+</span>boxes.matrix[,<span class="dv">1</span>])<span class="op">/</span><span class="fl">2.0</span></a>
-<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="kw">segments</span>(boxes.matrix[,<span class="dv">1</span>],boxes.matrix[,<span class="dv">2</span>], x2, y2, <span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">col=</span><span class="st">&quot;purple&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb12-16" data-line-number="16">y1 &lt;-<span class="st"> </span>intcpt[<span class="dv">1</span>]<span class="op">+</span>slope[<span class="dv">1</span>]<span class="op">*</span>boxes_matrix[,<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb12-17" data-line-number="17">x1 &lt;-<span class="st"> </span>(boxes_matrix[,<span class="dv">2</span>]<span class="op">-</span>intcpt[<span class="dv">1</span>])<span class="op">/</span>slope[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb12-18" data-line-number="18">y2 &lt;-<span class="st"> </span>(y1<span class="op">+</span>boxes_matrix[,<span class="dv">2</span>])<span class="op">/</span><span class="fl">2.0</span></a>
+<a class="sourceLine" id="cb12-19" data-line-number="19">x2 &lt;-<span class="st"> </span>(x1<span class="op">+</span>boxes_matrix[,<span class="dv">1</span>])<span class="op">/</span><span class="fl">2.0</span></a>
+<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="kw">segments</span>(boxes_matrix[,<span class="dv">1</span>],boxes_matrix[,<span class="dv">2</span>], x2, y2, <span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">col=</span><span class="st">&quot;purple&quot;</span>)</a></code></pre></div>
 <p><img src="lec16_files/figure-html/pca05-1.png" width="2100" /></p>
 <p>This plot illustrates the idea of the first (or “principal” component) providing an optimal summary of the data–no other line drawn on this scatter plot would produce a set of projected values of the data points onto the line with less variance. The first component also has an application in reduced major axis (RMA) regression in which both x- and y-variables are assumed to have errors or uncertainties, or where there is no clear distinction between a predictor and a response.</p>
 </div>
 <div id="a-second-example-using-the-large-cites-data-set" class="section level2">
-<h2><span class="header-section-number">4.2</span> A second example using the large-cites data set</h2>
+<h2><span class="header-section-number">3.2</span> A second example using the large-cites data set</h2>
 <p>A second example of a simple PCA analysis can be illustrated using the large-cities data set <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/cities.csv">[cities.csv]</a></p>
 <p>Create a data matrix that omits the city names and look at the data and the correlation matrix.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">cities_matrix &lt;-<span class="st"> </span><span class="kw">data.matrix</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>])</a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">rownames</span>(cities_matrix) &lt;-<span class="st"> </span>cities[,<span class="dv">1</span>] <span class="co"># add city names as row labels</span></a></code></pre></div>
 <div id="examining-the-correlation-matrix" class="section level3">
-<h3><span class="header-section-number">4.2.1</span> Examining the correlation matrix</h3>
+<h3><span class="header-section-number">3.2.1</span> Examining the correlation matrix</h3>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">plot</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>], <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.6</span>)</a></code></pre></div>
 <p><img src="lec16_files/figure-html/pca06b-1.png" width="2100" /></p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">cor</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>])</a></code></pre></div>
@@ -702,7 +683,7 @@ $(document).ready(function () {
 <p><img src="lec16_files/figure-html/pca10-1.png" width="2100" /></p>
 </div>
 <div id="pca-of-the-cities-data" class="section level3">
-<h3><span class="header-section-number">4.2.2</span> PCA of the cities data</h3>
+<h3><span class="header-section-number">3.2.2</span> PCA of the cities data</h3>
 <p>Here’s the principal components analysis of the cities data:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">cities_pca &lt;-<span class="st"> </span><span class="kw">princomp</span>(cities_matrix, <span class="dt">cor=</span>T)</a>
 <a class="sourceLine" id="cb25-2" data-line-number="2">cities_pca</a></code></pre></div>
@@ -818,7 +799,7 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="rotation-of-principal-components" class="section level2">
-<h2><span class="header-section-number">4.3</span> “Rotation” of principal components</h2>
+<h2><span class="header-section-number">3.3</span> “Rotation” of principal components</h2>
 <p>The interpretation of the components (which is governed by the loadings–the correlations of the original varialbles with the newly created components) can be enhanced by “rotation” which could be thought of a set of coordinated adjustments of the vectors on a biplot. There is not single optimal way of doing rotations, but probably the most common approach is “varimax” rotation in which the components are adjusted in a way that makes the loadings either high positive (or negative) or zero, while keeping the components uncorrelated or orthogonal. One side-product of rotation is that the first, or principal components is no longer optimal or the most efficient single-variable summary of the data set, but losing that property is often worth the incraese in interpretability. The <code>principal()</code> function in the <code>psych</code> package also implements rotation of principal components.</p>
 <p>Note the location and linkages of <code>Pop.1980</code> in the plot.</p>
 <p>Here’s the result with rotated components:</p>
@@ -874,7 +855,7 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="factor-analyis-fa-and-pca" class="section level1">
-<h1><span class="header-section-number">5</span> Factor analyis (FA) and PCA</h1>
+<h1><span class="header-section-number">4</span> Factor analyis (FA) and PCA</h1>
 <p><em>Factor analysis (FA)</em> can be thought of as a parallel analysis to PCA, and in some ways PCA and be viewed as a special case of FA. Despite their names being used indiscriminantly, the two alaysis do have differing underlying models:</p>
 <ul>
 <li>PCA: maximum variance, maximum simultaneous resemblance motivations</li>
@@ -889,7 +870,7 @@ $(document).ready(function () {
 <li>in geographical data: regionalization</li>
 </ul>
 <div id="example-of-a-factor-analysis" class="section level2">
-<h2><span class="header-section-number">5.1</span> Example of a factor analysis</h2>
+<h2><span class="header-section-number">4.1</span> Example of a factor analysis</h2>
 <p>Here’s a factor analysis of the large-cities data set using the <code>factanal()</code> function:</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="co"># cities_fa1 -- factor analysis of cities data -- no rotation</span></a>
 <a class="sourceLine" id="cb46-2" data-line-number="2">cities_fa1 &lt;-<span class="st"> </span><span class="kw">factanal</span>(cities_matrix, <span class="dt">factors=</span><span class="dv">2</span>, <span class="dt">rotation=</span><span class="st">&quot;none&quot;</span>, <span class="dt">scores=</span><span class="st">&quot;regression&quot;</span>)</a>
@@ -975,7 +956,7 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="a-second-example-controls-of-mid-holocene-aridity-in-eurasia" class="section level1">
-<h1><span class="header-section-number">6</span> A second example: Controls of mid-Holocene aridity in Eurasia</h1>
+<h1><span class="header-section-number">5</span> A second example: Controls of mid-Holocene aridity in Eurasia</h1>
 <p>The data set here is a “stacked” data set of output from thirteen “PMIP3” simulations of mid-Holocene climate (in particular, the long-term mean differences between the mid-Holocene simulations and those for the pre-industrial period) for a region in northern Eurasia. The objective of the analysis was to examine the systematic relationship among a number of different climate variables as part of understanding the mismatch between the simulations and paleoenvironmental observations (reconstructions), where the simulations were in general drier and warmer than the climate reconstructed from the data. (See Bartlein, P.J., S.P. Harrison and K. Izumi, 2017, Underlying causes of Eurasian mid-continental aridity in simulations of mid-Holocene climate, <em>Geophysical Research Letters</em> 44:1-9, <a href="http://dx.doi.org/10.1002/2017GL074476">http://dx.doi.org/10.1002/2017GL074476</a>)</p>
 <p>The variables include:</p>
 <ul>
@@ -1011,7 +992,7 @@ $(document).ready(function () {
 </ul>
 <p>The data set was assebled by stacking the monthly long-term mean differneces from each model on top of one another, creating a 13 x 12 row by 24 column array. This arrangement of the data will reveal the common variations in the seasonal cycles of the long-term mean differences.</p>
 <div id="read-and-transform-the-data" class="section level2">
-<h2><span class="header-section-number">6.1</span> Read and transform the data</h2>
+<h2><span class="header-section-number">5.1</span> Read and transform the data</h2>
 <p>Load necessary packages.</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="co"># pca of multimodel means</span></a>
 <a class="sourceLine" id="cb54-2" data-line-number="2"><span class="kw">library</span>(corrplot)</a>
@@ -1031,7 +1012,7 @@ $(document).ready(function () {
 ##                                                                                                
 ##        Qh                Qg              bowen                 alb                  ta         
 ##  Min.   :-5.1570   Min.   :-5.0070   Min.   :-9.870e+04   Min.   :-0.780800   Min.   :-2.2300  
-##  1st Qu.:-1.9760   1st Qu.:-0.9643   1st Qu.: 0.000e+00   1st Qu.:-0.001758   1st Qu.:-0.7361  
+##  1st Qu.:-1.9760   1st Qu.:-0.9643   1st Qu.: 0.000e+00   1st Qu.:-0.001757   1st Qu.:-0.7361  
 ##  Median :-0.8945   Median :-0.2530   Median : 0.000e+00   Median : 0.356050   Median :-0.3137  
 ##  Mean   : 0.3968   Mean   : 0.1404   Mean   : 2.826e+13   Mean   : 0.705529   Mean   : 0.1110  
 ##  3rd Qu.: 2.0897   3rd Qu.: 1.3645   3rd Qu.: 1.000e+00   3rd Qu.: 1.113250   3rd Qu.: 0.8729  
@@ -1088,7 +1069,7 @@ $(document).ready(function () {
 ## [17] &quot;Qdv&quot; &quot;shm&quot; &quot;clt&quot; &quot;pre&quot; &quot;pme&quot; &quot;ro&quot;  &quot;dS&quot;  &quot;snd&quot;</code></pre>
 </div>
 <div id="correlations-among-variables" class="section level2">
-<h2><span class="header-section-number">6.2</span> Correlations among variables</h2>
+<h2><span class="header-section-number">5.2</span> Correlations among variables</h2>
 <p>It’s useful to look at the correlations among the long-term mean differences among the variables. This could be done using a matrix scatterplot (<code>plot(mm_data, pch=16, cex=0.5</code>), but there are enough variables (24) to make that difficult to interpret. Another approach is to look at a <code>corrplot()</code> image:</p>
 <div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1">cor_mm_data &lt;-<span class="st"> </span><span class="kw">cor</span>(mm_data)</a>
 <a class="sourceLine" id="cb61-2" data-line-number="2"><span class="kw">corrplot</span>(cor_mm_data, <span class="dt">method=</span><span class="st">&quot;color&quot;</span>)</a></code></pre></div>
@@ -1111,7 +1092,7 @@ $(document).ready(function () {
 <p>We can already see that there are groups of variables that are highly correlated with one another. For example the three temperatures variables (<code>tas</code> (2-m air temperature), <code>ts</code> (surface or “skin” temperature), <code>ta</code> (850mb temperature)), are plotted close to one another, as are some of the surface energy-balance variables (e.g. <code>Qn</code> and <code>Kn</code>, net radiation and net shortwave radiation).</p>
 </div>
 <div id="pca-of-the-pmip-3-data" class="section level2">
-<h2><span class="header-section-number">6.3</span> PCA of the PMIP 3 data</h2>
+<h2><span class="header-section-number">5.3</span> PCA of the PMIP 3 data</h2>
 <p>Do a principal components analysis of the long-term mean differneces using the <code>principal()</code> function from the <code>psych</code> package. Initially, extract eight components:</p>
 <div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1">nfactors &lt;-<span class="st"> </span><span class="dv">8</span></a>
 <a class="sourceLine" id="cb64-2" data-line-number="2">mm_pca_unrot &lt;-<span class="st"> </span><span class="kw">principal</span>(mm_data, <span class="dt">nfactors =</span> nfactors, <span class="dt">rotate =</span> <span class="st">&quot;none&quot;</span>)</a>
@@ -1244,14 +1225,14 @@ $(document).ready(function () {
 <p><img src="lec16_files/figure-html/unnamed-chunk-12-1.png" width="2100" /></p>
 </div>
 <div id="qgraph-plot-of-the-principal-components" class="section level2">
-<h2><span class="header-section-number">6.4</span> qgraph plot of the principal components</h2>
+<h2><span class="header-section-number">5.4</span> qgraph plot of the principal components</h2>
 <p>The first plot below shows the components as square nodes, and the orignal variables as circular nodes. The second modifies that first plot by applying the “spring” layout.</p>
 <div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1"><span class="kw">qgraph_loadings_plot</span>(mm_pca_unrot, <span class="dt">title=</span><span class="st">&quot;Unrotated component loadings, all models over all months&quot;</span>)</a></code></pre></div>
 <p><img src="lec16_files/figure-html/unnamed-chunk-13-1.png" width="2100" /><img src="lec16_files/figure-html/unnamed-chunk-13-2.png" width="2100" /></p>
 <p>This result suggests (as also does the scree plot) that there is one very important (i.e. “principal” component) that is highly correlated with (or “loads heavily on”) a number of variables, with subsequent components correlated with mainly with a single variable.</p>
 </div>
 <div id="rotated-components" class="section level2">
-<h2><span class="header-section-number">6.5</span> Rotated components</h2>
+<h2><span class="header-section-number">5.5</span> Rotated components</h2>
 <p>The interpretability of the componets can often be improved by “rotation” of the components, which amounts to slightly moving the PCA axes relative to the original variable axes, while still maintaining the orthogonality (or “uncorrelatedness”) of the components. This has the effect of reducing the importance of the first component(s) (because the adjusted axes are no longer optimal), but this trade-off is usually worth it.</p>
 <p>Here are the results:</p>
 <div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" data-line-number="1">nfactors &lt;-<span class="st"> </span><span class="dv">4</span></a>
@@ -1306,7 +1287,7 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="readings" class="section level1">
-<h1><span class="header-section-number">7</span> Readings</h1>
+<h1><span class="header-section-number">6</span> Readings</h1>
 <ul>
 <li>Chapter 25, Multivariate Statistics, in Crawley, M.J. (2013) <em>The R Book</em>, Wiley. To get to the book, visit <a href="http://library.uoregon.edu">http://library.uoregon.edu</a>, login, and search for the 2013 edition of the book. Here’s a direct link, once you’re logged on: <a href="http://onlinelibrary.wiley.com/book/10.1002/9781118448908">http://onlinelibrary.wiley.com/book/10.1002/9781118448908</a></li>
 <li>Maindonald (<em>Using R</em>…): ch. 6, cex=c(0.7,0.8)</li>

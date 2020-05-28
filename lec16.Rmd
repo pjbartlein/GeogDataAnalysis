@@ -23,28 +23,14 @@ load(".Rdata")
 
 *Principal components analysis (PCA)* is a widely used multivariate analysis method, the general aim of which is to reveal systematic covariations among a group of variables.   The analysis can be motivated in a number of different ways, including (in geographical contexts) finding groups of variables that measure the same underlying dimensions of a data set, describing the basic anomaly patterns that appear in spatial data sets, or producing a general index of the common variation of a set of variables.
 
-- Example:  Davis' boxes ([data](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_data.png), [plot](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_boxes.png), [scatter](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scatter.png), [components](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scores.png)), (Davis, J.C., 2001, *Statistics and Data Analysis in Geology*, Wiley)
-- [Derivation of principal components](https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html)
-
-# Properties of principal components #
-
-Because the components are derived by solving a particular optimization problem, they naturally have some "built-in" properties that are desirable in practice (e.g. maximum variability).  In addition, there are a number of other properties of the components that can be derived:
-
-- *variances* of each component, and the *proportion of the total variance* of the original variables are are given by the eigenvalues;
-- component *scores* may be calculated, that illustrate the value of each component at each observation;
-- component *loadings* that describe the correlation between each component and each variable may also be obtained;
-- the *correlations among the original variables* can be reproduced by the *p*-components, as can that part of the correlations "explained" by the first q components.
-- the *original data can be reproduced* by the *p* components, as can those parts of the original data "explained" by the first *q* components;
-- the components can be "*rotated*" to increase the interpretability of the components.
-
-[[Back to top]](lec16.html)
+- Example:  Davis' boxes ([data](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_data.png), [plot](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_boxes_png), [scatter](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scatter.png), [components](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scores.png)), (Davis, J.C., 2001, *Statistics and Data Analysis in Geology*, Wiley)
 
 # Derivation of principal components and their properties
 
 The formal derivation of principal components analysis requires the use of matix algebra.
 
 - [[Matrix algebra]](https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.pdf) 
-- [Derivation of principal components](https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html) 
+- [[Derivation of principal components]](https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html) 
 
 Because the components are derived by solving a particular optimization problem, they naturally have some "built-in" properties that are desirable in practice (e.g. maximum variability).  In addition, there are a number of other properties of the components that can be derived:
 
@@ -63,61 +49,58 @@ Because the components are derived by solving a particular optimization problem,
 
 A classic data set for illustrating PCA is one that appears in John C. Davis's 2002 book *Statistics and data analysis in geology*, Wiley (UO Library, QE48.8 .D38 2002).  The data consist of 25 boxes or blocks with random dimensions (the long, intermediate and short axes of the boxes), plus some derived variables, like the length of the longest diagonal that can be contained within a box.
 
-Here's the data: [[boxes.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/boxes.csv) 
-
-- Example:  Davis' boxes ([data](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_data.png), [plot](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_boxes.png), [scatter](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scatter.png), [components](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scores.png)), (Davis, J.C., 2001, *Statistics and Data Analysis in Geology*, Wiley)
-- [Derivation of principal components](https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html) 
+Here's the data: [[boxes_csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/boxes_csv) 
 
 In this example, a simple two-variable (long-axis length and diagonal length) data set is created using Davis' artificial data.
 
 ```{r pca02}
-# boxes_pca -- principal components analysis of Davis boxes data
-boxes.matrix <- data.matrix(cbind(boxes[,1],boxes[,4]))
-dimnames(boxes.matrix) <- list(NULL, cbind("long","diag"))
+#boxes_pca -- principal components analysis of Davis boxes data
+boxes_matrix <- data.matrix(cbind(boxes[,1],boxes[,4]))
+dimnames(boxes_matrix) <- list(NULL, cbind("long","diag"))
 ```
 
 Matrix scatter plot of the data (which in this case is a single panel), and the correlation matrix:
 
 ```{r pca03, fig.asp=1}
-plot (boxes.matrix)
-cor(boxes.matrix)
+plot(boxes_matrix)
+cor(boxes_matrix)
 ```
 PCA using the `princomp()` function from the `stats` package.  The `loadings()` function extracts the *loadings* or the correlations between the input variables and the new components, and the the `biplot()` function creates a *biplot* a single figure that plots the loadings as vectors and the *component scores* as points represented by the observation numbers.  
 
 
 ```{r pca04}
-boxes_pca <- princomp(boxes.matrix, cor=T)
+boxes_pca <- princomp(boxes_matrix, cor=T)
 boxes_pca
 summary(boxes_pca)
-print(loadings(boxes_pca),cutoff=0.0)
+print(loadings(boxes_pca), cutoff=0.0)
 biplot(boxes_pca)
 ```
 
-Note the angle between the vectors--the correlation between two variables is equal to the cosine of the angle between the vectors (*&theta;*), or *r = cos(&theta;)*.  Here the angle is `r acos(cor(boxes.matrix[,1],boxes.matrix[,2]))/((2*pi)/360)`, which is found by the following R code: `acos(cor(boxes.matrix[,1],boxes.matrix[,2]))/((2*pi)/360)`.
+Note the angle between the vectors--the correlation between two variables is equal to the cosine of the angle between the vectors (*&theta;*), or *r = cos(&theta;)*.  Here the angle is `r acos(cor(boxes_matrix[,1],boxes_matrix[,2]))/((2*pi)/360)`, which is found by the following R code: `acos(cor(boxes_matrix[,1],boxes_matrix[,2]))/((2*pi)/360)`.
 
 The components can be drawn on the scatter plot as follows, 
 
 ```{r pca05}
 # get parameters of component lines (after Everitt & Rabe-Hesketh)
-load <- boxes_pca$loadings
+load <-boxes_pca$loadings
 slope <- load[2,]/load[1,]
-mn <- apply(boxes.matrix,2,mean)
+mn <- apply(boxes_matrix,2,mean)
 intcpt <- mn[2]-(slope*mn[1])
 
 # scatter plot with the two new axes added
 par(pty="s") # square plotting frame
-xlim <- range(boxes.matrix) # overall min, max
-plot(boxes.matrix, xlim=xlim, ylim=xlim, pch=16, col="purple") # both axes same length
+xlim <- range(boxes_matrix) # overall min, max
+plot(boxes_matrix, xlim=xlim, ylim=xlim, pch=16, col="purple") # both axes same length
 abline(intcpt[1],slope[1],lwd=2) # first component solid line
 abline(intcpt[2],slope[2],lwd=2,lty=2) # second component dashed
 legend("right", legend = c("PC 1", "PC 2"), lty = c(1, 2), lwd = 2, cex = 1)
 
 # projections of points onto PCA 1
-y1 <- intcpt[1]+slope[1]*boxes.matrix[,1]
-x1 <- (boxes.matrix[,2]-intcpt[1])/slope[1]
-y2 <- (y1+boxes.matrix[,2])/2.0
-x2 <- (x1+boxes.matrix[,1])/2.0
-segments(boxes.matrix[,1],boxes.matrix[,2], x2, y2, lwd=2,col="purple")
+y1 <- intcpt[1]+slope[1]*boxes_matrix[,1]
+x1 <- (boxes_matrix[,2]-intcpt[1])/slope[1]
+y2 <- (y1+boxes_matrix[,2])/2.0
+x2 <- (x1+boxes_matrix[,1])/2.0
+segments(boxes_matrix[,1],boxes_matrix[,2], x2, y2, lwd=2,col="purple")
 ```
 
 This plot illustrates the idea of the first (or "principal" component) providing an optimal summary of the data--no other line drawn on this scatter plot would produce a set of projected values of the data points onto the line with less variance.  The first component also has an application in reduced major axis (RMA) regression in which both x- and y-variables are assumed to have errors or uncertainties, or where there is no clear distinction between a predictor and a response.
