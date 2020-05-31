@@ -54,7 +54,7 @@ nvars <- 14
 nobs <- 124
 SCDist <- array(0.0, c(nobs^2,3))
 dimnames(SCDist) <- list(NULL,c("i","j","SCD"))
-SCDist.matrix <- array(0.0, c(nobs,nobs))
+SCDist_matrix <- array(0.0, c(nobs,nobs))
 for (i in 1:nobs) {
     for (j in 1:nobs) {
     distance <- 0.0
@@ -63,7 +63,7 @@ for (i in 1:nobs) {
             }
             m <-((i-1)*nobs)+j
             SCDist[m,3] <- sqrt(distance)
-            SCDist.matrix[i,j] <- sqrt(distance)
+            SCDist_matrix[i,j] <- sqrt(distance)
             SCDist[m,1] <- i
             SCDist[m,2] <- j
     }
@@ -71,7 +71,7 @@ for (i in 1:nobs) {
 
 # display the distance matrix
 grid <- expand.grid(obs1 = seq(1:nobs), obs2 = seq(1:nobs))
-levelplot(SCDist.matrix ~ obs1*obs2, data=grid, col.regions = gray(seq(0,1,by=0.0625)),
+levelplot(SCDist_matrix ~ obs1*obs2, data=grid, col.regions = gray(seq(0,1,by=0.0625)),
   xlab="observation", ylab="observation")
 
 ```
@@ -82,7 +82,7 @@ The basic Euclidean distance treats each variable as equally important in calcul
 
 *D<sup>2</sup>* = **(x - m)V** <sup>-1</sup>**(x - m)**
 
-where **x** is a vector of values for a particular observation, **m** is the vector of means of each variable, and **V** is the variance-covariance matrix. 
+where **x** is a vector of values for a particular observation, **m** is the vector of means of each variable, and **V** is the variance-covariance matriX_ 
 
 The following code illustrates the calculation of Mahalanobis distances in a "climate space" described by two climate variables from the Midwest pollen-climate data set.  The graduate circle around each point is proportional to the Mahalanobis distance between that point and the centroid of scatter of points.  The ellipses (drawn using the `ellipse()` function from the `car` package graphically illustrate isolines of Mahalanobis distance from the centroid.)
 
@@ -90,18 +90,18 @@ The following code illustrates the calculation of Mahalanobis distances in a "cl
 # Mahalonobis distances
 # July and annual temperature
 X <- as.matrix(midwtf2[,4:5])
-X.cov <- var(scale(X)) # standardize first
-X.cov <- var(X)
-X.mean <- apply(X,2,mean)
-X.mah <- mahalanobis(X, X.mean, X.cov)
+X_cov <- var(scale(X)) # standardize first
+X_cov <- var(X)
+X_mean <- apply(X,2,mean)
+X_mah <- mahalanobis(X, X_mean, X_cov)
 
 # plot the variables, conf. ellipses and M.D.
 library(car)
 plot(midwtf2$tmeanjul, midwtf2$tmeanyr)
-ellipse(X.mean, X.cov, radius=1, add=TRUE)
-ellipse(X.mean, X.cov, radius=2, add=TRUE)
-points(midwtf2$tmeanjul, midwtf2$tmeanyr, cex=10*(X.mah-min(X.mah))/(max(X.mah)-
-    min(X.mah)))
+ellipse(X_mean, X_cov, radius=1, add=TRUE)
+ellipse(X_mean, X_cov, radius=2, add=TRUE)
+points(midwtf2$tmeanjul, midwtf2$tmeanyr, cex=10*(X_mah-min(X_mah))/(max(X_mah)-
+    min(X_mah)))
 ```
 
 The following code finds the Mahalanobis distances between each pollen site, where distances are now in "pollen space.".
@@ -109,9 +109,9 @@ The following code finds the Mahalanobis distances between each pollen site, whe
 ```{r md03}
 # Mahalonobis distances for individual spectra, Midwestern pollen data
 X <- as.matrix(midwtf2[,7:21])
-X.cov <- var(X)
-X.mean <- apply(X,2,mean)
-X.mah <- mahalanobis(X, X.mean, X.cov, tol.inv=1e-16)
+X_cov <- var(X)
+X_mean <- apply(X,2,mean)
+X_mah <- mahalanobis(X, X_mean, X_cov, tol.inv=1e-16)
 ```
 
 These distances-in-pollen-space can be mapped as graduated circles, where the size of the circle is proporational to the ditance between the pollen data at each point, and the centroid or mean pollen spectrum over all of the data.
@@ -120,7 +120,7 @@ These distances-in-pollen-space can be mapped as graduated circles, where the si
 # Map the Midwestern study area
 # plot shape file
 plot(st_geometry(midwotl_sf), axes=TRUE)
-points(midwtf2$longitud, midwtf2$latitude, cex=10*(X.mah-min(X.mah))/(max(X.mah)-min(X.mah)))
+points(midwtf2$longitud, midwtf2$latitude, cex=10*(X_mah-min(X_mah))/(max(X_mah)-min(X_mah)))
 ```
 
 # Multidimensional scaling (MDS) #
@@ -143,11 +143,11 @@ The plot generated above is a conventional map, where the points (stations) are 
 ```{r, mds03, fig.asp=1}
 # MDS "map" based only on distances between stations, not their absolute coordinates
 X <- as.matrix(orstationc[,2:3]) # longitude and latitude only
-X.scal <- cmdscale(dist(X), k=2, eig=T)
-X.scal$points[,1] <- -X.scal$points[,1] # may need to reverse axes
-# X.scal$points[,2] <- -X.scal$points[,2]
-plot(X.scal$points, type="n")
-text(X.scal$points, labels = station, cex=.6)
+X_scal <- cmdscale(dist(X), k=2, eig=T)
+X_scal$points[,1] <- -X_scal$points[,1] # may need to reverse axes
+# X_scal$points[,2] <- -X_scal$points[,2]
+plot(X_scal$points, type="n")
+text(X_scal$points, labels = station, cex=.6)
 detach(orstationc)
 ```
 
@@ -158,11 +158,11 @@ It's possible to see the rough outline of the state in the locations of the stat
 # multidimensional scaling of Oregon climate station data
 # now with climate variables not locations
 X <- as.matrix(orstationc[,5:10])
-X.scal <- cmdscale(dist(X), k=2, eig=T)
-X.scal$points[,1] <- -X.scal$points[,1]
-X.scal$points[,2] <- -X.scal$points[,2]
-plot(X.scal$points, type="n")
-text(X.scal$points, labels = orstationc$station, cex=.6)
+X_scal <- cmdscale(dist(X), k=2, eig=T)
+X_scal$points[,1] <- -X_scal$points[,1]
+X_scal$points[,2] <- -X_scal$points[,2]
+plot(X_scal$points, type="n")
+text(X_scal$points, labels = orstationc$station, cex=.6)
 ```
 
 The final example, shows an MDS of the Midwestern pollen data.  The two scatter plots show the distributions of latitude and longitude in a low-dimensional pollen space.  Points that are close to one another (on either of the plots) have similar pollen spectra, while points farther away from one another are less similar in terms of pollen.
@@ -170,13 +170,13 @@ The final example, shows an MDS of the Midwestern pollen data.  The two scatter 
 ```{r, fig.asp=1}
 # multidimensional scaling of Midwestern pollen data
 X <- as.matrix(midwtf2[,7:21])
-X.scal <- cmdscale(dist(X), k=2, eig=T)
-X.scal$points[,2] <- -X.scal$points[,2]
-plot(X.scal$points, type="n", main="latitude")
-text(X.scal$points, labels = (format(signif(midwtf2$latitude,digits=3))),
+X_scal <- cmdscale(dist(X), k=2, eig=T)
+X_scal$points[,2] <- -X_scal$points[,2]
+plot(X_scal$points, type="n", main="latitude")
+text(X_scal$points, labels = (format(signif(midwtf2$latitude,digits=3))),
     cex=.6)
-plot(X.scal$points, type="n", main="longitude")
-text(X.scal$points, labels = (format(signif(midwtf2$longitud,digits=3))),
+plot(X_scal$points, type="n", main="longitude")
+text(X_scal$points, labels = (format(signif(midwtf2$longitud,digits=3))),
     cex=.6)
 ```
 
@@ -192,10 +192,10 @@ There is a very large number of clustering procedures, and quite a few have been
 # hierarchical clustering, Ward's method, Yellowstone pollen data
 attach(ypolsqrt)
 X <- as.matrix(ypolsqrt[,4:35]) # just the pollen data
-X.dist <- dist(scale(X))
-# image(seq(1:58),seq(1:58),as.matrix(X.dist))
-hier.cls <- hclust(X.dist, method = "ward.D2")
-plot(hier.cls, labels=Veg, cex=.7)
+X_dist <- dist(scale(X))
+# image(seq(1:58),seq(1:58),as.matrix(X_dist))
+hier_cls <- hclust(X_dist, method = "ward.D2")
+plot(hier_cls, labels=Veg, cex=.7)
 ```
 
 Ward's method is one of the more "traditional" cluster analysis methods and typically is displayed using a "dendrogram" that can be intuitively interpreted.  Note that there is no prior assumption of the *number* of clusters that is made.  The success of the clustering can be judged by a mosaic plot, which compares the objectively determined clusters of samples, with a previous subjective assignement of each sample to a vegetation zone.
@@ -205,9 +205,9 @@ Ward's method is one of the more "traditional" cluster analysis methods and typi
 levels(Veg)
 # cut dendrogram to give 5 clusters
 nclust <- 5
-clusternum <- cutree(hier.cls, k=nclust)
-class.table.hier <- table(Veg, clusternum)
-mosaicplot(class.table.hier, color=T)
+clusternum <- cutree(hier_cls, k=nclust)
+class_table_hier <- table(Veg, clusternum)
+mosaicplot(class_table_hier, color=T)
 ```
 
 With the exception of the "Subalpine" vegetation zone, the objective clusters usually contain samples that fall into one or two of the subjective zones.
@@ -220,9 +220,9 @@ In "k-means" clustering, a specific number of clusters, *k*,  is set before the 
 # k-means clustering of Yellowstone pollen data
 library(cluster)
 X <- as.matrix(ypolsqrt[,4:35])
-kmean.cls <- kmeans(X, centers=5)
-class.table.km <- table(Veg, kmean.cls$cluster)
-mosaicplot(class.table.km, color=T)
+kmean_cls <- kmeans(X, centers=5)
+class_table_km <- table(Veg, kmean_cls$cluster)
+mosaicplot(class_table_km, color=T)
 ```
 
 ## PAM ("partioning amung mediods" clustering) ##
@@ -233,10 +233,10 @@ Here's another example of a more exotic clustering algorithm
 # "pam" clustering of Yellowstone pollen data
 library(cluster)
 X <- as.matrix(ypolsqrt[,4:35])
-pam.cls <- pam(X, k=5)
-plot(pam.cls)
-class.table.pam <- table(Veg, pam.cls$cluster)
-mosaicplot(class.table.pam, color=T)
+pam_cls <- pam(X, k=5)
+plot(pam_cls)
+class_table_pam <- table(Veg, pam_cls$cluster)
+mosaicplot(class_table_pam, color=T)
 ```
 
 # Readings #

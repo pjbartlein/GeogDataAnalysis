@@ -220,7 +220,6 @@ ggplot() +
 
 Parallel coordinate plots can be made using the `ggparcoord()` function from the `GGally` package:
 
-
 ```{r, pcp01x, eval=FALSE, echo=TRUE}
 # parallel coordinate plot
 ggparcoord(data = gf[1:16],

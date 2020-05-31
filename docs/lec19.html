@@ -748,8 +748,8 @@ $(document).ready(function () {
 ##  $ Poaceae: num  0.109 0 0.091 0.184 0.073 0.187 0.275 0.196 0.241 0.197 ...
 ##  $ Quercus: num  0 0.132 0 0.423 0.192 0.058 0.269 0.177 0.274 0.123 ...
 ##  $ Salix  : num  0.166 0.094 0.075 0.061 0.051 0.058 0.081 0.084 0.075 0.047 ...
-##  $ Fed    : Factor w/ 11 levels &quot;99&quot;,&quot;Arctic&quot;,..: 8 5 3 6 5 5 6 5 6 5 ...
-##  $ USGS21 : Factor w/ 17 levels &quot;lc1&quot;,&quot;lc10&quot;,&quot;lc11&quot;,..: 10 5 5 14 13 5 3 4 3 3 ...</code></pre>
+##  $ Fed    : chr  &quot;ForestTundra&quot; &quot;ConiferHardwood&quot; &quot;BorealForest&quot; &quot;DeciduousForest&quot; ...
+##  $ USGS21 : chr  &quot;lc22&quot; &quot;lc15&quot; &quot;lc15&quot; &quot;lc6&quot; ...</code></pre>
 <p>Get a quick map of the pollen site locations:</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(world_sf), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">180</span>, <span class="dv">-10</span>), <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">80</span>), <span class="dt">axes=</span><span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb26-2" data-line-number="2"><span class="kw">points</span>(napol<span class="op">$</span>Lat <span class="op">~</span><span class="st"> </span>napol<span class="op">$</span>Lon, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>, <span class="dt">col=</span><span class="st">&quot;darkgreen&quot;</span>)</a></code></pre></div>
@@ -807,14 +807,13 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb35-3" data-line-number="3">csvname &lt;-<span class="st"> &quot;carp96t.csv&quot;</span> <span class="co"># square-root transformed data</span></a>
 <a class="sourceLine" id="cb35-4" data-line-number="4">carp &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">paste</span>(csvpath, csvname, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
 <a class="sourceLine" id="cb35-5" data-line-number="5"><span class="kw">summary</span>(carp)</a></code></pre></div>
-<pre><code>##      Depth            Age                 IS        Dippine         Happine          undpine     
-##  Min.   : 1.30   Min.   :  0.3983   3      :47   Min.   :0.000   Min.   :0.0000   Min.   :1.629  
-##  1st Qu.: 7.15   1st Qu.: 25.1045   1      :31   1st Qu.:1.220   1st Qu.:0.5585   1st Qu.:4.351  
-##  Median :12.80   Median : 57.6462   2      :24   Median :2.033   Median :1.1830   Median :5.827  
-##  Mean   :12.48   Mean   : 58.5209   4      :23   Mean   :2.048   Mean   :1.1933   Mean   :5.653  
-##  3rd Qu.:17.65   3rd Qu.: 89.0536   5a     :18   3rd Qu.:2.813   3rd Qu.:1.7915   3rd Qu.:7.021  
-##  Max.   :23.15   Max.   :124.9092   5c     :15   Max.   :5.247   Max.   :3.3850   Max.   :9.145  
-##                                     (Other):41                                                   
+<pre><code>##      Depth            Age                IS               Dippine         Happine          undpine     
+##  Min.   : 1.30   Min.   :  0.3983   Length:199         Min.   :0.000   Min.   :0.0000   Min.   :1.629  
+##  1st Qu.: 7.15   1st Qu.: 25.1045   Class :character   1st Qu.:1.220   1st Qu.:0.5585   1st Qu.:4.351  
+##  Median :12.80   Median : 57.6462   Mode  :character   Median :2.033   Median :1.1830   Median :5.827  
+##  Mean   :12.48   Mean   : 58.5209                      Mean   :2.048   Mean   :1.1933   Mean   :5.653  
+##  3rd Qu.:17.65   3rd Qu.: 89.0536                      3rd Qu.:2.813   3rd Qu.:1.7915   3rd Qu.:7.021  
+##  Max.   :23.15   Max.   :124.9092                      Max.   :5.247   Max.   :3.3850   Max.   :9.145  
 ##      Picea           Abies          Pseudotsug       Juniperus           Thet            Tmert       
 ##  Min.   :0.000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
 ##  1st Qu.:0.681   1st Qu.:0.5655   1st Qu.:0.0000   1st Qu.:0.2950   1st Qu.:0.0000   1st Qu.:0.0000  
@@ -822,7 +821,6 @@ $(document).ready(function () {
 ##  Mean   :1.252   Mean   :0.8382   Mean   :0.5850   Mean   :0.7792   Mean   :0.5844   Mean   :0.2315  
 ##  3rd Qu.:1.802   3rd Qu.:1.0780   3rd Qu.:0.8375   3rd Qu.:1.0180   3rd Qu.:0.9345   3rd Qu.:0.4485  
 ##  Max.   :3.741   Max.   :2.1440   Max.   :2.7850   Max.   :3.7170   Max.   :2.6690   Max.   :1.0670  
-##                                                                                                      
 ##    Taxusbrev           Alnus             Arubra          Corylus           Betula           Salix       
 ##  Min.   :0.00000   Min.   :0.00000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
 ##  1st Qu.:0.00000   1st Qu.:0.00000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000  
@@ -830,7 +828,6 @@ $(document).ready(function () {
 ##  Mean   :0.02918   Mean   :0.06538   Mean   :0.5741   Mean   :0.2122   Mean   :0.2167   Mean   :0.2940  
 ##  3rd Qu.:0.00000   3rd Qu.:0.00000   3rd Qu.:0.8970   3rd Qu.:0.4130   3rd Qu.:0.4745   3rd Qu.:0.5355  
 ##  Max.   :0.84100   Max.   :1.02100   Max.   :3.1130   Max.   :1.7150   Max.   :1.0210   Max.   :1.1700  
-##                                                                                                         
 ##     Fraxinus         Quercus          Poaceae        Artemisia        Ambrosia         Ivaciliat       
 ##  Min.   :0.0000   Min.   :0.0000   Min.   :0.553   Min.   :0.000   Min.   :0.00000   Min.   :0.000000  
 ##  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:1.862   1st Qu.:3.205   1st Qu.:0.00000   1st Qu.:0.000000  
@@ -838,15 +835,13 @@ $(document).ready(function () {
 ##  Mean   :0.0344   Mean   :0.6227   Mean   :2.954   Mean   :4.377   Mean   :0.07275   Mean   :0.002111  
 ##  3rd Qu.:0.0000   3rd Qu.:0.8030   3rd Qu.:4.071   3rd Qu.:5.891   3rd Qu.:0.00000   3rd Qu.:0.000000  
 ##  Max.   :0.7670   Max.   :3.5530   Max.   :5.951   Max.   :8.121   Max.   :0.81700   Max.   :0.420000  
-##                                                                                                        
 ##    Chenopodii    
 ##  Min.   :0.0000  
 ##  1st Qu.:0.3665  
 ##  Median :0.5350  
 ##  Mean   :0.6872  
 ##  3rd Qu.:0.8965  
-##  Max.   :3.9650  
-## </code></pre>
+##  Max.   :3.9650</code></pre>
 <p>Pollen data (expressed as proportions or percentages of individual pollen types) vary over an order of magnitude in value, and also have long-tailed distributions. Consequently they should be tranformed, and a useful transformation is to simply take the square root of the proportions.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="co"># transform </span></a>
 <a class="sourceLine" id="cb37-2" data-line-number="2">tcarp &lt;-<span class="st"> </span>carp</a>
