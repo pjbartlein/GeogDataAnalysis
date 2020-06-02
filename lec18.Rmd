@@ -84,7 +84,7 @@ The basic Euclidean distance treats each variable as equally important in calcul
 
 where **x** is a vector of values for a particular observation, **m** is the vector of means of each variable, and **V** is the variance-covariance matriX_ 
 
-The following code illustrates the calculation of Mahalanobis distances in a "climate space" described by two climate variables from the Midwest pollen-climate data set.  The graduate circle around each point is proportional to the Mahalanobis distance between that point and the centroid of scatter of points.  The ellipses (drawn using the `ellipse()` function from the `car` package graphically illustrate isolines of Mahalanobis distance from the centroid.)
+The following code illustrates the calculation of Mahalanobis distances in a "climate space" described by two climate variables from the Midwest pollen-climate data set.  The graduated circle around each point is proportional to the Mahalanobis distance between that point and the centroid of scatter of points.  The blue ellipses (drawn using the `ellipse()` function from the `car` package) graphically illustrate isolines of Mahalanobis distance from the centroid.  The red circles are of radii 1 and 2, and illustrate isolines of Euclidean distance from the centroid.
 
 ```{r md02, fig.asp=1}
 # Mahalonobis distances
@@ -97,11 +97,16 @@ X_mah <- mahalanobis(X, X_mean, X_cov)
 
 # plot the variables, conf. ellipses and M.D.
 library(car)
-plot(midwtf2$tmeanjul, midwtf2$tmeanyr)
+library(plotrix)
+
+# plot points, Mahalanobis distances and Euclidean distances
+plot(midwtf2$tmeanjul, midwtf2$tmeanyr, asp=1, pch=16, col="gray50")
 ellipse(X_mean, X_cov, radius=1, add=TRUE)
 ellipse(X_mean, X_cov, radius=2, add=TRUE)
 points(midwtf2$tmeanjul, midwtf2$tmeanyr, cex=10*(X_mah-min(X_mah))/(max(X_mah)-
     min(X_mah)))
+draw.circle(X_mean[1], X_mean[2], radius=1, lwd=2, bor="red")
+draw.circle(X_mean[1], X_mean[2], radius=2, lwd=2, bor="red")
 ```
 
 The following code finds the Mahalanobis distances between each pollen site, where distances are now in "pollen space.".
