@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 
 <html>
@@ -788,3 +789,795 @@ $(document).ready(function () {
 
 </body>
 </html>
+=======
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Datasets</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Geographic Data Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="lec01.html">Introduction to the course</a>
+    </li>
+    <li>
+      <a href="lec02.html">Univariate plots</a>
+    </li>
+    <li>
+      <a href="lec03.html">Bivariate plots</a>
+    </li>
+    <li>
+      <a href="lec04.html">Descriptive statistics</a>
+    </li>
+    <li>
+      <a href="lec05.html">Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ggplot2.html">ggplot2 versions of basic plots</a>
+    </li>
+    <li>
+      <a href="lec06.html">Maps in R</a>
+    </li>
+    <li>
+      <a href="lec07.html">Geospatial analysis in R</a>
+    </li>
+    <li>
+      <a href="lec08.html">Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="lec09.html">Reference distributions</a>
+    </li>
+    <li>
+      <a href="lec10.html">Statistical inference</a>
+    </li>
+    <li>
+      <a href="lec11.html">Analysis of variance</a>
+    </li>
+    <li>
+      <a href="lec12.html">Regression analysis</a>
+    </li>
+    <li>
+      <a href="lec13.html">More regression analysis</a>
+    </li>
+    <li>
+      <a href="lec14.html">Nonparametric regression</a>
+    </li>
+    <li>
+      <a href="lec15.html">GLMs, GAMs, and CARTs</a>
+    </li>
+    <li>
+      <a href="lec16.html">Principal components and factor analyses</a>
+    </li>
+    <li>
+      <a href="lec17.html">MANOVA and discriminant analysis</a>
+    </li>
+    <li>
+      <a href="lec18.html">Multivariate distances and cluster analysis</a>
+    </li>
+    <li>
+      <a href="lec19.html">High-resolution and high-dimension data</a>
+    </li>
+    <li>
+      <a href="lec20.html">Analysis and visualization of large raster data sets</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Exercises</li>
+    <li>
+      <a href="ex01.html">Exercise 01 -- Getting R and RStudio</a>
+    </li>
+    <li>
+      <a href="ex02.html">Exercise 02 -- Univariate plots</a>
+    </li>
+    <li>
+      <a href="ex03.html">Exercise 03 -- Bivariate plots and descriptive statistics</a>
+    </li>
+    <li>
+      <a href="ex04.html">Exercise 04 -- Multivariate plots</a>
+    </li>
+    <li>
+      <a href="ex05.html">Exercise 05 -- Data wrangling and matrix algebra</a>
+    </li>
+    <li>
+      <a href="ex06.html">Exercise 06 -- CI's, t-tests, ANOVA</a>
+    </li>
+    <li>
+      <a href="ex07.html">Exercise 07 -- Regression analysis</a>
+    </li>
+    <li>
+      <a href="ex08.html">Exercise 08 -- Multivariate analysis</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="packages-and-data.html">Packages and data</a>
+    </li>
+    <li>
+      <a href="vm_inst.html">Virtual machine instructions</a>
+    </li>
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="datasets.html">Datasets</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Datasets</h1>
+
+</div>
+
+
+<p>Note that the data sets on this web page are instructional in nature, intended for illustrating various aspects of data analysis and visualization.  It would be a bad idea to attempt to use them as research-grade data sets.</p>
+<hr />
+<div id="csv-files-dataframes" class="section level2">
+<h2>.csv files (Dataframes)</h2>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Data sets</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>==========================</td>
+<td>=============================================================================</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sumcr.csv">sumcr.csv</a></td>
+<td>Summit Cr. stream-channel data</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/orstationc.csv">orstationc.csv</a></td>
+<td>Oregon climate-station data</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/ortann.csv">ortann.csv</a></td>
+<td>Oregon climate-station data, annual temperatures only</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/orcountyp.csv">orcountyp.csv</a></td>
+<td>Oregon county census data</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/cities.csv">cities.csv</a></td>
+<td>Large cities of the world</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/cities2.csv">cities2.csv</a></td>
+<td>Large cities of the world, including country names</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/cirques.csv">cirques.csv</a></td>
+<td>Oregon cirque locations and elevations</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/scanvote.csv">scanvote.csv</a></td>
+<td>Scandinavian EU preference votes</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/midwtf2.csv">midwtf2.csv</a></td>
+<td>Midwest pollen and climate data</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/orgrid.csv">orgrid.csv</a></td>
+<td>Gridded Oregon climate data</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sierra.csv">sierra.csv</a></td>
+<td>Sierra Nevada dendroclimatological reconstructions</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/specmap.csv">specmap.csv</a></td>
+<td>pecmap oxygen-isotope and insolation data</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/yell_pratio.csv">yell_prato.csv</a></td>
+<td>Yellowstone precipitation seasonality data</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/yellpolsqrt.csv">yellpolsqrt.csv</a></td>
+<td>Transformed Yellowstone surface-sample pollen data</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/cidat.csv">cidat.csv</a></td>
+<td>Synthetic data for illustrating confidence intervals</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/ttestdat.csv">ttestdat.csv</a></td>
+<td>Synthetic data for illustrating t-tests</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/foursamples.csv">foursamples.csv</a></td>
+<td>Synthetic data for illustrating t-tests</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/anovadat.csv">anovadat.csv</a></td>
+<td>Synthetic data for illustrating analysis of variance</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/orsim.csv">orsim.csv</a></td>
+<td>Future climate simulations for Oregon</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/probdist.csv">probdist.csv</a></td>
+<td>Data and distribution functions for various distributions</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/wus_pratio.csv">wus_pratio.csv</a></td>
+<td>Western U.S. climate station precipitation ratios</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/wus_alpha.csv">wus_alpha.csv</a></td>
+<td>Western U.S. climate station AE/PE ratios (alpha)</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/regrex1.csv">regrex1.csv</a></td>
+<td>Regression analysis example data set 1</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/regrex2.csv">regrex2.csv</a></td>
+<td>Regression analysis example data set 2</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/regrex3.csv">regrex3.csv</a></td>
+<td>Regression analysis example data set 3</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/streams4.csv">streams4.csv</a></td>
+<td>Eastern Oregon stream-health geomorphic data</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/tstreams4.csv">tstreams4.csv</a></td>
+<td>Eastern Oregon stream-health geomorphic data--transformed values</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/boxes.csv">boxes.csv</a></td>
+<td>Davis PCA example data</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/IPCC-RF.csv">IPCC-RF.csv</a></td>
+<td>IPCC AR5 radiative forcing time series</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/IPCC-RFtrans.csv">IPCC-RFtrans.csv</a></td>
+<td>IPCC AR5 radiattive forcing time series--transformed values</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/NAmodpol.csv">NAmodpol.csv</a></td>
+<td>North American modern pollen data</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/gcdv3.csv">gcdv3.csv</a></td>
+<td>Global Charcoal Database v3</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/MM-ltmdiff-NEurAsia.csv">MM-ltmdiff-NEurAsia.csv</a></td>
+<td>Northern Eurasia PMIP3 MH area averages</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/EugeneClim.csv">EugeneClim.csv</a></td>
+<td>Eugene climate data</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/EugeneClim-short.csv">EugeneClim-short.csv</a></td>
+<td>Eugene climate data, “Short” .csv file</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/EugeneClim-short-alt-tvars.csv">EugeneClim-short-alt-tvars.csv</a></td>
+<td>Eugene climate data, alternative layout tvars</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/EugeneClim-short-alt-pvars.csv">EugeneClim-short-alt-pvars.csv</a></td>
+<td>Eugene climate data, alternative layout pvars</td>
+</tr>
+</tbody>
+</table>
+<p>Download .csv data sets to a working directory, and read into R using, for example</p>
+<p><code>sumcr &lt;- read.csv(&quot;sumcr.csv&quot;),</code> or <code>sumcr &lt;- read.csv(file.choose())</code></p>
+<hr />
+</div>
+<div id="shapefiles" class="section level2">
+<h2>Shapefiles</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Description</th>
+<th>basename</th>
+<th>components</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>===================================</td>
+<td>============</td>
+<td>=======================</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Oregon counties and census data</td>
+<td>orcounty</td>
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orcounty.dbf">[.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orcounty.prj">[.prj]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orcounty.shp">[.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orcounty.shx">[.shx]</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Oregon county outlines only</td>
+<td>orotl</td>
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.dbf">[.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.prj">[.prj]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.shp">[.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orotl.shx">[.shx]</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Oregon climate stations</td>
+<td>orstations</td>
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orstations.dbf">[.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orstations.prj">[.prj]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orstations.shp">[.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/orstations.shx">[.shx]</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Midwest study region</td>
+<td>midwotl</td>
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.dbf">[.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.prj">[.prj]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.shp">[.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/midwotl.shx">[.shx]</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Scandinavian communes</td>
+<td>scand</td>
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/scand.dbf">[.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/scand.prj">[.prj]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/scand.shp">[.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/scand.shx">[.shx]</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Western U.S. state outlines</td>
+<td>wus</td>
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/wus.dbf">[.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/wus.prj">[.prj]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/wus.shp">[.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/wus.shx">[.shx]</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Oregon cirque basins</td>
+<td>cirques</td>
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/cirques.dbf">[.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/cirques.prj">[.prj]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/cirques.shp">[.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/cirques.shx">[.shx]</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Yellowstone area state border</td>
+<td>ynpstate</td>
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/ynpstate.dbf">[.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/ynpstate.prj">[.prj]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/ynpstate.shp">[.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/ynpstate.shx">[.shx]</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Yellowsone area rivers</td>
+<td>ynprivers</td>
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/ynprivers.dbf">[.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/ynprivers.prj">[.prj]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/ynprivers.shp">[.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/ynprivers.shx">[.shx]</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Yellowstone area lakes</td>
+<td>ynplk</td>
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/ynplk.dbf">[.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/ynplk.prj">[.prj]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/ynplk.shp">[.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/ynplk.shx">[.shx]</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>World country outlines</td>
+<td>world</td>
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/world.dbf">[.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/world.prj">[.prj]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/world.shp">[.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/world.shx">[.shx]</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><em>Picea mariana</em></td>
+<td>picemari</td>
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/picemari.dbf">[.dbf]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/picemari.prj">[.prj]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/picemari.shp">[.shp]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/shp/picemari.shx">[.shx]</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Download shapefile components to a working directory, and see map-drawing scripts.</p>
+<hr />
+</div>
+<div id="workspaces" class="section level2">
+<h2>Workspaces</h2>
+<p>GEOG 4/595 data   <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/Rdata/geog495.RData">[geog495.RData]</a></p>
+<p>Download <code>.Rdata</code> files to a working directory, and use <code>load()</code> or Load workspace menu (e.g.):</p>
+<p><code>load(&quot;E:/DataVis/working/geog495.RData/&quot;)</code></p>
+<p>(Here is a link to an older workspace that includes <code>sp</code> objects used in previous versions of this web page: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/Rdata/geog495sp.RData">[geog495sp.RData]</a>)</p>
+<hr />
+</div>
+<div id="raster-data-sets-netcdf-files" class="section level2">
+<h2>Raster Data Sets / netCDF files</h2>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Data sets</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>===================</td>
+<td>==================================================================================</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/raster/cru10min30_tmp.nc">cru10min30_tmp.nc</a></td>
+<td>CRU CL 2.0 1961-1990 Monthly Averages (0.5-deg subset)</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/raster/cru10min30_bio.nc">cru10min30_bio.nc</a></td>
+<td>bioclimatic variables calculated using the CRU CL 2.0 data</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/raster/SSTexample.nc">SSTexample.nc</a></td>
+<td>SST example (raster package)</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/raster/air.mon.anom.nc">air.mon.anom.nc</a></td>
+<td>HADCRUT3 Combined Air Temperature/SST Anomaly Variance Adjusted</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/raster/GFEDv3.1_ltm.nc">GFEDv3.1_ltm.nc</a></td>
+<td>Global Fire Emissions Database version 3.1 (GFEDv3.1)</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/raster/sage_veg30.nc">sage_veg30.nc</a></td>
+<td>Ramankutty and Foley Potential Vegetation Type (Univ. Wisc. SAGE)</td>
+</tr>
+<tr class="even">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/raster/treecov.nc">treecov.nc</a></td>
+<td>UMD Tree Cover Data resampled to 0.5-degrees</td>
+</tr>
+<tr class="odd">
+<td><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/raster/tcdc.eatm.mon.mean.nc">tcdc.eatm.mon.mean.nc</a></td>
+<td>Clouds -- Monthly NOAA-CIRES 20th Century Reanalysis V2</td>
+</tr>
+</tbody>
+</table>
+<p>Check global attributes for data-set sources.</p>
+<p>Right-click on dataset name, and download to an appropriate folder.</p>
+<hr />
+<p>Note that the data sets on this web page are instructional in nature, intended for illustrating various aspects of data analysis and visualization.  It would be a bad idea to use them as research-grade data sets.</p>
+<p> </p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
+>>>>>>> parent of 953c77c... added some CRU data
