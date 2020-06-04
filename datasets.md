@@ -92,7 +92,9 @@ Download `.Rdata` files to a working directory, and use `load()` or Load workspa
 | Data sets | Description |
 |---|---|
 | ===================|==================================================================================|
-| [cru10min30\_tmp.nc](https://pjbartlein.github.io/GeogDataAnalysis/data/raster/cru10min30_tmp.nc) | CRU CL 2.0 1961-1990 Monthly Averages (0.5-deg subset)
+| [cru10min30\_tmp.nc](https://pjbartlein.github.io/GeogDataAnalysis/data/raster/cru10min30_tmp.nc) | CRU CL 2.0 1961-1990 Monthly Average Temperature (0.5-deg subset)
+| [cru10min30\_pre.nc](https://pjbartlein.github.io/GeogDataAnalysis/data/raster/cru10min30_tmp.nc) | CRU CL 2.0 1961-1990 Monthly Average Precipitation (0.5-deg subset)
+| [cru10min30\_sun.nc](https://pjbartlein.github.io/GeogDataAnalysis/data/raster/cru10min30_tmp.nc) | CRU CL 2.0 1961-1990 Monthly Average Percent Sun (0.5-deg subset)
 | [cru10min30\_bio.nc](https://pjbartlein.github.io/GeogDataAnalysis/data/raster/cru10min30_bio.nc) | bioclimatic variables calculated using the CRU CL 2.0 data
 | [SSTexample.nc](https://pjbartlein.github.io/GeogDataAnalysis/data/raster/SSTexample.nc) | SST example (raster package)
 | [air.mon.anom.nc](https://pjbartlein.github.io/GeogDataAnalysis/data/raster/air.mon.anom.nc) | HADCRUT3 Combined Air Temperature/SST Anomaly Variance Adjusted
