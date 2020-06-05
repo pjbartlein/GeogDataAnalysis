@@ -178,7 +178,7 @@ And here's the `qgraph` plot:
 qgraph_loadings_plot(tstreams_fa1, "Factor Analysis tstreams, unrotated components")
 ```
 
->Q3:  Compare the results of the factor analysis to the principal components analysis.  What looks similar, what looks different?   Hint:  Focus on the the two biplots, and the relative position of the vectors and points as opposed to their absolute positions on the diagrams.  What are the basic “dimensions” of the data?  From the perspective of somebody administering a field measurement-and-monitoring program, are there any redundancies among the variables that might be eliminated?
+>Q3:  Compare the results of the factor analysis to the principal components analysis.  What looks similar, what looks different?   Hint:  Focus on the the two biplots, and the relative position of the vectors and points as opposed to their absolute positions on the diagrams.  
 
 <br>
 **5. Rotated Factors**
@@ -199,7 +199,7 @@ biplot(tstreams_fa2$scores[,1:2], loadings(tstreams_fa2)[,1:2],
 qgraph_loadings_plot(tstreams_fa2, "Factor Analysis tstreams, 3 rotated components")
 ```
 
->Q4:  How do the loadings, biplot and qgraph change?  Which result, the unrotated or the rotated factors seems more interpretable?  Hint:  a more complicated analysis might not be better.  
+>Q4:  How do the loadings, biplot and qgraph change?  Which result, the unrotated or the rotated factors seems more interpretable?  Hint:  a more complicated analysis might not be better, but then again, it might be.  
 
 >Q5:  What are the basic “dimensions” of the data?  From the perspective of somebody administering a field measurement and monitoring program, are there any redundancies among the variables that might be eliminated?
 

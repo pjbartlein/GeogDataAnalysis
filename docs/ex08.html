@@ -597,7 +597,7 @@ $(document).ready(function () {
 <p>And here’s the <code>qgraph</code> plot:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">qgraph_loadings_plot</span>(tstreams_fa1, <span class="st">&quot;Factor Analysis tstreams, unrotated components&quot;</span>)</a></code></pre></div>
 <blockquote>
-<p>Q3: Compare the results of the factor analysis to the principal components analysis. What looks similar, what looks different? Hint: Focus on the the two biplots, and the relative position of the vectors and points as opposed to their absolute positions on the diagrams. What are the basic “dimensions” of the data? From the perspective of somebody administering a field measurement-and-monitoring program, are there any redundancies among the variables that might be eliminated?</p>
+<p>Q3: Compare the results of the factor analysis to the principal components analysis. What looks similar, what looks different? Hint: Focus on the the two biplots, and the relative position of the vectors and points as opposed to their absolute positions on the diagrams.</p>
 </blockquote>
 <p><br> <strong>5. Rotated Factors</strong></p>
 <p>Next, we’ll rotate the factors to try to make them more interpretable. It looks like the fourth component is not really important, so drop it.</p>
@@ -610,7 +610,7 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb15-7" data-line-number="7">  <span class="dt">main=</span><span class="st">&quot;PCA/Factor Analysis Biplot -- 3 Rotated Components&quot;</span>, <span class="dt">cex=</span><span class="fl">0.5</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">qgraph_loadings_plot</span>(tstreams_fa2, <span class="st">&quot;Factor Analysis tstreams, 3 rotated components&quot;</span>)</a></code></pre></div>
 <blockquote>
-<p>Q4: How do the loadings, biplot and qgraph change? Which result, the unrotated or the rotated factors seems more interpretable? Hint: a more complicated analysis might not be better.</p>
+<p>Q4: How do the loadings, biplot and qgraph change? Which result, the unrotated or the rotated factors seems more interpretable? Hint: a more complicated analysis might not be better, but then again, it might be.</p>
 </blockquote>
 <blockquote>
 <p>Q5: What are the basic “dimensions” of the data? From the perspective of somebody administering a field measurement and monitoring program, are there any redundancies among the variables that might be eliminated?</p>
