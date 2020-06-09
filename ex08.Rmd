@@ -133,7 +133,7 @@ library(qgraph)
 Here is the function:
 
 ```{r echo=TRUE, eval=FALSE}
-function(loadings_in, title) {
+qgraph_loadings_plot <- function(loadings_in, title) {
   ld <- loadings(loadings_in)
   qg_pca <- qgraph(ld, title=title, 
                    posCol = "darkgreen", negCol = "darkmagenta", arrows = FALSE, vTrans=256)
@@ -144,6 +144,8 @@ function(loadings_in, title) {
          width=7, height=5, normalize=TRUE, edge.width=0.75)
 }
 ```
+
+Copy the code, and either paste it into a script file and the "source" (i.e. run) it as usual, by selecting it and clicking on Run, or simply paste into the Console window at the command line.
 
 The function has two arguments:  1) the object created by `principal()` (e.g. `tstreams_pca`), and 2) a title.  Get the plots:
 
