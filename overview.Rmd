@@ -14,6 +14,7 @@ options(width = 105)
 knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 ```
+<p><span style="color: #FF0000;">This is last year's (Spring 2020) version of the course outline.  The page for Winter 2021 will be posted in early January.</span></p>
 
 ```{r child="overview.md"}
 ```

@@ -1,3 +1,4 @@
+
 # Course objectives #
 
 Phenomena describable by multiple variables arise in many subfields of physical and human geography and related disciplines.  The focus of this course is on the analysis and display of multivariate geographical data by traditional multivariate "machine-learning" methods and by newer methods of scientific visualization.
@@ -25,6 +26,8 @@ The specific topics that will be examined include:
 
 
 # Schedule -- Spring 2020 #
+
+<p><span style="color: #FF0000;">This is last year's (Spring 2020) version of the course outline.  The page for Winter 2021 will be posted in early January.</span></p>
 
 *See the Canvas course web page for Assignments and Quizzes*
 
@@ -55,9 +58,9 @@ The specific topics that will be examined include:
 
 # Grading and course mechanics #
 
-Format and grading:  Lectures, four quzzes, and eight exercises.  All quizzes and all exercises must be completed to receive a passing grade for the course.  The quizzes and exercises should be completed in a timely fashion, although this quarter allowances will be made.  Grading expections will be adjusted to reflect the nature of the course this year.
+Format and grading:  Lectures, four quzzes, and eight exercises.  The exercises will be worth eight points each, and the quizzes will be worth nine points each, for a total of 100 points.  Students taking GEOG 595 will be required to submit a short (3-5 page, plus figures) analysis of a "real" data set.  *All quizzes and all exercises must be completed to receive a passing grade for the course.*  The quizzes and exercises should be completed in a timely fashion, although this quarter allowances will be made.  Grading expections will be adjusted to reflect the nature of the course this year.
 
-Office hours will probably be conducted through Zoom.
+Office hours will be conducted through Zoom.
 
 Prerequisite:  GEOG 4/581 GIScience I (or GEOG 4/516  Introductory Geographic Information Systems)
 

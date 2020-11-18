@@ -33,3 +33,5 @@ pdf.options(useDingbats = TRUE)
   
 **Department of Geography, University of Oregon  -- 
 [[https://pjbartlein.github.io/GeogDataAnalysis/index.html]](https://pjbartlein.github.io/GeogDataAnalysis/index.html)**
+
+<p><span style="color: #FF0000;">This is last year's (Spring 2020) version of the course web page.  The page for Winter 2021 will be posted in early January.</span></p>
