@@ -25,40 +25,38 @@ The specific topics that will be examined include:
 - high-resolution and high-dimension data
 
 
-# Schedule -- Spring 2020 #
-
-<p><span style="color: #FF0000;">This is last year's (Spring 2020) version of the course outline.  The page for Winter 2021 will be posted in early January.</span></p>
+# Schedule -- Winter 2021 #
 
 *See the Canvas course web page for Assignments and Quizzes*
 
-| Lec |  Day | Date    | Topic -- see individual pages for readings   | Exercises | Quizzes |
-| --- |  --- | --------|  --- | --- | --- |
-| === |===|======|=======================================|==========|=========|
-| 1   | Tu  | 31-Mar | Intro, data analysis and visualization in R          |        | 
-| 2   | Th  |  2-Apr | Univariate plots                                     |        | 
-| 3   | Tu  |  7-Apr | Bivariate plots                                      |  7-Apr |
-| 4   | Th  |  9-Apr | Descriptive statistics                               | 10-Apr |
-| 5   | Tu  | 14-Apr | Multivariate plots                                   |        |        
-| 6   | Th  | 16-Apr | Graphics with ggplot2                                | 17-Apr |
-| 7   | Tu  | 21-Apr | Maps in R                                            |        |            
-| 8   | Th  | 23-Apr | Geospatial analysis in R                             | 24-Apr | 27-Apr      
-| 9   | Tu  | 28-Apr | Data wrangling and matrix algebra                    |        | 
-| 10  | Th  | 40-Apr | Reference distributions                              |  5-May |                           
-| 11  | Tu  |  5-May | Statistical inference                                |        |     
-| 12  | Th  |  7-May | Analysis of variance                                 |        | 11-May     
-| 13  | Tu  | 12-May | Regression analysis                                  |        |     
-| 14  | Th  | 14-May | More regression analysis                             | 15-May |                            
-| 15  | Tu  | 19-May | Nonparametric regression                             |        |                 
-| 16  | Th  | 21-May | Principal components and factor analysis             | 22-May |   
-| 17  | Tu  | 26-May | MANOVA, discriminant analysis                        |        | 25-May          
-| 18  | Th  | 28-May | Multivariate distances and cluster analysis          |        |     
-| 19  | Tu  |  2-Jun | High-resolution and high-dimensional data sets       |        |                            
-| 20  | Th  |  6-Jun | Analysis and visualization of large raster data sets | 11-Jun | 11-Jun                                                        
+| Lec | Day | Date   | Topic -- see individual webpages for readings        |Exercises| Quizzes |
+|---|---|------|-------------------------------------|----------|---------|
+|===|===|======|=====================================|==========|=========|
+| 1   | Tu  | Jan 5  | Intro, data analysis and visualization in R          |          | 
+| 2   | Th  | Jan 7  | Univariate plots                                     | 1 Jan 8  | 
+| 3   | Tu  | Jan 12 | Bivariate plots                                      |          |
+| 4   | Th  | Jan 14 | Descriptive statistics                               | 2 Jan 15 |
+| 5   | Tu  | Jan 19 | Multivariate plots                                   |          |        
+| 6   | Th  | Jan 21 | Graphics with ggplot2                                | 3 Jan 22 |
+| 7   | Tu  | Jan 26 | Maps in R                                            |          | 1 Jan 25           
+| 8   | Th  | Jan 28 | Geospatial analysis in R                             | 4 Jan 29 |       
+| 9   | Tu  | Feb 2  | Data wrangling and matrix algebra                    |          | 
+| 10  | Th  | Feb 4  | Reference distributions                              |          |                           
+| 11  | Tu  | Feb 9  | Statistical inference                                |          | 2 Feb 8   
+| 12  | Th  | Feb 11 | Analysis of variance                                 | 5 Feb 12 |      
+| 13  | Tu  | Feb 16 | Regression analysis                                  |          |     
+| 14  | Th  | Feb 18 | More regression analysis                             | 6 Feb 19 |                            
+| 15  | Tu  | Feb 23 | Nonparametric regression                             |          | 3 Feb 22               
+| 16  | Th  | Feb 25 | Principal components and factor analysis             | 7 Feb 26 |   
+| 17  | Tu  | Mar 2  | MANOVA, discriminant analysis                        |          |          
+| 18  | Th  | Mar 4  | Multivariate distances and cluster analysis          |          |     
+| 19  | Tu  | Mar 9  | High-resolution and high-dimensional data sets       |          |                            
+| 20  | Th  | Mar 11 | Analysis and visualization of large raster data sets | 8 Mar 12 | 4 Mar 15                                                        
 
 
 # Grading and course mechanics #
 
-Format and grading:  Lectures, four quzzes, and eight exercises.  The exercises will be worth eight points each, and the quizzes will be worth nine points each, for a total of 100 points.  Students taking GEOG 595 will be required to submit a short (3-5 page, plus figures) analysis of a "real" data set.  *All quizzes and all exercises must be completed to receive a passing grade for the course.*  The quizzes and exercises should be completed in a timely fashion, although this quarter allowances will be made.  Grading expections will be adjusted to reflect the nature of the course this year.
+Format and grading:  Lectures, four quzzes, and eight exercises.  The eight exercises will be worth eight points each, and the four quizzes will be worth nine points each, for a total of 100 points.  Students taking GEOG 595 will be required to submit a short (3-5 page, plus figures) analysis of a "real" data set.  *All quizzes and all exercises must be completed to receive a passing grade for the course.*  The quizzes and exercises should be completed in a timely fashion, although this quarter allowances will be made.  Grading expections will be adjusted to reflect the nature of the course this year.
 
 Office hours will be conducted through Zoom.
 
