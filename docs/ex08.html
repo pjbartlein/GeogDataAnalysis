@@ -13,6 +13,7 @@
 
 <title>Exercise 8</title>
 
+<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -20,34 +21,46 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -56,9 +69,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -500,12 +513,12 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #00cc00;">NOTE: This page has been revised for Spring 2020, but may undergo further edits.</span>
+<span style="color: #cc0000;">NOTE: This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span>
 </p>
 <p><strong>Geography 4/595: Geographic Data Analysis</strong><br />
-<strong>Spring 2020</strong></p>
+<strong>Winter 2021</strong></p>
 <p><strong>Exercise 8: Multivariate Analysis</strong><br />
-<strong>Finish by Thursday, June 11</strong></p>
+<strong>Finish by Friday, March 12</strong></p>
 <p><strong>1. Introduction</strong></p>
 <p>The data set used for most of this exercise consists of a subset of the variables and observations in a data set from Drew Lamb’s thesis, observed for 120 streams in northeastern Oregon. The variables are defined as follows:</p>
 <pre><code>1) Stream – stream name                            8) SmLWD – no. small large woody debris ( LWD) per mile
@@ -520,66 +533,66 @@ $(document).ready(function () {
 <p>NOTE: The variable names are the same in the two data sets, and so they both cannot be attached at the same time.</p>
 <p><strong>2. Multivariate plots</strong></p>
 <p>To start, download the .csv files to your working directory and read them into your workspace, if they’re not already there</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># read the streams file (if not already in the workspace)</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/csv/streams&quot;</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">streams &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_path)</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co"># read the transformed streams file (if not already in the workspace)</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/csv/tstreams&quot;</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">tstreams &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_path)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read the streams file (if not already in the workspace)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>csv_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Documents/geog495/data/csv/streams&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>streams <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csv_path)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># read the transformed streams file (if not already in the workspace)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>csv_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Documents/geog495/data/csv/tstreams&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>tstreams <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csv_path)</span></code></pre></div>
 <p>Get matrix scatter diagrams of the two data sets:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">plot</span>(streams[<span class="dv">3</span><span class="op">:</span><span class="dv">13</span>], <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span>.<span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">plot</span>(tstreams[<span class="dv">3</span><span class="op">:</span><span class="dv">13</span>], <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span>.<span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(streams[<span class="dv">3</span><span class="sc">:</span><span class="dv">13</span>], <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span>.<span class="dv">5</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tstreams[<span class="dv">3</span><span class="sc">:</span><span class="dv">13</span>], <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span>.<span class="dv">5</span>)</span></code></pre></div>
 <p>A few features should emerge, including the fact that for some variables, many zeros are observed (i.e. the count or frequency variables), and that some values for <code>BFWDratio</code> have evidently been estimated using drainage area. (How can you tell?) Notice that for some relationships, like that between <code>PoolDepth</code> and <code>PoolArea</code> the relationship is clearer in the transformed data set. Overall the transformed data set exhibits stronger linear relationships among variables, and so this one will be used below.</p>
 <p><strong>3. Principal Components Analysis (PCA)</strong></p>
 <p>Begin by doing a simple principal components analysis on variables 3 through 13 (i.e. just the continuous variables (columns 3 through 13), and not the factor Health). Select the variables to be analyzed, and add <code>rownames</code> to the resulting matrix.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># principal components analysis of (transformed) NE Oregon streams data</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">tstreams_matrix &lt;-<span class="st"> </span><span class="kw">data.matrix</span>(tstreams[,<span class="dv">3</span><span class="op">:</span><span class="dv">13</span>])</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co"># rownames combining stream name and U/H</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw">rownames</span>(tstreams_matrix) &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">as.character</span>(tstreams[,<span class="dv">2</span>]), <span class="kw">as.character</span>(tstreams[,<span class="dv">1</span>]))</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># principal components analysis of (transformed) NE Oregon streams data</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>tstreams_matrix <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(tstreams[,<span class="dv">3</span><span class="sc">:</span><span class="dv">13</span>])</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># rownames combining stream name and U/H</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(tstreams_matrix) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">as.character</span>(tstreams[,<span class="dv">2</span>]), <span class="fu">as.character</span>(tstreams[,<span class="dv">1</span>]))</span></code></pre></div>
 <p>Use the <code>psych</code> package PCA function (<code>principal()</code>) to get the principal components.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(psych)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">tstreams_pca &lt;-<span class="st"> </span><span class="kw">principal</span>(tstreams_matrix, <span class="dt">nfactors=</span><span class="dv">4</span>, <span class="dt">rotate=</span><span class="st">&quot;none&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>tstreams_pca <span class="ot">&lt;-</span> <span class="fu">principal</span>(tstreams_matrix, <span class="at">nfactors=</span><span class="dv">4</span>, <span class="at">rotate=</span><span class="st">&quot;none&quot;</span>)</span></code></pre></div>
 <p>Now take a look at the results:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># display the results</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">tstreams_pca</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw">summary</span>(tstreams_pca)</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw">VSS.scree</span>(tstreams_matrix)</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="kw">print</span>(<span class="kw">loadings</span>(tstreams_pca),<span class="dt">cutoff=</span><span class="fl">0.0</span>)</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="kw">biplot</span>(tstreams_pca<span class="op">$</span>scores[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="kw">loadings</span>(tstreams_pca)[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>],</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">  <span class="dt">main=</span><span class="st">&quot;PCA Biplot -- 2 Components&quot;</span>, <span class="dt">cex=</span><span class="fl">0.5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># display the results</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>tstreams_pca</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tstreams_pca)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">VSS.scree</span>(tstreams_matrix)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">loadings</span>(tstreams_pca),<span class="at">cutoff=</span><span class="fl">0.0</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">biplot</span>(tstreams_pca<span class="sc">$</span>scores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="fu">loadings</span>(tstreams_pca)[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>],</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">main=</span><span class="st">&quot;PCA Biplot -- 2 Components&quot;</span>, <span class="at">cex=</span><span class="fl">0.5</span>)</span></code></pre></div>
 <p>Typing the name of the resulting PCA object (<code>tstreams_pca</code>) along with the application of <code>summary()</code> function produces information on the relative importance of the principal components. Important components are generally regarded as those with variances (eigenvalues) greater than 1.0. Printing the results of the application of the <code>loadings()</code> function produces a table that contains the correlations between the original variables and the new components, while the <code>screeplot()</code> function gives a graphic picture of the importance of the first few components.</p>
 <p>The <code>biplot()</code> function shows both the observations (labeled by row number here) and the variables (represented by vectors) on the same display (i.e., a biplot).</p>
 <p>The components of the biplot are generated this way: The “component scores” or the values of the first two new components are first plotted as a labeled scatter diagram, where the labels above are the rownames. (Other things could be plotted, like the observation number.) Here is how the biplot could be generated manually:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># biplot -- observations</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">plot</span>(tstreams_pca<span class="op">$</span>scores[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">text</span>(tstreams_pca<span class="op">$</span>scores[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">labels=</span><span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(tstreams[,<span class="dv">1</span>])))</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># biplot -- observations</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tstreams_pca<span class="sc">$</span>scores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(tstreams_pca<span class="sc">$</span>scores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">labels=</span><span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(tstreams[,<span class="dv">1</span>])))</span></code></pre></div>
 <p>Or another way:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># biplot -- observations</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">plot</span>(tstreams_pca<span class="op">$</span>scores[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">cex =</span> <span class="fl">0.2</span>)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">text</span>(tstreams_pca<span class="op">$</span>scores[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">labels =</span> <span class="kw">rownames</span>(tstreams_matrix), <span class="dt">cex =</span> <span class="fl">0.5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># biplot -- observations</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tstreams_pca<span class="sc">$</span>scores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">cex =</span> <span class="fl">0.2</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(tstreams_pca<span class="sc">$</span>scores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">labels =</span> <span class="fu">rownames</span>(tstreams_matrix), <span class="at">cex =</span> <span class="fl">0.5</span>)</span></code></pre></div>
 <p>Then the vectors are drawn by overlaying a scatter plot of the loadings of the first two components:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># biplot -- variables</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">loadings</span>(tstreams_pca)[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw">text</span>(<span class="kw">loadings</span>(tstreams_pca)[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">labels=</span><span class="kw">colnames</span>(tstreams_matrix))</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># biplot -- variables</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">loadings</span>(tstreams_pca)[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fu">loadings</span>(tstreams_pca)[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">labels=</span><span class="fu">colnames</span>(tstreams_matrix))</span></code></pre></div>
 <p>The network plot provided by the <code>qgraph</code> package can also be used to visualize the relationship between the components and the original variables. First, we’ll need a function to implement the two-stage construction of such a plot.</p>
 <p>Load the <code>qgraph</code> library:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">library</span>(qgraph)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(qgraph)</span></code></pre></div>
 <p>Here is the function:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">qgraph_loadings_plot &lt;-<span class="st"> </span><span class="cf">function</span>(loadings_in, title) {</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">  ld &lt;-<span class="st"> </span><span class="kw">loadings</span>(loadings_in)</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">  qg_pca &lt;-<span class="st"> </span><span class="kw">qgraph</span>(ld, <span class="dt">title=</span>title, </a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">                   <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>, <span class="dt">vTrans=</span><span class="dv">256</span>)</a>
-<a class="sourceLine" id="cb11-5" data-line-number="5">  <span class="kw">qgraph</span>(qg_pca, <span class="dt">title=</span>title,</a>
-<a class="sourceLine" id="cb11-6" data-line-number="6">         <span class="dt">layout =</span> <span class="st">&quot;spring&quot;</span>, </a>
-<a class="sourceLine" id="cb11-7" data-line-number="7">         <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb11-8" data-line-number="8">         <span class="dt">node.height=</span><span class="fl">0.5</span>, <span class="dt">node.width=</span><span class="fl">0.5</span>, <span class="dt">vTrans=</span><span class="dv">256</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span>, <span class="dt">label.cex=</span><span class="fl">1.0</span>,</a>
-<a class="sourceLine" id="cb11-9" data-line-number="9">         <span class="dt">width=</span><span class="dv">7</span>, <span class="dt">height=</span><span class="dv">5</span>, <span class="dt">normalize=</span><span class="ot">TRUE</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span>)</a>
-<a class="sourceLine" id="cb11-10" data-line-number="10">}</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>qgraph_loadings_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(loadings_in, title) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  ld <span class="ot">&lt;-</span> <span class="fu">loadings</span>(loadings_in)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  qg_pca <span class="ot">&lt;-</span> <span class="fu">qgraph</span>(ld, <span class="at">title=</span>title, </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>, <span class="at">vTrans=</span><span class="dv">256</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">qgraph</span>(qg_pca, <span class="at">title=</span>title,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">layout =</span> <span class="st">&quot;spring&quot;</span>, </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">node.height=</span><span class="fl">0.5</span>, <span class="at">node.width=</span><span class="fl">0.5</span>, <span class="at">vTrans=</span><span class="dv">256</span>, <span class="at">edge.width=</span><span class="fl">0.75</span>, <span class="at">label.cex=</span><span class="fl">1.0</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">width=</span><span class="dv">7</span>, <span class="at">height=</span><span class="dv">5</span>, <span class="at">normalize=</span><span class="cn">TRUE</span>, <span class="at">edge.width=</span><span class="fl">0.75</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>Copy the code, and either paste it into a script file and the “source” (i.e. run) it as usual, by selecting it and clicking on Run, or simply paste into the Console window at the command line.</p>
-<p>The function has two arguments: 1) the object created by <code>principal()</code> (e.g. <code>tstreams_pca</code>), and 2) a title. Get the plots:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">qgraph_loadings_plot</span>(tstreams_pca, <span class="st">&quot;PCA tstreams, unrotated components&quot;</span>)</a></code></pre></div>
-<p>The <code>qgraph()</code> function generates a plain plot of the loadings, where the component (loadings) are represented by the numbered circles, the variables by squares labeled by abbreviations of the variable names, and the strength and sign of the loadings by colored links (magenta = negative; green = positive; and with the width of the arrow scaled to represent the magnitude of the loadings). The first plot simply arranges the components and variables around an ellipse. A more useful version of the plot can be generated using the <code>layout=&quot;spring&quot;</code> argument, which forces the line segments representing the loadings to be scaled inversely proportionally to the magnitude of he loadings (shorter segments represent higher loadings).</p>
+<p>The function has two arguments: 1) the object created by <code>principal()</code> (e.g. <code>tstreams_pca</code>), and 2) a title. Get the plots:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qgraph_loadings_plot</span>(tstreams_pca, <span class="st">&quot;PCA tstreams, unrotated components&quot;</span>)</span></code></pre></div>
+<p>The <code>qgraph()</code> function generates a plain plot of the loadings, where the component (loadings) are represented by the numbered circles, the variables by squares labeled by abbreviations of the variable names, and the strength and sign of the loadings by colored links (magenta = negative; green = positive; and with the width of the arrow scaled to represent the magnitude of the loadings). The first plot simply arranges the components and variables around an ellipse. A more useful version of the plot can be generated using the <code>layout="spring"</code> argument, which forces the line segments representing the loadings to be scaled inversely proportionally to the magnitude of he loadings (shorter segments represent higher loadings).</p>
 <blockquote>
 <p>Q1: How many important components are there? (See the screeplot.) Is there a natural breakpoint between the important and less-important components? Are there some variables on the <code>qgraph()</code> plot that are related only to a single component.</p>
 </blockquote>
@@ -588,28 +601,28 @@ $(document).ready(function () {
 </blockquote>
 <p><br> <strong>4. Simple Factor Analysis</strong></p>
 <p>Next, do a simple (unrotated) factor analysis of the same variables:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># factor analysis:  extract 4 factors, no rotation</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">tstreams_fa1 &lt;-<span class="st"> </span><span class="kw">factanal</span>(tstreams_matrix, <span class="dt">factors=</span><span class="dv">4</span>, <span class="dt">rotation=</span><span class="st">&quot;none&quot;</span>,</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">  <span class="dt">scores=</span><span class="st">&quot;regression&quot;</span>)</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">tstreams_fa1 <span class="co"># list the results</span></a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="kw">print</span>(<span class="kw">loadings</span>(tstreams_fa1),<span class="dt">cutoff=</span><span class="fl">0.7</span>)</a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="kw">biplot</span>(tstreams_fa1<span class="op">$</span>scores[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="kw">loadings</span>(tstreams_fa1)[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>],</a>
-<a class="sourceLine" id="cb13-7" data-line-number="7">  <span class="dt">main=</span><span class="st">&quot;PCA/Factor Analysis Biplot -- 4 Components&quot;</span>, <span class="dt">cex=</span><span class="fl">0.5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># factor analysis:  extract 4 factors, no rotation</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>tstreams_fa1 <span class="ot">&lt;-</span> <span class="fu">factanal</span>(tstreams_matrix, <span class="at">factors=</span><span class="dv">4</span>, <span class="at">rotation=</span><span class="st">&quot;none&quot;</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">scores=</span><span class="st">&quot;regression&quot;</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>tstreams_fa1 <span class="co"># list the results</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">loadings</span>(tstreams_fa1),<span class="at">cutoff=</span><span class="fl">0.7</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">biplot</span>(tstreams_fa1<span class="sc">$</span>scores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="fu">loadings</span>(tstreams_fa1)[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>],</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">main=</span><span class="st">&quot;PCA/Factor Analysis Biplot -- 4 Components&quot;</span>, <span class="at">cex=</span><span class="fl">0.5</span>)</span></code></pre></div>
 <p>And here’s the <code>qgraph</code> plot:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">qgraph_loadings_plot</span>(tstreams_fa1, <span class="st">&quot;Factor Analysis tstreams, unrotated components&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qgraph_loadings_plot</span>(tstreams_fa1, <span class="st">&quot;Factor Analysis tstreams, unrotated components&quot;</span>)</span></code></pre></div>
 <blockquote>
 <p>Q3: Compare the results of the factor analysis to the principal components analysis. What looks similar, what looks different? Hint: Focus on the the two biplots, and the relative position of the vectors and points as opposed to their absolute positions on the diagrams.</p>
 </blockquote>
 <p><br> <strong>5. Rotated Factors</strong></p>
 <p>Next, we’ll rotate the factors to try to make them more interpretable. It looks like the fourth component is not really important, so drop it.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># factor analysis with rotation</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">tstreams_fa2 &lt;-<span class="st"> </span><span class="kw">factanal</span>(tstreams_matrix, <span class="dt">factors=</span><span class="dv">3</span>, <span class="dt">rotation=</span><span class="st">&quot;varimax&quot;</span>,</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">  <span class="dt">scores=</span><span class="st">&quot;regression&quot;</span>)</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4">tstreams_fa2</a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="kw">print</span>(<span class="kw">loadings</span>(tstreams_fa2),<span class="dt">cutoff=</span><span class="fl">0.7</span>)</a>
-<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="kw">biplot</span>(tstreams_fa2<span class="op">$</span>scores[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="kw">loadings</span>(tstreams_fa2)[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>],</a>
-<a class="sourceLine" id="cb15-7" data-line-number="7">  <span class="dt">main=</span><span class="st">&quot;PCA/Factor Analysis Biplot -- 3 Rotated Components&quot;</span>, <span class="dt">cex=</span><span class="fl">0.5</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">qgraph_loadings_plot</span>(tstreams_fa2, <span class="st">&quot;Factor Analysis tstreams, 3 rotated components&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># factor analysis with rotation</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>tstreams_fa2 <span class="ot">&lt;-</span> <span class="fu">factanal</span>(tstreams_matrix, <span class="at">factors=</span><span class="dv">3</span>, <span class="at">rotation=</span><span class="st">&quot;varimax&quot;</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">scores=</span><span class="st">&quot;regression&quot;</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>tstreams_fa2</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">loadings</span>(tstreams_fa2),<span class="at">cutoff=</span><span class="fl">0.7</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">biplot</span>(tstreams_fa2<span class="sc">$</span>scores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="fu">loadings</span>(tstreams_fa2)[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>],</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">main=</span><span class="st">&quot;PCA/Factor Analysis Biplot -- 3 Rotated Components&quot;</span>, <span class="at">cex=</span><span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qgraph_loadings_plot</span>(tstreams_fa2, <span class="st">&quot;Factor Analysis tstreams, 3 rotated components&quot;</span>)</span></code></pre></div>
 <blockquote>
 <p>Q4: How do the loadings, biplot and qgraph change? Which result, the unrotated or the rotated factors seems more interpretable? Hint: a more complicated analysis might not be better, but then again, it might be.</p>
 </blockquote>
@@ -617,60 +630,60 @@ $(document).ready(function () {
 <p>Q5: What are the basic “dimensions” of the data? From the perspective of somebody administering a field measurement and monitoring program, are there any redundancies among the variables that might be eliminated?</p>
 </blockquote>
 <p><br> <strong>6. Multivariate Analysis of Variance (MANOVA)</strong></p>
-<p>The status of the streams were described by the land managers in terms of their perceived “ecological health” this is coded here by the variable <code>Health</code>. A multivariate analysis of variance is aimed at answering the question “are the healthy (<code>Health=H</code>) and”less-healthy&quot; (<code>Health=U</code>) groups of reaches similar in their fluvial geomorphic characteristics?</p>
+<p>The status of the streams were described by the land managers in terms of their perceived “ecological health” this is coded here by the variable <code>Health</code>. A multivariate analysis of variance is aimed at answering the question “are the healthy (<code>Health=H</code>) and”less-healthy" (<code>Health=U</code>) groups of reaches similar in their fluvial geomorphic characteristics?</p>
 <p>Take a look at some plots first, to get a subjective idea of how the groups of observations differ (<code>histogram()</code> is a <code>lattice</code> function, so load the <code>lattice</code> library first). Also attach <code>streams</code> (up to this point variables have been implicitly referred to as columns in data matrices).</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">library</span>(lattice)</a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co"># attach streams</span></a>
-<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="kw">attach</span>(streams)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># attach streams</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(streams)</span></code></pre></div>
 <p>Here’s set of histograms for <code>PoolDepth</code>, conditioned on <code>Health</code>.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># plot distributions by groups</span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">histogram</span>(<span class="op">~</span><span class="st"> </span>PoolDepth <span class="op">|</span><span class="st"> </span>Health, <span class="dt">nint=</span><span class="dv">20</span>, <span class="dt">layout=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="dt">aspect=</span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot distributions by groups</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">histogram</span>(<span class="sc">~</span> PoolDepth <span class="sc">|</span> Health, <span class="at">nint=</span><span class="dv">20</span>, <span class="at">layout=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">aspect=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>)</span></code></pre></div>
 <p>The <code>nint</code>, <code>layout</code> and <code>aspect</code> function arguments arrange a couple of nice histograms, plotted one above the other in order to make comparison of the groups easier than if the histograms were plotted side-by-side. Look at a number of variables this way to get an idea of what is going on in the data.</p>
 <p>Next, take a look at a univariate analyses of variance (ANOVA), to look at the significance of the differences in means between groups. For one of the variables (e.g. PoolDepth):</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># one-way analysis of variance</span></a>
-<a class="sourceLine" id="cb19-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="co"># test for homogeneity of group variances</span></a>
-<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="kw">tapply</span>(PoolDepth, Health, var)</a>
-<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="kw">bartlett.test</span>(PoolDepth <span class="op">~</span><span class="st"> </span>Health)</a>
-<a class="sourceLine" id="cb19-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb19-7" data-line-number="7"><span class="co"># analysis of variance</span></a>
-<a class="sourceLine" id="cb19-8" data-line-number="8">streams_aov1 &lt;-<span class="st"> </span><span class="kw">aov</span>(PoolDepth <span class="op">~</span><span class="st"> </span>Health)</a>
-<a class="sourceLine" id="cb19-9" data-line-number="9"><span class="kw">summary</span>(streams_aov1)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># one-way analysis of variance</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># test for homogeneity of group variances</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(PoolDepth, Health, var)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">bartlett.test</span>(PoolDepth <span class="sc">~</span> Health)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># analysis of variance</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>streams_aov1 <span class="ot">&lt;-</span> <span class="fu">aov</span>(PoolDepth <span class="sc">~</span> Health)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(streams_aov1)</span></code></pre></div>
 <p>(Here’s a link to the guide for interpreting <em>p</em>-values. <a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/interpstats.pdf">[interpstats.pdf]</a>)</p>
 <p>The test for homogeneity of group variances is done first, because if the variances are significantly different (i.e. the <em>p</em>-value for the Bartlett test is close to zero), then it really doesn’t make sense to ask whether the means are different. In the analysis of variance, large <em>F</em> statistics (and consequently small <em>p</em>-values) signal significant differences between (or among) groups.</p>
 <p>You could examine each variable in the data set this way, and it’s likely that some variables will appear to have means that are significantly different between groups, others that aren’t, and still others that may be borderline, and so it may be difficult to get and overall sense of whether the two groups of streams are different. Also, it’s likely that if enough pairwise comparisons are done, some “significant” results (1 in 20) will turn up even if the groups of observations have identical means.</p>
 <p>Multivariate analysis of variance (MANOVA) provides a single-number test statistic that can be used to answer the question “overall, are the group means significantly different?”</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># MANOVA</span></a>
-<a class="sourceLine" id="cb20-2" data-line-number="2">Y &lt;-<span class="st"> </span><span class="kw">cbind</span>(DA, ReachLen, Pools, DeepPools, LargePools, SmLWD, LrgLWD,</a>
-<a class="sourceLine" id="cb20-3" data-line-number="3">  PoolDepth, PoolArea, PRratio, BFWDratio)</a>
-<a class="sourceLine" id="cb20-4" data-line-number="4">streams_mva1 &lt;-<span class="st"> </span><span class="kw">manova</span>(Y <span class="op">~</span><span class="st"> </span>Health)</a>
-<a class="sourceLine" id="cb20-5" data-line-number="5"><span class="kw">summary.aov</span>(streams_mva1)</a>
-<a class="sourceLine" id="cb20-6" data-line-number="6"><span class="kw">summary</span>(streams_mva1, <span class="dt">test=</span><span class="st">&quot;Wilks&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># MANOVA</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">cbind</span>(DA, ReachLen, Pools, DeepPools, LargePools, SmLWD, LrgLWD,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  PoolDepth, PoolArea, PRratio, BFWDratio)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>streams_mva1 <span class="ot">&lt;-</span> <span class="fu">manova</span>(Y <span class="sc">~</span> Health)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary.aov</span>(streams_mva1)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(streams_mva1, <span class="at">test=</span><span class="st">&quot;Wilks&quot;</span>)</span></code></pre></div>
 <p>Note the creation of a new temporary variable (<code>Y</code>) that makes it efficient to apply the <code>manova()</code>function. Wilks lambda statistic can be interpreted as a multivariate generalization of the univariate <em>F</em> statistic. The <code>summary.aov()</code> function creates most of the output – individual ANOVAs of for the variables in the data set. The <code>summary()</code> function applied to a <code>manova()</code> object produces the Wilk’s lambda statistic.</p>
 <blockquote>
 <p>Q6: Do the groups of observations differ significantly?</p>
 </blockquote>
 <p><br> <strong>7. Discriminant Analysis</strong></p>
-<p>A discriminant analysis focuses on the issue of how two (or more) groups of observations differ (and also includes the sort of information provided by an analysis of variance on whether the groups are different). Whereas MANOVA answers the question “are the groups different?” discriminant analysis answers the question &quot;how are they different.)</p>
+<p>A discriminant analysis focuses on the issue of how two (or more) groups of observations differ (and also includes the sort of information provided by an analysis of variance on whether the groups are different). Whereas MANOVA answers the question “are the groups different?” discriminant analysis answers the question "how are they different.)</p>
 <p>Do a simple discriminant analysis on these data, using the <code>lda()</code> function from the Venebles and Ripley MASS library:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># linear discriminant analysis</span></a>
-<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw">library</span>(MASS)</a>
-<a class="sourceLine" id="cb21-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb21-4" data-line-number="4">health_lda1 &lt;-<span class="st"> </span><span class="kw">lda</span>(Health <span class="op">~</span><span class="st"> </span>DA <span class="op">+</span><span class="st"> </span>ReachLen <span class="op">+</span><span class="st"> </span>Pools <span class="op">+</span><span class="st"> </span>DeepPools <span class="op">+</span><span class="st"> </span>LargePools</a>
-<a class="sourceLine" id="cb21-5" data-line-number="5">    <span class="op">+</span><span class="st"> </span>SmLWD <span class="op">+</span><span class="st"> </span>LrgLWD <span class="op">+</span><span class="st"> </span>PoolDepth <span class="op">+</span><span class="st"> </span>PoolArea <span class="op">+</span><span class="st"> </span>PRratio <span class="op">+</span><span class="st"> </span>BFWDratio)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># linear discriminant analysis</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>health_lda1 <span class="ot">&lt;-</span> <span class="fu">lda</span>(Health <span class="sc">~</span> DA <span class="sc">+</span> ReachLen <span class="sc">+</span> Pools <span class="sc">+</span> DeepPools <span class="sc">+</span> LargePools</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="sc">+</span> SmLWD <span class="sc">+</span> LrgLWD <span class="sc">+</span> PoolDepth <span class="sc">+</span> PoolArea <span class="sc">+</span> PRratio <span class="sc">+</span> BFWDratio)</span></code></pre></div>
 <p>Note the formula, Health depends on the other variables. List and plot the results.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">health_lda1</a>
-<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="kw">plot</span>(health_lda1)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>health_lda1</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(health_lda1)</span></code></pre></div>
 <p>Because there are only two groups of observations here, there will be only one discriminant function.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">health_dscore &lt;-<span class="st"> </span><span class="kw">predict</span>(health_lda1, <span class="dt">dimen=</span><span class="dv">1</span>)<span class="op">$</span>x</a>
-<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="kw">boxplot</span>(health_dscore <span class="op">~</span><span class="st"> </span>Health)</a>
-<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="kw">cor</span>(tstreams[<span class="dv">3</span><span class="op">:</span><span class="dv">13</span>],health_dscore)</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>health_dscore <span class="ot">&lt;-</span> <span class="fu">predict</span>(health_lda1, <span class="at">dimen=</span><span class="dv">1</span>)<span class="sc">$</span>x</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(health_dscore <span class="sc">~</span> Health)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(tstreams[<span class="dv">3</span><span class="sc">:</span><span class="dv">13</span>],health_dscore)</span></code></pre></div>
 <p>The <code>predict(...)$x</code> function gets the “discriminant scores” (the <code>x's</code>) which are assigned to the variable <code>health_dscore</code>, the <code>boxplot()</code> function plots them by group (and should show clear variations of the discriminant scores among groups if the groups are distinctly different), while the <code>cor()</code> function gets the correlations between the new “discrimimant function” and the original variables (called “canonical coefficients”), which may be interpreted like PCA loadings. These values show which variables are most closely correlated with the discriminant scores, and consequently which variables best illustrate the differences between or among the groups.</p>
 <p>Examine the ability of the new discriminant function to correctly classify the healthiness of the stream reaches.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">health_class &lt;-<span class="st"> </span><span class="kw">predict</span>(health_lda1, <span class="dt">dimen=</span><span class="dv">1</span>)<span class="op">$</span>class</a>
-<a class="sourceLine" id="cb24-2" data-line-number="2">class_table &lt;-<span class="st"> </span><span class="kw">table</span>(Health, health_class)</a>
-<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="kw">mosaicplot</span>(class_table, <span class="dt">color=</span>T)</a>
-<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="kw">detach</span>(streams)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>health_class <span class="ot">&lt;-</span> <span class="fu">predict</span>(health_lda1, <span class="at">dimen=</span><span class="dv">1</span>)<span class="sc">$</span>class</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>class_table <span class="ot">&lt;-</span> <span class="fu">table</span>(Health, health_class)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaicplot</span>(class_table, <span class="at">color=</span>T)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(streams)</span></code></pre></div>
 <p>The <code>predict(...)$class</code> function gets the group that the new discriminant function would assign each original observation to based on the values of the individual variables, the <code>table()</code> function provides a cross tabulation of the observed healthiness of the streams (<code>Health</code>), and that predicted by the discriminant function (<code>health_class</code>). The <code>mosaic()</code> function plots the table.</p>
 <blockquote>
 <p>Q7: How do the two groups of observations differ? Would knowing the values of a few variables allow you to correctly classify the healthiness of streams for which stream health has yet to be measured in the field?</p>
@@ -679,55 +692,55 @@ $(document).ready(function () {
 <p><strong>8. Cluster analysis</strong></p>
 <p>Attempt to define the climate regions of Oregon (as expressed in the climate-station data in <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/orstationc.csv">[orstationc.csv]</a> via an “agglomerative-hierarchical” cluster analysis. In such an analysis, individual objects (observations) are combined according to their (dis)similarity, with the two most similar objects being combined first (to create a new composite object), then the next most similar objects, and so on until a single object is defined. The sequence of combinations is illustrated using a “dendrogram” (cluster tree), and this can be examined to determine the number of clusters. The function cutree determines the cluster membership of each observation, which can be listed or plotted.</p>
 <p>Begin with a map, labeled by station name (see Exercise 7 for the shapefile components, or get them from the <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/index.html">[data sets and shapefiles]</a> web page.) The shapefile may also already be in your workspace.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># hierarchical clustering of Oregon climate station data</span></a>
-<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw">library</span>(sf)</a>
-<a class="sourceLine" id="cb25-3" data-line-number="3"><span class="kw">library</span>(lattice)</a>
-<a class="sourceLine" id="cb25-4" data-line-number="4"><span class="kw">attach</span>(orstationc)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># hierarchical clustering of Oregon climate station data</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(orstationc)</span></code></pre></div>
 <p>Plot the station abbreviations.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># plot station abbreviations</span></a>
-<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(orotl_sf), <span class="dt">axes=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="kw">text</span>(lon, lat, <span class="dt">labels=</span>station, <span class="dt">cex=</span><span class="fl">0.7</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="kw">title</span>(<span class="st">&quot;Oregon Climate Stations&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot station abbreviations</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(orotl_sf), <span class="at">axes=</span><span class="cn">TRUE</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(lon, lat, <span class="at">labels=</span>station, <span class="at">cex=</span><span class="fl">0.7</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">&quot;Oregon Climate Stations&quot;</span>)</span></code></pre></div>
 <p>Calculate a dissimilarity (distance) matrix:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="co"># get dissimilarities (distances) and cluster</span></a>
-<a class="sourceLine" id="cb27-2" data-line-number="2">X &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(orstationc[,<span class="dv">5</span><span class="op">:</span><span class="dv">10</span>])</a>
-<a class="sourceLine" id="cb27-3" data-line-number="3">X_dist &lt;-<span class="st"> </span><span class="kw">dist</span>(<span class="kw">scale</span>(X))</a>
-<a class="sourceLine" id="cb27-4" data-line-number="4">grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">obs1 =</span> <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">92</span>), <span class="dt">obs2 =</span> <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">92</span>))</a>
-<a class="sourceLine" id="cb27-5" data-line-number="5"><span class="kw">levelplot</span>(<span class="kw">as.matrix</span>(X_dist)<span class="op">/</span><span class="kw">max</span>(X_dist) <span class="op">~</span><span class="st"> </span>obs1<span class="op">*</span>obs2, <span class="dt">data=</span>grid, </a>
-<a class="sourceLine" id="cb27-6" data-line-number="6">    <span class="dt">col.regions =</span> <span class="kw">gray</span>(<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">by=</span><span class="fl">0.0625</span>)), <span class="dt">xlab=</span><span class="st">&quot;observation&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;observation&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get dissimilarities (distances) and cluster</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(orstationc[,<span class="dv">5</span><span class="sc">:</span><span class="dv">10</span>])</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>X_dist <span class="ot">&lt;-</span> <span class="fu">dist</span>(<span class="fu">scale</span>(X))</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">obs1 =</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">92</span>), <span class="at">obs2 =</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">92</span>))</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">levelplot</span>(<span class="fu">as.matrix</span>(X_dist)<span class="sc">/</span><span class="fu">max</span>(X_dist) <span class="sc">~</span> obs1<span class="sc">*</span>obs2, <span class="at">data=</span>grid, </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.regions =</span> <span class="fu">gray</span>(<span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">by=</span><span class="fl">0.0625</span>)), <span class="at">xlab=</span><span class="st">&quot;observation&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;observation&quot;</span>)</span></code></pre></div>
 <p>For convenience, a matrix, <code>X</code>, is created to omit the variables we don’t want to include in the clustering (i.e. the non-climatic information). The <code>levelplot()</code> function plots the dissimilarity matrix that the cluster analysis works with. Now do the cluster analysis:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># cluster analysis</span></a>
-<a class="sourceLine" id="cb28-2" data-line-number="2">X_clusters &lt;-<span class="st"> </span><span class="kw">hclust</span>(X_dist, <span class="dt">method =</span> <span class="st">&quot;ward.D2&quot;</span>)</a>
-<a class="sourceLine" id="cb28-3" data-line-number="3"><span class="kw">plot</span>(X_clusters, <span class="dt">labels=</span>station, <span class="dt">cex=</span><span class="fl">0.5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cluster analysis</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>X_clusters <span class="ot">&lt;-</span> <span class="fu">hclust</span>(X_dist, <span class="at">method =</span> <span class="st">&quot;ward.D2&quot;</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X_clusters, <span class="at">labels=</span>station, <span class="at">cex=</span><span class="fl">0.5</span>)</span></code></pre></div>
 <p>The <code>plot()</code> function (or <code>pltclust()</code> function) plots the dendrogram.</p>
 <p>The dendrogram can be inspected to get an idea of how many distinct clusters there are (and it can also identify unusual points–look for Crater Lake <code>CLK</code>). As a first guess, let’s say there were three distinct clusters evident in the dendrogram.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="co"># cut dendrogram and plot points in each cluster (chunk 1)</span></a>
-<a class="sourceLine" id="cb29-2" data-line-number="2">nclust &lt;-<span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb29-3" data-line-number="3">clusternum &lt;-<span class="st"> </span><span class="kw">cutree</span>(X_clusters, <span class="dt">k=</span>nclust)</a>
-<a class="sourceLine" id="cb29-4" data-line-number="4"><span class="kw">head</span>(<span class="kw">cbind</span>(station, clusternum, <span class="kw">as.character</span>(Name)))</a>
-<a class="sourceLine" id="cb29-5" data-line-number="5"><span class="kw">tail</span>(<span class="kw">cbind</span>(station, clusternum, <span class="kw">as.character</span>(Name)))</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cut dendrogram and plot points in each cluster (chunk 1)</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>nclust <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>clusternum <span class="ot">&lt;-</span> <span class="fu">cutree</span>(X_clusters, <span class="at">k=</span>nclust)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">cbind</span>(station, clusternum, <span class="fu">as.character</span>(Name)))</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(<span class="fu">cbind</span>(station, clusternum, <span class="fu">as.character</span>(Name)))</span></code></pre></div>
 <p>Plot the cluster membership.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># plot cluster membership of each station</span></a>
-<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(orotl_sf), <span class="dt">axes=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb30-3" data-line-number="3"><span class="kw">text</span>(lon, lat, <span class="dt">labels=</span>clusternum, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb30-4" data-line-number="4"><span class="kw">title</span>(<span class="st">&quot;Oregon Climate Stations -- 3 clusters&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot cluster membership of each station</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(orotl_sf), <span class="at">axes=</span><span class="cn">TRUE</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(lon, lat, <span class="at">labels=</span>clusternum, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">&quot;Oregon Climate Stations -- 3 clusters&quot;</span>)</span></code></pre></div>
 <p>The <code>cutree()</code> function determines the cluster membership of each observation, and a map of the cluster membership of each station is generated. A list of the station id’s, the cluster number and name of the stations is provided by the <code>print()</code> function</p>
 <p>Just looking at the map suggests that three clusters might do an ok job of assigning the stations to groups that have similar climates, but this should be checked.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># examine clusters -- simple plots (chunk 2)</span></a>
-<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="kw">tapply</span>(tjan, clusternum, mean)</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3"><span class="kw">histogram</span>(<span class="op">~</span><span class="st"> </span>tjan <span class="op">|</span><span class="st"> </span>clusternum, <span class="dt">nint=</span><span class="dv">20</span>, <span class="dt">layout=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># examine clusters -- simple plots (chunk 2)</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(tjan, clusternum, mean)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">histogram</span>(<span class="sc">~</span> tjan <span class="sc">|</span> clusternum, <span class="at">nint=</span><span class="dv">20</span>, <span class="at">layout=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span></code></pre></div>
 <p>Note how many of the histograms seem multimodal–this is a clear sign of inhomogeneity of the clusters. Let’s see how the clusters differ.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co"># discriminant analysis (chunk 3)</span></a>
-<a class="sourceLine" id="cb32-2" data-line-number="2"><span class="kw">library</span>(MASS)</a>
-<a class="sourceLine" id="cb32-3" data-line-number="3">cluster_lda1 &lt;-<span class="st"> </span><span class="kw">lda</span>(clusternum <span class="op">~</span><span class="st"> </span>tjan <span class="op">+</span><span class="st"> </span>tjul <span class="op">+</span><span class="st"> </span>tann <span class="op">+</span><span class="st"> </span>pjan <span class="op">+</span><span class="st"> </span>pjul <span class="op">+</span><span class="st"> </span>pann)</a>
-<a class="sourceLine" id="cb32-4" data-line-number="4">cluster_lda1</a>
-<a class="sourceLine" id="cb32-5" data-line-number="5"><span class="kw">plot</span>(cluster_lda1)</a>
-<a class="sourceLine" id="cb32-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb32-7" data-line-number="7">cluster_dscore &lt;-<span class="st"> </span><span class="kw">predict</span>(cluster_lda1, <span class="dt">dimen=</span>nclust)<span class="op">$</span>x</a>
-<a class="sourceLine" id="cb32-8" data-line-number="8"><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(nclust<span class="dv">-1</span>)) {</a>
-<a class="sourceLine" id="cb32-9" data-line-number="9">  <span class="kw">boxplot</span>(cluster_dscore[,j] <span class="op">~</span><span class="st"> </span>clusternum, <span class="dt">xlab=</span><span class="kw">paste</span>(<span class="st">&quot;LD&quot;</span>, <span class="kw">as.character</span>(j), <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb32-10" data-line-number="10">  }</a>
-<a class="sourceLine" id="cb32-11" data-line-number="11"><span class="kw">cor</span>(orstationc[<span class="dv">5</span><span class="op">:</span><span class="dv">10</span>],cluster_dscore)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># discriminant analysis (chunk 3)</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>cluster_lda1 <span class="ot">&lt;-</span> <span class="fu">lda</span>(clusternum <span class="sc">~</span> tjan <span class="sc">+</span> tjul <span class="sc">+</span> tann <span class="sc">+</span> pjan <span class="sc">+</span> pjul <span class="sc">+</span> pann)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>cluster_lda1</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cluster_lda1)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>cluster_dscore <span class="ot">&lt;-</span> <span class="fu">predict</span>(cluster_lda1, <span class="at">dimen=</span>nclust)<span class="sc">$</span>x</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(nclust<span class="dv">-1</span>)) {</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">boxplot</span>(cluster_dscore[,j] <span class="sc">~</span> clusternum, <span class="at">xlab=</span><span class="fu">paste</span>(<span class="st">&quot;LD&quot;</span>, <span class="fu">as.character</span>(j), <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(orstationc[<span class="dv">5</span><span class="sc">:</span><span class="dv">10</span>],cluster_dscore)</span></code></pre></div>
 <p>The discriminant analysis here is used to answer the question “how do the clusters of stations differ climatically?” In this case, it looks like <code>pann</code> and <code>tann</code> are the variables most closely correlated with each discriminant function, and because each of these variables are more-or-less averages of the seasonal extreme variables, that might explain why the clusters seem inhomogeneous.</p>
 <p>The analysis can be repeated, extracting different numbers of clusters.</p>
 <blockquote>
@@ -744,7 +757,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

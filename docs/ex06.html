@@ -13,6 +13,7 @@
 
 <title>Exercise 6</title>
 
+<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -20,34 +21,46 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -56,9 +69,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -500,12 +513,12 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #00cc00;">NOTE: This page has been revised for Spring 2020, but may undergo further edits.</span>
+<span style="color: #cc0000;">NOTE: This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span>
 </p>
 <p><strong>Geography 4/595: Geographic Data Analysis</strong><br />
-<strong>Spring 2020</strong></p>
+<strong>Winter 2021</strong></p>
 <p><strong>Exercise 6: Reference Distributions and Significance Testing (Confidence Intervals, t-tests, and Analysis of Variance)</strong><br />
-<strong>Finish by Friday May 15</strong></p>
+<strong>Finish by Friday February 19</strong></p>
 <p><strong>1. Introduction</strong></p>
 <p>The objective of this exercise is to use R to make some statistical inferences about the significance of particular data values, statistics derived from data, or of the observed differences between the means of groups of observations.</p>
 <p><strong>2. Confidence Interval for the Mean</strong></p>
@@ -520,46 +533,46 @@ $(document).ready(function () {
 </blockquote>
 <p><br> How unusual is the present-day value of δ<sup>18</sup>O (-2.09)? Are current conditions representative of those that prevailed, on average, throughout the part of the Quaternary represented by these data, or are they relatively unusual? To get an idea of how representative or unusual the present is, compare its value to a 90% confidence interval for the mean of the whole series. If the present value falls outside of that interval, then that would suggest that the present value would not be a good estimate of the long-term average δ<sup>18</sup>O, or conversely, that the long-term average δ<sup>18</sup>O is quite different from the present value.</p>
 <p>The following code will get a 0.95 (or 95%) confidence interval for the mean δ<sup>18</sup>O,</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">attach</span>(specmap)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co"># statistics</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">O18_mean &lt;-<span class="st"> </span><span class="kw">mean</span>(O18)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">O18_sd &lt;-<span class="st"> </span><span class="kw">sd</span>(O18)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">O18_npts &lt;-<span class="st"> </span><span class="kw">length</span>(O18)</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">O18_semean &lt;-<span class="st"> </span>O18_sd<span class="op">/</span><span class="kw">sqrt</span>(O18_npts)</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw">print</span>(<span class="kw">c</span>(O18_mean, O18_sd, O18_npts, O18_semean))</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co"># confidence intervals</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">O18_upperCI &lt;-<span class="st"> </span>O18_mean <span class="op">+</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span>O18_semean</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">O18_lowerCI &lt;-<span class="st"> </span>O18_mean <span class="op">-</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span>O18_semean</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="kw">print</span>(<span class="kw">c</span>(O18_lowerCI, O18_mean, O18_upperCI))</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(specmap)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># statistics</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>O18_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(O18)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>O18_sd <span class="ot">&lt;-</span> <span class="fu">sd</span>(O18)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>O18_npts <span class="ot">&lt;-</span> <span class="fu">length</span>(O18)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>O18_semean <span class="ot">&lt;-</span> O18_sd<span class="sc">/</span><span class="fu">sqrt</span>(O18_npts)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(O18_mean, O18_sd, O18_npts, O18_semean))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># confidence intervals</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>O18_upperCI <span class="ot">&lt;-</span> O18_mean <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>O18_semean</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>O18_lowerCI <span class="ot">&lt;-</span> O18_mean <span class="sc">-</span> <span class="dv">2</span><span class="sc">*</span>O18_semean</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(O18_lowerCI, O18_mean, O18_upperCI))</span></code></pre></div>
 <blockquote>
 <p>Q3: Does the present (0 ka) value of δ<sup>18</sup>O fall inside or outside of the .95 or 95% confidence interval for the mean of δ<sup>18</sup>O? How about the value 1000 years ago (1 ka, row 2)? How far back in the record does one have to go to find the first δ<sup>18</sup>O value that would not be considered significantly different from the long-term mean? (Hint: just look at the numbers in a <code>View()</code> window. Also, you will have to mentally interpolate between values. For example, the δ<sup>18</sup>O at 2 ka is -1.91, and that at 3ka is -1.83, so at any time between 2ka and 3ka the value of δ<sup>18</sup>O is somewhere between -1.91 and -1.83.)</p>
 </blockquote>
 <p><br> Getting the standard error and confidence limits for a number of variables would quickly become tedious. <code>R</code> allows (and encourages) the creation of functions that can be “reused” for different variables. The following is such a function (<code>descr()</code>) that describes a variable:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># function for describing a variable</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co"># usage:  descr(x), where x is the name of a variable</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">descr &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">    x_mean &lt;-<span class="st"> </span><span class="kw">mean</span>(x); <span class="kw">cat</span>(<span class="st">&quot; Mean=&quot;</span>, x_mean, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">    x_sd &lt;-<span class="st"> </span><span class="kw">sd</span>(x); <span class="kw">cat</span>(<span class="st">&quot; StdDev=&quot;</span>, x_sd, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">    x_npts &lt;-<span class="st"> </span><span class="kw">length</span>(x); <span class="kw">cat</span>(<span class="st">&quot; n=&quot;</span>, x_npts, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">    x_semean &lt;-<span class="st"> </span>x_sd<span class="op">/</span><span class="kw">sqrt</span>(x_npts); <span class="kw">cat</span>(<span class="st">&quot;SE Mean=&quot;</span>, x_semean, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">    x_upperCI &lt;-<span class="st"> </span>x_mean <span class="op">+</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span>x_semean; <span class="kw">cat</span>(<span class="st">&quot; Upper=&quot;</span>, x_upperCI, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">    x_lowerCI &lt;-<span class="st"> </span>x_mean <span class="op">-</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span>x_semean; <span class="kw">cat</span>(<span class="st">&quot; Lower=&quot;</span>, x_lowerCI, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">    <span class="kw">cat</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">    }</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function for describing a variable</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># usage:  descr(x), where x is the name of a variable</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>descr <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    x_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(x); <span class="fu">cat</span>(<span class="st">&quot; Mean=&quot;</span>, x_mean, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    x_sd <span class="ot">&lt;-</span> <span class="fu">sd</span>(x); <span class="fu">cat</span>(<span class="st">&quot; StdDev=&quot;</span>, x_sd, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    x_npts <span class="ot">&lt;-</span> <span class="fu">length</span>(x); <span class="fu">cat</span>(<span class="st">&quot; n=&quot;</span>, x_npts, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    x_semean <span class="ot">&lt;-</span> x_sd<span class="sc">/</span><span class="fu">sqrt</span>(x_npts); <span class="fu">cat</span>(<span class="st">&quot;SE Mean=&quot;</span>, x_semean, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    x_upperCI <span class="ot">&lt;-</span> x_mean <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>x_semean; <span class="fu">cat</span>(<span class="st">&quot; Upper=&quot;</span>, x_upperCI, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    x_lowerCI <span class="ot">&lt;-</span> x_mean <span class="sc">-</span> <span class="dv">2</span><span class="sc">*</span>x_semean; <span class="fu">cat</span>(<span class="st">&quot; Lower=&quot;</span>, x_lowerCI, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div>
 <p>Copy and paste the function into RStudio (making sure you include the last curly bracket), select all of it, and run it. Nothing will happen, but the function will appeear in the Environment, and can now be used as follows:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">descr</span>(O18)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">descr</span>(Insol)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">descr</span>(O18)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">descr</span>(Insol)</span></code></pre></div>
 <p><strong>3. Probability Plots</strong></p>
 <p>The question concerning how well an observed distribution matches the normal distribution (Q2 above) can be answered more directly using a graphical display called a “quantile plot” or “QQ” plot. The normal probability plot (what R calls a QQ Normal (<code>qqnorm()</code> plot) is a scatter diagram containing the values of a particular variable (plotted along the x-axis) and the values that would be returned by the cumulative density function (cdf) of a normal distribution with the same mean and standard deviation as the variable under consideration (plotted along the y-axis). The idea is that if the data really are normally distributed, then the normal probability plot should appear as a straight line, and as the distribution gets less-and-less normal, the normal probability plot will become more-and-more nonlinear.</p>
 <p>Get a normal probability plot or QQ Normal plot for the δ<sup>18</sup>O data:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># qqnorm plot with a line</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">qqnorm</span>(O18)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw">qqline</span>(O18)  </a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co"># histogram and density plot for comparison</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="kw">hist</span>(O18, <span class="dt">breaks=</span><span class="dv">40</span>, <span class="dt">probability=</span>T)</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="kw">lines</span>(<span class="kw">density</span>(O18))</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># qqnorm plot with a line</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(O18)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(O18)  </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram and density plot for comparison</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(O18, <span class="at">breaks=</span><span class="dv">40</span>, <span class="at">probability=</span>T)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(O18))</span></code></pre></div>
 <blockquote>
 <p>Q4: What does the normal probability plot indicate about the distributions of δ<sup>18</sup>O values? Does the pattern of the points on the plot suggest anything about the way in which the observed distribution of δ<sup>18</sup>O departs from the normal distribution (if it indeed does)? Repeat the above analysis for insolation (<code>Insol</code>). Which variable appears to be closest to one that is normally distributed?</p>
 </blockquote>
@@ -567,89 +580,89 @@ $(document).ready(function () {
 <p>The question of whether two groups of observations are similar often arises. Similarity between groups of observations could be indicated by differences in the descriptive statistics of each group, in group-wise descriptive plots or in the distributions of variables. The most common index of “differentness” of groups of observations is provided by a comparison of the means of particular variables among the groups of observations. The test statistic that is appropriate for comparing two means is the t-statistic, which can be thought of as a “scaled” difference between two means, where the observed difference between two means is scaled by an estimate of the uncertainty in or variability of the the means.</p>
 <p>Download and read the data set <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/orsim.csv">[orsim.csv]</a> (and call it <code>orsim</code> in R). This data set includes climate values (January and July temperature and precipitation) simulated by a regional climate model for present, and for potential future conditions when the concentration of carbon dioxide in the atmosphere has doubled, for a set of model grid points that cover Oregon. The variables named <code>TJan1x</code>, <code>TJul1</code>x, <code>PJan1x</code> and <code>PJul1x</code> are the simulated present values of temperature (<code>T</code>) and precipitation (<code>P</code>), while the variables with “<code>2x</code>” in their names are those for the “doubled CO2 scenarios” that are intended to describe the climate of the next century.</p>
 <p>Note that the grid pattern in this particular data set is not parallel to the graticule (lat/lon lines). Check to make sure the Oregon county outlines shape files (<code>orotl.shp</code>) are available; if not, see Part 2 of Exercise 4. Here’s some code:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># load the appropriate packages</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">library</span>(sf)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw">library</span>(RColorBrewer)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="kw">library</span>(ggplot2)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the appropriate packages</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
 <p>Read the data file and shape file for mapping (if not already in the workspace).</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># read the data file (if not already in the workspace)</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/csv/orsim.csv&quot;</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">orsim &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_path)</a></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># read the shapefile (if not already in the workspace)</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">shapefile=<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/orotl.shp&quot;</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">orotl_sf &lt;-<span class="st"> </span><span class="kw">st_read</span>(shapefile)</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="kw">plot</span>(orotl_sf)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read the data file (if not already in the workspace)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>csv_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Documents/geog495/data/csv/orsim.csv&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>orsim <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csv_path)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read the shapefile (if not already in the workspace)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>shapefile<span class="ot">=</span><span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/orotl.shp&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>orotl_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(shapefile)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(orotl_sf)</span></code></pre></div>
 <p>Attach the dataframe.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># attach the dataframe</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">attach</span>(orsim)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># attach the dataframe</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(orsim)</span></code></pre></div>
 <p>Calculate the change in, for example, January temperature and precipitation:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># calculate Future - Present differences</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">orsim<span class="op">$</span>TJanDiff &lt;-<span class="st"> </span>orsim<span class="op">$</span>TJan2x <span class="op">-</span><span class="st"> </span>orsim<span class="op">$</span>TJan1x</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">orsim<span class="op">$</span>PJanDiff &lt;-<span class="st"> </span>orsim<span class="op">$</span>PJan2x <span class="op">-</span><span class="st"> </span>orsim<span class="op">$</span>PJan1x</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate Future - Present differences</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>orsim<span class="sc">$</span>TJanDiff <span class="ot">&lt;-</span> orsim<span class="sc">$</span>TJan2x <span class="sc">-</span> orsim<span class="sc">$</span>TJan1x</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>orsim<span class="sc">$</span>PJanDiff <span class="ot">&lt;-</span> orsim<span class="sc">$</span>PJan2x <span class="sc">-</span> orsim<span class="sc">$</span>PJan1x</span></code></pre></div>
 <p>Here is the code for a couple of <code>ggplot2</code> maps:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">## ggplot2 map of temperature</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">ggplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="st">    </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> orotl_sf, <span class="dt">fill=</span><span class="st">&quot;grey70&quot;</span>, <span class="dt">color=</span><span class="st">&quot;black&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">data =</span> orsim, <span class="kw">aes</span>(<span class="dt">x =</span> Lon, <span class="dt">y =</span> Lat, <span class="dt">color =</span> TJanDiff), <span class="dt">size =</span> <span class="fl">5.0</span> ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="st">    </span><span class="kw">scale_fill_gradient2</span>(<span class="dt">low =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">mid=</span> <span class="st">&quot;white&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">aesthetics =</span> <span class="st">&#39;color&#39;</span>,</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6">            <span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">6</span>, <span class="dv">6</span>), <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">6</span>, <span class="dv">6</span>, <span class="dt">by =</span> <span class="dv">2</span>), <span class="dt">guide =</span> <span class="st">&#39;colorbar&#39;</span>, <span class="dt">name =</span> <span class="st">&quot;TJanDiff (C)&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Oregon Future Climate Simulations&quot;</span>) </a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">## ggplot2 map of precipitation</span></a>
-<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="kw">ggplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="st">    </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> orotl_sf, <span class="dt">fill=</span><span class="st">&quot;grey70&quot;</span>, <span class="dt">color=</span><span class="st">&quot;black&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">data =</span> orsim, <span class="kw">aes</span>(<span class="dt">x =</span> Lon, <span class="dt">y =</span> Lat, <span class="dt">color =</span> PJanDiff), <span class="dt">size =</span> <span class="fl">5.0</span> ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="st">    </span><span class="kw">scale_fill_gradient2</span>(<span class="dt">low =</span> <span class="st">&quot;bisque4&quot;</span>, <span class="dt">mid=</span> <span class="st">&quot;white&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;skyblue3&quot;</span>, <span class="dt">aesthetics =</span> <span class="st">&#39;color&#39;</span>,</a>
-<a class="sourceLine" id="cb10-14" data-line-number="14">           <span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">150</span>, <span class="dv">150</span>), <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">150</span>, <span class="dv">150</span>, <span class="dt">by =</span> <span class="dv">50</span>), <span class="dt">guide =</span> <span class="st">&#39;colorbar&#39;</span>, <span class="dt">name =</span> <span class="st">&quot;PJanDiff (mm)&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Oregon Future Climate Simulations&quot;</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## ggplot2 map of temperature</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> orotl_sf, <span class="at">fill=</span><span class="st">&quot;grey70&quot;</span>, <span class="at">color=</span><span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">data =</span> orsim, <span class="fu">aes</span>(<span class="at">x =</span> Lon, <span class="at">y =</span> Lat, <span class="at">color =</span> TJanDiff), <span class="at">size =</span> <span class="fl">5.0</span> ) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">mid=</span> <span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;red&quot;</span>, <span class="at">aesthetics =</span> <span class="st">&#39;color&#39;</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">6</span>, <span class="dv">6</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">6</span>, <span class="dv">6</span>, <span class="at">by =</span> <span class="dv">2</span>), <span class="at">guide =</span> <span class="st">&#39;colorbar&#39;</span>, <span class="at">name =</span> <span class="st">&quot;TJanDiff (C)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">title =</span> <span class="st">&quot;Oregon Future Climate Simulations&quot;</span>) </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="do">## ggplot2 map of precipitation</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> orotl_sf, <span class="at">fill=</span><span class="st">&quot;grey70&quot;</span>, <span class="at">color=</span><span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">data =</span> orsim, <span class="fu">aes</span>(<span class="at">x =</span> Lon, <span class="at">y =</span> Lat, <span class="at">color =</span> PJanDiff), <span class="at">size =</span> <span class="fl">5.0</span> ) <span class="sc">+</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;bisque4&quot;</span>, <span class="at">mid=</span> <span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;skyblue3&quot;</span>, <span class="at">aesthetics =</span> <span class="st">&#39;color&#39;</span>,</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">150</span>, <span class="dv">150</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">150</span>, <span class="dv">150</span>, <span class="at">by =</span> <span class="dv">50</span>), <span class="at">guide =</span> <span class="st">&#39;colorbar&#39;</span>, <span class="at">name =</span> <span class="st">&quot;PJanDiff (mm)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">title =</span> <span class="st">&quot;Oregon Future Climate Simulations&quot;</span>) </span></code></pre></div>
 <p>Before going on, compare the two blocks of code to see what sort of things have to be changed to plot different variables (e.g. the range of values that are plotted, choice of colors).</p>
 <p>How would a doubling of carbon dioxide in the atmosphere affect temperature over Oregon? From what we already know about the greenhouse effect, atmospheric change, and basic climatology, we can suspect that the temperatures will increase with an increase in carbon dioxide. The question is, are the simulated temperatures for the “enhanced greenhouse”-situation significantly higher than those for present?</p>
 <p>A two-sample <em>t</em>-test can be performed as follows:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># t-tests among groups with different variances</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw">boxplot</span>(TJan2x, TJan1x)</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw">print</span>(<span class="kw">mean</span>(TJan2x)<span class="op">-</span><span class="kw">mean</span>(TJan1x)) <span class="co"># the temperature difference</span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">tt_TJan &lt;-<span class="st"> </span><span class="kw">t.test</span>(TJan2x, TJan1x)</a>
-<a class="sourceLine" id="cb11-5" data-line-number="5">tt_TJan</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># t-tests among groups with different variances</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(TJan2x, TJan1x)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">mean</span>(TJan2x)<span class="sc">-</span><span class="fu">mean</span>(TJan1x)) <span class="co"># the temperature difference</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>tt_TJan <span class="ot">&lt;-</span> <span class="fu">t.test</span>(TJan2x, TJan1x)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>tt_TJan</span></code></pre></div>
 <blockquote>
 <p>Q5: What is the value of the <em>t</em>-statistic for a comparison of the simulated present and potential future January mean temperature over Oregon? Is this value large enough to be significant? (Hint: examine the <em>p</em>-value.)</p>
 </blockquote>
 <p><br> In performing a t-test, the “default” null hypothesis, Ho, is that the means of the two groups of observations are equal, and the alternative hypothesis (Ha) is that the are not. A more explicit alternative hypothesis can be stated when, as is the case for this climate data, we expect the mean of one group (the present in this case) to be smaller than the mean of the other group (the doubled carbon dioxide scenario). In such a situation, where the potential sign of the difference between group means is known, a more “decisive” test can be made, by adopting a different, “one-sided” alternative hypothesis:</p>
 <p>For January precipitation (<code>PJan1x</code> and <code>PJan2x</code>) test the hypotheses that <code>PJan1x</code> and <code>PJan2x</code> are equal and that <code>PJan1x</code> is less than <code>PJan2x</code>.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># two-tailed test</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw">boxplot</span>(PJan2x, PJan1x)</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw">mean</span>(PJan2x)<span class="op">-</span><span class="kw">mean</span>(PJan1x)</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">tt_PJan_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">t.test</span>(PJan2x, PJan1x)</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">tt_PJan_<span class="dv">1</span></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co"># one-tailed test</span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="kw">boxplot</span>(PJan2x, PJan1x)</a>
-<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="kw">mean</span>(PJan2x)<span class="op">-</span><span class="kw">mean</span>(PJan1x)</a>
-<a class="sourceLine" id="cb12-10" data-line-number="10">tt_PJan_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">t.test</span>(PJan2x, PJan1x, <span class="dt">alternative=</span><span class="st">&quot;greater&quot;</span>)</a>
-<a class="sourceLine" id="cb12-11" data-line-number="11">tt_PJan_<span class="dv">2</span></a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># two-tailed test</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(PJan2x, PJan1x)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(PJan2x)<span class="sc">-</span><span class="fu">mean</span>(PJan1x)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>tt_PJan_1 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(PJan2x, PJan1x)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>tt_PJan_1</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># one-tailed test</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(PJan2x, PJan1x)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(PJan2x)<span class="sc">-</span><span class="fu">mean</span>(PJan1x)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>tt_PJan_2 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(PJan2x, PJan1x, <span class="at">alternative=</span><span class="st">&quot;greater&quot;</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>tt_PJan_2</span></code></pre></div>
 <blockquote>
 <p>Q6: Is future winter precipitation (<code>PJan2x</code>) the same as present (<code>PJan1x</code>), or is it significantly greater than present?</p>
 </blockquote>
 <p><br> <strong>5. Analysis of Variance</strong></p>
 <p>Many times, more than two groups of observations exist. Although it is possible to compare pairs of groups of observations, what often happens is that some comparisons appear significant, some don’t, and it may be difficult to reach an overall conclusion about whether the groups jointly are significantly different. The procedure known as “analysis of variance” (ANOVA) allows a single overall measure of the difference in the means among more than two groups to be computed. The statistic generated in an analysis of variance is the <em>F</em>-statistic, which is a measure of the variability among groups of data relative to the variability within groups – as the group means become more distinct, the <em>F</em>-statistic increases in size, while as the groups become more internally variable, the <em>F</em>-statistic decreases.</p>
-<p>Download and read in the Scandinavian EU Preference Vote data <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/scanvote.csv">[<code>scanvote.csv</code>]</a> if it’s not already in your workspace (call it <code>scanvote</code> in R, and attach it). These data describe the percentages of votes in favor of membership in the European Union (Yes(%)), by administrative district in Finland, Norway, and Sweden, collected by Alec Murphy. As always, plot the data first. A boxplot or stripchart by country would be good (e.g. <code>boxplot(Yes ~ Country)</code>). Use the <code>descr()</code> function from section 1 above and <code>tapply()</code> to calculate standard errors of the mean for each country, e.g.:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">attach</span>(scanvote)</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">tapply</span>(Yes, Country, descr)</a></code></pre></div>
+<p>Download and read in the Scandinavian EU Preference Vote data <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/scanvote.csv">[<code>scanvote.csv</code>]</a> if it’s not already in your workspace (call it <code>scanvote</code> in R, and attach it). These data describe the percentages of votes in favor of membership in the European Union (Yes(%)), by administrative district in Finland, Norway, and Sweden, collected by Alec Murphy. As always, plot the data first. A boxplot or stripchart by country would be good (e.g. <code>boxplot(Yes ~ Country)</code>). Use the <code>descr()</code> function from section 1 above and <code>tapply()</code> to calculate standard errors of the mean for each country, e.g.:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(scanvote)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(Yes, Country, descr)</span></code></pre></div>
 <p>Examine the text output and the plots to see how distinct the groups (countries) appear, and compare the means and standard errors of the mean to check the similarity of the means among countries.</p>
 <p>Now do an analysis of variance:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># anova</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">aov1 &lt;-<span class="st"> </span><span class="kw">aov</span>(Yes <span class="op">~</span><span class="st"> </span>Country)</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">aov1</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="kw">summary</span>(aov1)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># anova</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>aov1 <span class="ot">&lt;-</span> <span class="fu">aov</span>(Yes <span class="sc">~</span> Country)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>aov1</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(aov1)</span></code></pre></div>
 <p>The <em>F</em>-statistic has as its reference distribution, the <em>F</em>-distribution (no surprise there). The <em>F</em>-distribution varies considerably with the number of groups and the number of observations within groups, and is not as easily visualized as the normal or <em>t</em>-distributions.</p>
 <p>Also do the homogeneity of variance test.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">hov1 &lt;-<span class="st"> </span><span class="kw">bartlett.test</span>(Yes <span class="op">~</span><span class="st"> </span>Country)</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">hov1</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>hov1 <span class="ot">&lt;-</span> <span class="fu">bartlett.test</span>(Yes <span class="sc">~</span> Country)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>hov1</span></code></pre></div>
 <blockquote>
 <p>Q7: What is the value of the <em>F</em>-statistic, and how unusual is this value for the analysis of variance of these data? (Hint, look at the <em>p</em>-value, right next to the <em>F</em> statistic, lablelled <code>Pr(&gt;F)</code>.) Are the variances similar among groups? What does this suggest about the difference among countries in preference for joining the EU?</p>
 </blockquote>
 <p><br> (See the short guide to interpreting test statistics, <em>p</em>-values, and significance for information on interpreting <em>p</em>-values <a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/interpstats.pdf">[link]</a>.</p>
 <p>There is an interesting summary plot of an analysis of variance object that provides further visualization of the differences among groups</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">plot</span>(aov1)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(aov1)</span></code></pre></div>
 <p>Finally, download and read in the Summit Cr. geomorphic data project <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sumcr.csv">[<code>sumcr.csv</code>]</a> if you don’t already have it, and do an analysis of variance on water-surface width (<code>WidthWS</code>), with group membership determined by <code>Reach</code>. Compare the extent of overlap of the confidence intervals for the group means and the values of the <em>F</em>-statistics for this analysis, and the previous one on preferences. You should see how the size of the <em>F</em>-statistic reflects the distinctiveness of the groups.</p>
 <blockquote>
 <p>Q8 Decribe the results. Do water-surface widths differ significantly among reaches?</p>
@@ -666,7 +679,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

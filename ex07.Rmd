@@ -16,12 +16,13 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
-<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
+
+<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
 **Geography 4/595:  Geographic Data Analysis**  
-**Spring 2020**
+**Winter 2021**
 
 **Exercise 7:  Regression Analysis**  
-**Finish by Friday, May 22**
+**Finish by Friday, February 26**
 
 **1. Introduction**
 

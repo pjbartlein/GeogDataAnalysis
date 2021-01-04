@@ -21,7 +21,7 @@ klippy::klippy(position = c('top', 'right'))
 **Winter 2021**
 
 **Exercise 2: Univariate Plots**  
-**Finish by Friday, Jan 15**  
+**Finish by Friday, January 15**  
 
 The objective of this exercise is to demonstrate some of the basic univariate plots for displaying data.  This exercise will not involve much manipulation of R code; the individual “commands” (text in this font) can be easily copied and pasted into the R Console window.
 
