@@ -15,7 +15,9 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
+
 <p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
+
 # Introduction #
 
 Multivariate descriptive displays or plots are designed to reveal the relationship among several variables simulataneously..  As was the case when examining relationships among pairs of variables, there are several basic characteristics of the relationship among sets of variables that are of interest.  These include:

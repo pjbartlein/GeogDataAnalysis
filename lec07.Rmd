@@ -15,7 +15,7 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
-<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
+<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
 # Introduction #
 
 The `sf` package (and `sp` before it), with it's direct links to the `GDAL`, `GEOS`, and `PROJ` libraries give **R** a powerful geospatial analysis capability, and at this point in the development of packages and methods for handling spatial, practically anything that can be accomplished in commercial or open-source GIS software can be done in **R**.  Because **R** is script-oriented, this has the added benefit of reproducibility, inasmuch as scripts can be saved and reused, while analysis done in menu-focused GUIs are not.
@@ -63,7 +63,7 @@ Read the charcoal data locations:
 ```{r read charcoal}
 # read GCDv3 sites
 # modify the following path to reflect local files
-csv_path <- "/Users/bartlein/Dropbox/DataVis/working/data/csv_files/"
+csv_path <- "/Users/bartlein/Documents/geog495/data/csv/"
 csv_name <- "v3i_nsa_globe.csv"
 csv_file <- paste(csv_path, csv_name, sep="")
 gcdv3 <- read.csv(csv_file) 
@@ -288,6 +288,7 @@ Now overlay the points onto the polygons.  The `st_join()` function can take a l
 
 ```{r over}
 # overlay the two
+st_crs(picea_sf) <- st_crs(na10km_v2_sf) # make sure CRS's exactly match
 picea_pts_sf <- st_join(na10km_v2_sf, picea_sf)
 picea_pts_sf <- na.omit(picea_pts_sf)
 picea_pts_sf
@@ -621,7 +622,7 @@ NA_10km_v2_elev_sf
 ```{r gg3}
 # add (projected) CRS
 st_crs(NA_10km_v2_elev_sf) <- 
-  st_crs("+proj=laea +lon_0=-100` +lat_0=50 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
+  st_crs("+proj=laea +lon_0=-100 +lat_0=50 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
 NA_10km_v2_elev_sf
 ```
 
