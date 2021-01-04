@@ -13,6 +13,7 @@
 
 <title>Exercise 2</title>
 
+<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -20,34 +21,46 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -56,9 +69,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -500,24 +513,24 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #00cc00;">NOTE: This page has been revised for Spring 2020, but may undergo further edits.</span>
+<span style="color: #00cc00;">NOTE: This page has been revised for Winter 2021, but may undergo further edits.</span>
 </p>
 <p><strong>Geography 4/595: Geographic Data Analysis</strong><br />
 <strong>Spring 2020</strong></p>
 <p><strong>Exercise 2: Univariate Plots</strong><br />
-<strong>Finish by Friday, April 10</strong></p>
+<strong>Finish by Friday, Jan 15</strong></p>
 <p>The objective of this exercise is to demonstrate some of the basic univariate plots for displaying data. This exercise will not involve much manipulation of R code; the individual “commands” (text in this font) can be easily copied and pasted into the R Console window.</p>
 <p><strong>Read through the exercise before attempting to complete it.</strong></p>
 <p><strong>1. Univariate scatter plot (scatter diagrams) –</strong> <code>plot()</code> <strong>version</strong></p>
 <p>The univariate “scatter diagram” is a very simple plot of the values of a variable, plotted vs the observation number, or row number in a rectangular data set (labeled “Index” on the plot). (Ordinary scatter diagrams or scatterplots will be described later.) As it happens, in this data set the observations are arranged in downstream order, so there actually is some meaning to the observation number. That won’t always be the case, however.</p>
 <p>Start RStudio.</p>
 <p>Check to see if the “<code>sumcr</code>” data set (“data frame”) is still in your workspace using the <code>ls()</code> or “list” function:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># list files</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">ls</span>()  </a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># list files</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>()  </span></code></pre></div>
 <p>(Note that lines beginning with <code>#</code> are comments.)</p>
 <p>If the <code>sumcr</code> data set is not in the workspace, read it into the <code>/data</code> folder your working directory again as in Exercise 1 (here’s a link <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sumcr.csv">[sumcr.csv]</a>). You can find the working directory after starting R bytyping</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># get the working directory</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">getwd</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get the working directory</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div>
 <p>Here are the example <code>/data</code> folders working directories from the first exercise:</p>
 <ul>
 <li>Mac: <code>/Users/bartlein/Projects/geog495/data/</code></li>
@@ -528,12 +541,12 @@ $(document).ready(function () {
 <ul>
 <li>RStudio: <code>Session &gt; Set Working Directory &gt; Choose Directory...</code> then browse to the folder.</li>
 </ul>
-<p>Next, to make it easy to refer to individual variables (by their simple names (e.g. <code>WidthWS</code>) as opposed to their full or compound names (“<code>sumcr$WidthWS</code>”, i.e. <code>dataframe$variable</code>), use the <code>attach()</code> function:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># attach the sumcr dataframe</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">attach</span>(sumcr)</a></code></pre></div>
+<p>Next, to make it easy to refer to individual variables (by their simple names (e.g. <code>WidthWS</code>) as opposed to their full or compound names (“<code>sumcr$WidthWS</code>”, i.e. <code>dataframe$variable</code>), use the <code>attach()</code> function:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># attach the sumcr dataframe</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(sumcr)</span></code></pre></div>
 <p>To create a univariate scatter diagram for the variable “<code>Length</code>”, type</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># &quot;index plot&quot;</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">plot</span>(Length)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># &quot;index plot&quot;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Length)</span></code></pre></div>
 <blockquote>
 <p>Q1: What is the typical length of a hydrologic unit along Summit Cr.? What is the shortest, and what is the longest? What is the range of hydrologic unit lengths (difference between the smallest and largest)? (Just “eyeball” the graph to get these answers.)</p>
 </blockquote>
@@ -541,59 +554,59 @@ $(document).ready(function () {
 <p>It’s sometimes helpful to be able to return to previously generated plots. The obvious way to do that is to just reissue the commands again, but the individual plots can also be saved. Using Windows, after creating a plot, make sure the RGraphics window is active (by clicking on it), and then use the RGui History &gt; Recording menu to turn recording on. On the Mac, the Quartz window has history turned on by default. Subsequent plots will then be added, and can be viewed again by using the PgUp and PgDn keys on Windows, or Command-left arrow on the Mac, when the RGraphics window is active.</p>
 <p><strong>2. Univariate scatter Diagram –</strong> <code>stripchart()</code> <strong>version</strong></p>
 <p>(This plot is also known as a “strip plot” or “dot plot”.) Type the following</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># stripchart</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">stripchart</span>(Length) </a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># stripchart</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(Length) </span></code></pre></div>
 <p>Here’s an alternative version with the points with identical values “stacked”:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># stacked stripchart</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">stripchart</span>(Length, <span class="dt">method=</span><span class="st">&quot;stack&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># stacked stripchart</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(Length, <span class="at">method=</span><span class="st">&quot;stack&quot;</span>)</span></code></pre></div>
 <blockquote>
 <p>Q2: Describe what this plot looks like, in comparison with the first one for length. Has any information been lost? Is there any particular pattern to the points in this plot? Was that pattern also evident on the first plot?</p>
 </blockquote>
 <p>The two plots each have one point for each observation, and each point is plotted using the particular value of Length, but each gives a slightly different view of the data. That’s actually a desirable situation because one view may allow you to see a pattern that is not evident in the other view.</p>
 <p><strong>3. Dotplots (</strong><code>dotcharts</code><strong>)</strong></p>
 <p>Another way to examine a single variable and gain some insight into its variations across the observations in a data is through Cleveland’s dotplots (called “<code>dotchart</code>” in R). In the simple version here, the plot again shows individual observations. By default, the observations are arranged in the row-order of the data frame (i.e. first observation on the bottom of the plot, last on the top). Try</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">dotchart</span>(WidthWS)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dotchart</span>(WidthWS)</span></code></pre></div>
 <p>Here’s an alternative, this time with each line labeled by the Location variable</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="st">&quot;Clevland&quot;</span> dot plot<span class="op">/</span>chart</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">dotchart</span>(WidthWS, <span class="dt">labels=</span><span class="kw">as.character</span>(Location), <span class="dt">cex=</span><span class="fl">0.5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;Clevland&quot;</span> dot plot<span class="sc">/</span>chart</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dotchart</span>(WidthWS, <span class="at">labels=</span><span class="fu">as.character</span>(Location), <span class="at">cex=</span><span class="fl">0.5</span>)</span></code></pre></div>
 <p>The <code>as.character()</code> function converts the Location variable back to a character string (it was read in as a factor by the <code>read.csv(</code>) function. The <code>cex=0.5</code> parameter makes the characters smaller for legibility.</p>
 <p>Here’s a version in which the observations are sorted by the values of <code>WidthWS</code>. The creation of an index using the order() function is used to rearrange the the values of <code>WidthWS</code> and the corresponding values of the Location character-string label:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># stacked dotplot</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">index &lt;-<span class="st"> </span><span class="kw">order</span>(WidthWS)</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw">dotchart</span>(WidthWS[index], <span class="dt">labels=</span><span class="kw">as.character</span>(Location[index]), <span class="dt">cex=</span><span class="fl">0.5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># stacked dotplot</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">order</span>(WidthWS)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dotchart</span>(WidthWS[index], <span class="at">labels=</span><span class="fu">as.character</span>(Location[index]), <span class="at">cex=</span><span class="fl">0.5</span>)</span></code></pre></div>
 <p><strong>4. Boxplots</strong></p>
 <p>A <em>boxplot</em> contains a object (a box) and some decorations (lines, etc.) that are drawn to illustrate certain aspects of a variable. The box is drawn in such a way that the box itself encloses half of the data points. The top edge of the box is drawn so that 1/4 of the observations have values greater than that value, the bottom edge is drawn so that 1/4 of the observations have values that are less than that value, and the line in the middle of the box is drawn so that half of the observations have values greater than its value and half have values less than its value (i.e., at the median). The other parts of the box plot will be discussed in class. Try</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># boxplot</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">boxplot</span>(Length)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Length)</span></code></pre></div>
 <p>(the “whiskers”, by default, extend to 1.5 times the interquartile range). Here’s an alternative version where the “whiskers” of the plot extend to the extremes of the data:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># boxplot, different whiskers</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw">boxplot</span>(Length, <span class="dt">range=</span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplot, different whiskers</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Length, <span class="at">range=</span><span class="dv">0</span>)</span></code></pre></div>
 <blockquote>
 <p>Q3: What does the boxplot look like? Compare it to the univariate scatter diagram and strip plot for Length. Does the boxplot provide more information, less information, or different information than the other plots?</p>
 </blockquote>
 <p>At this point we’re done with the Summit Cr. data set, and so it’s a good practice to “<code>detach</code>” using the <code>detach()</code> function. This removes the shorthand way of referring to the variables in that data frame, which will avoid possible collisions with the variables in another data frame that might be read in that could have variables with the same names as those in the Summit Cr. data frame–a data frame from another study site for example. <code>detach()</code> doesn’t remove the data frame from the workspace, which you can verify using the <code>ls()</code> function. To detach the <code>sumcr</code> data frame, type</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># detach sumcr dataframe</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw">detach</span>(sumcr)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># detach sumcr dataframe</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
 <p><strong>5. Histograms</strong></p>
 <p>A <em>histogram</em> essentially is a bar chart of a frequency table, where the heights of the bars reflect the relative (or absolute) proportion of observations that fall within particular class intervals of the variable of interest. The s!hape of the histogram reveals the distribution of the individual observations.</p>
 <p>Open Alec Murphy’s Scandinavian EU voter-preference data. The data include the name of the commune (or county) (<code>District</code>), the percentage of Yes votes (<code>Yes</code>), the population of each commune (<code>Pop</code>), and a country code (<code>Country</code>). Here’s a link to the .csv file: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/scanvote.csv">[scanvote.csv]</a>. Download it and save it in your working directory.</p>
 <p>The command to read the .csv file is a little different than was used for reading the Summit Cr. data:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># read the scanvote data set</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">scanvote &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;scanvote.csv&quot;</span>, <span class="dt">as.is=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read the scanvote data set</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>scanvote <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;scanvote.csv&quot;</span>, <span class="at">as.is=</span><span class="dv">1</span>)</span></code></pre></div>
 <p>The <code>as.is=1</code> parameter prevents R from turning the commune name (<code>District</code>) in column 1 into a “factor” (like <code>Country</code>), leaving it as a text label.</p>
 <p>Here’s the alternative approach using <code>file.choose()</code></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># alternativd read</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">scanvote &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">file.choose</span>(), <span class="dt">as.is=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># alternativd read</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>scanvote <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">file.choose</span>(), <span class="at">as.is=</span><span class="dv">1</span>)</span></code></pre></div>
 <p>The nature of the individual variables in a data frame, i.e., whether they are continuous numeric variables “factors” that indicate group membership, or character-string labels can be seen using the <code>str()</code> function, which shows the “structure” of the data frame, and also prints out a little data:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># look at the structure of the scanvote data</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">str</span>(scanvote)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># look at the structure of the scanvote data</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(scanvote)</span></code></pre></div>
 <p>The listing produced should indicate that the District variable is a character string (chr), Yes and Pop are numerical variables, and Country is a factor.</p>
 <p>Attach the data frame by typing <code>attach(scanvote)</code>:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># attach the scanvote dataframe</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw">attach</span>(scanvote)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># attach the scanvote dataframe</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(scanvote)</span></code></pre></div>
 <p>Now, get histograms for the variable “Yes” (the proportion of voters in each commune (county) expressing a positive preference for joining the EU. To get a basic histogram, type</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># histogram</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw">hist</span>(Yes)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Yes)</span></code></pre></div>
 <blockquote>
 <p>Q4: Describe the distribution of Yes. What range of values occur the most frequently? What is the overall range of Yes values in the data set (looking at the figure)?</p>
 </blockquote>
@@ -601,26 +614,26 @@ $(document).ready(function () {
 <p>Q5: Produce a stripchart of the Yes votes using the <code>stripchart()</code> function described above. How well does each plot type describe the distribution of the Yes values. (You don’t really have to answer this–it’s easy to see but hard to say, but give it a shot.)</p>
 </blockquote>
 <p>Experiment with the number of bars in the histogram: Type the following:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># histogram, specific number of breaks</span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">hist</span>(Yes, <span class="dt">breaks=</span><span class="dv">20</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram, specific number of breaks</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Yes, <span class="at">breaks=</span><span class="dv">20</span>)</span></code></pre></div>
 <blockquote>
 <p>Q6: Describe what the histogram looks like now. How does the shape of the histogram change as the number of bars increases? What does it look like if <code>breaks=40</code>?</p>
 </blockquote>
 <p><strong>6. Density Plots</strong></p>
 <p>Evidently, the shape of the histogram (and consequently what it may imply about the distribution of the data) can vary considerably depending on the bin widths that are used to summarize the data or the number of bars (bins) used. An alternative plot type is the “kernel density smoother plot” This plot is produced by first using the <code>density()</code> function to estimate the number of data points in the vicinity of different values of the Yes percents, and then plotting these. To produce the plot, type the following two lines at the command prompt:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># density plot</span></a>
-<a class="sourceLine" id="cb19-2" data-line-number="2">Yes.density &lt;-<span class="st"> </span><span class="kw">density</span>(Yes)</a>
-<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="kw">plot</span>(Yes.density)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># density plot</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>Yes.density <span class="ot">&lt;-</span> <span class="fu">density</span>(Yes)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Yes.density)</span></code></pre></div>
 <blockquote>
 <p>Q7: Describe the different views that the histogram and density lines give of the data. Which view seems less dependent on the particular way the plot is generated? Which view loses the least information about the individual values of the variable?</p>
 </blockquote>
 <p><strong>7. A composite plot</strong></p>
 <p>The views of the data provided by the different plotting methods vary quite a bit. Some retain a lot of information, but may be hard to interpret (particularly if there are a lot of data), while others are very simple appearing, but lose information. One strategy for dealing with this is to produce a plot that superimposes several different plots. Type the following, one line at a time:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># composite plot</span></a>
-<a class="sourceLine" id="cb20-2" data-line-number="2">Yes.density &lt;-<span class="st"> </span><span class="kw">density</span>(Yes)</a>
-<a class="sourceLine" id="cb20-3" data-line-number="3"><span class="kw">hist</span>(Yes, <span class="dt">breaks=</span><span class="dv">20</span>, <span class="dt">probability=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb20-4" data-line-number="4"><span class="kw">lines</span>(Yes.density)</a>
-<a class="sourceLine" id="cb20-5" data-line-number="5"><span class="kw">rug</span>(Yes)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># composite plot</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>Yes.density <span class="ot">&lt;-</span> <span class="fu">density</span>(Yes)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Yes, <span class="at">breaks=</span><span class="dv">20</span>, <span class="at">probability=</span><span class="cn">TRUE</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(Yes.density)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rug</span>(Yes)</span></code></pre></div>
 <blockquote>
 <p>Q8: What does the resulting plot contain? What does the <code>rug()</code> function apparently do? Does this plot offer any advantages over the individual plots, or is too cluttered?</p>
 </blockquote>
@@ -636,7 +649,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

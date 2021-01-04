@@ -29,7 +29,7 @@ The specific topics that will be examined include:
 
 *See the Canvas course web page for Assignments and Quizzes*
 
-| Lec | Day | Date   | Topic -- see individual webpages for readings        |Exercises| Quizzes |
+| Lec | Day | Date   | Topic -- see individual webpages for readings        |Exercises (F)| Quizzes (M)|
 |---|---|------|-------------------------------------|----------|---------|
 |===|===|======|=====================================|==========|=========|
 | 1   | Tu  | Jan 5  | Intro, data analysis and visualization in R          |          | 

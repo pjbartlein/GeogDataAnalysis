@@ -13,6 +13,7 @@
 
 <title>Univariate Plots</title>
 
+<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -20,34 +21,46 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -56,9 +69,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -497,24 +510,30 @@ $(document).ready(function () {
 <div id="TOC">
 <ul>
 <li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="#univariate-enumerative-plots"><span class="toc-section-number">2</span> Univariate Enumerative Plots</a><ul>
-<li><a href="#enumerative-plots-all-points-shown"><span class="toc-section-number">2.1</span> Enumerative Plots (all points shown)</a><ul>
+<li><a href="#univariate-enumerative-plots"><span class="toc-section-number">2</span> Univariate Enumerative Plots</a>
+<ul>
+<li><a href="#enumerative-plots-all-points-shown"><span class="toc-section-number">2.1</span> Enumerative Plots (all points shown)</a>
+<ul>
 <li><a href="#index-plotunivariate-scatter-diagram"><span class="toc-section-number">2.1.1</span> Index Plot/Univariate Scatter Diagram</a></li>
 <li><a href="#y-zero-high-density-plot"><span class="toc-section-number">2.1.2</span> Y Zero High-Density Plot</a></li>
 </ul></li>
-<li><a href="#other-plot-types-using-plot"><span class="toc-section-number">2.2</span> Other plot types using <code>plot()</code></a><ul>
+<li><a href="#other-plot-types-using-plot"><span class="toc-section-number">2.2</span> Other plot types using <code>plot()</code></a>
+<ul>
 <li><a href="#time-series-plots"><span class="toc-section-number">2.2.1</span> Time Series Plots</a></li>
 <li><a href="#strip-plotstrip-chart-univariate-scatter-diagram"><span class="toc-section-number">2.2.2</span> Strip Plot/Strip Chart (univariate scatter diagram)</a></li>
 <li><a href="#dot-plotdot-chart"><span class="toc-section-number">2.2.3</span> Dot Plot/Dot Chart</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#univariate-summary-plots"><span class="toc-section-number">3</span> Univariate Summary Plots</a><ul>
-<li><a href="#summary-plots"><span class="toc-section-number">3.1</span> Summary Plots</a><ul>
+<li><a href="#univariate-summary-plots"><span class="toc-section-number">3</span> Univariate Summary Plots</a>
+<ul>
+<li><a href="#summary-plots"><span class="toc-section-number">3.1</span> Summary Plots</a>
+<ul>
 <li><a href="#histograms"><span class="toc-section-number">3.1.1</span> Histograms</a></li>
 <li><a href="#density-plots-or-kernel-plotssmoothed-histograms"><span class="toc-section-number">3.1.2</span> Density Plots (or Kernel Plots/Smoothed Histograms)</a></li>
 <li><a href="#boxplot-or-box-and-whisker-plot"><span class="toc-section-number">3.1.3</span> Boxplot (or Box-and-Whisker Plot)</a></li>
 </ul></li>
-<li><a href="#an-aside-on-reference-distributions"><span class="toc-section-number">3.2</span> An Aside on Reference Distributions</a><ul>
+<li><a href="#an-aside-on-reference-distributions"><span class="toc-section-number">3.2</span> An Aside on Reference Distributions</a>
+<ul>
 <li><a href="#qq-plot-or-qq-normal-plot"><span class="toc-section-number">3.2.1</span> QQ Plot (or QQ Normal Plot)</a></li>
 </ul></li>
 </ul></li>
@@ -527,7 +546,7 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #00cc00;">NOTE: This page has been revised for Spring 2020, but may undergo further edits.</span>
+<span style="color: #00cc00;">NOTE: This page has been revised for Winter 2021, but may undergo further edits.</span>
 </p>
 <p>Note: Ordinarily, learning how to download and “import” files into R/RStudio is an important part of climbing R’s steepish learning curve. To make it easier to replicate the lectures and to play with the code, here is a workaround that will load all of the individual data sets that are used in the lectures.</p>
 <p>First, make sure that after starting RStudio, that the working directory is indeed the one created while doing Exercise 1. To reiterate, the directories are as follows:</p>
@@ -537,21 +556,21 @@ $(document).ready(function () {
 <li>macOS: <code>User/userid/Documents/geog495/</code></li>
 </ul>
 <p>First, install the <code>sp</code> and <code>raster</code> packages (which are required by some of the objects in the workspace):</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install the sp and raster packages</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">install.packages</span>(<span class="st">&quot;sp&quot;</span>, <span class="dt">repos =</span> <span class="st">&quot;http://cran.r-project.org&quot;</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">install.packages</span>(<span class="st">&quot;raster&quot;</span>, <span class="dt">repos =</span> <span class="st">&quot;http://cran.r-project.org&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install the sp and raster packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;sp&quot;</span>, <span class="at">repos =</span> <span class="st">&quot;http://cran.r-project.org&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;raster&quot;</span>, <span class="at">repos =</span> <span class="st">&quot;http://cran.r-project.org&quot;</span>)</span></code></pre></div>
 <p>Then, clear the existing workspace by typing or copying the following in the <code>Console</code> pane of RStudio:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># clear the current workspace</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">rm</span>(<span class="dt">list=</span><span class="kw">ls</span>(<span class="dt">all=</span><span class="ot">TRUE</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># clear the current workspace</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list=</span><span class="fu">ls</span>(<span class="at">all=</span><span class="cn">TRUE</span>))</span></code></pre></div>
 <p><em>WARNING: This will indeed remove everything in the current workspace.</em> That will be ok, unless you’re in the middle of an exercise. Then, enter the following in the <code>Console</code> pane. The code uses a “connection” to download data from a URL:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># connect to a saved workspace name geog495.RData and load it</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">con &lt;-<span class="st"> </span><span class="kw">url</span>(<span class="st">&quot;https://pjbartlein.github.io/GeogDataAnalysis/data/Rdata/geog495.RData&quot;</span>)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw">load</span>(<span class="dt">file=</span>con)</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw">close</span>(con)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># connect to a saved workspace name geog495.RData and load it</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">url</span>(<span class="st">&quot;https://pjbartlein.github.io/GeogDataAnalysis/data/Rdata/geog495.RData&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="at">file=</span>con)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">close</span>(con)</span></code></pre></div>
 <p>Note that this workspace will overwrite the existing one. You can check its contents using <code>ls()</code>, or by typing <code>summary(sumcr)</code>. This workspace contains the shape files that are used in the exercises, so if you load it, you won’t have to download and read in the individual shape file components. See Section 6 of <code>Packages and data</code> on the course web page <code>Resources</code> menu.</p>
-<p>If the workspace has downloaded correctly, then you can skip the code chunks that read <code>.csv</code> files (e.g. <code>read(csvfile)</code>)</p>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>If the workspace has downloaded correctly, then you can skip the code chunks that read <code>.csv</code> files (e.g. <code>read(csvfile)</code>)</p>
+<div id="introduction" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>In describing or characterizing the observations of an individual variable, there are three basic properties that are of interest:</p>
 <ul>
 <li>the <em>location</em> of observations (along the number line in general (but the geographical analogy is obvious), or how large or small the values of the individual observations are)</li>
@@ -565,8 +584,8 @@ $(document).ready(function () {
 <li>Summary plots, that generalize the data into a simplified representation.</li>
 </ol>
 </div>
-<div id="univariate-enumerative-plots" class="section level1">
-<h1><span class="header-section-number">2</span> Univariate Enumerative Plots</h1>
+<div id="univariate-enumerative-plots" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> Univariate Enumerative Plots</h1>
 <p>Enumerative plots, in which all observations are shown, have the advantage of not losing any specific information–the values of the individual observations can be retrieved from the plot. The disadvantage of such plots arises when there are a large number of observations–it may be difficult to get an overall view of the properties of a variable. Enumerative plots do a fairly good job of displaying the location, dispersion and distribution of a variable, but may not allow a clear comparison of variables, one to another.</p>
 <p>Data files for these examples: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/cities.csv">[cities.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/specmap.csv">[specmap.csv]</a></p>
 <p>Recall that your data folders were:</p>
@@ -577,19 +596,19 @@ $(document).ready(function () {
 </ul>
 <p>(Note that in these lecture pages, the paths may appear a little differently.)</p>
 <p>Read the <code>cities.csv</code> file, using an explict path:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># read a .csv file</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">csvfile &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/csv/cities.csv&quot;</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">cities &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csvfile)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read a .csv file</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>csvfile <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Documents/geog495/data/csv/cities.csv&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>cities <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csvfile)</span></code></pre></div>
 <p>(What’s happening above is that first the string object <code>csvfile</code> is created by assigning (i.e. using the assignment operator <code>&lt;-</code>, which is pronounced “gets”) the string <code>/Users/bartlein/geog495/data/csv/cities.csv</code> (the path to the file) and then this object is operated on the the <code>read.csv()</code> function, to create the object <code>cities</code>.) <em>Adjust the path to reflect your own setup, on a Mac, Windows, or VM.</em></p>
 <p>Get some summary information about the <code>cities</code> “data frame”. The <code>names()</code> function lists the variables or attributes:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># get the names of the variables</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">names</span>(cities)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get the names of the variables</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(cities)</span></code></pre></div>
 <pre><code>##  [1] &quot;City&quot;     &quot;Area&quot;     &quot;Pop.1980&quot; &quot;Pop.1990&quot; &quot;Pop.2000&quot; &quot;Growth&quot;   &quot;Food&quot;     &quot;PersRoom&quot; &quot;Water&quot;   
 ## [10] &quot;Elec&quot;     &quot;Phones&quot;   &quot;Vehicles&quot;</code></pre>
 <p>The “structure” function (<code>str()</code>) provides a short listing of variables and few values:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">str</span>(cities)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(cities)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    21 obs. of  12 variables:
-##  $ City    : Factor w/ 21 levels &quot;Beijing&quot;,&quot;Bombay&quot;,..: 3 7 16 17 1 19 20 4 2 5 ...
+##  $ City    : chr  &quot;Buenos Aires&quot; &quot;Dhaka&quot; &quot;Rio de Janeiro&quot; &quot;Sao Paolo&quot; ...
 ##  $ Area    : num  700 100 650 800 1680 ...
 ##  $ Pop.1980: int  9918 3290 8789 12101 9029 11739 7268 6852 8067 9030 ...
 ##  $ Pop.1990: int  11448 6578 10948 18119 10867 13447 9249 8633 12223 10741 ...
@@ -602,7 +621,7 @@ $(document).ready(function () {
 ##  $ Phones  : int  14 2 8 16 2 4 4 4 5 2 ...
 ##  $ Vehicles: int  1000 600 4000 4000 308 148 200 939 588 500 ...</code></pre>
 <p>The <code>head()</code> and <code>tail()</code> functions list the first and last lines:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">head</span>(cities); <span class="kw">tail</span>(cities)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cities); <span class="fu">tail</span>(cities)</span></code></pre></div>
 <pre><code>##             City Area Pop.1980 Pop.1990 Pop.2000 Growth Food PersRoom Water Elec Phones Vehicles
 ## 1   Buenos Aires  700     9918    11448    12822    1.4   40      1.3    80   91     14     1000
 ## 2          Dhaka  100     3290     6578    11511    7.2   63      2.4    60   85      2      600
@@ -617,142 +636,142 @@ $(document).ready(function () {
 ## 19      Manila   64     5966     8882    12582    4.1   38      3.0    89   93      9      510
 ## 20 Los Angeles 1660     9523    11456    13151    1.9   12      0.5    91   98     35     8000
 ## 21    New York  359    15601    16056    16645    0.3   16      0.5    99  100     56     1780</code></pre>
-<div id="enumerative-plots-all-points-shown" class="section level2">
-<h2><span class="header-section-number">2.1</span> Enumerative Plots (all points shown)</h2>
+<div id="enumerative-plots-all-points-shown" class="section level2" number="2.1">
+<h2 number="2.1"><span class="header-section-number">2.1</span> Enumerative Plots (all points shown)</h2>
 <p>“Enumerative plots” are called such because they enumerate or show every individual data point (in contrast to “summary plots”.)</p>
-<div id="index-plotunivariate-scatter-diagram" class="section level3">
-<h3><span class="header-section-number">2.1.1</span> Index Plot/Univariate Scatter Diagram</h3>
+<div id="index-plotunivariate-scatter-diagram" class="section level3" number="2.1.1">
+<h3 number="2.1.1"><span class="header-section-number">2.1.1</span> Index Plot/Univariate Scatter Diagram</h3>
 <p>Displays the values of a single variable for each observation using symbols, with values of the variable for each observation plotted relative to the observation number</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># use large cities data [cities.csv], get an index plot</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw">attach</span>(cities)</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw">plot</span>(Pop<span class="fl">.2000</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use large cities data [cities.csv], get an index plot</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(cities)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Pop<span class="fl">.2000</span>)</span></code></pre></div>
 <p><img src="lec02_files/figure-html/plot-1.png" width="2100" /></p>
-<p>(Note the use of the <code>attach()</code> function. An individual variable’s “full” name is the name of the dataframe concatentated with its “short” name, with a dollar sign in between, e.g. <code>cities$Pop.2000</code>. The <code>attach()</code> function puts the data frame in the first search position and allows one to refer to a variable just by its short name (e.g. <code>Pop.2000</code>).</p>
+<p>(Note the use of the <code>attach()</code> function. An individual variable’s “full” name is the name of the dataframe concatentated with its “short” name, with a dollar sign in between, e.g. <code>cities$Pop.2000</code>. The <code>attach()</code> function puts the data frame in the first search position and allows one to refer to a variable just by its short name (e.g. <code>Pop.2000</code>).</p>
 </div>
-<div id="y-zero-high-density-plot" class="section level3">
-<h3><span class="header-section-number">2.1.2</span> Y Zero High-Density Plot</h3>
+<div id="y-zero-high-density-plot" class="section level3" number="2.1.2">
+<h3 number="2.1.2"><span class="header-section-number">2.1.2</span> Y Zero High-Density Plot</h3>
 <p>Displays the values of a single variable plotted as thin vertical lines</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># another univariate plot</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">plot</span>(Pop<span class="fl">.2000</span>, <span class="dt">type=</span><span class="st">&quot;h&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># another univariate plot</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Pop<span class="fl">.2000</span>, <span class="at">type=</span><span class="st">&quot;h&quot;</span>)</span></code></pre></div>
 <p><img src="lec02_files/figure-html/plot2-1.png" width="2100" /></p>
 <p><a href="lec02.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="other-plot-types-using-plot" class="section level2">
-<h2><span class="header-section-number">2.2</span> Other plot types using <code>plot()</code></h2>
+<div id="other-plot-types-using-plot" class="section level2" number="2.2">
+<h2 number="2.2"><span class="header-section-number">2.2</span> Other plot types using <code>plot()</code></h2>
 <p>A variety of different versions of the standard univariate plot generated with the <code>plot()</code> function can be generated using the <code>type=</code> argument.</p>
-<p><code>type = &quot;l&quot;, &quot;b&quot;, &quot;o&quot;, &quot;s&quot;, or &quot;S&quot;</code></p>
+<p><code>type = "l", "b", "o", "s", or "S"</code></p>
 <p>It’s good practice when done with a data set to detach it:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># detach the cities dataframe</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">detach</span>(cities)</a></code></pre></div>
-<div id="time-series-plots" class="section level3">
-<h3><span class="header-section-number">2.2.1</span> Time Series Plots</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># detach the cities dataframe</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(cities)</span></code></pre></div>
+<div id="time-series-plots" class="section level3" number="2.2.1">
+<h3 number="2.2.1"><span class="header-section-number">2.2.1</span> Time Series Plots</h3>
 <p>When data are in some kind of order (as in time), index values contain some useful information. Read and attach the <code>specmap.csv</code> file, and then plot the delta-O18 (oxygen isotope) values.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># use Specmap delta-O18 data</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">csvfile &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/csv/specmap.csv&quot;</span></a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">specmap &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csvfile)</a></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># attach specmap and plot</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw">attach</span>(specmap)</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw">plot</span>(O18)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use Specmap delta-O18 data</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>csvfile <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Documents/geog495/data/csv/specmap.csv&quot;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>specmap <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csvfile)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># attach specmap and plot</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(specmap)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(O18)</span></code></pre></div>
 <p><img src="lec02_files/figure-html/unnamed-chunk-7-1.png" width="2100" /></p>
 <p>In this data set, the large negative values indicate warm/less-ice conditions, and so it would be more appropriate to plot the values on an inverted y-axis, using the <code>ylim</code> argument.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># inverted y-axis </span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw">plot</span>(O18, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="fl">2.5</span>,<span class="op">-</span><span class="fl">2.5</span>))   <span class="co">#  invert y-axis</span></a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># inverted y-axis </span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(O18, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fl">2.5</span>,<span class="sc">-</span><span class="fl">2.5</span>))   <span class="co">#  invert y-axis</span></span></code></pre></div>
 <p><img src="lec02_files/figure-html/inverted-1.png" width="2100" /></p>
 </div>
-<div id="strip-plotstrip-chart-univariate-scatter-diagram" class="section level3">
-<h3><span class="header-section-number">2.2.2</span> Strip Plot/Strip Chart (univariate scatter diagram)</h3>
+<div id="strip-plotstrip-chart-univariate-scatter-diagram" class="section level3" number="2.2.2">
+<h3 number="2.2.2"><span class="header-section-number">2.2.2</span> Strip Plot/Strip Chart (univariate scatter diagram)</h3>
 <p>Displays the values of a single variable as symbols plotted along a line</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># stripchart</span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">stripchart</span>(O18)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># stripchart</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(O18)</span></code></pre></div>
 <p><img src="lec02_files/figure-html/stripchart-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">stripchart</span>(O18, <span class="dt">method=</span><span class="st">&quot;stack&quot;</span>)   <span class="co"># stack points to reduce overlap</span></a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(O18, <span class="at">method=</span><span class="st">&quot;stack&quot;</span>)   <span class="co"># stack points to reduce overlap</span></span></code></pre></div>
 <p><img src="lec02_files/figure-html/stripchart-2.png" width="2100" /></p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># detach the specmap dataframe</span></a>
-<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">detach</span>(specmap)                   </a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># detach the specmap dataframe</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(specmap)                   </span></code></pre></div>
 </div>
-<div id="dot-plotdot-chart" class="section level3">
-<h3><span class="header-section-number">2.2.3</span> Dot Plot/Dot Chart</h3>
+<div id="dot-plotdot-chart" class="section level3" number="2.2.3">
+<h3 number="2.2.3"><span class="header-section-number">2.2.3</span> Dot Plot/Dot Chart</h3>
 <p>The Cleveland dot plot displays the values of a single variable as symbols plotted along a line, with a separate line for each observation. (Note that we reattach the data set first.)</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># dotchart </span></a>
-<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw">attach</span>(cities)</a>
-<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="kw">dotchart</span>(Pop<span class="fl">.2000</span>, <span class="dt">labels=</span>City)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dotchart </span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(cities)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dotchart</span>(Pop<span class="fl">.2000</span>, <span class="at">labels=</span>City)</span></code></pre></div>
 <p><img src="lec02_files/figure-html/dotchart-1.png" width="2100" /></p>
 <p>An alternative version of this plot, and the one most frequently used, can be constructed by sorting the rows of the data table. Sorting can be tricky–it is easy to completely rearrange a data set by sorting one variable and not the others. It is often better to leave the data unsorted, and to use an auxiliary variable (in this case index) to record the rank-order of the variable being plotted (in this case Pop.2000), and the explicit vector-element indexing of R to arrange the data in the right order:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co"># indexed (sorted) dotchart</span></a>
-<a class="sourceLine" id="cb22-2" data-line-number="2">index &lt;-<span class="st"> </span><span class="kw">order</span>(Pop<span class="fl">.2000</span>)</a>
-<a class="sourceLine" id="cb22-3" data-line-number="3"><span class="kw">dotchart</span>(Pop<span class="fl">.2000</span>[index], <span class="dt">labels=</span>City[index])</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># indexed (sorted) dotchart</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">order</span>(Pop<span class="fl">.2000</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dotchart</span>(Pop<span class="fl">.2000</span>[index], <span class="at">labels=</span>City[index])</span></code></pre></div>
 <p><img src="lec02_files/figure-html/indexed%20dotchart-1.png" width="2100" /></p>
 <p>This example shows how to index or refer to specific values of a variable by specifying the subscripts of the observations involved (in square brackets <code>[</code>…<code>]</code>).</p>
 <p>Once you’re done with a data set, it’s good to “detach” it to avoid conflict among variables from different data sets that might have the same name.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co"># detach the cites dataframe</span></a>
-<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="kw">detach</span>(cities)</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># detach the cites dataframe</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(cities)</span></code></pre></div>
 <p><a href="lec02.html">[Back to top]</a></p>
 </div>
 </div>
 </div>
-<div id="univariate-summary-plots" class="section level1">
-<h1><span class="header-section-number">3</span> Univariate Summary Plots</h1>
+<div id="univariate-summary-plots" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> Univariate Summary Plots</h1>
 <p>Summary plots display an object or a graph that gives a more concise expression of the location, dispersion, and distribution of a variable than an enumerative plot, but this comes at the expense of some loss of information: In a summary plot, it is no longer possible to retrieve the individual data value, but this loss is usually matched by the gain in understanding that results from the efficient representation of the data. Summary plots generally prove to be much better than the enumerative plots in revealing the distribution of the data.</p>
 <p>Data files for these examples (download to working directory): <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/specmap.csv">[specmap.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/scanvote.csv">[scanvote.csv]</a></p>
 <p>Read the two data sets if they are not already in the workspace or environment. The <code>scanvote</code> data set will be explained below.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co"># adjust the paths to reflect the local environment</span></a>
-<a class="sourceLine" id="cb24-2" data-line-number="2">csvfile &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/csv/specmap.csv&quot;</span></a>
-<a class="sourceLine" id="cb24-3" data-line-number="3">specmap &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csvfile)</a>
-<a class="sourceLine" id="cb24-4" data-line-number="4">csvfile &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/csv/scanvote.csv&quot;</span></a>
-<a class="sourceLine" id="cb24-5" data-line-number="5">scanvote &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csvfile)</a></code></pre></div>
-<div id="summary-plots" class="section level2">
-<h2><span class="header-section-number">3.1</span> Summary Plots</h2>
-<div id="histograms" class="section level3">
-<h3><span class="header-section-number">3.1.1</span> Histograms</h3>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># adjust the paths to reflect the local environment</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>csvfile <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Documents/geog495/data/csv/specmap.csv&quot;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>specmap <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csvfile)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>csvfile <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Documents/geog495/data/csv/scanvote.csv&quot;</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>scanvote <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csvfile)</span></code></pre></div>
+<div id="summary-plots" class="section level2" number="3.1">
+<h2 number="3.1"><span class="header-section-number">3.1</span> Summary Plots</h2>
+<div id="histograms" class="section level3" number="3.1.1">
+<h3 number="3.1.1"><span class="header-section-number">3.1.1</span> Histograms</h3>
 <p>Histograms are a type of bar chart that displays the counts or relative frequencies of values falling in different class intervals or ranges.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># use Specmap O-18 data [specmap.csv]</span></a>
-<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw">attach</span>(specmap)</a>
-<a class="sourceLine" id="cb25-3" data-line-number="3"><span class="co"># histogram</span></a>
-<a class="sourceLine" id="cb25-4" data-line-number="4"><span class="kw">hist</span>(O18)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use Specmap O-18 data [specmap.csv]</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(specmap)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(O18)</span></code></pre></div>
 <p><img src="lec02_files/figure-html/histogram-1.png" width="2100" /></p>
 <p>The overall impression one gets about the distribution of a variable depends somewhat on the way the histogram is constructed: fewer bars give a more generalized view, but may obscure details of the distribution (the existence of a bimodal distribution, for example), while more may not generalize enough. Plot a second histogram with 20 bins using the <code>breaks</code> arguement:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># second histogram</span></a>
-<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="kw">hist</span>(O18, <span class="dt">breaks=</span><span class="dv">20</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># second histogram</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(O18, <span class="at">breaks=</span><span class="dv">20</span>)</span></code></pre></div>
 <p><img src="lec02_files/figure-html/second%20histogram-1.png" width="2100" /></p>
 </div>
-<div id="density-plots-or-kernel-plotssmoothed-histograms" class="section level3">
-<h3><span class="header-section-number">3.1.2</span> Density Plots (or Kernel Plots/Smoothed Histograms)</h3>
+<div id="density-plots-or-kernel-plotssmoothed-histograms" class="section level3" number="3.1.2">
+<h3 number="3.1.2"><span class="header-section-number">3.1.2</span> Density Plots (or Kernel Plots/Smoothed Histograms)</h3>
 <p>A density plot is a plot of the local relative frequency or density of points along the number line or x-axis of a plot. The local density is determined by summing the individual “kernel” densities for each point. Where points occur more frequently, this sum, and consequently the local density, will be greater. Density plots get around some of the problems that histograms have, but still require some choices to be made.</p>
 <p><a href="https://pjbartlein.github.io/GeogDataAnalysis/images/hist_smooth.gif">[histogram smoothing illustration]</a><br />
 <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/kernel_type.gif">[different kernels]</a></p>
 <p>Density plot of the O18 data. Note that in this example, an object <code>O18.density</code> is created by the <code>density()</code> function, and then plotted using the <code>plot()</code> function.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="co"># density plot</span></a>
-<a class="sourceLine" id="cb27-2" data-line-number="2">O18_density &lt;-<span class="st"> </span><span class="kw">density</span>(O18)</a>
-<a class="sourceLine" id="cb27-3" data-line-number="3"><span class="kw">plot</span>(O18_density)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># density plot</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>O18_density <span class="ot">&lt;-</span> <span class="fu">density</span>(O18)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(O18_density)</span></code></pre></div>
 <p><img src="lec02_files/figure-html/density-1.png" width="2100" /></p>
 <p>Plots with both a histogram and density line can be created:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># histogram plus density plot</span></a>
-<a class="sourceLine" id="cb28-2" data-line-number="2">O18_density &lt;-<span class="st"> </span><span class="kw">density</span>(O18)</a>
-<a class="sourceLine" id="cb28-3" data-line-number="3"><span class="kw">hist</span>(O18, <span class="dt">breaks=</span><span class="dv">40</span>, <span class="dt">probability=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb28-4" data-line-number="4"><span class="kw">lines</span>(O18_density)</a>
-<a class="sourceLine" id="cb28-5" data-line-number="5"><span class="kw">rug</span>(O18)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram plus density plot</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>O18_density <span class="ot">&lt;-</span> <span class="fu">density</span>(O18)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(O18, <span class="at">breaks=</span><span class="dv">40</span>, <span class="at">probability=</span><span class="cn">TRUE</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(O18_density)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rug</span>(O18)</span></code></pre></div>
 <p><img src="lec02_files/figure-html/density%20and%20histogram-1.png" width="2100" /></p>
 <p>Note the addtion of the “rug” plot at the bottom (which is an enumerative plot).</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="co"># detach the specmap dataframe</span></a>
-<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw">detach</span>(specmap)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># detach the specmap dataframe</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(specmap)</span></code></pre></div>
 </div>
-<div id="boxplot-or-box-and-whisker-plot" class="section level3">
-<h3><span class="header-section-number">3.1.3</span> Boxplot (or Box-and-Whisker Plot)</h3>
+<div id="boxplot-or-box-and-whisker-plot" class="section level3" number="3.1.3">
+<h3 number="3.1.3"><span class="header-section-number">3.1.3</span> Boxplot (or Box-and-Whisker Plot)</h3>
 <p>A boxplot characterizes the location, dispersion and distribution of a variable by construction a box-like figure with a set of lines (whiskers) extending from the ends of the box. The edges of the box are drawn at the 25th and 75th percentiles of the data, and a line in the middle of the box marks the 50th percentile. The whiskers and other aspects of the boxplot are drawn in various ways.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># use Scandinavian EU-preference vote data</span></a>
-<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="kw">attach</span>(scanvote)</a>
-<a class="sourceLine" id="cb30-3" data-line-number="3"><span class="co"># get a boxplot</span></a>
-<a class="sourceLine" id="cb30-4" data-line-number="4"><span class="kw">boxplot</span>(Pop)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use Scandinavian EU-preference vote data</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(scanvote)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># get a boxplot</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Pop)</span></code></pre></div>
 <p><img src="lec02_files/figure-html/scanvote%20boxplot-1.png" width="2100" /></p>
 <p>Note that the plot looks pretty odd, a function of the distribution of the population data. Typically, the log (base 10) of population data is more informative:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># second boxplot</span></a>
-<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="kw">boxplot</span>(<span class="kw">log10</span>(Pop))</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># second boxplot</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">log10</span>(Pop))</span></code></pre></div>
 <p><img src="lec02_files/figure-html/second%20boxplot-1.png" width="2100" /> <a href="lec02.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="an-aside-on-reference-distributions" class="section level2">
-<h2><span class="header-section-number">3.2</span> An Aside on Reference Distributions</h2>
+<div id="an-aside-on-reference-distributions" class="section level2" number="3.2">
+<h2 number="3.2"><span class="header-section-number">3.2</span> An Aside on Reference Distributions</h2>
 <p>There are a number of “theoretical” reference distributions that arise in data analysis that can be compared with observed or empirical distributions (i.e. of a set of observations of a particular variable) and used in other ways. One of the more frequently used reference distributions is the normal distribution (which arises frequently in practice owing to the Central Limit Theorem).</p>
 <p><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/normaldist.pdf">[The normal distribution]</a></p>
 <p>Theoretical distributions are represented by their:</p>
@@ -762,39 +781,39 @@ $(document).ready(function () {
 <li>inverse cumulative distribution functions which illustrate the particular value of a variable that is equaled or exceeded (1-p)x100 percent of the time.</li>
 </ul>
 <p>For the standard normal distribution (with mean of 0 and a standard deviation of 1), the PDF and CDF can be displayed as follows:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co"># display the &quot;normal&quot; theoretical reference distribution</span></a>
-<a class="sourceLine" id="cb32-2" data-line-number="2">z &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="fl">3.0</span>,<span class="fl">3.0</span>,.<span class="dv">05</span>)</a>
-<a class="sourceLine" id="cb32-3" data-line-number="3">pdf_z &lt;-<span class="st"> </span><span class="kw">dnorm</span>(z)   <span class="co"># get probability density function</span></a>
-<a class="sourceLine" id="cb32-4" data-line-number="4"><span class="kw">plot</span>(z, pdf_z)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># display the &quot;normal&quot; theoretical reference distribution</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">3.0</span>,<span class="fl">3.0</span>,.<span class="dv">05</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>pdf_z <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(z)   <span class="co"># get probability density function</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(z, pdf_z)</span></code></pre></div>
 <p><img src="lec02_files/figure-html/ref%20distributions-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">cdf_z &lt;-<span class="st"> </span><span class="kw">pnorm</span>(z)   <span class="co"># get cumulative distribution function</span></a>
-<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="kw">plot</span>(z, cdf_z)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>cdf_z <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(z)   <span class="co"># get cumulative distribution function</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(z, cdf_z)</span></code></pre></div>
 <p><img src="lec02_files/figure-html/ref%20distributions-2.png" width="2100" /></p>
 <p>and the inverse cumulative distribution function as follows:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="co"># inverse cdf</span></a>
-<a class="sourceLine" id="cb34-2" data-line-number="2">p &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,.<span class="dv">01</span>)</a>
-<a class="sourceLine" id="cb34-3" data-line-number="3">invcdf_z &lt;-<span class="st"> </span><span class="kw">qnorm</span>(p)  </a>
-<a class="sourceLine" id="cb34-4" data-line-number="4"><span class="kw">plot</span>(p,invcdf_z)</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># inverse cdf</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,.<span class="dv">01</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>invcdf_z <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(p)  </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p,invcdf_z)</span></code></pre></div>
 <p><img src="lec02_files/figure-html/inverse%20csf-1.png" width="2100" /></p>
-<div id="qq-plot-or-qq-normal-plot" class="section level3">
-<h3><span class="header-section-number">3.2.1</span> QQ Plot (or QQ Normal Plot)</h3>
+<div id="qq-plot-or-qq-normal-plot" class="section level3" number="3.2.1">
+<h3 number="3.2.1"><span class="header-section-number">3.2.1</span> QQ Plot (or QQ Normal Plot)</h3>
 <p>A quantile plot is a two-dimensional graph where each observation is shown by a point, so strictly speaking, a QQ plot is an enumerative plot. The data value for each point is plotted along the vertical or y-axis, while the equivalent quantile (e.g. a percentile) value is plotted along the horizontal or x-axis. The quantiles plotted along the x-axis could be empirical ones, like the percentile equivalents or rank for each value, or they could be theoretical ones corresponding to the “p-values” of a reference distribution (e.g. a normal distribution) with the same parameters as the variable being examined. In practice, the shape of the QQ plot is the issue:</p>
 <p><a href="https://pjbartlein.github.io/GeogDataAnalysis/images/qqplots.gif">[a variety of histograms and QQ Plots]</a></p>
 <p>The qqnorm plot plots the data values along the y-axis, and p-values of the normal distribution along the x-axis. qqline adds a straight line that passes through the first and third quartiles (25th and 75th percentiles) and can be used to assess (a) the overall departure of the observed distribution from a normal distribution with the same parameters (mean and standard deviation) as the observations, and (b) outliers or unsual points.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co"># QQ plots</span></a>
-<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="kw">qqnorm</span>(Pop)</a>
-<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="kw">qqline</span>(Pop)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># QQ plots</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(Pop)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(Pop)</span></code></pre></div>
 <p><img src="lec02_files/figure-html/qqplots-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw">qqnorm</span>(<span class="kw">log10</span>(Pop))</a>
-<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="kw">qqline</span>(<span class="kw">log10</span>(Pop))</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(<span class="fu">log10</span>(Pop))</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(<span class="fu">log10</span>(Pop))</span></code></pre></div>
 <p><img src="lec02_files/figure-html/qqplots-2.png" width="2100" /></p>
 <p>Clean up</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">detach</span>(scanvote)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(scanvote)</span></code></pre></div>
 </div>
 </div>
 </div>
-<div id="readings" class="section level1">
-<h1><span class="header-section-number">4</span> Readings</h1>
+<div id="readings" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> Readings</h1>
 <ul>
 <li>Owen (<em>The R Guide</em>): Ch. 4 &amp; 5, section 6.3</li>
 <li>Kuhnert &amp; Venebles (<em>An Introduction…</em>): p. 61-76</li>
@@ -812,7 +831,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

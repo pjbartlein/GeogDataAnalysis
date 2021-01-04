@@ -13,6 +13,7 @@
 
 <title>Exercise 1</title>
 
+<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -20,12 +21,110 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
 
 
 <style type="text/css">
@@ -414,18 +513,18 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #00cc00;">NOTE: This page has been revised for Spring 2020, but may undergo further edits.</span>
+<span style="color: #00cc00;">NOTE: This page has been revised for Winter 2021, but may undergo further edits.</span>
 </p>
 <p><strong>Geography 4/595: Geographic Data Analysis</strong><br />
-<strong>Spring 2020</strong></p>
+<strong>Winter 2021</strong></p>
 <p><strong>Exercise 1: Getting and using R and RStudio</strong><br />
-<strong>Finish by Tuesday, April 7</strong></p>
+<strong>Finish by Friday, Jan 8 (or soon thereafter, at least by early the following week)</strong></p>
 <p><strong>1. Introduction</strong></p>
 <p>The object of this exercise is to install and set up R and RStudio, and to experiment with some basic procedures. R is actually a computer language (that is quite similar to the S language for data analysis and visualization developed at AT&amp;T’s Bell Labs), but is best thought of as an “environment” for producing both numerical and graphical analyses of data. R has several advantages for us here, because</p>
 <ul>
 <li>it is “open-source” software (which for our purposes means that it can be freely downloaded);</li>
 <li>it is available for a number of different operating systems, including Windows, Linux, and Macintosh;</li>
-<li>by itself is fairly powerful and is extensible (meaning that procedures for analyzing data that don’t currently exist can be readily developed);</li>
+<li>by itself is fairly powerful, but is extensible (meaning that procedures for analyzing data that don’t currently exist can be readily developed);</li>
 <li>it has the capability for mapping data, an asset not generally available in other statistical software; and</li>
 <li>it has multiple add-on “packages” specifically designed for the analysis of spatial data.</li>
 </ul>
@@ -434,29 +533,29 @@ $(document).ready(function () {
 <div id="read-through-the-following-before-beginning" class="section level4">
 <h4><strong>Read through the following before beginning…</strong></h4>
 <p><strong>2. Getting R</strong></p>
-<p>This quarter, there will be two main options for running R: 1) downloading R to an accessible “personal” machine, and 2) running R and RStudio in a Windows 10 virtual machine. The latter is still a work-in-progress, but the virtual machine can be accessed from a browser. Separate directions for accessing the virtual machine will be added later. If you will be using the virtual machine, it would be useful to still read the following, but you can skip sections 2 and 4 below.</p>
+<p>This quarter, there will be two main options for running R: 1) downloading R to an accessible “personal” machine, and 2) running R and RStudio in a Windows 10 virtual machine. The latter works fine, but has several disadvantages that can be worked around, and the virtual machine can be accessed from a browser. Directions for using the virtual machine can be found under the Other menu on the course web page. If you will be using the virtual machine, it would be useful to still read the following, but you can skip sections 2 and 4 below.</p>
 <p>R can be downloaded from one of the “CRAN” (Comprehensive R Archive Network) sites. In the US, the main site is at <a href="https://cran.r-project.org">https://cran.r-project.org</a> To download R, go to a CRAN website, and look in the “Download and Install R” area. Click on the appropriate link.</p>
 <p><em>Windows 10 (and 7 &amp; 8)</em></p>
-<p>Note: Depending on the age of your computer and version of Windows, you may be running either a “32-bit” or “64-bit” version of the Windows operating system. If you have the 64-bit version (most likely), R will install the appropriate version (R x64 3.6.3) and will also (for backwards compatibility) install the 32-bit version (R i386 3.6.3). You can run either, but you will probably just want to run the 64-bit version.</p>
+<p>Note: Depending on the age of your computer and version of Windows, you may be running either a “32-bit” or “64-bit” version of the Windows operating system. If you have the 64-bit version (most likely), R will install the appropriate version (R x64 4.0.3) and will also (for backwards compatibility) install the 32-bit version (R i386 4.0.3). You can run either, but you will probably just want to run the 64-bit version.</p>
 <ol style="list-style-type: decimal">
-<li>On the “R for Windows” page, for example, click on the “base” link (which should take you to the “Download R-3.6.3 for Windows” page, or you can click directly on this link: <a href="https://cran.r-project.org/bin/windows/">https://cran.r-project.org/bin/windows/</a>).<br />
+<li>On the “R for Windows” page, for example, click on the “base” link (which should take you to the “Download R-4.0.3 for Windows” page, or you can click directly on this link: <a href="https://cran.r-project.org/bin/windows/">https://cran.r-project.org/bin/windows/</a>).<br />
 </li>
 <li>On this page, click either on the “base” or “install R for the first time links”.<br />
 </li>
-<li>On the next page, click on “Download R 3.6.3 for Windows” link, and save that file to your hard disk when prompted. Saving to the desktop is fine.<br />
+<li>On the next page, click on “Download R 4.0.3 for Windows” link, and save that file to your hard disk when prompted. Saving to the desktop is fine.<br />
 </li>
 <li>To begin the installation, double-click on the downloaded file, or open it from a downloads window. Don’t be alarmed unknown publisher type warnings. Window’s UAC (User Account Control) will also worry about an unidentified program wanting access to your computer. Click on “Run”.<br />
 </li>
 <li>Select the proposed options in each part of the install dialog. When the “Select Components” screen appears, just accept the standard choices</li>
 </ol>
-<p><em>Mac OS X (and MacOS Sierra)</em></p>
+<p><em>Mac OS X and MacOS</em></p>
 <p>On the “R for Mac OS X” page (<a href="https://cran.r-project.org/bin/macosx/">https://cran.r-project.org/bin/macosx/</a>), there are multiple packages that could be downloaded, but there are two choices for “newer” versoins of MacOS (There are also packages for older versions):</p>
 <ul>
-<li><code>R3.6.3.pkg</code> if you’re running MacOS Catalina,</li>
-<li><code>R3.6.3.nn.pkg</code> if you’re running Mojave, High Sierra, Sierra, El Capitan, Yosemite</li>
+<li><code>R-4.0.3.pkg</code> if you’re running MacOS High Sierra (10.13) or newer,</li>
+<li><code>R-3.6.3.nn.pkg</code> if you’re running Mojave, Sierra, El Capitan, Yosemite</li>
 </ul>
 <ol start="2" style="list-style-type: decimal">
-<li>To download the package click on the (e.g.) “<code>R-3.6.3.pkg</code>” link.</li>
+<li>To download the package click on the (e.g.) “<code>R-4.0.3.pkg</code>” link.</li>
 <li>After the package finishes downloading, right-click in the downloads window of your browser, and click on “Show in Finder” (or just look in the Downloads folder). This will open a new Finder window with the installer package.</li>
 <li>Then double-click on the installer package, and after a few screens, select a destination for the installation of the R framework (the program) and the R.app GUI. Note that you will have supply the Administator’s password. Close the window when the installation is done.</li>
 <li>An application will appear in the Applications folder: R.app. You may want to drag R.app to the Dock to make R easier to start up.</li>
@@ -473,7 +572,7 @@ $(document).ready(function () {
 <p>To create a working folder,</p>
 <ol style="list-style-type: decimal">
 <li>start Windows Explorer (right-click on the Start button, and click on “File Explorer”)</li>
-<li>browse to or create a new folder that will contain the R data and files (e.g. create a new folder called “<code>geog495</code>” or something). Pick a sensible location for this folder; on Windows 10, probably in the <code>c:/Users/xxxx/Documents/</code> folder (e.g. <code>c:/Users/bartlein/Documents/</code>) (Note that in “modern” versions of Windows, file paths can be constructed with forward slashes.)</li>
+<li>browse to or create a new folder that will contain the R data and files (e.g. create a new folder called “<code>geog495</code>” or something). Pick a sensible location for this folder; on Windows 10, probably in the <code>c:/Users/xxxx/Documents/</code> folder (e.g. <code>c:/Users/bartlein/Documents/</code>) (Note that in “modern” versions of Windows, file paths can be constructed with forward slashes.)</li>
 <li>open that folder by clicking on it, and</li>
 <li>create a folders in the <code>geog495</code> folder you just created called <code>data</code> (<code>File &gt; New &gt; Folder</code> etc.). That folder will be empty at first.</li>
 </ol>
@@ -505,23 +604,23 @@ $(document).ready(function () {
 <p>where <code>userid</code> is your specific userid.</p>
 <p>In practice, it may be useful to create multiple working folders to keep different projects separate, and you’re free to name the folders anything you want. The rest of this exercise assumes that they were names as above.</p>
 <p><strong>4. Installing and Using RStudio</strong></p>
-<p>RStudio (<a href="http://www.rstudio.com">http://www.rstudio.com</a>) is an IDE (integrated development environment) that provides a consistent environment for running R across different platforms (i.e. Windows, OS X or MacOS, Linux). The “environment” contains four “panes” two of which include the standard command-line “console” interface of R, and a code or script editor that is generally more useful that those built into the standard R applications for Windows or the Mac, plus two other panes that provide a graphics window, help window, workspace summary and so on. The panes are tiled, and remain in the foreground, making it a little easier to navigate around the different windows that appear in the Windows and Mac applications. The IDE also provides other nice features that assist coding in general (like autocompletion) and in doing the report writing and documentation required to do “reproducible research” and also developing R packages. RStudio is still under development (the current version is Version 1.1.383), and so there are occasional problems that arise, but most are minor.</p>
-<p>Installing RStudio is not too complicated. The RStudio page is at: <a href="https://www.rstudio.com">https://www.rstudio.com</a>, and after a few clicks you can choose the version for the particular operating system (Windows, OS X, several flavors of Linux) that you’re using Here’s a direct link to the downloads page:</p>
+<p>RStudio (<a href="http://www.rstudio.com">http://www.rstudio.com</a>) is an IDE (integrated development environment) that provides a consistent environment for running R across different platforms (i.e. Windows, OS X or MacOS, Linux). The “environment” contains four “panes” two of which include the standard command-line “console” interface of R, and a code or script editor that is generally more useful that those built into the standard R applications for Windows or the Mac, plus two other panes that provide a graphics window, help window, workspace summary and so on. The panes are tiled, and remain in the foreground, making it a little easier to navigate around the different windows that appear in the Windows and Mac applications. The IDE also provides other nice features that assist coding in general (like autocompletion) and in doing the report writing and documentation required to do “reproducible research” and also developing R packages. RStudio is under continuous development (the current version is Version 1.3.1093), and so there are occasional problems that arise, but most are minor.</p>
+<p>Installing RStudio is not too complicated. The RStudio page is at: <a href="https://www.rstudio.com">https://www.rstudio.com</a>, and after a few clicks you can choose the version for the particular operating system (Windows, OS X or MacOS, several flavors of Linux) that you’re using Here’s a direct link to the downloads page:</p>
 <ul>
 <li><a href="https://rstudio.com/products/rstudio/download/#download">https://rstudio.com/products/rstudio/download/#download/</a>.</li>
 </ul>
 <p>Note that the specific version numbers below may change as RStudio is updated.</p>
 <p><em>Windows</em></p>
 <ol style="list-style-type: decimal">
-<li>Clicking on the Windows Windows 10/8/7 installation package (e.g. <code>RStudio 1.2.5003</code> ) will bring up a standard Windows download dialog box. Save the file to an appropriate place.</li>
+<li>Clicking on the Windows Windows 10/8/7 installation package (e.g. <code>RStudio 1.3.1093</code> ) will bring up a standard Windows download dialog box. Save the file to an appropriate place.</li>
 <li>Open the downloaded file.<br />
 </li>
 <li>Accept the proposed defaults, and quit the installer when finished. You should see an RStudio icon on the desktop</li>
 </ol>
 <p><em>Mac</em></p>
 <ol style="list-style-type: decimal">
-<li>Download the macSO 10.13+ disk-image installation (e.g. <code>RStudio 1.2.5033</code>). Save the file.</li>
-<li>Open the downloaded file (<code>RStudio-1.2.5033.dmg</code>) by clicking on it. This will open a dialog box that asks if you want to open the file with the default DiskImageMounter application.<br />
+<li>Download the macSO 10.13+ disk-image installation (e.g. <code>RStudio 1.3.1093</code>). Save the file.</li>
+<li>Open the downloaded file (<code>RStudio-1.3.1093.dmg</code>) by clicking on it. This will open a dialog box that asks if you want to open the file with the default DiskImageMounter application.<br />
 </li>
 <li>Clicking on ok will open a window showing icons for your Applications folder and the RStudio.app. Drag and drop the RStudio.app onto the Applications folder icon.</li>
 <li>If you wish, browse to your Applications folder and drag RStudio.app to the Dock.</li>
@@ -545,17 +644,13 @@ $(document).ready(function () {
 <p><strong>5. Starting RStudio</strong></p>
 <p>To start the RStudio “gui” (graphical user interface), click on the start menu in Windows, and type RStudio) or click on the RStudio.app GUI (Mac) in the Applications folder (which you can copy to the Dock).</p>
 <p>After a brief pause, RStudio will open, and you should see the message like this in the Console pane:</p>
-<pre><code>R version 3.6.3 (2020-02-29) -- &quot;Holding the Windsock&quot;
-Copyright (C) 2020 The R Foundation for Statistical Computing
-Platform: x86_64-apple-darwin15.6.0 (64-bit)
-
-...</code></pre>
+<p>R version 4.0.3 (2020-10-10) – “Bunny-Wunnies Freak Out” Copyright (C) 2020 The R Foundation for Statistical Computing Platform: x86_64-apple-darwin17.0 (64-bit) …</p>
 <p><strong>6. Quitting R</strong></p>
 <p>There are several ways to quit R – clicking on the “close window” button, typing <code>File &gt; Quit Session</code> from the RStudio menu. RStudio will ask if you want to save the current workspace image and any other files you’ve created or edited. In general, you’ll want to do that, but there are cases when you might not want to (e.g. you’ve accidentally deleted some intermediate results).</p>
 <p><strong>7. Getting Help</strong></p>
 <p>The first thing to do in learning new software is figure out how to get help. R has several approaches:</p>
 <ul>
-<li>A quick way to get help on a particular function or command, for example, the quit function described above, is to type a question mark plus the name of the function at the command line, e.g. <code>?quit</code>, you can also type <code>help(quit)</code>. (Note that typing <code>?quit</code> will be one of the few times in which a function (<code>quit()</code>) is typed without the parentheses.</li>
+<li>A quick way to get help on a particular function or command, for example, the quit function described above, is to type a question mark plus the name of the function at the command line, e.g. <code>?quit</code>, you can also type <code>help(quit)</code>. (Note that typing <code>?quit</code> will be one of the few times in which a function (<code>quit()</code>) is typed without the parentheses.</li>
 <li>You can also get to a web page-based help system by typing <code>help.start()</code> at the command line or using the <code>Help &gt; R Help</code> on the RStudio menu.</li>
 </ul>
 <p>The key links on the help page are:</p>
@@ -566,8 +661,8 @@ Platform: x86_64-apple-darwin15.6.0 (64-bit)
 </ol>
 <p>One of the issues with R is that error messages can be rather obscure. The most frequent sources of errors are simple typos, followed by those generate by copying and editing code. With time, you’ll develop a feel for what the error messages mean.</p>
 <p><strong>8. Projects in RStudio</strong></p>
-<p>One very nice feature of RStudio is its ability to create <em>Projects</em> which help a lot in keeping data (e.g. <code>.csv</code>-type text files, or R’s internal <code>.RData</code> format) and scripts (e.g. files that end in <code>.R</code>, or .<code>Rmd</code>) organized. Also, multiple Projects can reside on the same machine (or user account on the machine), which helps keep your work organized. Project folders can be created internally in RStudio, but it may be easier to create the folders outside of RStudio, and then use the <code>File &gt; New Project &gt; Existing Directory</code> dialog to browse to that folder or directory. (Note (don’t do this now): A useful folder or directory hierarchy would be created by using the two subfolders or directories to the working directories described above, the <code>R</code> one for code, the <code>.RData</code> workspace file, and <code>*.R</code> and <code>*.Rmd</code> source files, and the other <code>data</code> to download data into. Then in the New Project dialog, one would browse to, say <code>c:/Users/bartlein/Documents/geog495/R/</code> (Windows), or <code>User/Documents/R/</code> (OS X/MacOS) to create the Project file (<code>R.Rproj</code>), and download data to <code>c:/Users/bartlein/Documents/geog495/data/</code> (Windows), or <code>User/Documents/data/</code> (OS X/MacOS).) Projects can also be created on the virtual machine.</p>
-<p>It’s also possible to begin where you left off, by browsing to a Project file, and simply clicking on it.</p>
+<p>One very nice feature of RStudio is its ability to create <em>Projects</em> which help a lot in keeping data (e.g. <code>.csv</code>-type text files, or R’s internal <code>.RData</code> format) and scripts (e.g. files that end in <code>.R</code>, or .<code>Rmd</code>) organized. Also, multiple Projects can reside on the same machine (or user account on the machine), which helps keep your work organized. Project folders can be created internally in RStudio, but it may be easier to create the folders outside of RStudio, and then use the <code>File &gt; New Project &gt; Existing Directory</code> dialog to browse to that folder or directory. (Note (don’t do this now): A useful folder or directory hierarchy would be created by using the two subfolders or directories to the working directories described above, the <code>R</code> one for code, the <code>.RData</code> workspace file, and <code>*.R</code> and <code>*.Rmd</code> source files, and the other <code>data</code> to download data into. Then in the New Project dialog, one would browse to, say <code>c:/Users/bartlein/Documents/geog495/R/</code> (Windows), or <code>User/Documents/R/</code> (OS X/MacOS) to create the Project file (<code>R.Rproj</code>), and download data to <code>c:/Users/bartlein/Documents/geog495/data/</code> (Windows), or <code>User/Documents/data/</code> (OS X/MacOS).) Projects can also be created on the virtual machine.</p>
+<p>It’s also possible to easily begin where you left off, by browsing to a Project file, and simply clicking on it to start RStudio.</p>
 <p><strong>9. A Data Set</strong></p>
 <p>The Summit Cr. geomorphic data consists of 88 observations of 11 variables along an 0.8-km stretch of Summit Cr. in eastern Oregon. This data set was collected by Pat McDowell, Frank Magilligan and their students as part of their study of the effects of cattle “exclosures” on the morphology of stream channels. They divided this stretch of Summit Cr. into individual “hydrologic units” (HU’s) that were either pools, shallow “riffles,” or straight “glides.” The overall study area is divided into three sections: an upstream reach (reach A) in which cattle are permitted to graze, a middle reach (reach B) from which cattle have been excluded, and a downstream reach (reach C), in which cattle were again permitted to graze.</p>
 <p>The dataset contains the following information:</p>
@@ -679,13 +774,17 @@ Platform: x86_64-apple-darwin15.6.0 (64-bit)
 <p><strong>10. Importing the Data Set</strong></p>
 <p><em>The “working directory” issue.</em></p>
 <p>NOTE: The directions described below will only work if the file being downloaded is indeed downloaded to the <code>/data</code> folder in the working folder created earlier, and the folder is indeed the current working folder in R. If you wind up downloading the file somewhere else, like your <code>/Downloads</code> folder, you should move it into your working folder.</p>
-<p>The current working folder can be discoverd by typing the following in the Console window:</p>
-<pre><code>getwd()</code></pre>
+<p>The current working folder can be discovered by typing the following in the Console window:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div>
 <p>If you’re not in the working directory, you can use the RStudio <code>Session &gt; Set Working Directory &gt; Choose Working Directory...</code> dialog. You can also “strong-arm” the change of the working directory using the <code>setwd()</code> function:</p>
 <pre><code>setwd(&quot;C:/Users/bartlein/Documents/geog495/data/&quot;) # Windows
+setwd(&quot;C:\\Users\\bartlein\\Documents\\geog495\\data\\&quot;) # classical Windows
+
 setwd(&quot;R:/geog495_1/Student_Data/userid/&quot;) # virtual machine
+setwd(&quot;R:\\geog495_1\\Student_Data\\userid\\&quot;) # virtual machine -- classical Windows foremat
+    
 setwd(&quot;/Users/userid/Documents/geog495/&quot;) # macOS</code></pre>
-<p>Note the use of the forward slash in specifying the folder paths in Windows. (R uses a single backslash “<code>\</code>” as an operator, and so the first backslash “escapes” the second, telling R to treat the combination like a single backslash.)</p>
+<p>Note the use of either the forward slash or double backslash in specifying the folder paths in Windows. (R uses a single backslash “<code>\</code>” as an operator, and so the first backslash “escapes” the second, telling R to treat the combination like a single backslash.) It’s easier to use the forward-slash format.</p>
 <p><em>Reading data</em></p>
 <p>NOTE: Punctuation, spelling and case are important. R is case sensitive; in other words, <code>Sumcr</code> is not the same thing as <code>sumcr</code>, and <code>Read.csv</code> is not the same as <code>read.csv</code>.</p>
 <p>R can read data from a number of different sources, including text (ascii) data and the .csv (comma separated values) format of Excel spreadsheets, as well as from an internal format, which is text-based, but not easily readable by humans. R stores the data, names of variables, etc. in an efficient form in its workspace (.Rdata) that can be saved and reloaded.</p>
@@ -705,29 +804,29 @@ setwd(&quot;/Users/userid/Documents/geog495/&quot;) # macOS</code></pre>
 <li>macOS: <code>/Users/userid/Documents/geog495/data/</code></li>
 </ul>
 <p>To <strong><em>read</em></strong> the Summit Cr. data set into R on Windows, type the following:</p>
-<pre><code>sumcr &lt;- read.csv(&quot;C:/Users/userid/Documents/geog495/data/sumcr.csv&quot;)</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sumcr <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;C:/Users/userid/Documents/geog495/data/sumcr.csv&quot;</span>)</span></code></pre></div>
 <p>while on the virtual machine, type the following</p>
-<pre><code>sumcr &lt;- read.csv(&quot;R:/geog495_1/Student_Data/userid/data/sumcr.csv&quot;) </code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sumcr <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;R:/geog495_1/Student_Data/userid/data/sumcr.csv&quot;</span>) </span></code></pre></div>
 <p>and on the Mac, type the following</p>
-<pre><code>sumcr &lt;- read.csv(&quot;/Users/bartlein/Documents/geog495/data/sumcr.csv&quot;)  </code></pre>
-<p>where, as usual, <code>&quot;userid&quot;</code> is your userid. Make sure that the file paths are bracketed by quotation marks.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sumcr <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/sumcr.csv&quot;</span>)  </span></code></pre></div>
+<p>where, as usual, <code>"userid"</code> is your userid. Make sure that the file paths are bracketed by quotation marks.</p>
 <p>The <code>read.csv()</code> function creates a data frame “object” called “<code>sumcr</code>” that contains the data from the .csv file. Note that the data frame object doesn’t need to have the same name as the file, especially if the filename is complicated. The “<code>&lt;-</code>” arrow is called the “assignment operator”, which, as it sounds, assigns whatever object is to its right to whatever object is to its left, sometimes creating a new object in the process. In reading a line of text, the operator is usually spoken as “gets” as in “the dataframe <code>sumcr</code> gets the contents of the <code>sumcr.csv</code> file.” In newer versions of R, the equals (=) sign can be used, but in most existing texts and .pdf files, the <code>&lt;-</code> version is used.</p>
 <p>The advantage of the download-first-then-read-in approach is that you have an Excel-editable copy of the data set in your working folder.</p>
 <p>An alternative approach for reading data is to use the <code>file.choose()</code> function to browse to a particular file:</p>
-<pre><code>sumcr &lt;- read.csv(file.choose())</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sumcr <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">file.choose</span>())</span></code></pre></div>
 <p>This will open a “Select file…” dialog box. There’s a disadvantage to this approach in that it is not “reproducible”–at some later time, you may not be able to recall what file was read in to produce a particular result.</p>
 <p><em>Looking at the data</em></p>
 <p>The first thing to do is to check to see that R indeed has the Summit Cr. data frame in its workspace. This can be done by typing <code>ls()</code> (the list function) at the command line, or (Windows) clicking on Misc &gt; List objects on the RGui menu.</p>
-<p>The data frame can be examined by simply typing the name of the data frame at the command line (e.g. <code>sumcr</code>), which will create a lot of output, or by typing <code>head(sumcr)</code>, which lists the first five lines (and guess what <code>tail(sumcr)</code> does..)..</p>
+<p>The data frame can be examined by simply typing the name of the data frame at the command line (e.g. <code>sumcr</code>), which will create a lot of output, or by typing <code>head(sumcr)</code>, which lists the first five lines (and guess what <code>tail(sumcr)</code> does..)..</p>
 <p>The <code>names()</code> function can be used to get a list of the variables in a data frame, e.g.:</p>
-<pre><code>names(sumcr)</code></pre>
-<p>The individual variables are referred to by a “compound” name consisting of the data frame name and the variable name, joined by a dollar sign (<code>$</code>), e.g. <code>sumcr$WidthWS</code> Note that variable names are case-sensitive too (e.g. the name <code>sumcr$WidthWS</code> is not the same as <code>sumcr$widthws</code>.) This manner of referring to variables can be made less cumbersome by using the <code>attach()</code> function. For example, try typing the following (don’t type the material in parentheses, or the comments within a line, just the text in the Courier type face:</p>
-<pre><code>sumcr$WidthWS   # (works ok)
-WidthWS   # (produces the error message &#39;Object &quot;WidthWS&quot; not found&#39;)</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(sumcr)</span></code></pre></div>
+<p>The individual variables are referred to by a “compound” name consisting of the data frame name and the variable name, joined by a dollar sign (<code>$</code>), e.g. <code>sumcr$WidthWS</code> Note that variable names are case-sensitive too (e.g. the name <code>sumcr$WidthWS</code> is not the same as <code>sumcr$widthws</code>.) This manner of referring to variables can be made less cumbersome by using the <code>attach()</code> function. For example, try typing the following (don’t type the material in parentheses, or the comments within a line, just the text in the Courier type face:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sumcr<span class="sc">$</span>WidthWS   <span class="co"># (works ok)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>WidthWS   <span class="co"># (produces the error message &#39;Object &quot;WidthWS&quot; not found&#39;)</span></span></code></pre></div>
 <p>Then try typing <code>attach(sumcr)</code>, press Enter, and now type <code>WidthWS</code> on the next line (should work ok now).</p>
 <p><strong>11. What to hand in.</strong></p>
 <p>Use the <code>summary()</code> function to produce a quick summarization of the data set:</p>
-<pre><code>summary(sumcr)</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sumcr)</span></code></pre></div>
 <p>To hand it in, simply copy-and-paste it into the Canvas assignment window.</p>
 <p>To print the summary out, select the text, and click on the “print” icon, or use File &gt; Print.</p>
 <p><strong>12. Quitting RStudio</strong></p>
@@ -743,7 +842,7 @@ WidthWS   # (produces the error message &#39;Object &quot;WidthWS&quot; not foun
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

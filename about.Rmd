@@ -20,7 +20,7 @@ pdf.options(useDingbats = TRUE)
 - Topic:  Visualization and Data Analysis
 - Instructor:  Pat Bartlein, bartlein@uoregon.edu, 154 Condon, +1 541 346 4967
 
-The web pages here support the Spring 2020 course offering of GEOG 4/595 Geographic Data Analysis
+The web pages here support the Winter 2021 course offering of GEOG 4/595 Geographic Data Analysis
 
 Note that the data sets on this web page are instructional in nature, intended for illustrating various aspects of data analysis and visualization.  It would be a bad idea to use them as research-grade data sets.
 

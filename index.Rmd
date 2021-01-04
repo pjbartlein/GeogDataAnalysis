@@ -20,7 +20,8 @@ pdf.options(useDingbats = TRUE)
 **GEOG 4/595: Winter 2021, Asynchronous Lecture Time 2:15-3:45 T&Th**
 
 - Topic:  Visualization and Data Analysis
-- Instructor:  Pat Bartlein, bartlein@uoregon.edu, 154 Condon, 541-346-4967
+- Instructor:  Pat Bartlein, bartlein@uoregon.edu, Ph: 541-346-4967, OH: 3-4p W
+- GE:  Kate Shields, kfs@uoregon.edu, OH: 3-4p W &  10-11a F.
 
 **Course overview:**  Phenomena describable by multiple variables arise in many subfields of physical and human geography and related disciplines.  The focus of this course is on the analysis and display of multivariate geographical data by traditional multivariate "machine-learning" methods and by newer methods of scientific visualization.  The R data-analysis and computing environment will be used.
 

@@ -13,6 +13,7 @@
 
 <title>Geographic Data Analysis</title>
 
+<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -20,6 +21,17 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
 
@@ -410,7 +422,7 @@ $(document).ready(function () {
 <li>Topic: Visualization and Data Analysis</li>
 <li>Instructor: Pat Bartlein, <a href="mailto:bartlein@uoregon.edu" class="email">bartlein@uoregon.edu</a>, 154 Condon, +1 541 346 4967</li>
 </ul>
-<p>The web pages here support the Spring 2020 course offering of GEOG 4/595 Geographic Data Analysis</p>
+<p>The web pages here support the Winter 2021 course offering of GEOG 4/595 Geographic Data Analysis</p>
 <p>Note that the data sets on this web page are instructional in nature, intended for illustrating various aspects of data analysis and visualization. It would be a bad idea to use them as research-grade data sets.</p>
 <p>The GitHub repository for these pages is at <a href="https://github.com/pjbartlein/GeogDataAnalysis">https://github.com/pjbartlein/GeogDataAnalysis</a></p>
 
@@ -423,7 +435,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

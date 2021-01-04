@@ -15,7 +15,7 @@
 - lecture web pages with embedded R examples
 - exercises with other examples
 - R "packages" for advanced analyses
-- two take-home exams
+- four quizzes
 
 # Nature of Geographical Data #
 

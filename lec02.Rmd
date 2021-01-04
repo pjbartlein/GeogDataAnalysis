@@ -16,7 +16,7 @@ pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
 
-<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2021, but may undergo further edits.</span></p>
 
 Note:  Ordinarily, learning how to download and "import" files into R/RStudio is an important part of climbing R's steepish learning curve.  To make it easier to replicate the lectures and to play with the code, here is a workaround that will load all of the individual data sets that are used in the lectures.
 
