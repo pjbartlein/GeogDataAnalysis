@@ -16,12 +16,12 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
-<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2021, but may undergo further edits.</span></p>
 **Geography 4/595:  Geographic Data Analysis**  
-**Spring 2020**
+**Winter 2021**
 
 **Exercise 3:  Bivariate Plots & Descriptive Statistics**  
-**Finish by Friday, April 17**
+**Finish by Friday, January 22**
 
 **1.  Introduction**  
 
