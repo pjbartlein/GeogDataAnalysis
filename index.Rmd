@@ -17,7 +17,7 @@ pdf.options(useDingbats = TRUE)
 
 ![](images/annp.png)
 
-**GEOG 4/595: Winter 2021, Nominal Class Time 2:15-3:45 T&Th**
+**GEOG 4/595: Winter 2021, Asynchronous Lecture Time 2:15-3:45 T&Th**
 
 - Topic:  Visualization and Data Analysis
 - Instructor:  Pat Bartlein, bartlein@uoregon.edu, 154 Condon, 541-346-4967
