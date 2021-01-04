@@ -18,7 +18,7 @@ klippy::klippy(position = c('top', 'right'))
 ```{r load, echo=FALSE, cache=FALSE}
 load(".Rdata")
 ```
-<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
+<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
 # Introduction -- Significance evaluation #
 
 Descriptive statistics (like the mean or standard deviation) are useful for characterizing a set of observations, but the significance of a particular value of a statistic (i.e. is it large or small? commonplace or unusual?) will in general not be immediately apparent, and must be judged using some external (to the data set) standard.

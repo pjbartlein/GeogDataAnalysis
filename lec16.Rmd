@@ -18,7 +18,7 @@ klippy::klippy(position = c('top', 'right'))
 ```{r load, echo=FALSE, cache=FALSE}
 load(".Rdata")
 ```
-<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
+<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
 # Introduction #
 
 *Principal components analysis (PCA)* is a widely used multivariate analysis method, the general aim of which is to reveal systematic covariations among a group of variables.   The analysis can be motivated in a number of different ways, including (in geographical contexts) finding groups of variables that measure the same underlying dimensions of a data set, describing the basic anomaly patterns that appear in spatial data sets, or producing a general index of the common variation of a set of variables.

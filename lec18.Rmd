@@ -14,7 +14,7 @@ options(width = 105)
 load(".Rdata")
 klippy::klippy(position = c('top', 'right'))
 ```
-<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
+<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
 # Introduction #
 
 There is a broad group of multivariate analyses that have as their objective the organization of individual observations (objects, sites, individuals), and these analyses are built upon the concept of multivariate distances (expressed either as similarities or dissimilarities) among the objects.
