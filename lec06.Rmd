@@ -15,7 +15,7 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
-<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
+<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
 # Introduction #
 
 One extremely useful feature of **R** for analyzing geographical data is its ability to provide maps of data in the same computing environment that the data analysis is being performed in, and moreover, to read, manipulate and analyze data with explicitly spatial coordinate information.  This facility for handling spatial data was built into **S** relatively early on, and is now implemented three ways, through the following packages:
