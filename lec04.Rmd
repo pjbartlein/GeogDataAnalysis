@@ -15,7 +15,7 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
-<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
+<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, but may undergo further edits.</span></p>
 # Introduction #
 
 There are a number of descriptive statistics that, like descriptive plots, provide basic information on the nature of a particular variable or set of variables.  A statistic is simply a number that summarizes or represents a set of observations of a particular variable.  

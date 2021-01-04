@@ -13,6 +13,7 @@
 
 <title>Descriptive statistics</title>
 
+<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -20,34 +21,46 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -56,9 +69,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -497,18 +510,21 @@ $(document).ready(function () {
 <div id="TOC">
 <ul>
 <li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="#univariate-descriptive-statistics"><span class="toc-section-number">2</span> Univariate descriptive statistics</a><ul>
+<li><a href="#univariate-descriptive-statistics"><span class="toc-section-number">2</span> Univariate descriptive statistics</a>
+<ul>
 <li><a href="#measures-of-central-tendency"><span class="toc-section-number">2.1</span> Measures of Central Tendency</a></li>
 <li><a href="#measures-of-variability-scale-or-dispersion"><span class="toc-section-number">2.2</span> Measures of Variability, Scale or Dispersion</a></li>
 <li><a href="#measures-of-the-shapes-of-distributions"><span class="toc-section-number">2.3</span> Measures of the shapes of distributions</a></li>
 </ul></li>
 <li><a href="#univariate-descriptive-statistics-examples"><span class="toc-section-number">3</span> Univariate descriptive statistics – examples</a></li>
-<li><a href="#bivariate-descriptive-statistics"><span class="toc-section-number">4</span> Bivariate Descriptive Statistics</a><ul>
+<li><a href="#bivariate-descriptive-statistics"><span class="toc-section-number">4</span> Bivariate Descriptive Statistics</a>
+<ul>
 <li><a href="#correlation-and-covariance"><span class="toc-section-number">4.1</span> Correlation and covariance</a></li>
 <li><a href="#correlation-coefficients"><span class="toc-section-number">4.2</span> Correlation coefficients</a></li>
 <li><a href="#correlation-coefficients-only-measure-linear-relationships"><span class="toc-section-number">4.3</span> Correlation coefficients only measure <em>linear</em> relationships</a></li>
 </ul></li>
-<li><a href="#the-x2-chi-square-measure-of-association-for-categorical-data"><span class="toc-section-number">5</span> The <em>X<sup>2</sup></em> (Chi-square) measure of association (for categorical data)</a><ul>
+<li><a href="#the-x2-chi-square-measure-of-association-for-categorical-data"><span class="toc-section-number">5</span> The <em>X<sup>2</sup></em> (Chi-square) measure of association (for categorical data)</a>
+<ul>
 <li><a href="#descriptive-plots-for-categorical-datamosaic-plots"><span class="toc-section-number">5.1</span> Descriptive plots for categorical data–mosaic plots</a></li>
 <li><a href="#the-chi-square-statistic"><span class="toc-section-number">5.2</span> The Chi-square statistic</a></li>
 <li><a href="#the-chi-square-distribution"><span class="toc-section-number">5.3</span> The Chi-square distribution</a></li>
@@ -521,21 +537,21 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #00cc00;">NOTE: This page has been revised for Spring 2020, but may undergo further edits.</span>
+<span style="color: #cc0000;">NOTE: This page was revised for Spring 2020, but may undergo further edits.</span>
 </p>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
+<div id="introduction" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>There are a number of descriptive statistics that, like descriptive plots, provide basic information on the nature of a particular variable or set of variables. A statistic is simply a number that summarizes or represents a set of observations of a particular variable.</p>
 <p>Before describing the statistics, it will be helpful to look at the summation operator and</p>
 <ul>
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/summation.pdf">summation notation</a></li>
 </ul>
 </div>
-<div id="univariate-descriptive-statistics" class="section level1">
-<h1><span class="header-section-number">2</span> Univariate descriptive statistics</h1>
+<div id="univariate-descriptive-statistics" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> Univariate descriptive statistics</h1>
 <p>In general, descriptive statistics–like the univariate descriptive plots–can be classified into three groups, those that measure 1) central tendency or location of a set of numbers, 2) variability or dispersion, and 3) the shape of the distribution. The univariate descriptive statistics can be thought of as companions to the univariate descriptive plots. The best way to develop an idea of what the statistics are summarizing or attempting to convey is to always produce a descriptive plot first.</p>
-<div id="measures-of-central-tendency" class="section level2">
-<h2><span class="header-section-number">2.1</span> Measures of Central Tendency</h2>
+<div id="measures-of-central-tendency" class="section level2" number="2.1">
+<h2 number="2.1"><span class="header-section-number">2.1</span> Measures of Central Tendency</h2>
 <p>Mode</p>
 <ul>
 <li>definition: the most frequent class interval</li>
@@ -554,8 +570,8 @@ $(document).ready(function () {
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/images/asymdist1.gif">asymmetric distributions</a></li>
 </ul>
 </div>
-<div id="measures-of-variability-scale-or-dispersion" class="section level2">
-<h2><span class="header-section-number">2.2</span> Measures of Variability, Scale or Dispersion</h2>
+<div id="measures-of-variability-scale-or-dispersion" class="section level2" number="2.2">
+<h2 number="2.2"><span class="header-section-number">2.2</span> Measures of Variability, Scale or Dispersion</h2>
 <p>Range</p>
 <ul>
 <li>definition: (maximum value - minimum value)</li>
@@ -573,8 +589,8 @@ $(document).ready(function () {
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/coeffvar.pdf">definition</a></li>
 </ul>
 </div>
-<div id="measures-of-the-shapes-of-distributions" class="section level2">
-<h2><span class="header-section-number">2.3</span> Measures of the shapes of distributions</h2>
+<div id="measures-of-the-shapes-of-distributions" class="section level2" number="2.3">
+<h2 number="2.3"><span class="header-section-number">2.3</span> Measures of the shapes of distributions</h2>
 <p>Skewness and kurtosis</p>
 <ul>
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/moments.pdf">definitions</a></li>
@@ -582,13 +598,13 @@ $(document).ready(function () {
 <p><a href="lec04.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="univariate-descriptive-statistics-examples" class="section level1">
-<h1><span class="header-section-number">3</span> Univariate descriptive statistics – examples</h1>
+<div id="univariate-descriptive-statistics-examples" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> Univariate descriptive statistics – examples</h1>
 <p>Descriptive statistics can be most easily obtained in R using the <code>summary()</code> function. The summary command is generic in the sense that object or “argument” of the function could be anything. If the argument is a data frame, <code>summary()</code> returns descriptive statistics for each variable, whereas if the argument is a single variable, <code>summary()</code> just returns the descriptive statistics for that variable.</p>
 <p>Data files for these examples (download to the working directory and read in): <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/scanvote.csv">[scanvote.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/specmap.csv">[specmap.csv]</a></p>
 <p>Summarize the <code>scanvote</code> data frame. (Note that it is not necessary to attach the data frame if the whole thing is being summarized.)</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># dataframe summary</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">summary</span>(scanvote) </a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dataframe summary</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(scanvote) </span></code></pre></div>
 <pre><code>##        District       Yes             Pop          Country 
 ##  Ahvenanmaa: 1   Min.   :25.50   Min.   :   1.50   Fin:12  
 ##  Akershus  : 1   1st Qu.:43.20   1st Qu.:  10.00   Nor:19  
@@ -601,16 +617,16 @@ $(document).ready(function () {
 <p><code>mean()</code>, <code>median()</code>, <code>max()</code>, <code>min()</code>, <code>range()</code>, <code>var()</code>, <code>sd()</code>, <code>quantile()</code>, <code>fivenum()</code>, <code>length()</code>, <code>which.max()</code>, <code>which.min()</code></p>
 <p>The easiest way to illustrate what these functions do is to apply them to individual variables and see what they produce.</p>
 <p>Descriptive statistics for individual groups of observations can be obtained using the <code>tapply()</code> function. For example,</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># attach dataframe</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">attach</span>(scanvote)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co"># mean of Yes by Country</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="kw">tapply</span>(Yes, Country, mean)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># attach dataframe</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(scanvote)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># mean of Yes by Country</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(Yes, Country, mean)</span></code></pre></div>
 <pre><code>##      Fin      Nor      Swe 
 ## 52.76667 44.16316 48.57500</code></pre>
 <p>The <code>tapply()</code> function applies a particular function, <code>mean()</code> in this case, to groups of observations (specified here by the <code>Country</code> argument), of the variable <code>Yes</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># summary by Country</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">tapply</span>(Yes, Country, summary)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># summary by Country</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(Yes, Country, summary)</span></code></pre></div>
 <pre><code>## $Fin
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##   43.90   47.62   50.10   52.77   55.10   70.80 
@@ -623,38 +639,34 @@ $(document).ready(function () {
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##   27.20   45.10   48.90   48.58   53.75   64.80</code></pre>
 <p>Detach the <code>scanvote</code> data frame before continuing.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># detach the scanvote dataframe</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">detach</span>(scanvote)</a></code></pre></div>
-<p>Here’s a second example, summarizing the variable <code>WidthWS</code> in the Summit Cr. data frame. Note that here the dataframe was not attached prior to executing the code, and so the variables must be indicated by their “full” names (e.g. <code>sumcr$WidthWS</code>):</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">tapply</span>(sumcr<span class="op">$</span>WidthWS, sumcr<span class="op">$</span>Reach, mean)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># detach the scanvote dataframe</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(scanvote)</span></code></pre></div>
+<p>Here’s a second example, summarizing the variable <code>WidthWS</code> in the Summit Cr. data frame. Note that here the dataframe was not attached prior to executing the code, and so the variables must be indicated by their “full” names (e.g. <code>sumcr$WidthWS</code>):</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(sumcr<span class="sc">$</span>WidthWS, sumcr<span class="sc">$</span>Reach, mean)</span></code></pre></div>
 <pre><code>##        A        B        C 
 ## 3.981000 2.544783 3.697273</code></pre>
 <p>The upstream and downstream grazed reaches (A and C, respecively) have wider stream cross sections than does the exclosure reach (B).</p>
 <p><a href="lec04.html">[Back to top]</a></p>
 </div>
-<div id="bivariate-descriptive-statistics" class="section level1">
-<h1><span class="header-section-number">4</span> Bivariate Descriptive Statistics</h1>
+<div id="bivariate-descriptive-statistics" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> Bivariate Descriptive Statistics</h1>
 <p>A frequent goal in data analysis is to efficiently describe or measure the strength of relationships between variables, or to detect associations between factors used to set up a cross tabulation. A related goal may be to determine which variables are related in a predictive sense to a particular response variable, or put another way, to learn how best to predict future values of a response variable. Correlation (and regression analysis), along with measures of association constructed from tables, provide the means for constructing and displaying such relationships.</p>
 <p>Bivariate descriptive statistics allow the strength dependence of the relationship displayed in a scatter plot to be efficiently summarized, in much the same way that the univariate descriptive statistics provide efficient summaries of the information evident in univariate plots, but the form of the relationship and possible external influences are best detected using descriptive plots, or by specific analyses like regression.</p>
-<div id="correlation-and-covariance" class="section level2">
-<h2><span class="header-section-number">4.1</span> Correlation and covariance</h2>
+<div id="correlation-and-covariance" class="section level2" number="4.1">
+<h2 number="4.1"><span class="header-section-number">4.1</span> Correlation and covariance</h2>
 <p>The correlation coefficient is a simple descriptive statistic that measures the strength of the linear relationship between two interval- or ratio-scale variables (as opposed to categorical, or nominal-scale variables), as might be visualized in a scatter plot. The value of the correlation coefficient, usually symbolized as r, ranges from -1 (for a perfect negative (or inverse) correlation) to +1 for a perfect positive (or direct) correlation.</p>
 <p>Data files for these examples (download to the working directory and read in): <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/cities.csv">[cities.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sumcr.csv">[sumcr.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sierra.csv">[sierra.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/orstationc.csv">[orstationc.csv]</a></p>
 </div>
-<div id="correlation-coefficients" class="section level2">
-<h2><span class="header-section-number">4.2</span> Correlation coefficients</h2>
+<div id="correlation-coefficients" class="section level2" number="4.2">
+<h2 number="4.2"><span class="header-section-number">4.2</span> Correlation coefficients</h2>
 <p><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/correlation.pdf">[Correlation definition]</a></p>
 <p><a href="https://pjbartlein.github.io/GeogDataAnalysis/images/corr.gif">[Illustrations of the strength of the correlation]</a></p>
 <p>Produce examples of - a scatter plot matrix (a graphical summary) - the covariance matrix (numerical summary) - the correlation matrix (numerical summary)</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># bivariate descriptive statistics with the cities dataframe</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">attach</span>(cities)</a></code></pre></div>
-<pre><code>## The following objects are masked from cities (pos = 6):
-## 
-##     Area, City, Elec, Food, Growth, PersRoom, Phones, Pop.1980, Pop.1990, Pop.2000, Vehicles,
-##     Water</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">plot</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>], <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.6</span>)  <span class="co"># scatter plot matrix, omit city name</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bivariate descriptive statistics with the cities dataframe</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(cities)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cities[,<span class="dv">2</span><span class="sc">:</span><span class="dv">12</span>], <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">0.6</span>)  <span class="co"># scatter plot matrix, omit city name</span></span></code></pre></div>
 <p><img src="lec04_files/figure-html/covandcor-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">cov</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>])   <span class="co"># covariance matrix</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(cities[,<span class="dv">2</span><span class="sc">:</span><span class="dv">12</span>])   <span class="co"># covariance matrix</span></span></code></pre></div>
 <pre><code>##                 Area     Pop.1980     Pop.1990     Pop.2000       Growth         Food     PersRoom
 ## Area     232093.0046   363275.214   300632.844   164425.877  -271.613789  -1694.80643  -346.266284
 ## Pop.1980 363275.2139 18016775.762 17077452.245 14134672.921 -5342.455944 -34160.30476 -3341.284353
@@ -679,7 +691,7 @@ $(document).ready(function () {
 ## Elec       183.61429   160.44762   107.89762   12780.976
 ## Phones     158.21429   107.89762   270.34762   20836.276
 ## Vehicles 14609.89286 12780.97619 20836.27619 4041558.962</code></pre>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">cor</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>])   <span class="co"># correlation matrix</span></a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(cities[,<span class="dv">2</span><span class="sc">:</span><span class="dv">12</span>])   <span class="co"># correlation matrix</span></span></code></pre></div>
 <pre><code>##                Area   Pop.1980   Pop.1990   Pop.2000     Growth       Food   PersRoom      Water
 ## Area      1.0000000  0.1776504  0.1482707  0.0811688 -0.3106659 -0.2277181 -0.5172160  0.2941461
 ## Pop.1980  0.1776504  1.0000000  0.9559486  0.7919490 -0.6935458 -0.5209447 -0.5664580  0.6213565
@@ -704,118 +716,107 @@ $(document).ready(function () {
 ## Elec      1.0000000  0.5180646  0.5019066
 ## Phones    0.5180646  1.0000000  0.6303538
 ## Vehicles  0.5019066  0.6303538  1.0000000</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">detach</span>(cities)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(cities)</span></code></pre></div>
 </div>
-<div id="correlation-coefficients-only-measure-linear-relationships" class="section level2">
-<h2><span class="header-section-number">4.3</span> Correlation coefficients only measure <em>linear</em> relationships</h2>
+<div id="correlation-coefficients-only-measure-linear-relationships" class="section level2" number="4.3">
+<h2 number="4.3"><span class="header-section-number">4.3</span> Correlation coefficients only measure <em>linear</em> relationships</h2>
 <p>An important issue in the calculation and interpretation of correlations and covariances is that they only measure or describe linear relationships. This can be illustrated by the relationship between water surface width and downstream distance at Summit Cr.:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># scatter plot with smooth</span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">attach</span>(sumcr)</a></code></pre></div>
-<pre><code>## The following objects are masked from sumcr (pos = 4):
-## 
-##     AreaWS, CumLen, DepthWS, HU, HUAreaBF, HUAreaWS, Length, Location, Reach, WidthBF,
-##     WidthWS, wsgrad</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">plot</span>(CumLen, WidthWS)</a>
-<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">lines</span>(<span class="kw">lowess</span>(CumLen, WidthWS), <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># scatter plot with smooth</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(sumcr)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(CumLen, WidthWS)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">lowess</span>(CumLen, WidthWS), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
 <p><img src="lec04_files/figure-html/sumcr-1.png" width="2100" /></p>
 <p>The relationship is obviously non-linear, but strong (reflecting the among-reach differences in <code>WidthWS</code> seen earlier). What about the correlation?</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">cor</span>(CumLen, WidthWS)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(CumLen, WidthWS)</span></code></pre></div>
 <pre><code>## [1] -0.0959915</code></pre>
 <p>Does the correlation coefficient make any sense here?</p>
 <p><a href="lec04.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="the-x2-chi-square-measure-of-association-for-categorical-data" class="section level1">
-<h1><span class="header-section-number">5</span> The <em>X<sup>2</sup></em> (Chi-square) measure of association (for categorical data)</h1>
+<div id="the-x2-chi-square-measure-of-association-for-categorical-data" class="section level1" number="5">
+<h1 number="5"><span class="header-section-number">5</span> The <em>X<sup>2</sup></em> (Chi-square) measure of association (for categorical data)</h1>
 <p>Categorical data are data that take on discreet values corresponding to the particular class interval that observations of ordinal-, interval-, or ratio-scale variables fall in or the particular group membership of nominal-scale variables. Before applying a particular descriptive statistic, it’s always good to plot the data.</p>
-<div id="descriptive-plots-for-categorical-datamosaic-plots" class="section level2">
-<h2><span class="header-section-number">5.1</span> Descriptive plots for categorical data–mosaic plots</h2>
+<div id="descriptive-plots-for-categorical-datamosaic-plots" class="section level2" number="5.1">
+<h2 number="5.1"><span class="header-section-number">5.1</span> Descriptive plots for categorical data–mosaic plots</h2>
 <p>Categorical or group-membership data (“factors” in R) are often summarized in tables, the cells of which indicate absolute or relative frequencies of different combinations of the levels of the factors. There are several approaches for visualizing the contents of a table.</p>
 <p>First, summarize the data in a table (sometimes called a “cross-tab” or “cross-tabulation” table):</p>
 <pre><code>## The following objects are masked from sumcr (pos = 3):
 ## 
-##     AreaWS, CumLen, DepthWS, HU, HUAreaBF, HUAreaWS, Length, Location, Reach, WidthBF,
-##     WidthWS, wsgrad</code></pre>
-<pre><code>## The following objects are masked from sumcr (pos = 5):
-## 
-##     AreaWS, CumLen, DepthWS, HU, HUAreaBF, HUAreaWS, Length, Location, Reach, WidthBF,
-##     WidthWS, wsgrad</code></pre>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># descriptive plots for categorical data</span></a>
-<a class="sourceLine" id="cb25-2" data-line-number="2">ReachHU_table &lt;-<span class="st"> </span><span class="kw">table</span>(Reach, HU)   <span class="co"># tabluate Reach and HU data</span></a>
-<a class="sourceLine" id="cb25-3" data-line-number="3">ReachHU_table</a></code></pre></div>
+##     CumLen, DepthWS, HU, HUAreaBF, HUAreaWS, Length, Location, Reach, WidthBF, WidthWS,
+##     wsgrad</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># descriptive plots for categorical data</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>ReachHU_table <span class="ot">&lt;-</span> <span class="fu">table</span>(Reach, HU)   <span class="co"># tabluate Reach and HU data</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>ReachHU_table</span></code></pre></div>
 <pre><code>##      HU
 ## Reach  G  P  R
 ##     A  6  4 10
 ##     B 12 13 21
 ##     C  9  5  8</code></pre>
 <p>Next, produce several summary plots based on the table:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">dotchart</span>(ReachHU_table)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dotchart</span>(ReachHU_table)</span></code></pre></div>
 <p><img src="lec04_files/figure-html/crosstabPlots-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">barplot</span>(ReachHU_table)</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(ReachHU_table)</span></code></pre></div>
 <p><img src="lec04_files/figure-html/crosstabPlots-2.png" width="2100" /></p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">mosaicplot</span>(ReachHU_table, <span class="dt">color=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaicplot</span>(ReachHU_table, <span class="at">color=</span>T)</span></code></pre></div>
 <p><img src="lec04_files/figure-html/crosstabPlots-3.png" width="2100" /></p>
 <p><a href="lec04.html">[Back to top]</a></p>
 </div>
-<div id="the-chi-square-statistic" class="section level2">
-<h2><span class="header-section-number">5.2</span> The Chi-square statistic</h2>
+<div id="the-chi-square-statistic" class="section level2" number="5.2">
+<h2 number="5.2"><span class="header-section-number">5.2</span> The Chi-square statistic</h2>
 <p>The <em>X<sup>2</sup></em> statistic measures the strength of association between two categorical variables (nominal- or ordinal-scale variables, summarized by a cross-tabulation, a table that shows the frequency of occurrence of observations with particular combinations of the levels of two (or more) variables.</p>
 <p><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/chisq.pdf">[Chi-squared definition]</a></p>
 <p>Calculate the <em>X2</em> statistic for the <code>ReachHU</code> table.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># Chi-squared statistic</span></a>
-<a class="sourceLine" id="cb30-2" data-line-number="2">ReachHU_table &lt;-<span class="st"> </span><span class="kw">table</span>(Reach,HU)</a>
-<a class="sourceLine" id="cb30-3" data-line-number="3">ReachHU_table</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Chi-squared statistic</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>ReachHU_table <span class="ot">&lt;-</span> <span class="fu">table</span>(Reach,HU)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>ReachHU_table</span></code></pre></div>
 <pre><code>##      HU
 ## Reach  G  P  R
 ##     A  6  4 10
 ##     B 12 13 21
 ##     C  9  5  8</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">chisq.test</span>(ReachHU_table)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(ReachHU_table)</span></code></pre></div>
 <pre><code>## 
 ##  Pearson&#39;s Chi-squared test
 ## 
 ## data:  ReachHU_table
 ## X-squared = 1.9889, df = 4, p-value = 0.7378</code></pre>
 <p>The <code>p-value</code> reported here provides a way of inferring whether or not there is a relationship between the row and column variables in the table, and will be explained more later. In practice the value here is rather large, which provides support for rejecting the notion that there is no relationship between <code>Reach</code> and <code>HU</code>.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">detach</span>(sumcr)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
 <p>To further illustrate the application of the X2 test, the Sierra Nevada reconstructed climate data and the Oregon climate-station data can be converted to categorical (ordinal-scale) data, and the following scripts employed</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co"># crosstab &amp; Chi-square -- Sierra Nevada TSum and PWin groups</span></a>
-<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="kw">attach</span>(sierra)</a>
-<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="kw">plot</span>(PWin, TSum)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># crosstab &amp; Chi-square -- Sierra Nevada TSum and PWin groups</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(sierra)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(PWin, TSum)</span></code></pre></div>
 <p><img src="lec04_files/figure-html/sierra-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">PWin_group &lt;-<span class="st"> </span><span class="kw">cut</span>(PWin, <span class="dv">3</span>) </a>
-<a class="sourceLine" id="cb36-2" data-line-number="2">TSum_group &lt;-<span class="st"> </span><span class="kw">cut</span>(TSum, <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb36-3" data-line-number="3">TSumPWin_table &lt;-<span class="st"> </span><span class="kw">table</span>(TSum_group, PWin_group)</a>
-<a class="sourceLine" id="cb36-4" data-line-number="4">TSumPWin_table</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>PWin_group <span class="ot">&lt;-</span> <span class="fu">cut</span>(PWin, <span class="dv">3</span>) </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>TSum_group <span class="ot">&lt;-</span> <span class="fu">cut</span>(TSum, <span class="dv">3</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>TSumPWin_table <span class="ot">&lt;-</span> <span class="fu">table</span>(TSum_group, PWin_group)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>TSumPWin_table</span></code></pre></div>
 <pre><code>##              PWin_group
 ## TSum_group    (34.8,91.7] (91.7,148] (148,205]
 ##   (13.7,14.9]         166        130        79
 ##   (14.9,16.2]         239        152       101
 ##   (16.2,17.5]         142        135        45</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">chisq.test</span>(TSumPWin_table)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(TSumPWin_table)</span></code></pre></div>
 <pre><code>## 
 ##  Pearson&#39;s Chi-squared test
 ## 
 ## data:  TSumPWin_table
 ## X-squared = 13.733, df = 4, p-value = 0.008198</code></pre>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw">detach</span>(sierra)</a></code></pre></div>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="co"># crosstab &amp; Chi-square -- Oregon station elevation and tann</span></a>
-<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="kw">attach</span>(orstationc)</a></code></pre></div>
-<pre><code>## The following objects are masked _by_ .GlobalEnv:
-## 
-##     x, y</code></pre>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="kw">plot</span>(elev, tann)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(sierra)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># crosstab &amp; Chi-square -- Oregon station elevation and tann</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(orstationc)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(elev, tann)</span></code></pre></div>
 <p><img src="lec04_files/figure-html/orstationc-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">elev_group &lt;-<span class="st"> </span><span class="kw">cut</span>(elev, <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb44-2" data-line-number="2">tann_group &lt;-<span class="st"> </span><span class="kw">cut</span>(tann, <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb44-3" data-line-number="3">elevtann_table &lt;-<span class="st"> </span><span class="kw">table</span>(elev_group, tann_group)</a>
-<a class="sourceLine" id="cb44-4" data-line-number="4">elevtann_table</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>elev_group <span class="ot">&lt;-</span> <span class="fu">cut</span>(elev, <span class="dv">3</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>tann_group <span class="ot">&lt;-</span> <span class="fu">cut</span>(tann, <span class="dv">3</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>elevtann_table <span class="ot">&lt;-</span> <span class="fu">table</span>(elev_group, tann_group)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>elevtann_table</span></code></pre></div>
 <pre><code>##                      tann_group
 ## elev_group            (3.19,6.33] (6.33,9.47] (9.47,12.6]
 ##   (0.028,659]                   0           1          52
 ##   (659,1.32e+03]                2          19           9
 ##   (1.32e+03,1.98e+03]           3           6           0</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="kw">chisq.test</span>(elevtann_table)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(elevtann_table)</span></code></pre></div>
 <pre><code>## Warning in chisq.test(elevtann_table): Chi-squared approximation may be incorrect</code></pre>
 <pre><code>## 
 ##  Pearson&#39;s Chi-squared test
@@ -823,12 +824,12 @@ $(document).ready(function () {
 ## data:  elevtann_table
 ## X-squared = 66.672, df = 4, p-value = 1.143e-13</code></pre>
 </div>
-<div id="the-chi-square-distribution" class="section level2">
-<h2><span class="header-section-number">5.3</span> The Chi-square distribution</h2>
+<div id="the-chi-square-distribution" class="section level2" number="5.3">
+<h2 number="5.3"><span class="header-section-number">5.3</span> The Chi-square distribution</h2>
 <p>Quick look at the appropriate Chi-square distribution:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">25</span>, <span class="dt">by =</span> <span class="fl">.1</span>)</a>
-<a class="sourceLine" id="cb49-2" data-line-number="2">pdf &lt;-<span class="st"> </span><span class="kw">dchisq</span>(x, <span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb49-3" data-line-number="3"><span class="kw">plot</span>(pdf <span class="op">~</span><span class="st"> </span>x, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">25</span>, <span class="at">by =</span> .<span class="dv">1</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>pdf <span class="ot">&lt;-</span> <span class="fu">dchisq</span>(x, <span class="dv">4</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pdf <span class="sc">~</span> x, <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
 <p><img src="lec04_files/figure-html/chisq-dist-1.png" width="2100" /></p>
 <p>#Readings#</p>
 <ul>
@@ -849,7 +850,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

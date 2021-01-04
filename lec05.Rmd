@@ -15,7 +15,8 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
-<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
+
+<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, but may undergo further edits.</span></p>
 # Introduction #
 
 Multivariate descriptive displays or plots are designed to reveal the relationship among several variables simulataneously..  As was the case when examining relationships among pairs of variables, there are several basic characteristics of the relationship among sets of variables that are of interest.  These include:
@@ -272,7 +273,7 @@ The following plots explore the seasonality of precipitation in the Yellowstone 
 
 ```{r plot19}
 library(sf)
-attach(yell_pratio)
+attach(yellpratio)
 
 # simple map
 # read and plot shapefiles
@@ -286,7 +287,7 @@ points(Lon, Lat, pch=3, cex=0.6)
 
 # stars plot for precipitation ratios
 col.red <- rep("red",length(orstationc[,1]))
-stars(yell_pratio[,4:15], locations=as.matrix(cbind(Lon, Lat)),
+stars(yellpratio[,4:15], locations=as.matrix(cbind(Lon, Lat)),
 col.stars=col.red, len=0.2, lwd=1, key.loc=c(-111.5,42.5), labels=NULL, add=T)
 ```
 
@@ -341,7 +342,7 @@ Next, the general idea that seems to be emerging, that there variations within t
 
 ```{r plot22}
 # Parallel plot of precipitation ratios
-plot4 <- parallelplot(~yell_pratio[,4:15] | Elevation,
+plot4 <- parallelplot(~yellpratio[,4:15] | Elevation,
     layout = c(4, 1),
     ylab = "Precipitation Ratios")
 print(plot4)
