@@ -110,7 +110,7 @@ dotchart(WidthWS)
 Here's an alternative, this time with each line labeled by the Location variable
 
 ```{r echo=TRUE, eval=FALSE}
-"Clevland" dot plot/chart
+# "Clevland" dot plot/chart
 dotchart(WidthWS, labels=as.character(Location), cex=0.5)
 ```
 
