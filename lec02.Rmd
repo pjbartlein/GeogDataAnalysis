@@ -372,5 +372,6 @@ detach(scanvote)
 - Owen (*The R Guide*):  Ch. 4 & 5, section 6.3
 - Kuhnert & Venebles (*An Introduction...*):  p. 61-76
 - Rossiter (*Introduction ... ITC*):  Ch. 2; sections 3.1-3.3
+- Chang (*R Graphics Cookbook*): Ch. 2, 3, 4, 6
 
 [[Back to top]](lec02.html)

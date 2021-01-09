@@ -15,7 +15,7 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
-<p><span style="color: #00cc00;">NOTE:  This page has been revised for Spring 2020, but may undergo further edits.</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2021, but may undergo further edits.</span></p>
 # Introduction #
 
 The **R** package `ggplot2` by Hadley Wickham provides an alternative approach to the "base" graphics in **R** for constructing plots and maps, and is inspired by Lee Wilkinson's *The Grammar of Graphics* book (Springer, 2nd Ed. 2005).  The basic premise of the *Grammar of Graphics* book, and of the underlying design of the package, is that data graphics, like a language, are built upon some basic components that are assembled or layered on top of one another.  In the case of English (e.g Garner, B., 2016, *The Chicago Guide to Grammar, Usage and Punctuation*, Univ. Chicago Press), there are eight "parts of speech" from which sentences are assembled:
@@ -425,20 +425,14 @@ detach(sumcr)
 Symbol size can be used to indicate the value of a third variable, forming a "bubble" or "balloon" plot, to indicate the value of station elevation on a simple longitude by latitude plot of the Oregon climate-station data:
 
 ```{r mv6}
-attach(orstationc)
-plot(lon, lat, type="n")
-symbols(lon, lat, circles=elev, inches=0.1, add=T)
+plot(orstationc$lon, orstationc$lat, type="n")
+symbols(orstationc$lon, orstationc$lat, circles=orstationc$elev, inches=0.1, add=T)
 ```
 
 Here's the equivalent plot using `ggplot2`
 
 ```{r mv7}
 ggplot(orstationc, aes(x=lon, y=lat, size=elev)) + geom_point(shape=21, color="black", fill="lightblue")
-```
-
-
-```{r}
-detach(orstationc)
 ```
 
 ## Trellis/Lattice-like plots ##
@@ -546,5 +540,17 @@ ggplot(yellpratio, aes(x=APJul, y=APJan)) +
   geom_point() + 
   facet_wrap(~Loc_factor)
 ```
+
+[[Back to top]](ggplot2.html)
+
+# Readings #
+
+- the main reference on `ggplot()` is Wickham, H., 2016, *Ggplot2, Elegant Graphics for Data Analysis*, eBook available on line at UO Library (search topics for "ggplot2")
+- Peng (*EDA with R*): Ch. 14, 15
+- Kabakoff (*Data Visualization with R*): Ch. 3 - 6
+- Irizarry (*Introduction to Data Science*): Ch. 6 - 10
+
+
+
 
 [[Back to top]](ggplot2.html)

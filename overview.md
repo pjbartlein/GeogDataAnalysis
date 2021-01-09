@@ -1,4 +1,7 @@
 
+**Instructor:**  Pat Bartlein, [bartlein@uoregon.edu](bartlein@uoregon.edu) 541-346-4967, OH:  3-4pm Weds.  
+**GE:** Kate Shields, [kfs@uoregon.edu](kfs@uoregon.edu) OH:  12-1 pm Weds., 10-11am Fri.
+
 # Course objectives #
 
 Phenomena describable by multiple variables arise in many subfields of physical and human geography and related disciplines.  The focus of this course is on the analysis and display of multivariate geographical data by traditional multivariate "machine-learning" methods and by newer methods of scientific visualization.

@@ -340,7 +340,7 @@ detach(sumcr)
 
 - Owen (*The R Guide*):  Ch. 5   
 - Kuhnert & Venebles (*An Introduction...*): p. 80-85  
-- Maindonald (*Using R…*): section 3.6; 
-- Cleveland (*Visualizing Data*):  ch. 3  
+- Chang, (*R Graphics Cookbook*): Ch. 6
+- Cleveland (*Visualizing Data*):  Ch. 3  (UO Library)
 
 [[Back to top]](lec03.html)

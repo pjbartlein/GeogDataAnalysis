@@ -15,7 +15,7 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
-<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2021, but may undergo further edits.</span></p>
 # Introduction #
 
 One extremely useful feature of **R** for analyzing geographical data is its ability to provide maps of data in the same computing environment that the data analysis is being performed in, and moreover, to read, manipulate and analyze data with explicitly spatial coordinate information.  This facility for handling spatial data was built into **S** relatively early on, and is now implemented three ways, through the following packages:
@@ -520,13 +520,13 @@ ggplot() +
 
 # Readings #
 
-In addtion to the web pages listed above, simple features and mapping are discussed in the following Bookdown eBooks:
+In addition to the web pages listed above, simple features and mapping are discussed in the following Bookdown eBooks:
 
 Lovelace, R., J. Nowosad, and J. Muenchow, 2019, *Geocomputation with R* [[https://bookdown.org/robinlovelace/geocompr/]](https://bookdown.org/robinlovelace/geocompr/)
 
 Pebesma, E. and R. Bivand, 2020, *Spatial Data Science* [[https://keen-swartz-3146c4.netlify.com]](https://keen-swartz-3146c4.netlify.com)
 
-Also worth looking chapter 3 in Bivand, R., et al. (2013) *Applied Spatial Data Analysis with R*, 2nd edition, which describes the `sp` package approach to mapping.  (Search for the eBook version on the UO Library page [[http://library.uoregon.edu]](http://library.uoregon.edu))  (The whole book is worth looking at, but Ch. 3 is the key reference for the display of spatial data (i.e. mapping) using the older `sp` package.)
+Also worth looking at is chapter 3 in Bivand, R., et al. (2013) *Applied Spatial Data Analysis with R*, 2nd edition, which describes the `sp` package approach to mapping.  (Search for the eBook version on the UO Library page [[http://library.uoregon.edu]](http://library.uoregon.edu))  (The whole book is worth looking at, but Ch. 3 is the key reference for the display of spatial data (i.e. mapping) using the older `sp` package.)
 
 
 

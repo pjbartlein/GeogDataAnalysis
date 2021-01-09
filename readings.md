@@ -2,34 +2,44 @@
 
 # Online readings #
 
-Online Readings:  (available on CRAN at [http://cran.us.r-project.org/other-docs.html](http://cran.us.r-project.org/other-docs.html))
+Online Readings:  (available on CRAN at [[http://cran.us.r-project.org/other-docs.html][(http://cran.us.r-project.org/other-docs.html)) 
 
-Kuhnert, P. and W. Venebles, 2005, An Introduction to R:  Software for Statistical Modelling & Computing.  CSIRO Australia (.pdf)
+Kuhnert, P. and W. Venebles, 2005, An Introduction to R:  Software for Statistical Modelling & Computing.  CSIRO Australia [[zipped .pdf on CRAN]](https://cran.r-project.org/doc/contrib/Kuhnert+Venables-R_Course_Notes.zip)
 
-Owen, W.J., 2010, The R Guide.  Dept. of Mathematics and Computer Science, University of Richmond.  (.pdf)
+Owen, W.J., 2010, The R Guide.  Dept. of Mathematics and Computer Science, University of Richmond.  [[.pdf on CRAN]](https://cran.r-project.org/doc/contrib/Owen-TheRGuide.pdf)
 
-Rossiter, D.G., 2012, Introduction to the R Project for Statistical Computing for use at ITC.  International Institute for Geo-information Science & Earth Observation (ITC)
-
-Maindonald, J.H., 2008, Using R for Data Analysis and Graphics, an Introduction (.pdf)
+Rossiter, D.G., 2012, Introduction to the R Project for Statistical Computing for use at ITC.  International Institute for Geo-information Science & Earth Observation (ITC) [[.pdf on CRAN]](https://cran.r-project.org/doc/contrib/Rossiter-RIntro-ITC.pdf)
 
 
-# Other online books and documents #
+# Bookdown and other online books and documents #
 
-Healy, K., 2019, Data Visualization, a practical introduction.  (Princeton Univ. Press) [https://kjhealy.github.io/socviz/](https://kjhealy.github.io/socviz/)
-
-Hijmans, R., 2016, *Spatial Data Analysis and Modeling with R* [http://rspatial.org](http://rspatial.org) 
-
-Peng, R.D., 2016, *R Programming for Data Science*  [https://bookdown.org/rdpeng/rprogdatascience/](https://bookdown.org/rdpeng/rprogdatascience/)
-
-Grolemund, G. and H. Wickham, 2016, *R for Data Science*, [http://r4ds.had.co.nz](http://r4ds.had.co.nz)
+[[https://bookdown.org/]](https://bookdown.org/)
 
 Peng, R.D., 2016, *Exploratory Data Analysis with R*, [https://bookdown.org/rdpeng/exdata/](https://bookdown.org/rdpeng/exdata/)
 
+Phillips, N.D., 2017, *YaRrr — The Pirate's Guide to R*  
+[[https://bookdown.org/ndphillips/YaRrr/]](https://bookdown.org/ndphillips/YaRrr/) 
 
-Phillips, N.D., 2017, *YaRrr — The Pirate's Guide to R* [[https://bookdown.org/ndphillips/YaRrr/]](https://bookdown.org/ndphillips/YaRrr/) 
+Irizarry, R.A., 2020, *Introduction to Data Science, Data Analysis and Prediction Algorithms with R* [[https://rafalab.github.io/dsbook/]](https://rafalab.github.io/dsbook/)
 
-Ismay, C. 2016, *Getting used to R, RStudio, and Markdown* [[https://bookdown.org/chesterismay/rbasics/]](https://bookdown.org/chesterismay/rbasics/)
+Ismay, C., and A.Y. Kim, 2020, *Statistical Inference via Data Science* [[https://moderndive.com/index.html]](https://moderndive.com/index.html)
+ 
+Kabacoff, R., 2020, *Data Visualization with R* [[https://rkabacoff.github.io/datavis/]](https://rkabacoff.github.io/datavis/)
 
+Healy, K., 2019, Data Visualization, a practical introduction.  (Princeton Univ. Press)  
+[[https://kjhealy.github.io/socviz/]](https://kjhealy.github.io/socviz/)
+
+# R programming #
+
+Chang, W., 2021, *R Graphics Cookbook, 2nd Edition  * [[https://r-graphics.org/]](https://r-graphics.org/)
+
+Ismay, C., 2016, *Getting used to R, RStudio, and Markdown* [[https://bookdown.org/chesterismay/rbasics/]](https://bookdown.org/chesterismay/rbasics/)
+
+Peng, R.D., 2020, *R Programming for Data Science* [[https://bookdown.org/rdpeng/rprogdatascience/]](https://bookdown.org/rdpeng/rprogdatascience/)
+
+Grolemund, G., 2014, *Hands-On Programming with R* [[https://rstudio-education.github.io/hopr/]](https://rstudio-education.github.io/hopr/)
+
+Grolemund, G. and H. Wickham, 2016, *R for Data Science*, [http://r4ds.had.co.nz](http://r4ds.had.co.nz)
 
 # Geospatial developments in R #
 
@@ -37,9 +47,12 @@ Simple features (`sf`) web site [[https://r-spatial.github.io/sf/index.html]](ht
 
 Stars project (`stars`) web site [[http://r-spatial.org/r/2017/11/23/stars1.html]](http://r-spatial.org/r/2017/11/23/stars1.html)
 
-Lovelace, R., J. Nowosad, and J. Muenchow, 2019, *Geocomputation with R* [[https://bookdown.org/robinlovelace/geocompr/]](https://bookdown.org/robinlovelace/geocompr/)
+Lovelace, R., J. Nowosad, and J. Muenchow, 2019, *Geocomputation with R*  
+[[https://bookdown.org/robinlovelace/geocompr/]](https://bookdown.org/robinlovelace/geocompr/)
 
 Pebesma, E. and R. Bivand, 2020, *Spatial Data Science* [[https://keen-swartz-3146c4.netlify.com]](https://keen-swartz-3146c4.netlify.com)
+
+Hijmans, R., 2016, *Spatial Data Analysis and Modeling with R* [http://rspatial.org](http://rspatial.org) 
 
 # Other references #
 
@@ -50,6 +63,8 @@ Bivand, R.S., E.J. Pebesma and V. Gomez-Rubio (2013) Applied Spatial Data Analys
 Rogerson, P.A., 2001, Statistical Methods for Geography, Sage, 236 p.
 
 Fotheringham, A.S., C. Brunsdon, and M. Charlton (2000) Quantitative Geography,  Sage, 270 p.
+
+Maindonald, J.H., 2008, Using R for Data Analysis and Graphics, an Introduction (.pdf on CRAN)
 
 # Web pages #
 

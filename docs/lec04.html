@@ -537,7 +537,7 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #cc0000;">NOTE: This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span>
+<span style="color: #00cc00;">NOTE: This page has been revised for Winter 2021, but may undergo further edits.</span>
 </p>
 <div id="introduction" class="section level1" number="1">
 <h1 number="1"><span class="header-section-number">1</span> Introduction</h1>
@@ -804,19 +804,22 @@ $(document).ready(function () {
 ## X-squared = 13.733, df = 4, p-value = 0.008198</code></pre>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(sierra)</span></code></pre></div>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># crosstab &amp; Chi-square -- Oregon station elevation and tann</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(orstationc)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(elev, tann)</span></code></pre></div>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(orstationc)</span></code></pre></div>
+<pre><code>## The following objects are masked _by_ .GlobalEnv:
+## 
+##     lat, lon</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(elev, tann)</span></code></pre></div>
 <p><img src="lec04_files/figure-html/orstationc-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>elev_group <span class="ot">&lt;-</span> <span class="fu">cut</span>(elev, <span class="dv">3</span>)</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>tann_group <span class="ot">&lt;-</span> <span class="fu">cut</span>(tann, <span class="dv">3</span>)</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>elevtann_table <span class="ot">&lt;-</span> <span class="fu">table</span>(elev_group, tann_group)</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>elevtann_table</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>elev_group <span class="ot">&lt;-</span> <span class="fu">cut</span>(elev, <span class="dv">3</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>tann_group <span class="ot">&lt;-</span> <span class="fu">cut</span>(tann, <span class="dv">3</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>elevtann_table <span class="ot">&lt;-</span> <span class="fu">table</span>(elev_group, tann_group)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>elevtann_table</span></code></pre></div>
 <pre><code>##                      tann_group
 ## elev_group            (3.19,6.33] (6.33,9.47] (9.47,12.6]
 ##   (0.028,659]                   0           1          52
 ##   (659,1.32e+03]                2          19           9
 ##   (1.32e+03,1.98e+03]           3           6           0</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(elevtann_table)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(elevtann_table)</span></code></pre></div>
 <pre><code>## Warning in chisq.test(elevtann_table): Chi-squared approximation may be incorrect</code></pre>
 <pre><code>## 
 ##  Pearson&#39;s Chi-squared test
@@ -827,15 +830,15 @@ $(document).ready(function () {
 <div id="the-chi-square-distribution" class="section level2" number="5.3">
 <h2 number="5.3"><span class="header-section-number">5.3</span> The Chi-square distribution</h2>
 <p>Quick look at the appropriate Chi-square distribution:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">25</span>, <span class="at">by =</span> .<span class="dv">1</span>)</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>pdf <span class="ot">&lt;-</span> <span class="fu">dchisq</span>(x, <span class="dv">4</span>)</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pdf <span class="sc">~</span> x, <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">25</span>, <span class="at">by =</span> .<span class="dv">1</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>pdf <span class="ot">&lt;-</span> <span class="fu">dchisq</span>(x, <span class="dv">4</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pdf <span class="sc">~</span> x, <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
 <p><img src="lec04_files/figure-html/chisq-dist-1.png" width="2100" /></p>
 <p>#Readings#</p>
 <ul>
 <li>Owen (<em>The R Guide</em>): Sec. 5.1</li>
 <li>Rossiter (<em>Introduction … ITC</em>): section 4.14</li>
-<li>Rogerson (<em>Statistical Methods</em>): section 1.4!</li>
+<li>Rogerson (<em>Statistical Methods</em>): section 1.4 (UO Library)</li>
 </ul>
 <p><a href="lec04.html">[Back to top]</a></p>
 </div>
