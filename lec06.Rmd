@@ -512,7 +512,7 @@ ggplot() +
                                 "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
                      name = "Jul:Jan Ppt. Ratio") +
                        labs(x = "Longitude", y = "Latitude") +
-  coord_sf(crs = st_crs(wus_sf_proj), xlim = c(-1400000, 1900000), ylim = c(-400000, 2150000)) +
+  coord_sf(crs = st_crs(wus_sf_proj), xlim = c(-1400000, 1500000), ylim = c(-400000, 2150000)) +
   theme_bw()
 ```
 

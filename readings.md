@@ -17,10 +17,10 @@ Rossiter, D.G., 2012, Introduction to the R Project for Statistical Computing fo
 
 Peng, R.D., 2016, *Exploratory Data Analysis with R*, [https://bookdown.org/rdpeng/exdata/](https://bookdown.org/rdpeng/exdata/)
 
-Phillips, N.D., 2017, *YaRrr — The Pirate's Guide to R*  
-[[https://bookdown.org/ndphillips/YaRrr/]](https://bookdown.org/ndphillips/YaRrr/) 
+Phillips, N.D., 2017, *YaRrr — The Pirate's Guide to R* [[https://bookdown.org/ndphillips/YaRrr/]](https://bookdown.org/ndphillips/YaRrr/) 
 
-Irizarry, R.A., 2020, *Introduction to Data Science, Data Analysis and Prediction Algorithms with R* [[https://rafalab.github.io/dsbook/]](https://rafalab.github.io/dsbook/)
+Irizarry, R.A., 2020, *Introduction to Data Science, Data Analysis and Prediction Algorithms with R*  
+[[https://rafalab.github.io/dsbook/]](https://rafalab.github.io/dsbook/)
 
 Ismay, C., and A.Y. Kim, 2020, *Statistical Inference via Data Science* [[https://moderndive.com/index.html]](https://moderndive.com/index.html)
  
@@ -58,7 +58,11 @@ Hijmans, R., 2016, *Spatial Data Analysis and Modeling with R* [http://rspatial.
 
 Cleveland, W.S., 1993, Visualizing Data, Hobart Press, 360 p.
 
-Bivand, R.S., E.J. Pebesma and V. Gomez-Rubio (2013) Applied Spatial Data Analysis with R, Springer, 405 p.
+Everitt, B. and T. Hothorn, 2011, *An Introduction to Applied Multivariate Analysis with R*, Springer, 273 p., availabe as an eBook at UO Libraries.
+
+Wickham, H., 2016, *Ggplot2, Elegant Graphics for Data Analysis 2nd Ed.*, Springer, 266 p. availabe as an eBook at UO Libraries.
+
+Bivand, R.S., E.J. Pebesma and V. Gomez-Rubio (2013) *Applied Spatial Data Analysis with R*, Springer, 405 p. availabe as an eBook at UO Libraries.
 
 Rogerson, P.A., 2001, Statistical Methods for Geography, Sage, 236 p.
 

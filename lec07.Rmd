@@ -15,7 +15,7 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
-<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2021, but may undergo further edits.</span></p>
 # Introduction #
 
 The `sf` package (and `sp` before it), with it's direct links to the `GDAL`, `GEOS`, and `PROJ` libraries give **R** a powerful geospatial analysis capability, and at this point in the development of packages and methods for handling spatial, practically anything that can be accomplished in commercial or open-source GIS software can be done in **R**.  Because **R** is script-oriented, this has the added benefit of reproducibility, inasmuch as scripts can be saved and reused, while analysis done in menu-focused GUIs are not.
@@ -639,5 +639,17 @@ ggplot(data = NA_10km_v2_elev_sf, aes(x = "lon", y = "lat")) +
   scale_y_discrete(breaks = seq(0, 90, by=10)) +
   theme_bw()
 ```
+
+[[Back to top]](lec07.html)
+
+# Readings #
+
+In addition to the web pages listed in the *Maps in R& topic, geospatial analysis is discussed in the following Bookdown eBooks:
+
+Lovelace, R., J. Nowosad, and J. Muenchow, 2019, *Geocomputation with R* [[https://bookdown.org/robinlovelace/geocompr/]](https://bookdown.org/robinlovelace/geocompr/)
+
+Pebesma, E. and R. Bivand, 2020, *Spatial Data Science* [[https://keen-swartz-3146c4.netlify.com]](https://keen-swartz-3146c4.netlify.com)
+
+Also worth looking at is chapter 3 in Bivand, R., et al. (2013) *Applied Spatial Data Analysis with R*, 2nd edition, which describes the `sp` package approach to mapping.  (Search for the eBook version on the UO Library page [[http://library.uoregon.edu]](http://library.uoregon.edu))  (The whole book is worth looking at, but Ch. 3 is the key reference for the display of spatial data (i.e. mapping) using the older `sp` package.)
 
 [[Back to top]](lec07.html)

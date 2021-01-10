@@ -532,6 +532,7 @@ $(document).ready(function () {
 <li><a href="#open-the-control-netcdf-and-target-.csv-files"><span class="toc-section-number">5.1</span> Open the “control” netCDF and target .csv files</a></li>
 <li><a href="#interpolation"><span class="toc-section-number">5.2</span> Interpolation</a></li>
 </ul></li>
+<li><a href="#readings"><span class="toc-section-number">6</span> Readings</a></li>
 </ul>
 </div>
 
@@ -540,7 +541,7 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #cc0000;">NOTE: This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span>
+<span style="color: #00cc00;">NOTE: This page has been revised for Winter 2021, but may undergo further edits.</span>
 </p>
 <div id="introduction" class="section level1" number="1">
 <h1 number="1"><span class="header-section-number">1</span> Introduction</h1>
@@ -1209,7 +1210,7 @@ $(document).ready(function () {
 ##         institution: USFS
 ##         source: http://www.fs.usda.gov/rds/archive/Product/RDS-2013-0009.3/
 ##         references: Short, K.C., 2014, Earth Syst. Sci. Data, 6, 1-27
-##         history: P.J. Bartlein, Mon Jan  4 14:48:35 2021
+##         history: P.J. Bartlein, Sat Jan  9 16:43:32 2021
 ##         Conventions: CF-1.6</code></pre>
 <div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># close the file, writing data to disk</span></span>
 <span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nc_close</span>(ncout)</span></code></pre></div>
@@ -1474,6 +1475,14 @@ $(document).ready(function () {
 <p><img src="lec07_files/figure-html/gg4-1.png" width="2100" /></p>
 <p><a href="lec07.html">[Back to top]</a></p>
 </div>
+</div>
+<div id="readings" class="section level1" number="6">
+<h1 number="6"><span class="header-section-number">6</span> Readings</h1>
+<p>In addition to the web pages listed in the *Maps in R&amp; topic, geospatial analysis is discussed in the following Bookdown eBooks:</p>
+<p>Lovelace, R., J. Nowosad, and J. Muenchow, 2019, <em>Geocomputation with R</em> <a href="https://bookdown.org/robinlovelace/geocompr/">[https://bookdown.org/robinlovelace/geocompr/]</a></p>
+<p>Pebesma, E. and R. Bivand, 2020, <em>Spatial Data Science</em> <a href="https://keen-swartz-3146c4.netlify.com">[https://keen-swartz-3146c4.netlify.com]</a></p>
+<p>Also worth looking at is chapter 3 in Bivand, R., et al. (2013) <em>Applied Spatial Data Analysis with R</em>, 2nd edition, which describes the <code>sp</code> package approach to mapping. (Search for the eBook version on the UO Library page <a href="http://library.uoregon.edu">[http://library.uoregon.edu]</a>) (The whole book is worth looking at, but Ch. 3 is the key reference for the display of spatial data (i.e. mapping) using the older <code>sp</code> package.)</p>
+<p><a href="lec07.html">[Back to top]</a></p>
 </div>
 
 
