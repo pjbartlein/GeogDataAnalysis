@@ -13,6 +13,7 @@
 
 <title>Reference distributions</title>
 
+<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -20,34 +21,46 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -56,9 +69,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -497,16 +510,20 @@ $(document).ready(function () {
 <div id="TOC">
 <ul>
 <li><a href="#introduction-significance-evaluation"><span class="toc-section-number">1</span> Introduction – Significance evaluation</a></li>
-<li><a href="#empirical-reference-distributions"><span class="toc-section-number">2</span> Empirical reference distributions</a><ul>
-<li><a href="#use-of-an-empirical-reference-distribution"><span class="toc-section-number">2.1</span> Use of an empirical reference distribution</a><ul>
+<li><a href="#empirical-reference-distributions"><span class="toc-section-number">2</span> Empirical reference distributions</a>
+<ul>
+<li><a href="#use-of-an-empirical-reference-distribution"><span class="toc-section-number">2.1</span> Use of an empirical reference distribution</a>
+<ul>
 <li><a href="#how-unusual-is-a-particular-observation-of-tsum"><span class="toc-section-number">2.1.1</span> How unusual is a particular observation of <code>TSum</code>?</a></li>
 <li><a href="#what-value-of-tsum-is-exceeded-10-percent-of-the-time"><span class="toc-section-number">2.1.2</span> What value of <code>TSum</code> is exceeded 10 percent of the time?</a></li>
 <li><a href="#how-unusual-is-the-mean-of-the-last-30-years-of-the-record"><span class="toc-section-number">2.1.3</span> How unusual is the mean of the last 30 years of the record?</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#a-theoretical-reference-distribution-the-normal-or-standard-normal-distribution"><span class="toc-section-number">3</span> A theoretical reference distribution – the normal (or standard normal) distribution</a><ul>
+<li><a href="#a-theoretical-reference-distribution-the-normal-or-standard-normal-distribution"><span class="toc-section-number">3</span> A theoretical reference distribution – the normal (or standard normal) distribution</a>
+<ul>
 <li><a href="#density-functions-for-the-normal-distribution"><span class="toc-section-number">3.1</span> Density functions for the normal distribution</a></li>
-<li><a href="#the-central-limit-theorem"><span class="toc-section-number">3.2</span> The Central Limit Theorem</a><ul>
+<li><a href="#the-central-limit-theorem"><span class="toc-section-number">3.2</span> The Central Limit Theorem</a>
+<ul>
 <li><a href="#empirical-demonstration-of-the-central-limit-theorem"><span class="toc-section-number">3.2.1</span> Empirical demonstration of the Central Limit Theorem</a></li>
 </ul></li>
 <li><a href="#other-theoretical-reference-distributions"><span class="toc-section-number">3.3</span> Other theoretical reference distributions</a></li>
@@ -520,16 +537,16 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span>
+<span style="color: #00cc00;">NOTE: This page has been revised for Winter 2021, but may undergo further edits.</span>
 </p>
-<div id="introduction-significance-evaluation" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction – Significance evaluation</h1>
+<div id="introduction-significance-evaluation" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Introduction – Significance evaluation</h1>
 <p>Descriptive statistics (like the mean or standard deviation) are useful for characterizing a set of observations, but the significance of a particular value of a statistic (i.e. is it large or small? commonplace or unusual?) will in general not be immediately apparent, and must be judged using some external (to the data set) standard.</p>
 <p>The significance of a particular value of a statistic (e.g. the 30-yr mean annual temperature of a place) can be evaluated by determining how rare or how commonplace that particular value is. In ordinary practice, those values of a statistic with absolute values that are equaled or exceeded in no more than 5% of the realizations of that statistic are regarded as significant.</p>
 <p>The significance of a particular value of a statistic can be judged by comparing that value to the distribution of “all” values of the statistic. That distribution is known as the reference distribution, and in practice, can be either an <em>empirical distribution</em> (as represented by a histogram or cumulative frequency curve for an actual data set), or a <em>theoretical distribution</em> (as represented by an equation or function).</p>
 </div>
-<div id="empirical-reference-distributions" class="section level1">
-<h1><span class="header-section-number">2</span> Empirical reference distributions</h1>
+<div id="empirical-reference-distributions" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> Empirical reference distributions</h1>
 <p>Empirical reference distributions are contructed using observed (i.e. real) data sets, which if sufficently large, allow statements to be made about the chances of observing particular values of a variable–possibly new obervations of the variable, or of observing combinations of values of a variable, such as the mean for some subset of observations.</p>
 <p>If a relatively large data set exists, then the distribution of a particular statistic (e.g. a 30-yr mean) can be created by repeatedly</p>
 <ul>
@@ -541,24 +558,24 @@ $(document).ready(function () {
 <ul>
 <li>looking at the distribution of the sample statistics (via the histogram or other plot, or by direct inspection).</li>
 </ul>
-<div id="use-of-an-empirical-reference-distribution" class="section level2">
-<h2><span class="header-section-number">2.1</span> Use of an empirical reference distribution</h2>
+<div id="use-of-an-empirical-reference-distribution" class="section level2" number="2.1">
+<h2 number="2.1"><span class="header-section-number">2.1</span> Use of an empirical reference distribution</h2>
 <p>The examples here use the 1189-year-long time series of summer temperature (TSum) for the Sierra Nevada, as reconstructed from tree-ring data (Graumlich, 1993). [<code>sierra.csv</code>] This data set is sufficiently long enough to illustrate the idea of having a large amount of empirical information to base judgements about the <em>significance</em> (or the relative unusualness) of individual values or statistics.</p>
-<div id="how-unusual-is-a-particular-observation-of-tsum" class="section level3">
-<h3><span class="header-section-number">2.1.1</span> How unusual is a particular observation of <code>TSum</code>?</h3>
+<div id="how-unusual-is-a-particular-observation-of-tsum" class="section level3" number="2.1.1">
+<h3 number="2.1.1"><span class="header-section-number">2.1.1</span> How unusual is a particular observation of <code>TSum</code>?</h3>
 <p>To answer this question, the appropriate reference distribution is the one formed by all of the individual observations of <code>TSum</code>. In other words, the entire data set should be used to answer questions about the significance (or relative size) of an individual observation, simply by comparing that observation to all other observations. This comparison is facilitated by first sorting the observations, and then creating a new variable that indicates the relative position within the sorted observations of each observation.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Sierra Nevada tree-ring summer temperature reconstructions</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">attach</span>(sierra)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># sort and rank TSum values</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">sort_Tsum &lt;-<span class="st"> </span><span class="kw">sort</span>(TSum) <span class="co"># arranges values from low to high</span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">rank_Tsum &lt;-<span class="st"> </span><span class="kw">rank</span>(TSum) <span class="co"># replaces values with rank number (1 to n)</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co"># inspect the sorted and ranked values</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co"># close window to exit</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">sierra_sort &lt;-<span class="st"> </span><span class="kw">data.frame</span>(Year, TSum, <span class="kw">rank</span>(TSum), sort_Tsum, <span class="kw">rank</span>(sort_Tsum),</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">     Year[<span class="kw">rank</span>(TSum)])</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="kw">head</span>(sierra_sort)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sierra Nevada tree-ring summer temperature reconstructions</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(sierra)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># sort and rank TSum values</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>sort_Tsum <span class="ot">&lt;-</span> <span class="fu">sort</span>(TSum) <span class="co"># arranges values from low to high</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>rank_Tsum <span class="ot">&lt;-</span> <span class="fu">rank</span>(TSum) <span class="co"># replaces values with rank number (1 to n)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># inspect the sorted and ranked values</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># close window to exit</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>sierra_sort <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(Year, TSum, <span class="fu">rank</span>(TSum), sort_Tsum, <span class="fu">rank</span>(sort_Tsum),</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>     Year[<span class="fu">rank</span>(TSum)])</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sierra_sort)</span></code></pre></div>
 <pre><code>##   Year  TSum rank.TSum. sort_Tsum rank.sort_Tsum. Year.rank.TSum..
 ## 1  800 15.68      667.0     13.68             1.0             1466
 ## 2  801 14.00       58.0     13.70             2.0              857
@@ -566,7 +583,7 @@ $(document).ready(function () {
 ## 4  803 15.28      523.5     13.74             4.5             1322
 ## 5  804 16.14      849.5     13.74             4.5             1648
 ## 6  805 16.99     1093.5     13.75             6.0             1892</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">tail</span>(sierra_sort)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(sierra_sort)</span></code></pre></div>
 <pre><code>##      Year  TSum rank.TSum. sort_Tsum rank.sort_Tsum. Year.rank.TSum..
 ## 1184 1983 16.79     1047.0     17.38          1182.5             1846
 ## 1185 1984 16.71     1018.0     17.39          1185.5             1817
@@ -575,26 +592,26 @@ $(document).ready(function () {
 ## 1188 1987 14.26      149.5     17.45          1188.0              948
 ## 1189 1988 14.99      395.0     17.48          1189.0             1194</code></pre>
 <p>The table can be inspected by opening it in a data viewer:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">View</span>(sierra_sort)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(sierra_sort)</span></code></pre></div>
 <p>From this table, for example, the value 13.79 C can be seen to have occurred three times, in 1101, 1479, and 1892, and is a relatively low value of temperature, in contrast to the highest temperature value, 17.48, which occurred in 1194.</p>
 <p>Similar information can be gained from the histogram.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># nice histogram</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">cutpts &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">12.0</span>, <span class="fl">18.0</span>, <span class="dt">by=</span><span class="fl">0.1</span>)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw">hist</span>(TSum, <span class="dt">breaks=</span>cutpts, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">13</span>,<span class="dv">18</span>))</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw">lines</span>(<span class="kw">density</span>(TSum))</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="kw">rug</span>(TSum)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># nice histogram</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">12.0</span>, <span class="fl">18.0</span>, <span class="at">by=</span><span class="fl">0.1</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(TSum, <span class="at">breaks=</span>cutpts, <span class="at">probability=</span>T, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">13</span>,<span class="dv">18</span>))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(TSum))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rug</span>(TSum)</span></code></pre></div>
 <p><img src="lec09_files/figure-html/refDist02-1.png" width="2100" /></p>
 </div>
-<div id="what-value-of-tsum-is-exceeded-10-percent-of-the-time" class="section level3">
-<h3><span class="header-section-number">2.1.2</span> What value of <code>TSum</code> is exceeded 10 percent of the time?</h3>
+<div id="what-value-of-tsum-is-exceeded-10-percent-of-the-time" class="section level3" number="2.1.2">
+<h3 number="2.1.2"><span class="header-section-number">2.1.2</span> What value of <code>TSum</code> is exceeded 10 percent of the time?</h3>
 <p>Other information can be gained by examining the empirical cumulative density function, which is a plot of the sorted values of <code>TSum</code> and the probability of equaling or exceeding that value in the data set</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># empirical cumulative density function</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">ecdf_Tsum &lt;-<span class="st"> </span><span class="kw">rank</span>(sort_Tsum)<span class="op">/</span><span class="kw">length</span>(TSum)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">plot</span>(sort_Tsum, ecdf_Tsum, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># empirical cumulative density function</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>ecdf_Tsum <span class="ot">&lt;-</span> <span class="fu">rank</span>(sort_Tsum)<span class="sc">/</span><span class="fu">length</span>(TSum)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sort_Tsum, ecdf_Tsum, <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
 <p><img src="lec09_files/figure-html/refDist03-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">sierra_ecdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(Year, TSum, <span class="kw">rank</span>(TSum), sort_Tsum, <span class="kw">rank</span>(sort_Tsum),</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">     Year[<span class="kw">rank</span>(TSum)], ecdf_Tsum)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">head</span>(sierra_ecdf); <span class="kw">tail</span>(sierra_ecdf)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sierra_ecdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(Year, TSum, <span class="fu">rank</span>(TSum), sort_Tsum, <span class="fu">rank</span>(sort_Tsum),</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>     Year[<span class="fu">rank</span>(TSum)], ecdf_Tsum)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sierra_ecdf); <span class="fu">tail</span>(sierra_ecdf)</span></code></pre></div>
 <pre><code>##   Year  TSum rank.TSum. sort_Tsum rank.sort_Tsum. Year.rank.TSum..    ecdf_Tsum
 ## 1  800 15.68      667.0     13.68             1.0             1466 0.0008410429
 ## 2  801 14.00       58.0     13.70             2.0              857 0.0016820858
@@ -610,71 +627,71 @@ $(document).ready(function () {
 ## 1188 1987 14.26      149.5     17.45          1188.0              948 0.9991590
 ## 1189 1988 14.99      395.0     17.48          1189.0             1194 1.0000000</code></pre>
 <p>Again, the specific answer can be obtained by inspection of the data sheet, the histogram, or the Line plot of ProbTSum vs SortTSum.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">View</span>(sierra_ecdf)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(sierra_ecdf)</span></code></pre></div>
 <p>Alternatively, the values corresponding to specific quantiles can be gotten by the following command:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">quantile</span>(TSum, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.0</span>,.<span class="dv">05</span>,.<span class="dv">10</span>,.<span class="dv">25</span>,.<span class="dv">50</span>,.<span class="dv">75</span>,.<span class="dv">90</span>,.<span class="dv">95</span>, <span class="fl">1.0</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(TSum, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.0</span>,.<span class="dv">05</span>,.<span class="dv">10</span>,.<span class="dv">25</span>,.<span class="dv">50</span>,.<span class="dv">75</span>,.<span class="dv">90</span>,.<span class="dv">95</span>, <span class="fl">1.0</span>))</span></code></pre></div>
 <pre><code>##     0%     5%    10%    25%    50%    75%    90%    95%   100% 
 ## 13.680 14.014 14.180 14.730 15.450 16.290 16.870 17.160 17.480</code></pre>
 </div>
-<div id="how-unusual-is-the-mean-of-the-last-30-years-of-the-record" class="section level3">
-<h3><span class="header-section-number">2.1.3</span> How unusual is the mean of the last 30 years of the record?</h3>
+<div id="how-unusual-is-the-mean-of-the-last-30-years-of-the-record" class="section level3" number="2.1.3">
+<h3 number="2.1.3"><span class="header-section-number">2.1.3</span> How unusual is the mean of the last 30 years of the record?</h3>
 <p>The following command gets the mean of the last 30 yrs of data:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">mean</span>(TSum[(<span class="kw">length</span>(TSum)<span class="op">-</span><span class="dv">29</span>)<span class="op">:</span>(<span class="kw">length</span>(TSum))])</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(TSum[(<span class="fu">length</span>(TSum)<span class="sc">-</span><span class="dv">29</span>)<span class="sc">:</span>(<span class="fu">length</span>(TSum))])</span></code></pre></div>
 <pre><code>## [1] 15.848</code></pre>
 <p>To answer the above question, the appropriate reference distribution is no longer that formed from the whole data set, but instead is the distribution that would be formed by a set of mean values of 30-year long samples from the data. This set can be obtained by repeated sampling of the <code>TSum</code> data using the following:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># repeated sampling and calculation of means</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">nsamp &lt;-<span class="st"> </span><span class="dv">200</span> <span class="co"># number of samples</span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3">Means30yr &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nsamp) <span class="co"># matrix to hold means</span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nsamp) {</a>
-<a class="sourceLine" id="cb16-5" data-line-number="5">     samp &lt;-<span class="st"> </span><span class="kw">sample</span>(TSum, <span class="dv">30</span>, <span class="dt">replace=</span>T)</a>
-<a class="sourceLine" id="cb16-6" data-line-number="6">          Means30yr[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
-<a class="sourceLine" id="cb16-7" data-line-number="7">     }</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># repeated sampling and calculation of means</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>nsamp <span class="ot">&lt;-</span> <span class="dv">200</span> <span class="co"># number of samples</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>Means30yr <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span>nsamp) <span class="co"># matrix to hold means</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nsamp) {</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>     samp <span class="ot">&lt;-</span> <span class="fu">sample</span>(TSum, <span class="dv">30</span>, <span class="at">replace=</span>T)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>          Means30yr[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(samp)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>     }</span></code></pre></div>
 <p>The script causes causes <code>nsamp</code> samples of 30 observations each to be drawn at random from the column of data containing <code>TSum</code>. For each sample, the mean is calculated, and stored in the variable <code>Means30yr</code>. The distribution of this variable (<code>Means30yr</code>) rather than that of the original data is the appropriate one for answering the above question.</p>
 <p>The two empirical reference distributions can be compared by looking at their histograms:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># histograms of data and of 30-Means</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb17-3" data-line-number="3">cutpts &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">12.0</span>, <span class="fl">18.0</span>, <span class="dt">by=</span><span class="fl">0.1</span>)</a>
-<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="kw">hist</span>(TSum, <span class="dt">breaks=</span>cutpts, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">12</span>,<span class="dv">20</span>))</a>
-<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="kw">lines</span>(<span class="kw">density</span>(TSum))</a>
-<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="kw">hist</span>(Means30yr, <span class="dt">breaks=</span>cutpts, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">12</span>,<span class="dv">20</span>))</a>
-<a class="sourceLine" id="cb17-7" data-line-number="7"><span class="kw">lines</span>(<span class="kw">density</span>(Means30yr))</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histograms of data and of 30-Means</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">12.0</span>, <span class="fl">18.0</span>, <span class="at">by=</span><span class="fl">0.1</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(TSum, <span class="at">breaks=</span>cutpts, <span class="at">probability=</span>T, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">12</span>,<span class="dv">20</span>))</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(TSum))</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Means30yr, <span class="at">breaks=</span>cutpts, <span class="at">probability=</span>T, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">12</span>,<span class="dv">20</span>))</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(Means30yr))</span></code></pre></div>
 <p><img src="lec09_files/figure-html/refDist07-1.png" width="2100" /></p>
 <p>The above procedure draws 30 years at random from TSum. It might be more appropriate to draw 30-consecutive-year samples from TSum. This can be done as follows:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># repeated sampling and calculation of means</span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="co"># consecutive samples</span></a>
-<a class="sourceLine" id="cb18-3" data-line-number="3">nsamp &lt;-<span class="st"> </span><span class="dv">200</span> <span class="co"># number of samples</span></a>
-<a class="sourceLine" id="cb18-4" data-line-number="4">Means30yrb &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nsamp) <span class="co"># matrix to hold means</span></a>
-<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nsamp) {</a>
-<a class="sourceLine" id="cb18-6" data-line-number="6">     start &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1</span>, <span class="dt">min=</span><span class="dv">1</span>, <span class="dt">max=</span><span class="kw">length</span>(Year)<span class="op">-</span><span class="dv">30</span>)</a>
-<a class="sourceLine" id="cb18-7" data-line-number="7">     start &lt;-<span class="st"> </span><span class="kw">round</span>(start)</a>
-<a class="sourceLine" id="cb18-8" data-line-number="8">     sampmean &lt;-<span class="st"> </span><span class="fl">0.0</span></a>
-<a class="sourceLine" id="cb18-9" data-line-number="9">     <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>) {</a>
-<a class="sourceLine" id="cb18-10" data-line-number="10">          sampmean &lt;-<span class="st"> </span>sampmean <span class="op">+</span><span class="st"> </span>TSum[start<span class="op">+</span>j<span class="dv">-1</span>]</a>
-<a class="sourceLine" id="cb18-11" data-line-number="11">     }</a>
-<a class="sourceLine" id="cb18-12" data-line-number="12">     Means30yrb[i] &lt;-<span class="st"> </span>sampmean<span class="op">/</span><span class="fl">30.0</span></a>
-<a class="sourceLine" id="cb18-13" data-line-number="13">}</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># repeated sampling and calculation of means</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># consecutive samples</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>nsamp <span class="ot">&lt;-</span> <span class="dv">200</span> <span class="co"># number of samples</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>Means30yrb <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span>nsamp) <span class="co"># matrix to hold means</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nsamp) {</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>     start <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="at">min=</span><span class="dv">1</span>, <span class="at">max=</span><span class="fu">length</span>(Year)<span class="sc">-</span><span class="dv">30</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>     start <span class="ot">&lt;-</span> <span class="fu">round</span>(start)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>     sampmean <span class="ot">&lt;-</span> <span class="fl">0.0</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>     <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>) {</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>          sampmean <span class="ot">&lt;-</span> sampmean <span class="sc">+</span> TSum[start<span class="sc">+</span>j<span class="dv">-1</span>]</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>     }</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>     Means30yrb[i] <span class="ot">&lt;-</span> sampmean<span class="sc">/</span><span class="fl">30.0</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>And here are the histograms:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># histograms of data and of 30-Means from consecutive samples</span></a>
-<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb19-3" data-line-number="3">cutpts &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">12.0</span>, <span class="fl">18.0</span>, <span class="dt">by=</span><span class="fl">0.1</span>)</a>
-<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="kw">hist</span>(TSum, <span class="dt">breaks=</span>cutpts, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">12</span>,<span class="dv">20</span>))</a>
-<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="kw">lines</span>(<span class="kw">density</span>(TSum))</a>
-<a class="sourceLine" id="cb19-6" data-line-number="6"><span class="kw">hist</span>(Means30yrb, <span class="dt">breaks=</span>cutpts, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">12</span>,<span class="dv">20</span>))</a>
-<a class="sourceLine" id="cb19-7" data-line-number="7"><span class="kw">lines</span>(<span class="kw">density</span>(Means30yrb))</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histograms of data and of 30-Means from consecutive samples</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">12.0</span>, <span class="fl">18.0</span>, <span class="at">by=</span><span class="fl">0.1</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(TSum, <span class="at">breaks=</span>cutpts, <span class="at">probability=</span>T, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">12</span>,<span class="dv">20</span>))</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(TSum))</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Means30yrb, <span class="at">breaks=</span>cutpts, <span class="at">probability=</span>T, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">12</span>,<span class="dv">20</span>))</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(Means30yrb))</span></code></pre></div>
 <p><img src="lec09_files/figure-html/refDist09-1.png" width="2100" /></p>
 <p>Note that this approach for using an empirical reference distribution is a general one–the significance of other statistics (e.g. the variance) can be evaluated the same way.</p>
 <p><a href="lec09.html">[Back to top]</a></p>
 </div>
 </div>
 </div>
-<div id="a-theoretical-reference-distribution-the-normal-or-standard-normal-distribution" class="section level1">
-<h1><span class="header-section-number">3</span> A theoretical reference distribution – the normal (or standard normal) distribution</h1>
+<div id="a-theoretical-reference-distribution-the-normal-or-standard-normal-distribution" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> A theoretical reference distribution – the normal (or standard normal) distribution</h1>
 <p>Much of the time, a data set large enough to make probabilistic-type statements about the values of a statistic does not exist, or the statistic may be difficult to observe. In such cases, theoretical reference distributions allow the significance of particular values of statistics to be evaluated. One distribution that is applicable to many cases in practice is the normal distribution, and the Central Limit Theorem explains the source of that general applicability.</p>
 <ul>
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/normaldist.pdf">the normal distribution</a></li>
 </ul>
-<div id="density-functions-for-the-normal-distribution" class="section level2">
-<h2><span class="header-section-number">3.1</span> Density functions for the normal distribution</h2>
+<div id="density-functions-for-the-normal-distribution" class="section level2" number="3.1">
+<h2 number="3.1"><span class="header-section-number">3.1</span> Density functions for the normal distribution</h2>
 <p>The standard normal distribution is widely used in inferential statistics, owing to its:</p>
 <ul>
 <li>applicability (many processes are intrinsically normally distributed, and the central limit theorem assures us that sample means, in specific, and many processes that involve summation or integration, in general, are normally distributed)</li>
@@ -682,116 +699,119 @@ $(document).ready(function () {
 </ul>
 <p>The standard normal distribution is described by an equation and is represented by its:</p>
 <p>Probability density function (pdf) (R/S-Plus term is Density),</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># probability density function</span></a>
-<a class="sourceLine" id="cb20-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">3</span>, <span class="op">+</span><span class="dv">3</span>, <span class="dt">by=</span>.<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb20-3" data-line-number="3">pdf_norm&lt;-<span class="st"> </span><span class="kw">dnorm</span>(x, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb20-4" data-line-number="4"><span class="kw">plot</span>(x, pdf_norm, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># probability density function</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="sc">+</span><span class="dv">3</span>, <span class="at">by=</span>.<span class="dv">1</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>pdf_norm<span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, pdf_norm, <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
 <p><img src="lec09_files/figure-html/normal01-1.png" width="2100" /></p>
 <p>Cumulative density function (cdf) (R/S-Plus term is Probability), and</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># cumulative density function</span></a>
-<a class="sourceLine" id="cb21-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">3</span>, <span class="op">+</span><span class="dv">3</span>, <span class="dt">by=</span>.<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb21-3" data-line-number="3">cdf_norm&lt;-<span class="kw">pnorm</span>(x, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb21-4" data-line-number="4"><span class="kw">plot</span>(x, cdf_norm, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cumulative density function</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="sc">+</span><span class="dv">3</span>, <span class="at">by=</span>.<span class="dv">1</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>cdf_norm<span class="ot">&lt;-</span><span class="fu">pnorm</span>(x, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, cdf_norm, <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
 <p><img src="lec09_files/figure-html/normal02-1.png" width="2100" /></p>
 <p>Inverse cumulative density function (invcdf) (R/S-Plus term is Quantile).</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co"># inverse cumulative density function</span></a>
-<a class="sourceLine" id="cb22-2" data-line-number="2">pr &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">by=</span>.<span class="dv">01</span>)</a>
-<a class="sourceLine" id="cb22-3" data-line-number="3">invcdf_norm&lt;-<span class="st"> </span><span class="kw">qnorm</span>(pr, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb22-4" data-line-number="4"><span class="kw">plot</span>(pr, invcdf_norm, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># inverse cumulative density function</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>pr <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">by=</span>.<span class="dv">01</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>invcdf_norm<span class="ot">&lt;-</span> <span class="fu">qnorm</span>(pr, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pr, invcdf_norm, <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
 <p><img src="lec09_files/figure-html/normal03-1.png" width="2100" /></p>
 <p>Random numbers drawn from the normal distribution can be obtained as follows</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co"># normally distributed random numbers</span></a>
-<a class="sourceLine" id="cb23-2" data-line-number="2">z &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n=</span><span class="dv">1000</span>, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="kw">hist</span>(z, <span class="dt">nclass=</span><span class="dv">40</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># normally distributed random numbers</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(z, <span class="at">nclass=</span><span class="dv">40</span>)</span></code></pre></div>
 <p><img src="lec09_files/figure-html/normal04-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">plot</span>(z)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(z)</span></code></pre></div>
 <p><img src="lec09_files/figure-html/normal04-2.png" width="2100" /></p>
 </div>
-<div id="the-central-limit-theorem" class="section level2">
-<h2><span class="header-section-number">3.2</span> The Central Limit Theorem</h2>
+<div id="the-central-limit-theorem" class="section level2" number="3.2">
+<h2 number="3.2"><span class="header-section-number">3.2</span> The Central Limit Theorem</h2>
 <p>The Central Limit Theorem provides the explanation for the wide applicability of the normal distribution in significance testing, because it guarantees us that (providing certain assumptions are met) that statistics (like the mean) obtained by integrating (as in summing up for computing the mean) will turn out to be normally distributed, no matter what the distribution of the underlying data is.</p>
 <p>The Central Limit Theorem is a mathematical demonstration that statistics (like the mean) that are based on summations or integrations of a set of observations are normally distributed, no matter what the distribution is of the data from which samples are being drawn. The theorem therefore assures us that the normal distribution is the appropriate reference distribution for a sample mean to be compared with, in order to judge the relative size of that sample mean_</p>
-<div id="empirical-demonstration-of-the-central-limit-theorem" class="section level3">
-<h3><span class="header-section-number">3.2.1</span> Empirical demonstration of the Central Limit Theorem</h3>
+<div id="empirical-demonstration-of-the-central-limit-theorem" class="section level3" number="3.2.1">
+<h3 number="3.2.1"><span class="header-section-number">3.2.1</span> Empirical demonstration of the Central Limit Theorem</h3>
 <p>Generate 1000 random numbers from four different distributions, the standard normal, the normal, the log-normal and uniform distributions. Histograms of the random numbers will make it clear what the shape of the distributions are like</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb25-2" data-line-number="2">stdNormal &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb25-3" data-line-number="3">Normal &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dt">mean=</span><span class="fl">4.0</span>, <span class="dt">sd=</span><span class="fl">2.0</span>)</a>
-<a class="sourceLine" id="cb25-4" data-line-number="4">logNormal &lt;-<span class="st"> </span><span class="kw">rlnorm</span>(n, <span class="dt">meanlog=</span><span class="fl">1.0</span>, <span class="dt">sdlog=</span><span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb25-5" data-line-number="5">Uniform &lt;-<span class="st"> </span><span class="kw">runif</span>(n, <span class="dt">min=</span><span class="fl">0.0</span>, <span class="dt">max=</span><span class="fl">1.0</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="kw">hist</span>(stdNormal)</a>
-<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="kw">hist</span>(Normal)</a>
-<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="kw">hist</span>(logNormal)</a>
-<a class="sourceLine" id="cb26-5" data-line-number="5"><span class="kw">hist</span>(Uniform)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>stdNormal <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>Normal <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean=</span><span class="fl">4.0</span>, <span class="at">sd=</span><span class="fl">2.0</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>logNormal <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(n, <span class="at">meanlog=</span><span class="fl">1.0</span>, <span class="at">sdlog=</span><span class="fl">0.5</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>Uniform <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="at">min=</span><span class="fl">0.0</span>, <span class="at">max=</span><span class="fl">1.0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(stdNormal)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Normal)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(logNormal)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Uniform)</span></code></pre></div>
 <p><img src="lec09_files/figure-html/central02-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>par <span class="ot">&lt;-</span> opar</span></code></pre></div>
 <p>The following script generates nsamp sample means from one of these distributions</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># take repeated samples from each distribution and calculate and save means</span></a>
-<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="co"># repeated sampling and calculation of means</span></a>
-<a class="sourceLine" id="cb28-3" data-line-number="3">nsamp &lt;-<span class="st"> </span><span class="dv">200</span> <span class="co"># number of samples</span></a>
-<a class="sourceLine" id="cb28-4" data-line-number="4">mean_stdNormal &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nsamp) <span class="co"># matrix to hold means</span></a>
-<a class="sourceLine" id="cb28-5" data-line-number="5">mean_normal &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nsamp) <span class="co"># matrix to hold means</span></a>
-<a class="sourceLine" id="cb28-6" data-line-number="6">mean_logNormal &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nsamp) <span class="co"># matrix to hold means</span></a>
-<a class="sourceLine" id="cb28-7" data-line-number="7">mean_Uniform &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nsamp) <span class="co"># matrix to hold means</span></a>
-<a class="sourceLine" id="cb28-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb28-9" data-line-number="9"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nsamp) {</a>
-<a class="sourceLine" id="cb28-10" data-line-number="10">     samp &lt;-<span class="st"> </span><span class="kw">sample</span>(stdNormal, <span class="dv">30</span>, <span class="dt">replace=</span>T)</a>
-<a class="sourceLine" id="cb28-11" data-line-number="11">     mean_stdNormal[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
-<a class="sourceLine" id="cb28-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb28-13" data-line-number="13">     samp &lt;-<span class="st"> </span><span class="kw">sample</span>(Normal, <span class="dv">30</span>, <span class="dt">replace=</span>T)</a>
-<a class="sourceLine" id="cb28-14" data-line-number="14">     mean_normal[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
-<a class="sourceLine" id="cb28-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb28-16" data-line-number="16">     samp &lt;-<span class="st"> </span><span class="kw">sample</span>(logNormal, <span class="dv">30</span>, <span class="dt">replace=</span>T)</a>
-<a class="sourceLine" id="cb28-17" data-line-number="17">     mean_logNormal[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
-<a class="sourceLine" id="cb28-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb28-19" data-line-number="19">     samp &lt;-<span class="st"> </span><span class="kw">sample</span>(Uniform, <span class="dv">30</span>, <span class="dt">replace=</span>T)</a>
-<a class="sourceLine" id="cb28-20" data-line-number="20">     mean_Uniform[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
-<a class="sourceLine" id="cb28-21" data-line-number="21">}</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># take repeated samples from each distribution and calculate and save means</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"># repeated sampling and calculation of means</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>nsamp <span class="ot">&lt;-</span> <span class="dv">200</span> <span class="co"># number of samples</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>mean_stdNormal <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span>nsamp) <span class="co"># matrix to hold means</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>mean_normal <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span>nsamp) <span class="co"># matrix to hold means</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>mean_logNormal <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span>nsamp) <span class="co"># matrix to hold means</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>mean_Uniform <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span>nsamp) <span class="co"># matrix to hold means</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nsamp) {</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>     samp <span class="ot">&lt;-</span> <span class="fu">sample</span>(stdNormal, <span class="dv">30</span>, <span class="at">replace=</span>T)</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>     mean_stdNormal[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(samp)</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>     samp <span class="ot">&lt;-</span> <span class="fu">sample</span>(Normal, <span class="dv">30</span>, <span class="at">replace=</span>T)</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>     mean_normal[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(samp)</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>     samp <span class="ot">&lt;-</span> <span class="fu">sample</span>(logNormal, <span class="dv">30</span>, <span class="at">replace=</span>T)</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>     mean_logNormal[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(samp)</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>     samp <span class="ot">&lt;-</span> <span class="fu">sample</span>(Uniform, <span class="dv">30</span>, <span class="at">replace=</span>T)</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>     mean_Uniform[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(samp)</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>Histograms of the original data, as well as of the sample means can be obtained with the following script.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="co"># histograms of data and of sample means</span></a>
-<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb29-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb29-4" data-line-number="4"><span class="co"># standard Normal</span></a>
-<a class="sourceLine" id="cb29-5" data-line-number="5">xmax &lt;-<span class="st"> </span><span class="kw">max</span>(stdNormal)</a>
-<a class="sourceLine" id="cb29-6" data-line-number="6">xmin &lt;-<span class="st"> </span><span class="kw">min</span>(stdNormal)</a>
-<a class="sourceLine" id="cb29-7" data-line-number="7"><span class="kw">hist</span>(stdNormal, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a>
-<a class="sourceLine" id="cb29-8" data-line-number="8"><span class="kw">hist</span>(mean_stdNormal, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histograms of data and of sample means</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># standard Normal</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> <span class="fu">max</span>(stdNormal)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="fu">min</span>(stdNormal)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(stdNormal, <span class="at">nclass=</span><span class="dv">40</span>, <span class="at">probability=</span>T, <span class="at">xlim=</span><span class="fu">c</span>(xmin,xmax))</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(mean_stdNormal, <span class="at">nclass=</span><span class="dv">40</span>, <span class="at">probability=</span>T, <span class="at">xlim=</span><span class="fu">c</span>(xmin,xmax))</span></code></pre></div>
 <p><img src="lec09_files/figure-html/central04-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># Normal</span></a>
-<a class="sourceLine" id="cb30-2" data-line-number="2">xmax &lt;-<span class="st"> </span><span class="kw">max</span>(Normal)</a>
-<a class="sourceLine" id="cb30-3" data-line-number="3">xmin &lt;-<span class="st"> </span><span class="kw">min</span>(Normal)</a>
-<a class="sourceLine" id="cb30-4" data-line-number="4"><span class="kw">hist</span>(Normal, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a>
-<a class="sourceLine" id="cb30-5" data-line-number="5"><span class="kw">hist</span>(mean_normal, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Normal</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> <span class="fu">max</span>(Normal)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="fu">min</span>(Normal)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Normal, <span class="at">nclass=</span><span class="dv">40</span>, <span class="at">probability=</span>T, <span class="at">xlim=</span><span class="fu">c</span>(xmin,xmax))</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(mean_normal, <span class="at">nclass=</span><span class="dv">40</span>, <span class="at">probability=</span>T, <span class="at">xlim=</span><span class="fu">c</span>(xmin,xmax))</span></code></pre></div>
 <p><img src="lec09_files/figure-html/central04-2.png" width="2100" /></p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># log Normal</span></a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">xmax &lt;-<span class="st"> </span><span class="kw">max</span>(logNormal)</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3">xmin &lt;-<span class="st"> </span><span class="kw">min</span>(logNormal)</a>
-<a class="sourceLine" id="cb31-4" data-line-number="4"><span class="kw">hist</span>(logNormal, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a>
-<a class="sourceLine" id="cb31-5" data-line-number="5"><span class="kw">hist</span>(mean_logNormal, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># log Normal</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> <span class="fu">max</span>(logNormal)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="fu">min</span>(logNormal)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(logNormal, <span class="at">nclass=</span><span class="dv">40</span>, <span class="at">probability=</span>T, <span class="at">xlim=</span><span class="fu">c</span>(xmin,xmax))</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(mean_logNormal, <span class="at">nclass=</span><span class="dv">40</span>, <span class="at">probability=</span>T, <span class="at">xlim=</span><span class="fu">c</span>(xmin,xmax))</span></code></pre></div>
 <p><img src="lec09_files/figure-html/central04-3.png" width="2100" /></p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co"># Uniform</span></a>
-<a class="sourceLine" id="cb32-2" data-line-number="2">xmax &lt;-<span class="st"> </span><span class="kw">max</span>(Uniform)</a>
-<a class="sourceLine" id="cb32-3" data-line-number="3">xmin &lt;-<span class="st"> </span><span class="kw">min</span>(Uniform)</a>
-<a class="sourceLine" id="cb32-4" data-line-number="4"><span class="kw">hist</span>(Uniform, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a>
-<a class="sourceLine" id="cb32-5" data-line-number="5"><span class="kw">hist</span>(mean_Uniform, <span class="dt">nclass=</span><span class="dv">40</span>, <span class="dt">probability=</span>T, <span class="dt">xlim=</span><span class="kw">c</span>(xmin,xmax))</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Uniform</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> <span class="fu">max</span>(Uniform)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="fu">min</span>(Uniform)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Uniform, <span class="at">nclass=</span><span class="dv">40</span>, <span class="at">probability=</span>T, <span class="at">xlim=</span><span class="fu">c</span>(xmin,xmax))</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(mean_Uniform, <span class="at">nclass=</span><span class="dv">40</span>, <span class="at">probability=</span>T, <span class="at">xlim=</span><span class="fu">c</span>(xmin,xmax))</span></code></pre></div>
 <p><img src="lec09_files/figure-html/central04-4.png" width="2100" /></p>
 <p><a href="lec09.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="other-theoretical-reference-distributions" class="section level2">
-<h2><span class="header-section-number">3.3</span> Other theoretical reference distributions</h2>
+<div id="other-theoretical-reference-distributions" class="section level2" number="3.3">
+<h2 number="3.3"><span class="header-section-number">3.3</span> Other theoretical reference distributions</h2>
 <p>Although the normal distribution is applicable in a number of situations (owing to the implications of the Central Limit Theorem), other situations arise, in which other referernce distributions may apply.</p>
 <ul>
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/theoretical.pdf">details of other reference distributions</a></li>
 </ul>
+<p><a href="lec09.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="readings" class="section level1">
-<h1><span class="header-section-number">4</span> Readings</h1>
+<div id="readings" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> Readings</h1>
 <ul>
-<li>Owen (The R Guide): Ch. 6.</li>
+<li>Owen (The R Guide): Ch. 6</li>
+<li>Irizarry (<em>Intro to Data Science</em>): Ch. 12 - 15</li>
 </ul>
+<p><a href="lec09.html">[Back to top]</a></p>
 </div>
 
 
@@ -803,7 +823,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

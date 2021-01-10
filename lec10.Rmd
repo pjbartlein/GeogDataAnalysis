@@ -18,7 +18,7 @@ klippy::klippy(position = c('top', 'right'))
 ```{r load, echo=FALSE, cache=FALSE}
 load(".Rdata")
 ```
-<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2021, but may undergo further edits.</span></p>
 # Introduction #
 
 The general idea that underlies statistical inference is the comparison of particular statistics from on observational data set (i.e. the mean, the standard deviation, the differences among the means of subsets of the data), with an appropriate reference distribution in order to judge the significance of those statistics.  When various assumptions are met, and specific hypotheses about the values of those statistics that should arise in practice have been specified, then statistical inference can be a powerful approach for drawing scientific conclusions that efficiently uses existing data or those collected for the specific purpose of testing those hypotheses.  Even in a context when a formal experimental design is not possible, or when the objective is to explore the data, significance evaluation can be useful.
@@ -351,6 +351,9 @@ There is a formal test for equality of group variances that will be described wi
 
 [[Back to top]](lec10.html)
 
-# Readings #
+# Readings #  
 
-- Owen (The R Guide):  section 7.1
+- Owen (The R Guide):  Ch. 7.1
+- Irizarry (*Intro to Data Science*): Ch. 12 - 15
+
+[[Back to top]](lec09.html)

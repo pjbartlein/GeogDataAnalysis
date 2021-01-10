@@ -13,6 +13,7 @@
 
 <title>Statistical inference</title>
 
+<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -20,34 +21,46 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -56,9 +69,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -497,14 +510,17 @@ $(document).ready(function () {
 <div id="TOC">
 <ul>
 <li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="#characterization-of-samples"><span class="toc-section-number">2</span> Characterization of samples</a><ul>
+<li><a href="#characterization-of-samples"><span class="toc-section-number">2</span> Characterization of samples</a>
+<ul>
 <li><a href="#standard-error-of-the-mean-and-confidence-interval-for-the-mean"><span class="toc-section-number">2.1</span> Standard error of the mean and confidence interval for the mean</a></li>
 <li><a href="#confidence-intervals"><span class="toc-section-number">2.2</span> Confidence intervals</a></li>
 </ul></li>
-<li><a href="#simple-inferences-based-on-the-standard-error-of-the-mean"><span class="toc-section-number">3</span> Simple inferences based on the standard error of the mean</a><ul>
+<li><a href="#simple-inferences-based-on-the-standard-error-of-the-mean"><span class="toc-section-number">3</span> Simple inferences based on the standard error of the mean</a>
+<ul>
 <li><a href="#hypothesis-tests"><span class="toc-section-number">3.1</span> Hypothesis tests</a></li>
 </ul></li>
-<li><a href="#the-t-test"><span class="toc-section-number">4</span> The t-test</a><ul>
+<li><a href="#the-t-test"><span class="toc-section-number">4</span> The t-test</a>
+<ul>
 <li><a href="#the-t-test-for-assessing-differences-in-group-means"><span class="toc-section-number">4.1</span> The <em>t</em>-test for assessing differences in group means</a></li>
 <li><a href="#differences-in-group-variances"><span class="toc-section-number">4.2</span> Differences in group variances</a></li>
 </ul></li>
@@ -517,176 +533,179 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span>
+<span style="color: #00cc00;">NOTE: This page has been revised for Winter 2021, but may undergo further edits.</span>
 </p>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
+<div id="introduction" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>The general idea that underlies statistical inference is the comparison of particular statistics from on observational data set (i.e. the mean, the standard deviation, the differences among the means of subsets of the data), with an appropriate reference distribution in order to judge the significance of those statistics. When various assumptions are met, and specific hypotheses about the values of those statistics that should arise in practice have been specified, then statistical inference can be a powerful approach for drawing scientific conclusions that efficiently uses existing data or those collected for the specific purpose of testing those hypotheses. Even in a context when a formal experimental design is not possible, or when the objective is to explore the data, significance evaluation can be useful.</p>
 <p>As a consequence of the central limit theorem, we know that the mean is normally distributed, and so we can use the normal distribution to describe the uncertainty of a sample mean.</p>
 </div>
-<div id="characterization-of-samples" class="section level1">
-<h1><span class="header-section-number">2</span> Characterization of samples</h1>
+<div id="characterization-of-samples" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> Characterization of samples</h1>
 <p>Once a sample has been obtained, and descriptive statistics calculated, attention may then turn to the significance (representativeness as opposed to unusualness) of the sample or of the statistics. This information may be gained by comparing the specific value of a statistic with an appropriate reference distribution, and by the calculation of additional statistics that describe the level of uncertainty a particular statistic may have.</p>
 <p>In the case of the sample mean, the appropriate reference distribution is the normal distribution, which is implied by the Central Limit Theorem.</p>
-<div id="standard-error-of-the-mean-and-confidence-interval-for-the-mean" class="section level2">
-<h2><span class="header-section-number">2.1</span> Standard error of the mean and confidence interval for the mean</h2>
+<div id="standard-error-of-the-mean-and-confidence-interval-for-the-mean" class="section level2" number="2.1">
+<h2 number="2.1"><span class="header-section-number">2.1</span> Standard error of the mean and confidence interval for the mean</h2>
 <p>Uncertainty in the mean can be described by the standard error of the mean or by the confidence interval for the mean. The standard error of the mean can be thought of as the standard deviation of a set mean values from repeated samples.</p>
 <p>Definition of the <a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/semean.pdf">standard error of the mean</a></p>
 <p>Here is a demonstration using simulated data and repeated samples of different sizes</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># generate 1000 random numbers from the normal distribution</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">npts &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">demo_mean &lt;-<span class="st"> </span><span class="dv">5</span>; demo_sd &lt;-<span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">data_values &lt;-<span class="st"> </span><span class="kw">rnorm</span>(npts, demo_mean, demo_sd)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">hist</span>(data_values); <span class="kw">mean</span>(data_values); <span class="kw">sd</span>(data_values)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate 1000 random numbers from the normal distribution</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>npts <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>demo_mean <span class="ot">&lt;-</span> <span class="dv">5</span>; demo_sd <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data_values <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(npts, demo_mean, demo_sd)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(data_values); <span class="fu">mean</span>(data_values); <span class="fu">sd</span>(data_values)</span></code></pre></div>
 <p><img src="lec10_files/figure-html/semean01-1.png" width="2100" /></p>
-<pre><code>## [1] 4.885482</code></pre>
-<pre><code>## [1] 2.000486</code></pre>
+<pre><code>## [1] 5.034757</code></pre>
+<pre><code>## [1] 1.966487</code></pre>
 <p>Set the number of replications <code>nreps</code> and the (maximum) sample size</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">nreps &lt;-<span class="st"> </span><span class="dv">1000</span> <span class="co"># number of replications (samples) for each sample size</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">max_sample_size &lt;-<span class="st"> </span><span class="dv">100</span> <span class="co"># number of example sample sizes</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>nreps <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="co"># number of replications (samples) for each sample size</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>max_sample_size <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="co"># number of example sample sizes</span></span></code></pre></div>
 <p>Create several matrices to hold the individual replication results.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># matrix to hold means of each of the nreps samples</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">mean_samp &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>nreps)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co"># matrices to hold means, sd’s and sample sizes for for each n</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">average_means &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>(max_sample_size<span class="dv">-1</span>))</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">sd_means &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>(max_sample_size<span class="dv">-1</span>))</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">sample_size &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span>(max_sample_size<span class="dv">-1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># matrix to hold means of each of the nreps samples</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>mean_samp <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span>nreps)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># matrices to hold means, sd’s and sample sizes for for each n</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>average_means <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span>(max_sample_size<span class="dv">-1</span>))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>sd_means <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span>(max_sample_size<span class="dv">-1</span>))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>sample_size <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span>(max_sample_size<span class="dv">-1</span>))</span></code></pre></div>
 <p>Generate means for a range of sample sizes (1:max_sample_size)</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="cf">for</span> (n <span class="cf">in</span> <span class="kw">seq</span>(<span class="dv">1</span>,max_sample_size<span class="dv">-1</span>)) {</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">   <span class="co"># for each sample size generate nreps samples and get their mean</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">   <span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq</span>(<span class="dv">1</span>,nreps)) {</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">         samp &lt;-<span class="st"> </span><span class="kw">sample</span>(data_values, n<span class="op">+</span><span class="dv">1</span>, <span class="dt">replace=</span>T)</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">         mean_samp[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">   }</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">   <span class="co"># get the average and standard deviation of the nreps means</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">   average_means[n] &lt;-<span class="st"> </span><span class="kw">apply</span>(mean_samp,<span class="dv">2</span>,mean)</a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">   sd_means[n] &lt;-<span class="st"> </span><span class="kw">apply</span>(mean_samp,<span class="dv">2</span>,sd)</a>
-<a class="sourceLine" id="cb6-10" data-line-number="10">   sample_size[n] &lt;-<span class="st"> </span>n<span class="op">+</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11">}</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">1</span>,max_sample_size<span class="dv">-1</span>)) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>   <span class="co"># for each sample size generate nreps samples and get their mean</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>   <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">1</span>,nreps)) {</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>         samp <span class="ot">&lt;-</span> <span class="fu">sample</span>(data_values, n<span class="sc">+</span><span class="dv">1</span>, <span class="at">replace=</span>T)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>         mean_samp[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(samp)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>   }</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>   <span class="co"># get the average and standard deviation of the nreps means</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>   average_means[n] <span class="ot">&lt;-</span> <span class="fu">apply</span>(mean_samp,<span class="dv">2</span>,mean)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>   sd_means[n] <span class="ot">&lt;-</span> <span class="fu">apply</span>(mean_samp,<span class="dv">2</span>,sd)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>   sample_size[n] <span class="ot">&lt;-</span> n<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>Take a look at the means and the standard errors. Note that means remain essentially constant across the range of sample sizes, while the standard errors decrease rapidly (at first) with increasing sample size.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">plot</span>(sample_size, average_means, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="fl">4.5</span>, <span class="fl">5.5</span>), <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sample_size, average_means, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fl">4.5</span>, <span class="fl">5.5</span>), <span class="at">pch=</span><span class="dv">16</span>)</span></code></pre></div>
 <p><img src="lec10_files/figure-html/semean05-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">plot</span>(sample_size, sd_means, <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sample_size, sd_means, <span class="at">pch=</span><span class="dv">16</span>)</span></code></pre></div>
 <p><img src="lec10_files/figure-html/semean05-2.png" width="2100" /></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">head</span>(<span class="kw">cbind</span>(average_means,sd_means,sample_size))</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">cbind</span>(average_means,sd_means,sample_size))</span></code></pre></div>
 <pre><code>##          [,1]      [,2] [,3]
-## [1,] 4.869145 1.3837017    2
-## [2,] 4.919966 1.1305459    3
-## [3,] 4.898501 0.9996743    4
-## [4,] 4.901989 0.8757847    5
-## [5,] 4.899534 0.8201785    6
-## [6,] 4.885380 0.7307880    7</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">tail</span>(<span class="kw">cbind</span>(average_means,sd_means,sample_size))</a></code></pre></div>
+## [1,] 5.002194 1.3991343    2
+## [2,] 4.992911 1.1747384    3
+## [3,] 5.059321 0.9902242    4
+## [4,] 5.031235 0.8585874    5
+## [5,] 5.031041 0.8160077    6
+## [6,] 5.015314 0.7535537    7</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(<span class="fu">cbind</span>(average_means,sd_means,sample_size))</span></code></pre></div>
 <pre><code>##           [,1]      [,2] [,3]
-## [94,] 4.886368 0.2110815   95
-## [95,] 4.884759 0.2016839   96
-## [96,] 4.894875 0.1958151   97
-## [97,] 4.871323 0.1993095   98
-## [98,] 4.873961 0.2038435   99
-## [99,] 4.868781 0.1976714  100</code></pre>
+## [94,] 5.036694 0.1899069   95
+## [95,] 5.041825 0.1985795   96
+## [96,] 5.044742 0.2041062   97
+## [97,] 5.036726 0.2012360   98
+## [98,] 5.040909 0.2003633   99
+## [99,] 5.038318 0.2000125  100</code></pre>
 <p>Verify that the standard error of the mean is sigma/sqrt(n)</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">plot</span>(demo_sd<span class="op">/</span><span class="kw">sqrt</span>((<span class="dv">2</span><span class="op">:</span>max_sample_size)), sd_means, <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(demo_sd<span class="sc">/</span><span class="fu">sqrt</span>((<span class="dv">2</span><span class="sc">:</span>max_sample_size)), sd_means, <span class="at">pch=</span><span class="dv">16</span>)</span></code></pre></div>
 <p><img src="lec10_files/figure-html/semean06-1.png" width="2100" /></p>
 <p>Generate some data values, this time from a uniform distribution</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># data_values from a uniform distribution</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">data_values &lt;-<span class="st"> </span><span class="kw">runif</span>(npts, <span class="dv">0</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">hist</span>(data_values); <span class="kw">mean</span>(data_values); <span class="kw">sd</span>(data_values)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data_values from a uniform distribution</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>data_values <span class="ot">&lt;-</span> <span class="fu">runif</span>(npts, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(data_values); <span class="fu">mean</span>(data_values); <span class="fu">sd</span>(data_values)</span></code></pre></div>
 <p><img src="lec10_files/figure-html/semean07-1.png" width="2100" /></p>
-<pre><code>## [1] 0.4853015</code></pre>
-<pre><code>## [1] 0.2921011</code></pre>
+<pre><code>## [1] 0.5087177</code></pre>
+<pre><code>## [1] 0.2835326</code></pre>
 <p>Rescale these values so that they have the same mean (<code>demo_mean</code>) and standard deviation (<code>demo_sd</code>) as in the previous example,</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># rescale the data_values so they have a mean of demo_mean</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co"># and a standard deviation of demo_sd (standardize, then rescale)</span></a>
-<a class="sourceLine" id="cb17-3" data-line-number="3">data_values &lt;-<span class="st"> </span>(data_values<span class="op">-</span><span class="kw">mean</span>(data_values))<span class="op">/</span><span class="kw">sd</span>(data_values)</a>
-<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="kw">mean</span>(data_values); <span class="kw">sd</span>(data_values)</a></code></pre></div>
-<pre><code>## [1] 6.652579e-17</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rescale the data_values so they have a mean of demo_mean</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># and a standard deviation of demo_sd (standardize, then rescale)</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>data_values <span class="ot">&lt;-</span> (data_values<span class="sc">-</span><span class="fu">mean</span>(data_values))<span class="sc">/</span><span class="fu">sd</span>(data_values)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data_values); <span class="fu">sd</span>(data_values)</span></code></pre></div>
+<pre><code>## [1] 4.369281e-18</code></pre>
 <pre><code>## [1] 1</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">data_values &lt;-<span class="st"> </span>(data_values<span class="op">*</span>demo_sd)<span class="op">+</span>demo_mean</a>
-<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">hist</span>(data_values); <span class="kw">mean</span>(data_values); <span class="kw">sd</span>(data_values)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>data_values <span class="ot">&lt;-</span> (data_values<span class="sc">*</span>demo_sd)<span class="sc">+</span>demo_mean</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(data_values); <span class="fu">mean</span>(data_values); <span class="fu">sd</span>(data_values)</span></code></pre></div>
 <p><img src="lec10_files/figure-html/semean08-1.png" width="2100" /></p>
 <pre><code>## [1] 5</code></pre>
 <pre><code>## [1] 2</code></pre>
 <p>Repeat the demonstration</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="cf">for</span> (n <span class="cf">in</span> <span class="kw">seq</span>(<span class="dv">1</span>,max_sample_size<span class="dv">-1</span>)) {</a>
-<a class="sourceLine" id="cb23-2" data-line-number="2">   <span class="co"># for each sample size generate nreps samples and get their mean</span></a>
-<a class="sourceLine" id="cb23-3" data-line-number="3">   <span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq</span>(<span class="dv">1</span>,nreps)) {</a>
-<a class="sourceLine" id="cb23-4" data-line-number="4">         samp &lt;-<span class="st"> </span><span class="kw">sample</span>(data_values, n<span class="op">+</span><span class="dv">1</span>, <span class="dt">replace=</span>T)</a>
-<a class="sourceLine" id="cb23-5" data-line-number="5">         mean_samp[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(samp)</a>
-<a class="sourceLine" id="cb23-6" data-line-number="6">   }</a>
-<a class="sourceLine" id="cb23-7" data-line-number="7">   <span class="co"># get the average and standard deviation of the nreps means</span></a>
-<a class="sourceLine" id="cb23-8" data-line-number="8">   average_means[n] &lt;-<span class="st"> </span><span class="kw">apply</span>(mean_samp,<span class="dv">2</span>,mean)</a>
-<a class="sourceLine" id="cb23-9" data-line-number="9">   sd_means[n] &lt;-<span class="st"> </span><span class="kw">apply</span>(mean_samp,<span class="dv">2</span>,sd)</a>
-<a class="sourceLine" id="cb23-10" data-line-number="10">   sample_size[n] &lt;-<span class="st"> </span>n<span class="op">+</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb23-11" data-line-number="11">}</a>
-<a class="sourceLine" id="cb23-12" data-line-number="12"><span class="kw">plot</span>(sample_size, sd_means, <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">1</span>,max_sample_size<span class="dv">-1</span>)) {</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>   <span class="co"># for each sample size generate nreps samples and get their mean</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>   <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">1</span>,nreps)) {</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>         samp <span class="ot">&lt;-</span> <span class="fu">sample</span>(data_values, n<span class="sc">+</span><span class="dv">1</span>, <span class="at">replace=</span>T)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>         mean_samp[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(samp)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>   }</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>   <span class="co"># get the average and standard deviation of the nreps means</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>   average_means[n] <span class="ot">&lt;-</span> <span class="fu">apply</span>(mean_samp,<span class="dv">2</span>,mean)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>   sd_means[n] <span class="ot">&lt;-</span> <span class="fu">apply</span>(mean_samp,<span class="dv">2</span>,sd)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>   sample_size[n] <span class="ot">&lt;-</span> n<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sample_size, sd_means, <span class="at">pch=</span><span class="dv">16</span>)</span></code></pre></div>
 <p><img src="lec10_files/figure-html/semean09-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">head</span>(<span class="kw">cbind</span>(average_means,sd_means,sample_size))</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">cbind</span>(average_means,sd_means,sample_size))</span></code></pre></div>
 <pre><code>##          [,1]      [,2] [,3]
-## [1,] 5.040256 1.4365609    2
-## [2,] 5.072014 1.1364654    3
-## [3,] 4.979576 0.9994014    4
-## [4,] 4.997650 0.8747587    5
-## [5,] 5.014330 0.8533994    6
-## [6,] 5.014758 0.7700185    7</code></pre>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">tail</span>(<span class="kw">cbind</span>(average_means,sd_means,sample_size))</a></code></pre></div>
+## [1,] 5.009442 1.4284970    2
+## [2,] 5.012839 1.1621002    3
+## [3,] 4.918761 0.9917057    4
+## [4,] 5.004906 0.9018073    5
+## [5,] 4.975955 0.8187180    6
+## [6,] 5.022585 0.7554809    7</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(<span class="fu">cbind</span>(average_means,sd_means,sample_size))</span></code></pre></div>
 <pre><code>##           [,1]      [,2] [,3]
-## [94,] 4.996266 0.2020135   95
-## [95,] 5.004224 0.1943945   96
-## [96,] 5.005490 0.2034202   97
-## [97,] 5.014969 0.1967694   98
-## [98,] 4.998495 0.2016952   99
-## [99,] 4.998972 0.1974246  100</code></pre>
+## [94,] 5.004614 0.2007629   95
+## [95,] 5.015275 0.2047870   96
+## [96,] 4.999232 0.2094253   97
+## [97,] 4.996611 0.2028047   98
+## [98,] 5.003051 0.1943208   99
+## [99,] 5.003415 0.2052365  100</code></pre>
 <p>This demonstrates that the standard error of the mean is insensitive to the underlying distribution of the data_</p>
 </div>
-<div id="confidence-intervals" class="section level2">
-<h2><span class="header-section-number">2.2</span> Confidence intervals</h2>
+<div id="confidence-intervals" class="section level2" number="2.2">
+<h2 number="2.2"><span class="header-section-number">2.2</span> Confidence intervals</h2>
 <p>The confidence interval provides a verbal or graphical characterization, based on the information in a sample, of the likely range of values within which the “true” or population mean lies. This example uses an artificial data set <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/cidat.csv">[cidat.csv]</a></p>
 <p><code>cidat</code> is a data frame that can be generated as follows</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># generate 4000 random values from the Normal Distribution with mean=10, and standard deviation=1</span></a>
-<a class="sourceLine" id="cb28-2" data-line-number="2">NormDat &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">mean=</span><span class="dv">10</span>, <span class="dt">sd=</span><span class="dv">1</span>, <span class="dt">n=</span><span class="dv">4000</span>) </a>
-<a class="sourceLine" id="cb28-3" data-line-number="3"><span class="co"># generate a &quot;grouping variable&quot; that defines 40 groups, each with 100 observations</span></a>
-<a class="sourceLine" id="cb28-4" data-line-number="4">Group &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">40</span>,<span class="dv">100</span>))</a>
-<a class="sourceLine" id="cb28-5" data-line-number="5">cidat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">cbind</span>(NormDat, Group)) <span class="co"># make a data frame</span></a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate 4000 random values from the Normal Distribution with mean=10, and standard deviation=1</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>NormDat <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">mean=</span><span class="dv">10</span>, <span class="at">sd=</span><span class="dv">1</span>, <span class="at">n=</span><span class="dv">4000</span>) </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># generate a &quot;grouping variable&quot; that defines 40 groups, each with 100 observations</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>Group <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">40</span>,<span class="dv">100</span>))</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>cidat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(NormDat, Group)) <span class="co"># make a data frame</span></span></code></pre></div>
 <p>Attach and summarize the data set.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">attach</span>(cidat)</a>
-<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw">summary</span>(cidat)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(cidat)</span></code></pre></div>
+<pre><code>## The following objects are masked _by_ .GlobalEnv:
+## 
+##     Group, NormDat</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cidat)</span></code></pre></div>
 <pre><code>##     NormDat           Group      
-##  Min.   : 5.730   Min.   : 1.00  
-##  1st Qu.: 9.323   1st Qu.:10.75  
-##  Median : 9.985   Median :20.50  
-##  Mean   : 9.991   Mean   :20.50  
-##  3rd Qu.:10.678   3rd Qu.:30.25  
-##  Max.   :13.826   Max.   :40.00</code></pre>
+##  Min.   : 6.322   Min.   : 1.00  
+##  1st Qu.: 9.357   1st Qu.:10.75  
+##  Median :10.030   Median :20.50  
+##  Mean   :10.030   Mean   :20.50  
+##  3rd Qu.:10.703   3rd Qu.:30.25  
+##  Max.   :13.627   Max.   :40.00</code></pre>
 <p>The idea here is to imagine that each group of 100 observations represents one possible sample of some underlying process or information set, that might occur in practice. These hypothetical samples (which are each equally likely) provide a mechanism for illustrating the range of values of the mean that could occur simply due to natural variability of the data, and the “confidence interal” is that range of values of the mean that enclose 90% of the possible mean values.</p>
 <p>Get the means and standard errors of each group_</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">group_means &lt;-<span class="st"> </span><span class="kw">tapply</span>(NormDat, Group, mean)</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">group_sd &lt;-<span class="st"> </span><span class="kw">tapply</span>(NormDat, Group, sd)</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3">group_npts &lt;-<span class="st"> </span><span class="kw">tapply</span>(NormDat, Group, length)</a>
-<a class="sourceLine" id="cb31-4" data-line-number="4">group_semean &lt;-<span class="st"> </span>(group_sd<span class="op">/</span>(<span class="kw">sqrt</span>(group_npts)))</a>
-<a class="sourceLine" id="cb31-5" data-line-number="5"><span class="kw">mean</span>(group_means)</a></code></pre></div>
-<pre><code>## [1] 9.991148</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">sd</span>(group_means)</a></code></pre></div>
-<pre><code>## [1] 0.08264523</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>group_means <span class="ot">&lt;-</span> <span class="fu">tapply</span>(NormDat, Group, mean)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>group_sd <span class="ot">&lt;-</span> <span class="fu">tapply</span>(NormDat, Group, sd)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>group_npts <span class="ot">&lt;-</span> <span class="fu">tapply</span>(NormDat, Group, length)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>group_semean <span class="ot">&lt;-</span> (group_sd<span class="sc">/</span>(<span class="fu">sqrt</span>(group_npts)))</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(group_means)</span></code></pre></div>
+<pre><code>## [1] 10.02969</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(group_means)</span></code></pre></div>
+<pre><code>## [1] 0.09699701</code></pre>
 <p>Plot the individual samples (top plot) and then the means, and their standard errors (bottom plot). Note the different scales on the plots.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co"># plot means and data</span></a>
-<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="kw">plot</span>(Group, NormDat)</a>
-<a class="sourceLine" id="cb35-4" data-line-number="4"><span class="kw">points</span>(group_means, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>)</a>
-<a class="sourceLine" id="cb35-5" data-line-number="5"><span class="co"># plot means and standard errors of means</span></a>
-<a class="sourceLine" id="cb35-6" data-line-number="6"><span class="kw">plot</span>(group_means, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">9</span>, <span class="dv">11</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">xlab=</span><span class="st">&quot;Group&quot;</span>)</a>
-<a class="sourceLine" id="cb35-7" data-line-number="7"><span class="kw">points</span>(group_means <span class="op">+</span><span class="st"> </span><span class="fl">2.0</span><span class="op">*</span>group_semean , <span class="dt">pch=</span><span class="st">&quot;-&quot;</span>)</a>
-<a class="sourceLine" id="cb35-8" data-line-number="8"><span class="kw">points</span>(group_means <span class="op">-</span><span class="st"> </span><span class="fl">2.0</span><span class="op">*</span>group_semean , <span class="dt">pch=</span><span class="st">&quot;-&quot;</span>)</a>
-<a class="sourceLine" id="cb35-9" data-line-number="9"><span class="kw">abline</span>(<span class="dv">10</span>,<span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot means and data</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Group, NormDat)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(group_means, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">pch=</span><span class="dv">16</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co"># plot means and standard errors of means</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(group_means, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">11</span>), <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">xlab=</span><span class="st">&quot;Group&quot;</span>)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(group_means <span class="sc">+</span> <span class="fl">2.0</span><span class="sc">*</span>group_semean , <span class="at">pch=</span><span class="st">&quot;-&quot;</span>)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(group_means <span class="sc">-</span> <span class="fl">2.0</span><span class="sc">*</span>group_semean , <span class="at">pch=</span><span class="st">&quot;-&quot;</span>)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">10</span>,<span class="dv">0</span>)</span></code></pre></div>
 <p><img src="lec10_files/figure-html/semean13-1.png" width="2100" /></p>
 <p>The bottom plot shows that out the 40 mean values (red dots), 2 (0.05 or 5 percent) have intervals (defined to be twice the standard error either side of the mean, black tick marks) that do not enclose the “true” value of the mean (10.0).</p>
 <p>Set the graphics window back to normal and detach <code>cidat</code>.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="kw">detach</span>(cidat)</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(cidat)</span></code></pre></div>
 <p><a href="lec10.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="simple-inferences-based-on-the-standard-error-of-the-mean" class="section level1">
-<h1><span class="header-section-number">3</span> Simple inferences based on the standard error of the mean</h1>
+<div id="simple-inferences-based-on-the-standard-error-of-the-mean" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> Simple inferences based on the standard error of the mean</h1>
 <p>The standard error of the mean, along with the knowledge that the sample mean is normally distributed allows inferences about the mean to made For example, questions of the following kind can be answered:</p>
 <ul>
 <li>What is the probability of occurrence of an observation with a particular value?</li>
@@ -698,8 +717,8 @@ $(document).ready(function () {
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/simpleinf.pdf">[simple inferential statistics]</a></li>
 </ul>
 <p><a href="lec10.html">[Back to top]</a></p>
-<div id="hypothesis-tests" class="section level2">
-<h2><span class="header-section-number">3.1</span> Hypothesis tests</h2>
+<div id="hypothesis-tests" class="section level2" number="3.1">
+<h2 number="3.1"><span class="header-section-number">3.1</span> Hypothesis tests</h2>
 <p>The next step toward statistical inference is the more formal development and testing of specific hypotheses (as opposed to the rather informal inspection of descriptive plots, confidence intervals, etc.)</p>
 <p>“Hypothesis” is a word used in several contexts in data analysis or statistics:</p>
 <ul>
@@ -732,8 +751,8 @@ $(document).ready(function () {
 <p><a href="lec10.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="the-t-test" class="section level1">
-<h1><span class="header-section-number">4</span> The t-test</h1>
+<div id="the-t-test" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> The t-test</h1>
 <p>An illustration of an hypothesis test that is frequently used in practice is provided by the <em>t</em>-test, one of several “difference-of-means” tests. The t-test (or more particularly <em>Student’s t-test</em> (after the pseudonym of its author, W.S. Gosset) provides a mechanism for the simple task of testing whether there is a significant difference between two groups of observations, as reflected by differences in the means of the two groups. In the <em>t</em>-test, two sample mean values, or a sample mean and a theoretical mean value, are compared as follows:</p>
 <ul>
 <li>the null hypthesis is that the two mean values are equal, while the</li>
@@ -743,13 +762,13 @@ $(document).ready(function () {
 <li>the significance level or <em>p</em>-value is determined using the* <em>t</em>-distribution</li>
 </ul>
 <p>The shape of the <em>t</em> distribution can be visualized as follows (for df=30):</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">3</span>,<span class="dv">3</span>, <span class="dt">by=</span>.<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb37-2" data-line-number="2">pdf_t &lt;-<span class="st"> </span><span class="kw">dt</span>(x,<span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb37-3" data-line-number="3"><span class="kw">plot</span>(pdf_t <span class="op">~</span><span class="st"> </span>x, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>, <span class="at">by=</span>.<span class="dv">1</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>pdf_t <span class="ot">&lt;-</span> <span class="fu">dt</span>(x,<span class="dv">3</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pdf_t <span class="sc">~</span> x, <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
 <p><img src="lec10_files/figure-html/ttest01-1.png" width="2100" /></p>
 <p>You can read about the origin of Gosset’s pseudonum (and his contributions to brewing) <a href="http://pubs.aeaweb.org/doi/pdfplus/10.1257/jep.22.4.199">here</a>.</p>
-<div id="the-t-test-for-assessing-differences-in-group-means" class="section level2">
-<h2><span class="header-section-number">4.1</span> The <em>t</em>-test for assessing differences in group means</h2>
+<div id="the-t-test-for-assessing-differences-in-group-means" class="section level2" number="4.1">
+<h2 number="4.1"><span class="header-section-number">4.1</span> The <em>t</em>-test for assessing differences in group means</h2>
 <p><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/ttest.pdf">[Details of the t-test]</a></p>
 <p>There are two ways the <em>t</em>-test is implemented in practice, depending on the nature of the question being asked and hence on the nature of the null hypotheis:</p>
 <ul>
@@ -763,13 +782,13 @@ $(document).ready(function () {
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/foursamples.csv">[foursamples.csv]</a></li>
 </ul>
 <p>Attach the example data, and get a boxplot of the data by group:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="co"># t-tests</span></a>
-<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="kw">attach</span>(ttestdat)</a>
-<a class="sourceLine" id="cb38-3" data-line-number="3"><span class="kw">boxplot</span>(Set1 <span class="op">~</span><span class="st"> </span>Group1)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># t-tests</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(ttestdat)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Set1 <span class="sc">~</span> Group1)</span></code></pre></div>
 <p><img src="lec10_files/figure-html/ttest02-1.png" width="2100" /></p>
 <p>Two-tailed <em>t</em>-test (are the means different in a general way?)</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="co"># two-tailed tests</span></a>
-<a class="sourceLine" id="cb39-2" data-line-number="2"><span class="kw">t.test</span>(Set1 <span class="op">~</span><span class="st"> </span>Group1)</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># two-tailed tests</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(Set1 <span class="sc">~</span> Group1)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -783,7 +802,7 @@ $(document).ready(function () {
 ##        7.988305        7.999399</code></pre>
 <p>The <em>t</em>-statistic is -0.2071 and the <em>p</em>-value = 0.8367, which indicates that the <em>t</em>-statistic is not significant, i.e. that there is little support for rejecting the null hypothesis that there is no difference between the mean of group 0 and the mean of group 1.</p>
 <p>Two one-tailed <em>t</em>-tests (each evaluates whether the means are different in a specific way?)</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="kw">t.test</span>(Set1 <span class="op">~</span><span class="st"> </span>Group1, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>)    <span class="co"># i.e. mean of group 0 is less than the mean of group 1</span></a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(Set1 <span class="sc">~</span> Group1, <span class="at">alternative =</span> <span class="st">&quot;less&quot;</span>)    <span class="co"># i.e. mean of group 0 is less than the mean of group 1</span></span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -795,7 +814,7 @@ $(document).ready(function () {
 ## sample estimates:
 ## mean in group 0 mean in group 1 
 ##        7.988305        7.999399</code></pre>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="kw">t.test</span>(Set1 <span class="op">~</span><span class="st"> </span>Group1, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>) <span class="co"># i.e. mean of group 0 is greater than the mean of group 1</span></a></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(Set1 <span class="sc">~</span> Group1, <span class="at">alternative =</span> <span class="st">&quot;greater&quot;</span>) <span class="co"># i.e. mean of group 0 is greater than the mean of group 1</span></span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -809,9 +828,9 @@ $(document).ready(function () {
 ##        7.988305        7.999399</code></pre>
 <p>Notice that for each example, the statistics (<em>t</em>-statistic, means of each group), are identical, while the <em>p</em>-values, and confidence intervals for the <em>t</em>-statistic differ). The smallest <em>p</em>-value is obtained for the test of the hypothes that the mean of group 0 is less than the mean of group 1 (which is the observed difference). <em>But</em>, that difference is not significant (the <em>p</em>-value is greater than 0.05).</p>
 <p>A a second example</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="kw">boxplot</span>(Set2 <span class="op">~</span><span class="st"> </span>Group2)</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Set2 <span class="sc">~</span> Group2)</span></code></pre></div>
 <p><img src="lec10_files/figure-html/ttest05-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="kw">t.test</span>(Set2 <span class="op">~</span><span class="st"> </span>Group2)</a></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(Set2 <span class="sc">~</span> Group2)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -823,31 +842,31 @@ $(document).ready(function () {
 ## sample estimates:
 ## mean in group 0 mean in group 1 
 ##        7.988305        7.599339</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="kw">detach</span>(ttestdat)</a></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(ttestdat)</span></code></pre></div>
 <p>Here the <em>t</em>-statistic is relatively large and the <em>p</em>-value very small, lending support for rejecting the null hypothesis of no significant difference in the means (and accepting the alternative hypothesis that the means do differ). Remember, we haven’t “proven” that they differ, we’ve only rejected the idea that they are identical.</p>
 </div>
-<div id="differences-in-group-variances" class="section level2">
-<h2><span class="header-section-number">4.2</span> Differences in group variances</h2>
+<div id="differences-in-group-variances" class="section level2" number="4.2">
+<h2 number="4.2"><span class="header-section-number">4.2</span> Differences in group variances</h2>
 <p>One assumption that underlies the <em>t</em>-test is that the variances (or dispersions) of the two samples are equal. A modification of the basic test allows cases when the variances are approximately equal to be handled, but large differences in variability between the two groups can have an impact on the interpretability of the test results:</p>
 <p>Example data: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/foursamples.csv">[foursamples.csv]</a></p>
 <p><em>t</em>-tests among groups with different variances</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="kw">attach</span>(foursamples)</a>
-<a class="sourceLine" id="cb49-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb49-3" data-line-number="3"><span class="co"># nice histograms</span></a>
-<a class="sourceLine" id="cb49-4" data-line-number="4">cutpts &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.0</span>, <span class="fl">20.0</span>, <span class="dt">by=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb49-5" data-line-number="5"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb49-6" data-line-number="6"><span class="kw">hist</span>(Sample1, <span class="dt">breaks=</span>cutpts, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">20</span>))</a>
-<a class="sourceLine" id="cb49-7" data-line-number="7"><span class="kw">hist</span>(Sample2, <span class="dt">breaks=</span>cutpts, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">20</span>))</a>
-<a class="sourceLine" id="cb49-8" data-line-number="8"><span class="kw">hist</span>(Sample3, <span class="dt">breaks=</span>cutpts, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">20</span>))</a>
-<a class="sourceLine" id="cb49-9" data-line-number="9"><span class="kw">hist</span>(Sample4, <span class="dt">breaks=</span>cutpts, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">20</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(foursamples)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="co"># nice histograms</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.0</span>, <span class="fl">20.0</span>, <span class="at">by=</span><span class="dv">1</span>)</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Sample1, <span class="at">breaks=</span>cutpts, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">20</span>))</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Sample2, <span class="at">breaks=</span>cutpts, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">20</span>))</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Sample3, <span class="at">breaks=</span>cutpts, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">20</span>))</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Sample4, <span class="at">breaks=</span>cutpts, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">20</span>))</span></code></pre></div>
 <p><img src="lec10_files/figure-html/ttest06-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb50-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb50-3" data-line-number="3"><span class="kw">boxplot</span>(Sample1, Sample2, Sample3, Sample4)</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(Sample1, Sample2, Sample3, Sample4)</span></code></pre></div>
 <p><img src="lec10_files/figure-html/ttest06-2.png" width="2100" /></p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="kw">mean</span>(Sample1)<span class="op">-</span><span class="kw">mean</span>(Sample2)</a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Sample1)<span class="sc">-</span><span class="fu">mean</span>(Sample2)</span></code></pre></div>
 <pre><code>## [1] -0.2718703</code></pre>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="kw">t.test</span>(Sample1, Sample2)</a></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(Sample1, Sample2)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -859,9 +878,9 @@ $(document).ready(function () {
 ## sample estimates:
 ## mean of x mean of y 
 ##  10.72631  10.99818</code></pre>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="kw">mean</span>(Sample3)<span class="op">-</span><span class="kw">mean</span>(Sample4)</a></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Sample3)<span class="sc">-</span><span class="fu">mean</span>(Sample4)</span></code></pre></div>
 <pre><code>## [1] -0.2676365</code></pre>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="kw">t.test</span>(Sample3, Sample4)</a></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(Sample3, Sample4)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -873,9 +892,9 @@ $(document).ready(function () {
 ## sample estimates:
 ## mean of x mean of y 
 ##  10.73264  11.00027</code></pre>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="kw">mean</span>(Sample1)<span class="op">-</span><span class="kw">mean</span>(Sample3)</a></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Sample1)<span class="sc">-</span><span class="fu">mean</span>(Sample3)</span></code></pre></div>
 <pre><code>## [1] -0.006325667</code></pre>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1"><span class="kw">t.test</span>(Sample1, Sample3)</a></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(Sample1, Sample3)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -887,9 +906,9 @@ $(document).ready(function () {
 ## sample estimates:
 ## mean of x mean of y 
 ##  10.72631  10.73264</code></pre>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="kw">mean</span>(Sample2)<span class="op">-</span><span class="kw">mean</span>(Sample4)</a></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Sample2)<span class="sc">-</span><span class="fu">mean</span>(Sample4)</span></code></pre></div>
 <pre><code>## [1] -0.002091883</code></pre>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="kw">t.test</span>(Sample2, Sample4)</a></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(Sample2, Sample4)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -901,16 +920,18 @@ $(document).ready(function () {
 ## sample estimates:
 ## mean of x mean of y 
 ##  10.99818  11.00027</code></pre>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1"><span class="kw">detach</span>(foursamples)</a></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(foursamples)</span></code></pre></div>
 <p>There is a formal test for equality of group variances that will be described with analysis of variance.</p>
 <p><a href="lec10.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="readings" class="section level1">
-<h1><span class="header-section-number">5</span> Readings</h1>
+<div id="readings" class="section level1" number="5">
+<h1 number="5"><span class="header-section-number">5</span> Readings</h1>
 <ul>
-<li>Owen (The R Guide): section 7.1</li>
+<li>Owen (The R Guide): Ch. 7.1</li>
+<li>Irizarry (<em>Intro to Data Science</em>): Ch. 12 - 15</li>
 </ul>
+<p><a href="lec09.html">[Back to top]</a></p>
 </div>
 
 
@@ -922,7 +943,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
