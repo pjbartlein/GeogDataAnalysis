@@ -273,7 +273,7 @@ The aim of the analysis is to examine the spatial variations in the elevations o
 Produce a 3-D scatter plot of cirque elevation as a function of latitude and longitude, with the points colored by Glacier
 
 ```{r echo=TRUE, eval=FALSE}
-cloud(Elev ~ Lon*Lat, pch=16, cex=1.25, col=as.integer(Glacier)+1)
+cloud(Elev ~ Lon*Lat, pch=16, cex=1.25, col=unclass(as.factor(Glacier)))
 ```
 
 The glaciated cirque basins should appear in red.  Relative to all cirque basins, note where the glaciated ones tend to occur.

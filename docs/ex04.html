@@ -13,7 +13,7 @@
 
 <title>Exercise 4</title>
 
-<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -21,8 +21,6 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
@@ -153,6 +151,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 <link rel="stylesheet" href="html-md-01.css" type="text/css" />
 
@@ -671,7 +670,7 @@ $(document).ready(function () {
 <p>See Section 7 of the “Mutivariate Plots” lecture for maps of the data.</p>
 <p>The aim of the analysis is to examine the spatial variations in the elevations of the cirque basins, in order to infer what might be controlling their distribution. From theory, we might expect that the “glaciation threshold” or elevation at which glaciers may form, should be lower where it is cooler and moister, and higher where it is warm and dry. The question that can be asked here is whether the Oregon cirque distributions conform to this idea, based on examining that distribution.</p>
 <p>Produce a 3-D scatter plot of cirque elevation as a function of latitude and longitude, with the points colored by Glacier</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cloud</span>(Elev <span class="sc">~</span> Lon<span class="sc">*</span>Lat, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">1.25</span>, <span class="at">col=</span><span class="fu">as.integer</span>(Glacier)<span class="sc">+</span><span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cloud</span>(Elev <span class="sc">~</span> Lon<span class="sc">*</span>Lat, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">1.25</span>, <span class="at">col=</span><span class="fu">unclass</span>(<span class="fu">as.factor</span>(Glacier)))</span></code></pre></div>
 <p>The glaciated cirque basins should appear in red. Relative to all cirque basins, note where the glaciated ones tend to occur.</p>
 <p>Create and plot some conditioning variables:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>Lat2 <span class="ot">&lt;-</span> <span class="fu">equal.count</span>(Lat,<span class="dv">4</span>,.<span class="dv">5</span>)</span>

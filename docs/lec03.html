@@ -512,10 +512,11 @@ $(document).ready(function () {
 <li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
 <li><a href="#basic-scatter-plots"><span class="toc-section-number">2</span> Basic scatter plots</a>
 <ul>
-<li><a href="#scatter-diagramscatterplot"><span class="toc-section-number">2.1</span> Scatter diagram/Scatterplot</a>
+<li><a href="#scatter-diagramscatterplot"><span class="toc-section-number">2.1</span> Scatter diagram/Scatterplot</a></li>
+<li><a href="#variations-on-basic-scatter-plots"><span class="toc-section-number">2.2</span> Variations on basic scatter plots</a>
 <ul>
-<li><a href="#axis-scaling"><span class="toc-section-number">2.1.1</span> Axis scaling</a></li>
-<li><a href="#multiple-plots-with-different-y-axes"><span class="toc-section-number">2.1.2</span> Multiple plots with different y-axes</a></li>
+<li><a href="#axis-scaling"><span class="toc-section-number">2.2.1</span> Axis scaling</a></li>
+<li><a href="#multiple-plots-with-different-y-axes"><span class="toc-section-number">2.2.2</span> Multiple plots with different y-axes</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#line-plots"><span class="toc-section-number">3</span> Line Plots</a>
@@ -582,10 +583,12 @@ $(document).ready(function () {
 <p>Detach the <code>orstationc</code> data frame.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># detach orstationc dataframe</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(orstationc)</span></code></pre></div>
-<p>##Variations on basic scatter plots ##</p>
+</div>
+<div id="variations-on-basic-scatter-plots" class="section level2" number="2.2">
+<h2 number="2.2"><span class="header-section-number">2.2</span> Variations on basic scatter plots</h2>
 <p>There are several variations on the basic scatter plot that can be made to enhance interpret ability of the plots.</p>
-<div id="axis-scaling" class="section level3" number="2.1.1">
-<h3 number="2.1.1"><span class="header-section-number">2.1.1</span> Axis scaling</h3>
+<div id="axis-scaling" class="section level3" number="2.2.1">
+<h3 number="2.2.1"><span class="header-section-number">2.2.1</span> Axis scaling</h3>
 <p>Linear, log (base 10), ln (base e) and probability-scale axes may be examined to linearize the relationship between variables</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use Scandinavian EU vote data [scanvote.csv]</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(scanvote)</span>
@@ -597,8 +600,8 @@ $(document).ready(function () {
 <p>Note how the log10 transformation linearizes the relationship. Logarithmic transformations basically compress the high end of the range of values of the transformed variable, and expand the low end.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(scanvote)</span></code></pre></div>
 </div>
-<div id="multiple-plots-with-different-y-axes" class="section level3" number="2.1.2">
-<h3 number="2.1.2"><span class="header-section-number">2.1.2</span> Multiple plots with different y-axes</h3>
+<div id="multiple-plots-with-different-y-axes" class="section level3" number="2.2.2">
+<h3 number="2.2.2"><span class="header-section-number">2.2.2</span> Multiple plots with different y-axes</h3>
 <p>Differing symbol types may be used to distinguish multiple Y-variables plotted versus the same X-variable. Here, two y-axis variables are plotted vs the same x-axis:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use Oregon climate-station data [orstationc.csv]</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(orstationc)</span>

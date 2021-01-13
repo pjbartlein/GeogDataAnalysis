@@ -63,7 +63,7 @@ Detach the `orstationc` data frame.
 detach(orstationc)
 ```
 
-##Variations on basic scatter plots ##
+## Variations on basic scatter plots ##
 
 There are several variations on the basic scatter plot that can be made to enhance interpret ability of the plots.  
 
