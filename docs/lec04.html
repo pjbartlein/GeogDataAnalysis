@@ -13,7 +13,7 @@
 
 <title>Descriptive statistics</title>
 
-<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -21,8 +21,6 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
@@ -153,6 +151,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 <link rel="stylesheet" href="SI-md-08.css" type="text/css" />
 
@@ -529,6 +528,7 @@ $(document).ready(function () {
 <li><a href="#the-chi-square-statistic"><span class="toc-section-number">5.2</span> The Chi-square statistic</a></li>
 <li><a href="#the-chi-square-distribution"><span class="toc-section-number">5.3</span> The Chi-square distribution</a></li>
 </ul></li>
+<li><a href="#readings"><span class="toc-section-number">6</span> Readings</a></li>
 </ul>
 </div>
 
@@ -601,18 +601,17 @@ $(document).ready(function () {
 <div id="univariate-descriptive-statistics-examples" class="section level1" number="3">
 <h1 number="3"><span class="header-section-number">3</span> Univariate descriptive statistics – examples</h1>
 <p>Descriptive statistics can be most easily obtained in R using the <code>summary()</code> function. The summary command is generic in the sense that object or “argument” of the function could be anything. If the argument is a data frame, <code>summary()</code> returns descriptive statistics for each variable, whereas if the argument is a single variable, <code>summary()</code> just returns the descriptive statistics for that variable.</p>
-<p>Data files for these examples (download to the working directory and read in): <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/scanvote.csv">[scanvote.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/specmap.csv">[specmap.csv]</a></p>
+<p>Data files for these examples (download to the working directory and read in): <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/scanvote.csv">[scanvote.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/specmap.csv">[specmap.csv]</a> <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sumcr.csv">[specmap.csv]</a></p>
 <p>Summarize the <code>scanvote</code> data frame. (Note that it is not necessary to attach the data frame if the whole thing is being summarized.)</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dataframe summary</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(scanvote) </span></code></pre></div>
-<pre><code>##        District       Yes             Pop          Country 
-##  Ahvenanmaa: 1   Min.   :25.50   Min.   :   1.50   Fin:12  
-##  Akershus  : 1   1st Qu.:43.20   1st Qu.:  10.00   Nor:19  
-##  Alvsborg  : 1   Median :48.20   Median :  16.70   Swe:24  
-##  Aust-Agder: 1   Mean   :47.97   Mean   :  52.02           
-##  Blekinge  : 1   3rd Qu.:53.80   3rd Qu.:  39.25           
-##  Buskerud  : 1   Max.   :70.80   Max.   :1016.80           
-##  (Other)   :49</code></pre>
+<pre><code>##    District              Yes             Pop            Country         
+##  Length:55          Min.   :25.50   Min.   :   1.50   Length:55         
+##  Class :character   1st Qu.:43.20   1st Qu.:  10.00   Class :character  
+##  Mode  :character   Median :48.20   Median :  16.70   Mode  :character  
+##                     Mean   :47.97   Mean   :  52.02                     
+##                     3rd Qu.:53.80   3rd Qu.:  39.25                     
+##                     Max.   :70.80   Max.   :1016.80</code></pre>
 <p>Individual descriptive statistics can be obtained using the following, self-explaining functions:</p>
 <p><code>mean()</code>, <code>median()</code>, <code>max()</code>, <code>min()</code>, <code>range()</code>, <code>var()</code>, <code>sd()</code>, <code>quantile()</code>, <code>fivenum()</code>, <code>length()</code>, <code>which.max()</code>, <code>which.min()</code></p>
 <p>The easiest way to illustrate what these functions do is to apply them to individual variables and see what they produce.</p>
@@ -729,6 +728,7 @@ $(document).ready(function () {
 <p>The relationship is obviously non-linear, but strong (reflecting the among-reach differences in <code>WidthWS</code> seen earlier). What about the correlation?</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(CumLen, WidthWS)</span></code></pre></div>
 <pre><code>## [1] -0.0959915</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
 <p>Does the correlation coefficient make any sense here?</p>
 <p><a href="lec04.html">[Back to top]</a></p>
 </div>
@@ -740,10 +740,6 @@ $(document).ready(function () {
 <h2 number="5.1"><span class="header-section-number">5.1</span> Descriptive plots for categorical data–mosaic plots</h2>
 <p>Categorical or group-membership data (“factors” in R) are often summarized in tables, the cells of which indicate absolute or relative frequencies of different combinations of the levels of the factors. There are several approaches for visualizing the contents of a table.</p>
 <p>First, summarize the data in a table (sometimes called a “cross-tab” or “cross-tabulation” table):</p>
-<pre><code>## The following objects are masked from sumcr (pos = 3):
-## 
-##     CumLen, DepthWS, HU, HUAreaBF, HUAreaWS, Length, Location, Reach, WidthBF, WidthWS,
-##     wsgrad</code></pre>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># descriptive plots for categorical data</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>ReachHU_table <span class="ot">&lt;-</span> <span class="fu">table</span>(Reach, HU)   <span class="co"># tabluate Reach and HU data</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>ReachHU_table</span></code></pre></div>
@@ -765,7 +761,7 @@ $(document).ready(function () {
 <h2 number="5.2"><span class="header-section-number">5.2</span> The Chi-square statistic</h2>
 <p>The <em>X<sup>2</sup></em> statistic measures the strength of association between two categorical variables (nominal- or ordinal-scale variables, summarized by a cross-tabulation, a table that shows the frequency of occurrence of observations with particular combinations of the levels of two (or more) variables.</p>
 <p><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/chisq.pdf">[Chi-squared definition]</a></p>
-<p>Calculate the <em>X2</em> statistic for the <code>ReachHU</code> table.</p>
+<p>Calculate the <em>X<sup>2</sup></em> statistic for the <code>ReachHU</code> table.</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Chi-squared statistic</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>ReachHU_table <span class="ot">&lt;-</span> <span class="fu">table</span>(Reach,HU)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>ReachHU_table</span></code></pre></div>
@@ -780,9 +776,9 @@ $(document).ready(function () {
 ## 
 ## data:  ReachHU_table
 ## X-squared = 1.9889, df = 4, p-value = 0.7378</code></pre>
-<p>The <code>p-value</code> reported here provides a way of inferring whether or not there is a relationship between the row and column variables in the table, and will be explained more later. In practice the value here is rather large, which provides support for rejecting the notion that there is no relationship between <code>Reach</code> and <code>HU</code>.</p>
+<p>The <code>p-value</code> reported here provides a way of inferring whether or not there is a relationship between the row and column variables in the table, and will be explained more later. In practice the value here is rather large, which provides support for rejecting the notion that there is a relationship between <code>Reach</code> and <code>HU</code>, and so we might conclude instead that they are “independent”.</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
-<p>To further illustrate the application of the X2 test, the Sierra Nevada reconstructed climate data and the Oregon climate-station data can be converted to categorical (ordinal-scale) data, and the following scripts employed</p>
+<p>To further illustrate the application of the <em>X<sup>2</sup></em> test, the Sierra Nevada reconstructed climate data and the Oregon climate-station data can be converted to categorical (ordinal-scale) data, and the following scripts employed</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># crosstab &amp; Chi-square -- Sierra Nevada TSum and PWin groups</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(sierra)</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(PWin, TSum)</span></code></pre></div>
@@ -803,6 +799,7 @@ $(document).ready(function () {
 ## data:  TSumPWin_table
 ## X-squared = 13.733, df = 4, p-value = 0.008198</code></pre>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(sierra)</span></code></pre></div>
+<p>The <em>X<sup>2</sup></em> test here yields a small <em>p</em>-value, suggesting that there is a relationship between the two variables.</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># crosstab &amp; Chi-square -- Oregon station elevation and tann</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(orstationc)</span></code></pre></div>
 <pre><code>## The following objects are masked _by_ .GlobalEnv:
@@ -826,6 +823,7 @@ $(document).ready(function () {
 ## 
 ## data:  elevtann_table
 ## X-squared = 66.672, df = 4, p-value = 1.143e-13</code></pre>
+<p>The <em>X<sup>2</sup></em> test here yields a small <em>p</em>-value, again suggesting that there is a relationship between the two variables.</p>
 </div>
 <div id="the-chi-square-distribution" class="section level2" number="5.3">
 <h2 number="5.3"><span class="header-section-number">5.3</span> The Chi-square distribution</h2>
@@ -834,14 +832,16 @@ $(document).ready(function () {
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>pdf <span class="ot">&lt;-</span> <span class="fu">dchisq</span>(x, <span class="dv">4</span>)</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pdf <span class="sc">~</span> x, <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
 <p><img src="lec04_files/figure-html/chisq-dist-1.png" width="2100" /></p>
-<p>#Readings#</p>
+</div>
+</div>
+<div id="readings" class="section level1" number="6">
+<h1 number="6"><span class="header-section-number">6</span> Readings</h1>
 <ul>
 <li>Owen (<em>The R Guide</em>): Sec. 5.1</li>
 <li>Rossiter (<em>Introduction … ITC</em>): section 4.14</li>
 <li>Rogerson (<em>Statistical Methods</em>): section 1.4 (UO Library)</li>
 </ul>
 <p><a href="lec04.html">[Back to top]</a></p>
-</div>
 </div>
 
 

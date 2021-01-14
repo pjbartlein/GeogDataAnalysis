@@ -81,6 +81,7 @@ Descriptive statistics can be most easily obtained in R using the `summary()` fu
 Data files for these examples (download to the working directory and read in):
 [[scanvote.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/scanvote.csv)
 [[specmap.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/specmap.csv)
+[[specmap.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sumcr.csv)
 
 ```{r load, echo=FALSE, cache=FALSE}
 load(".Rdata")
@@ -185,6 +186,9 @@ The relationship is obviously non-linear, but strong (reflecting the among-reach
 cor(CumLen, WidthWS)
 ```
 
+```{r}
+detach(sumcr)
+``` 
 Does the correlation coefficient make any sense here?
  
 [[Back to top]](lec04.html)
@@ -225,7 +229,7 @@ The *X<sup>2</sup>* statistic measures the strength of association between two c
 
 [[Chi-squared definition]](https://pjbartlein.github.io/GeogDataAnalysis/topics/chisq.pdf)
 
-Calculate the *X2* statistic for the `ReachHU` table.
+Calculate the *X<sup>2</sup>* statistic for the `ReachHU` table.
 
 ```{r chisq_calc}
 # Chi-squared statistic
@@ -234,13 +238,13 @@ ReachHU_table
 chisq.test(ReachHU_table)
 ```
 
-The `p-value` reported here provides a way of inferring whether or not there is a relationship between the row and column variables in the table, and will be explained more later.  In practice the value here is rather large, which provides support for rejecting the notion that there is no relationship between `Reach` and `HU`.
+The `p-value` reported here provides a way of inferring whether or not there is a relationship between the row and column variables in the table, and will be explained more later.  In practice the value here is rather large, which provides support for rejecting the notion that there is a relationship between `Reach` and `HU`, and so we might conclude instead that they are "independent".
 
 ```{r detach_sumcr2}
 detach(sumcr)
 ```
 
-To further illustrate the application of the X2 test, the Sierra Nevada reconstructed climate data and the Oregon climate-station data can be converted to categorical (ordinal-scale) data, and the following scripts employed
+To further illustrate the application of the *X<sup>2</sup>* test, the Sierra Nevada reconstructed climate data and the Oregon climate-station data can be converted to categorical (ordinal-scale) data, and the following scripts employed
 
 ```{r sierra}
 # crosstab & Chi-square -- Sierra Nevada TSum and PWin groups
@@ -254,6 +258,8 @@ chisq.test(TSumPWin_table)
 detach(sierra)
 ```
 
+The *X<sup>2</sup>* test here yields a small *p*-value, suggesting that there is a relationship between the two variables.
+
 ```{r orstationc}
 # crosstab & Chi-square -- Oregon station elevation and tann
 attach(orstationc)
@@ -265,6 +271,8 @@ elevtann_table
 chisq.test(elevtann_table)
 ```
 
+The *X<sup>2</sup>* test here yields a small *p*-value, again suggesting that there is a relationship between the two variables.
+
 ## The Chi-square distribution ##
 
 Quick look at the appropriate Chi-square distribution:
@@ -275,7 +283,7 @@ pdf <- dchisq(x, 4)
 plot(pdf ~ x, type="l")
 ```
 
-#Readings#
+# Readings #
 
 - Owen (*The R Guide*):  Sec. 5.1
 - Rossiter (*Introduction ... ITC*):  section 4.14
