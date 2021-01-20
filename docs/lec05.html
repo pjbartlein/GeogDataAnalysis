@@ -13,7 +13,7 @@
 
 <title>Multivariate Plots</title>
 
-<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -21,8 +21,6 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
@@ -153,6 +151,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 <link rel="stylesheet" href="SI-md-08.css" type="text/css" />
 
@@ -687,22 +686,23 @@ $(document).ready(function () {
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="lec05_files/figure-html/plot16-1.png" width="2100" /></p>
 <p>Note the use of the “panel” function here. Basically, what’s going on is that the <code>coplot()</code> function is determining which subset of observations should appear in each panel, while the two function calls within the <code>panel()</code> function (<code>panel.smooth()</code> and <code>abline()</code>) perform their tasks on that subset of observations. In other words, <code>coplot()</code> selects the observations of <code>Yes</code> and <code>log(Pop)</code> for a particular panel (i.e. <code>Country</code>), sends these to the panel function, which passes them on (relabeled as x and y), and plots the points, and then <code>panel.smooth()</code> and <code>albline()</code> draw a lowess curve and least-squares line for those observations on each panel (more about those later). The general idea is to compare the panels (countries) seeing where in the panel the points lie and what the relationship looks like. The general relationship between population and percent of <code>Yes</code> votes is apparent, as well as country-to-country differences, like the generally greater proportion of <code>Yes</code> votes in Finland.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(scanvote)</span></code></pre></div>
 </div>
 <div id="coplot-conditioning-by-one-continuous-numeric-variable" class="section level2" number="5.2">
 <h2 number="5.2"><span class="header-section-number">5.2</span> Coplot, conditioning by one continuous numeric variable</h2>
 <p>Most of the time, the conditioning variables are continuous numeric variables. Here’s a coplot for <code>WidthWS</code> as a function of <code>DepthWS</code> in the Summit Cr. data set, conditioned by <code>CumLen</code> (or distance downsteam):</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(sumcr)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coplot</span>(WidthWS <span class="sc">~</span> DepthWS <span class="sc">|</span> CumLen, <span class="at">pch=</span><span class="dv">14</span><span class="sc">+</span><span class="fu">as.integer</span>(Reach), <span class="at">cex=</span><span class="fl">1.5</span>,</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">number=</span><span class="dv">3</span>, <span class="at">columns=</span><span class="dv">3</span>,</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">panel=</span><span class="cf">function</span>(x,y,...) {</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>          <span class="fu">panel.smooth</span>(x,y,<span class="at">span=</span>.<span class="dv">8</span>,<span class="at">iter=</span><span class="dv">5</span>,...)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>          <span class="fu">abline</span>(<span class="fu">lm</span>(y <span class="sc">~</span> x), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>     }</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(sumcr)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coplot</span>(WidthWS <span class="sc">~</span> DepthWS <span class="sc">|</span> CumLen, <span class="at">pch=</span><span class="dv">14</span><span class="sc">+</span><span class="fu">as.integer</span>(Reach), <span class="at">cex=</span><span class="fl">1.5</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">number=</span><span class="dv">3</span>, <span class="at">columns=</span><span class="dv">3</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">panel=</span><span class="cf">function</span>(x,y,...) {</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>          <span class="fu">panel.smooth</span>(x,y,<span class="at">span=</span>.<span class="dv">8</span>,<span class="at">iter=</span><span class="dv">5</span>,...)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>          <span class="fu">abline</span>(<span class="fu">lm</span>(y <span class="sc">~</span> x), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>     }</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="lec05_files/figure-html/plot17-1.png" width="2100" /></p>
 <p>We know the arrangement of the reaches, and so the resulting plot should be no surprise. The plotting characters are determined by Reach, to reveal the extent of overlap in the conditioning “shingles.” The plot could be regenerated using Reach as the conditioning variable, which would result in no overlap between the individual panels.</p>
 <p>It’s easy to see that the two grazed reaches (A upstream and C downstream) have generally wider channels, which would be expected. Something that is not apparent in ordinary plots of the data is that the “normal” or expected inverse relationship between width and depth (as one gets bigger the other gets smaller) does not apply in the middle (exclosure) reach.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
 <p><a href="lec05.html">[Back to top]</a></p>
 </div>
 </div>
@@ -712,11 +712,8 @@ $(document).ready(function () {
 <div id="multipanel-plots" class="section level2" number="6.1">
 <h2 number="6.1"><span class="header-section-number">6.1</span> Multipanel plots</h2>
 <p>A multipanel plot, in which the individual panels are “conditioned” by the value of a third variable, here longitude, can be illustrated for the Oregon climate station data using the following script:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(orstationc)</span></code></pre></div>
-<pre><code>## The following objects are masked _by_ .GlobalEnv:
-## 
-##     lat, lon</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(orstationc)</span></code></pre></div>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make a factor variable indicating which longitude band a station falls in</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>Lon2 <span class="ot">&lt;-</span> <span class="fu">equal.count</span>(lon,<span class="dv">8</span>,.<span class="dv">5</span>)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the lattice plot</span></span>
@@ -735,13 +732,13 @@ $(document).ready(function () {
 <span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="co"># add the shingles</span></span>
 <span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">plot</span>(Lon2), <span class="at">position=</span><span class="fu">c</span>(.<span class="dv">1</span>,<span class="fl">0.0</span>,.<span class="dv">9</span>,.<span class="dv">4</span>))</span></code></pre></div>
-<p><img src="lec05_files/figure-html/unnamed-chunk-2-1.png" width="2100" /></p>
+<p><img src="lec05_files/figure-html/unnamed-chunk-3-1.png" width="2100" /></p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(orstationc)</span></code></pre></div>
 <p>The idea here is to chop longitude into eight bands from west to east using the equal.count() function. (The third argument here, 0.5, indicates that the bands should overlap by 50 percent.) Then the lattice plot is made using the xyplot() function, which makes a separate scatter plot for each longitude band, showing the relationship between annual precipitation and elevation. A “shingles” plot is added at the bottom to indicate the range of longitudes that go into each plot.</p>
 <p>Notice that in each panel, a straight regression line (more about regression later) and a smooth lowess curve have been added to help summarize the relationships. The panels are arranged in longitudinal order from low (west) to high (east, remember that in the western hemisphere, longitudes are negative). The plots are certainly interesting. The general idea is that precipitation should increase with increasing elevation, but at least for the western part of the state the reverse seems to be true! What is going on here is that proximity to the Pacific is a much more important control than elevation, and low elevation coastal and inland stations are quite wet. In the eastern part of the state (top row of panels), the expected relationship holds, but it’s kind of hard to see because the wet western part of the state stretches out the scale.,</p>
 <p>The following plots explore the seasonality of precipitation in the Yellowstone region. This first plot uses glyphs to show the values of twelve monthly precipitation variables as “spokes” of a wheel, where each variable is plotted relative to its overall range. The first block of code below sets things up, and the <code>stars()</code> function does the plotting.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code></pre></div>
-<pre><code>## Linking to GEOS 3.8.1, GDAL 3.1.1, PROJ 6.3.1</code></pre>
+<pre><code>## Linking to GEOS 3.8.1, GDAL 3.1.4, PROJ 6.3.1</code></pre>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(yellpratio)</span></code></pre></div>
 <pre><code>## The following object is masked _by_ .GlobalEnv:
 ## 
@@ -829,6 +826,7 @@ $(document).ready(function () {
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>plot5 <span class="ot">&lt;-</span> <span class="fu">splom</span>(<span class="sc">~</span><span class="fu">cbind</span>(APJan,APJul,Elev) <span class="sc">|</span> Latitude<span class="sc">*</span>Longitude)</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plot5)</span></code></pre></div>
 <p><img src="lec05_files/figure-html/plot23-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(yellpratio)</span></code></pre></div>
 <p>These plots provide a different prospective on the variations of precipitation across the region, but they’re consistent with what the other plots show.</p>
 </div>
 </div>
@@ -837,38 +835,38 @@ $(document).ready(function () {
 <p>The <code>ggplot2</code> package can produce lattice-like multipanel plots, by “faceting”, and for spatial data provides an alternative to <code>spplot</code> in the spatial (<code>sp</code>) package. Ploting with <code>ggplot2</code> will be the focus of an upcoming lecture.</p>
 <p>The following example uses a data set of locations and elevations Oregon cirque basins (upland basins eroded by glaciers), and whether or not they are currently (early 21st century) glaciated. Whether a cirque is occupied by a glacier or not is basically determined by the trade-off between snow accumulation (and hence winter precipitation) and summer ablation (or melting, and hence summer temperature. Cirque basins not currently occupied by glaciers were, of course, occupied in the past, while those occupied today indicate where “glacier-safe” climate prevails (at least for now).</p>
 <p>In the code below, the two <code>as.factor()</code> functions are used to turn the single variable <code>cirques_sf$Glacier</code>, which has the values “<code>G</code>” and “<code>U</code>”, into two “binary” (0 or 1) variables. The variable <code>cirques_sf$Glaciated</code> will contain 1’s for glaciated cirques, and 0 otherwise (i.e. unglaciated cirques), while the variable <code>cirques_sf$Unglaciated</code> will contain 1’s for unglaciated cirques, and 0 otherwise. The two variables are obviously redundant (the elements would sum to 1 for each observation), but it makes the illustration of the method more transparent.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the ggplot2 package</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># multi-panel lattice plot</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>cirques_sf<span class="sc">$</span>Glaciated <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(cirques_sf<span class="sc">$</span>Glacier<span class="sc">==</span><span class="st">&quot;G&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>cirques_sf<span class="sc">$</span>Unglaciated <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(cirques_sf<span class="sc">$</span>Glacier<span class="sc">==</span><span class="st">&quot;U&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the ggplot2 package</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># multi-panel lattice plot</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>cirques_sf<span class="sc">$</span>Glaciated <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(cirques_sf<span class="sc">$</span>Glacier<span class="sc">==</span><span class="st">&quot;G&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>cirques_sf<span class="sc">$</span>Unglaciated <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(cirques_sf<span class="sc">$</span>Glacier<span class="sc">==</span><span class="st">&quot;U&quot;</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span></code></pre></div>
 <p>Use the <code>ggplot()</code> function in the <code>ggplot2</code> package (note the name distinction), to produce simple map of cirque locations.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> orotl_sf) <span class="sc">+</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(cirques_sf<span class="sc">$</span>Lon, cirques_sf<span class="sc">$</span>Lat), <span class="at">size =</span> <span class="fl">2.0</span> , <span class="at">color =</span> cirques_sf<span class="sc">$</span>Glaciated <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> orotl_sf) <span class="sc">+</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(cirques_sf<span class="sc">$</span>Lon, cirques_sf<span class="sc">$</span>Lat), <span class="at">size =</span> <span class="fl">2.0</span> , <span class="at">color =</span> cirques_sf<span class="sc">$</span>Glaciated <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="lec05_files/figure-html/ggplot%201-1.png" width="2100" /></p>
 <p>It’s pretty easy to see where the glaciated cirques occur.</p>
 <p>Here are two multi-panel plots constructed using “facets”, the first plotting separate maps for glaciated and unglaciated cirques, and the second plotting cirques by region.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cirques_sf) <span class="sc">+</span> </span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> orotl_sf) <span class="sc">+</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(Lon, Lat), <span class="at">size =</span> <span class="fl">1.0</span> , <span class="at">color =</span> cirques_sf<span class="sc">$</span>Glaciated <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Glacier) <span class="sc">+</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="lec05_files/figure-html/ggplot%202-1.png" width="2100" /></p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cirques_sf) <span class="sc">+</span> </span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> orotl_sf) <span class="sc">+</span></span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(Lon, Lat), <span class="at">size =</span> <span class="fl">1.0</span> , <span class="at">color =</span> cirques_sf<span class="sc">$</span>Glaciated <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Region) <span class="sc">+</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Glacier) <span class="sc">+</span></span>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
 <span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="lec05_files/figure-html/ggplot%202-1.png" width="2100" /></p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cirques_sf) <span class="sc">+</span> </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> orotl_sf) <span class="sc">+</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(Lon, Lat), <span class="at">size =</span> <span class="fl">1.0</span> , <span class="at">color =</span> cirques_sf<span class="sc">$</span>Glaciated <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Region) <span class="sc">+</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="lec05_files/figure-html/ggplot%202-2.png" width="2100" /></p>
 <p>This way of mapping the cirques could also have been done by plotting a simple shape file, and then putting points on top, e.g.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(orotl_sf))</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(cirques_sf<span class="sc">$</span>Lon, cirques_sf<span class="sc">$</span>Lat, <span class="at">col=</span><span class="dv">3</span><span class="sc">-</span><span class="fu">as.integer</span>(cirques_sf<span class="sc">$</span>Glacier))</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="dv">118</span>, <span class="fl">43.5</span>, <span class="fu">c</span>(<span class="st">&quot;Glaciated&quot;</span>,<span class="st">&quot;Unglaciated&quot;</span>), <span class="at">pch=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">col=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(orotl_sf))</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(cirques_sf<span class="sc">$</span>Lon, cirques_sf<span class="sc">$</span>Lat, <span class="at">col=</span><span class="dv">3</span><span class="sc">-</span><span class="fu">as.integer</span>(cirques_sf<span class="sc">$</span>Glacier))</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="sc">-</span><span class="dv">118</span>, <span class="fl">43.5</span>, <span class="fu">c</span>(<span class="st">&quot;Glaciated&quot;</span>,<span class="st">&quot;Unglaciated&quot;</span>), <span class="at">pch=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">col=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span></code></pre></div>
 <p><img src="lec05_files/figure-html/plot25-1.png" width="2100" /></p>
 <p><a href="lec05.html">[Back to top]</a></p>
 </div>

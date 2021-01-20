@@ -199,6 +199,10 @@ coplot(Yes ~ log10(Pop) | Country, columns=3,
 
 Note the use of the "panel" function here.  Basically, what's going on is that the `coplot()` function is determining which subset of observations should appear in each panel, while the two function calls within the `panel()` function (`panel.smooth()` and `abline()`) perform their tasks on that subset of observations.  In other words, `coplot()` selects the observations of `Yes` and `log(Pop)` for a particular panel (i.e. `Country`), sends these to the panel function, which passes them on (relabeled as x and y), and plots the points, and then `panel.smooth()` and `albline()` draw a lowess curve and least-squares line for those observations on each panel (more about those later).  The general idea is to compare the panels (countries) seeing where in the panel the points lie and what the relationship looks like.  The general relationship between population and percent of `Yes` votes is apparent, as well as country-to-country differences, like the generally greater proportion of `Yes` votes in Finland.
 
+```{r}
+detach(scanvote)
+```
+
 ## Coplot, conditioning by one continuous numeric variable ##
 
 Most of the time, the conditioning variables are continuous numeric variables.  Here's a coplot for `WidthWS` as a function of `DepthWS` in the Summit Cr. data set, conditioned by `CumLen` (or distance downsteam):
@@ -351,6 +355,10 @@ Lattice plots can extend many of the basic univariate and bivariate plots. For e
 # Lattice plot of scatter plot matrices
 plot5 <- splom(~cbind(APJan,APJul,Elev) | Latitude*Longitude)
 print(plot5)
+```
+
+```{r}
+detach(yellpratio)
 ```
 
 These plots provide a different prospective on the variations of precipitation across the region, but they're consistent with what the other plots show.
