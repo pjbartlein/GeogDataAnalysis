@@ -1,6 +1,6 @@
-# lec05.Rmd
+# purled from lec05.Rmd
 
-load(".Rdata")
+# load(".Rdata")
 
 attach(specmap)
 plot(O18 ~ Insol, pch=16, cex=0.6)
@@ -78,6 +78,8 @@ coplot(Yes ~ log10(Pop) | Country, columns=3,
           panel.smooth(x,y,span=.8,iter=5,...)
           abline(lm(y ~ x), col="blue") } 
 )
+
+detach(scanvote)
 
 attach(sumcr)
 coplot(WidthWS ~ DepthWS | CumLen, pch=14+as.integer(Reach), cex=1.5,
@@ -172,6 +174,8 @@ print(plot4)
 # Lattice plot of scatter plot matrices
 plot5 <- splom(~cbind(APJan,APJul,Elev) | Latitude*Longitude)
 print(plot5)
+
+detach(yellpratio)
 
 # load the ggplot2 package
 library(ggplot2)

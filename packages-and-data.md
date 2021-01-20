@@ -16,16 +16,16 @@ Note that you will need to be connected to the Internet to download the various 
 
 Because Windows objects to the idea of programs installing files into the `C:\Program Files` folder, R will run into trouble when it attempts to install add-in packages there.  The most reliable work-around seems to be to create what's known as a "personal library" where the packages are stored.  The R GUI for Windows and RStudio will generally offer to create one the first time you download a package (see the examples below), but Windows sometimes does not get the permissions entirely correct.  The best thing to do is to create the folder yourself before downloading a package the first time, i.e., create the folder
 
-`C:\Users\username\Documents\R\win-library\3.6\`
+`C:\Users\username\Documents\R\win-library\4.0\`
 
-using Windows Explorer (the file manager, not Internet Explorer, the web browser), where `username` is your specific Windows user name.  Use Windows Explorer to browse to your `\Documents` (or "`\My Documents`") folder and successively create the sub-folders `\R`, `\win-library`, and `\3.6`.
-(Later, when you update R to a new version (e.g. R 3.7.x) you can create another new personal library folder named, for example, `C:\Users\username\Documents\R\win-library\3.7\`, move the old packages there, and then use R or RStudio to update them.)
+using Windows Explorer (the file manager, not Internet Explorer, the web browser), where `username` is your specific Windows user name.  Use Windows Explorer to browse to your `\Documents` (or "`\My Documents`") folder and successively create the sub-folders `\R`, `\win-library`, and `\4.0`.
+(Later, when you update R to a new version (e.g. R 4.1.x) you can create another new personal library folder named, for example, `C:\Users\username\Documents\R\win-library\4.1\`, move the old packages there, and then use R or RStudio to update them.)
 
 **3.  Installing a single package**  
 
 Much of the time only a single package must be installed.  In those instances, using the Console command line, or RStudio is quite efficient.  The following illustrates several different ways that, for example, the `sp` or "spatial" package can be installed.
 
-The various ways of running R (Windows or Mac OS X/macOS GUIs, RStudio) all have in common the simple Console command-line approach, where the following can be typed in or copied to the "Console" window (Note that the package name here must be surrounded by quotes):
+The various ways of running R (Windows or Mac OS X/macOS GUIs, RStudio) all have in common the simple Console command-line approach, where the following can be typed in or copied to the "Console" window (*Note that the package name here must be surrounded by quotes*):
 
 	install.packages("sp")
 
@@ -39,12 +39,12 @@ In the R for Windows GUI, packages can be installed at the Console command line,
 
 	## install.packages("sp")  
 	## Warning in install.packages("sp") :  
-	##   'lib = "C:/Program Files/R/R-3.6.3/library"' is not writable
+	##   'lib = "C:/Program Files/R/R-4.0.3/library"' is not writable
 
 This message indicates that the personal library file hadn't been created earlier. R will immediately pop up two dialog boxes, one after the other:  
 
 1. Would you like to use a personal library instead?`  
-1. Would you like to create a personal library `'C:\Users\bartlein\Documents\R\win-library\3.6'` to install packages into?  
+1. Would you like to create a personal library `'C:\Users\bartlein\Documents\R\win-library\4.0'` to install packages into?  
 
 Respond yes to both.
 
@@ -52,7 +52,7 @@ The first time a package is installed, R may want to know which "CRAN Mirror" yo
 
 and something like the following confirmation should appear:
 
-	## trying URL 'http://cran.r-project.org/bin/macosx/el-capitan/contrib/3.6/sp_1.4-1.tgz' 
+	## trying URL 'http://cran.r-project.org/bin/macosx/el-capitan/contrib/4.0/sp_1.4-5.tgz' 
 	## Content type 'application/x-gzip' length 1884204 bytes (1.8 MB)
 	## ==================================================
 	## downloaded 1.8 MB
@@ -75,14 +75,14 @@ If that happens, quit RStudio and try again.  Note that if RStudio occupies the 
 
 You can also use the Tools > Install packages... menu.  If the personal library does not exist, the following message will appear
 
-	## Would you like to create a personal library 'C:\Users\bartlein\Documents\R\win-library\3.6' 
+	## Would you like to create a personal library 'C:\Users\bartlein\Documents\R\win-library\4.0' 
 	## to install packages into?  
 
 Reply yes, and select or type in the following in the dialog box that appears:  
 
 1. Install from:  `Repository (CRAN)`  
 1. Packages:  `sp`  
-1. Install to Library:  `C:\Users\bartlein\Documents\R\win-library\3.5 (Default)`
+1. Install to Library:  `C:\Users\bartlein\Documents\R\win-library\4.0 (Default)`
 2. Make sure "install dependencies" is checked  
 
 You should get a confirmation as before.
