@@ -13,7 +13,7 @@
 
 <title>Maps in R</title>
 
-<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -21,8 +21,6 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
@@ -153,6 +151,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 <link rel="stylesheet" href="SI-md-08.css" type="text/css" />
 
@@ -571,9 +570,9 @@ The easiest way to get most of these data files and shape-file components, is to
 ##  Linking to sp version: 1.4-2 
 ##  Polygon checking: TRUE</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rgdal)</span></code></pre></div>
-<pre><code>## rgdal: version: 1.5-18, (SVN revision 1082)
+<pre><code>## rgdal: version: 1.5-19, (SVN revision 1092)
 ## Geospatial Data Abstraction Library extensions to R successfully loaded
-## Loaded GDAL runtime: GDAL 3.1.1, released 2020/06/22
+## Loaded GDAL runtime: GDAL 3.1.4, released 2020/10/20
 ## Path to GDAL shared files: /Library/Frameworks/R.framework/Versions/4.0/Resources/library/rgdal/gdal
 ## GDAL binary built with GEOS: TRUE 
 ## Loaded PROJ runtime: Rel. 6.3.1, February 10th, 2020, [PJ_VERSION: 631]
@@ -582,7 +581,7 @@ The easiest way to get most of these data files and shape-file components, is to
 ## To mute warnings of possible GDAL/OSR exportToProj4() degradation,
 ## use options(&quot;rgdal_show_exportToProj4_warnings&quot;=&quot;none&quot;) before loading rgdal.</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code></pre></div>
-<pre><code>## Linking to GEOS 3.8.1, GDAL 3.1.1, PROJ 6.3.1</code></pre>
+<pre><code>## Linking to GEOS 3.8.1, GDAL 3.1.4, PROJ 6.3.1</code></pre>
 <p>Note that the <code>sp</code> requires the <code>rgeos</code> and <code>rgdal</code> packages for manipulating and reading spatial data, while the <code>sf</code> package links to compiled versions of the <code>GEOS</code>, <code>GDAL</code>, and <code>PROJ5</code> libraries.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
