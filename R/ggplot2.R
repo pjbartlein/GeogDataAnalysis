@@ -1,6 +1,6 @@
 # purled from ggplot2.Rmd
 
-load(".RData")
+# load(".RData")
 
 # ggplot2 versions of plots
 library(ggplot2)
@@ -193,7 +193,8 @@ coplot(WidthWS ~ DepthWS | Reach, pch=14+as.integer(Reach), cex=1.5,
 ggplot(sumcr, aes(x=DepthWS, y=WidthWS)) +
   stat_smooth(method = "lm") + 
   geom_point() + 
-  facet_wrap(~ Reach) 
+  facet_wrap(~ Reach) +
+  theme_bw()
 
 detach(sumcr)
 

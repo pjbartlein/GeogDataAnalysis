@@ -1,6 +1,6 @@
 # purled from loc04.Rmd
 
-load(".Rdata")
+# load(".Rdata")
 
 # dataframe summary
 summary(scanvote) 
@@ -34,7 +34,7 @@ lines(lowess(CumLen, WidthWS), col="blue", lwd=2)
 cor(CumLen, WidthWS)
 
 # attach the sumcr dataframe
-attach(sumcr)
+detach(sumcr)
 
 # descriptive plots for categorical data
 ReachHU_table <- table(Reach, HU)   # tabluate Reach and HU data

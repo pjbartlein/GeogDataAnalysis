@@ -13,7 +13,7 @@
 
 <title>Geospatial analysis in R</title>
 
-<script src="site_libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -21,8 +21,6 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
@@ -153,6 +151,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 <link rel="stylesheet" href="SI-md-08.css" type="text/css" />
 
@@ -622,8 +621,7 @@ $(document).ready(function () {
 ## 9        9 1921         LASE             Bluff POINT (-122.5575 41.3467)
 ## 10      10 1740         LASE             Cedar POINT (-122.4954 41.2075)</code></pre>
 <p>Add the CRS:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(gcdv3_sf) <span class="ot">&lt;-</span> <span class="fu">st_crs</span>(<span class="st">&quot;+proj=longlat&quot;</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># gcdv3_pts &lt;- as_Spatial(gcdv3_sf)</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(gcdv3_sf) <span class="ot">&lt;-</span> <span class="fu">st_crs</span>(<span class="st">&quot;+proj=longlat&quot;</span>)</span></code></pre></div>
 <p>Plot the target points on top of ths source map. The <code>as_Spatial()</code> function converts an <code>sf</code> object to a <code>sp</code> spatial-data type on the fly.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>plt <span class="ot">&lt;-</span> <span class="fu">levelplot</span>(vegtype, <span class="at">margin=</span><span class="cn">FALSE</span>, <span class="at">par.settings=</span>mapTheme,</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">main=</span><span class="st">&quot;Potential Natural Vegetation&quot;</span>)</span>
@@ -1210,7 +1208,7 @@ $(document).ready(function () {
 ##         institution: USFS
 ##         source: http://www.fs.usda.gov/rds/archive/Product/RDS-2013-0009.3/
 ##         references: Short, K.C., 2014, Earth Syst. Sci. Data, 6, 1-27
-##         history: P.J. Bartlein, Sat Jan  9 16:43:32 2021
+##         history: P.J. Bartlein, Tue Jan 26 17:14:56 2021
 ##         Conventions: CF-1.6</code></pre>
 <div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># close the file, writing data to disk</span></span>
 <span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nc_close</span>(ncout)</span></code></pre></div>
@@ -1231,7 +1229,7 @@ $(document).ready(function () {
 <pre><code>## Loading required package: spam</code></pre>
 <pre><code>## Loading required package: dotCall64</code></pre>
 <pre><code>## Loading required package: grid</code></pre>
-<pre><code>## Spam version 2.5-1 (2019-12-12) is loaded.
+<pre><code>## Spam version 2.6-0 (2020-12-14) is loaded.
 ## Type &#39;help( Spam)&#39; or &#39;demo( spam)&#39; for a short introduction 
 ## and overview of this package.
 ## Help for individual functions is also obtained by adding the

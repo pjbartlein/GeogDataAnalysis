@@ -84,7 +84,6 @@ Add the CRS:
 
 ```{r sf2}
 st_crs(gcdv3_sf) <- st_crs("+proj=longlat")
-# gcdv3_pts <- as_Spatial(gcdv3_sf)
 ```
 
 Plot the target points on top of ths source map.  The `as_Spatial()` function converts an `sf` object to a `sp` spatial-data type on the fly.

@@ -5,6 +5,7 @@ load(".RData")
 library(sp)
 library(rgeos)
 library(rgdal)
+
 library(sf)
 
 library(RColorBrewer)
@@ -113,6 +114,7 @@ plotclr <- brewer.pal(nclr+1,"BuPu")[2:(nclr+1)]
 ggplot() +
   geom_sf(data = orcounty_sf, fill=NA) +
   geom_point(aes(orstations_sf$lon, orstations_sf$lat, color = plot_factor), size = 5.0, pch=16) +
+  geom_point(aes(orstations_sf$lon, orstations_sf$lat), size = 5.0, pch=1) +
   scale_colour_manual(values=plotclr, aesthetics = "colour",
                     labels = c("0 - 200", "200 - 500", "500 - 1000", "1000 - 2000", "> 2000"),
                      name = "Ann. Precip.", drop=TRUE) +
@@ -123,7 +125,7 @@ ggplot() +
 orcounty_cntr <- (st_centroid(orcounty_sf))
 ggplot()  +
   geom_sf(data = orcounty_sf) +
-  geom_sf(data = orcounty_cntr, aes(size = AREA), color="purple") + 
+  geom_sf(data = orcounty_cntr, aes(size = POP1990), color="purple") + 
   scale_size_area(max_size = 15) +
   labs(x = "Longitude", y = "Latitude", title = "Area") +
   theme_bw()
@@ -227,7 +229,7 @@ plot(st_geometry(st_graticule(wus_pratio_sf_proj)), axes = TRUE, add = TRUE)
 ggplot() +
   geom_sf(data = na2_sf_proj, fill=NA, color="gray") +
   geom_sf(data = wus_sf_proj, fill=NA) +
-  geom_sf(data = wus_pratio_sf_proj, aes(color = pjulpjan_factor), size = 1.0 ) +
+  geom_sf(data = wus_pratio_sf_proj, aes(color = pjulpjan_factor), size = 2.0 ) +
   scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
                      labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
                                 "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
