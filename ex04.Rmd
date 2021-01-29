@@ -196,7 +196,7 @@ Coplots (or conditioning plots) are probably the most commonly used multipanel p
 Here's the code for the coplot:
 
 ```{r echo=TRUE, eval=FALSE}
-coplot(orstationc$tann ~ eorstationc$lev | orstationc$lon * orstationc$lat, number=5, overlap=.5,
+coplot(orstationc$tann ~ orstationc$elev | orstationc$lon * orstationc$lat, number=5, overlap=.5,
     panel=function(x,y,...) {
         panel.smooth(x,y,span=.8,iter=5,...)
         abline(lm(y ~ x), col="blue")
@@ -255,7 +255,7 @@ The aim of the analysis is to examine the spatial variations in the elevations o
 Produce a 3-D scatter plot of cirque elevation as a function of latitude and longitude, with the points colored by Glacier
 
 ```{r echo=TRUE, eval=FALSE}
-cloud(orstationc$Elev ~ orstationc$Lon*orstationc$Lat, pch=16, cex=1.25, col=unclass(as.factor(orstationc$Glacier)))
+cloud(cirques$Elev ~ cirques$Lon*cirques$Lat, pch=16, cex=1.25, col=unclass(as.factor(cirques$Glacier)))
 ```
 
 The glaciated cirque basins should appear in red.  Relative to all cirque basins, note where the glaciated ones tend to occur.
@@ -263,8 +263,8 @@ The glaciated cirque basins should appear in red.  Relative to all cirque basins
 Create and plot some conditioning variables:
 
 ```{r echo=TRUE, eval=FALSE}
-Lat2 <- equal.count(orstationc$Lat,4,.5)
-Lon2 <- equal.count(orstationc$Lon,4,.5)
+Lat2 <- equal.count(cirques$Lat,4,.5)
+Lon2 <- equal.count(cirques$Lon,4,.5)
 plot(Lat2)
 plot(Lon2)
 ```
@@ -273,7 +273,7 @@ Using those conditioning variables, construct a Lattice-type coplot of elevation
 
 ```{r echo=TRUE, eval=FALSE}
 # Cirque elevation as a function of longitude, given latitude
-plot2 <- xyplot(orstationc$Elev ~ Lon | Lat2,
+plot2 <- xyplot(cirques$Elev ~ Lon | Lat2,
     layout = c(4, 2),
     panel = function(x, y) {
         panel.grid(v=2)
@@ -301,11 +301,11 @@ Produce two other kinds of Trellis plots
 
 ```{r echo=TRUE, eval=FALSE}
 # Lattice stripplot
-plot4 <- stripplot(Gorstationc$lacier ~ orstationc$Elev | Lat2*Lon2)
+plot4 <- stripplot(cirques$Glacier ~ cirques$Elev | Lat2*Lon2)
 print(plot4)
 
 # Lattice boxplot
-plot5 <- bwplot(orstationc$Glacier ~ orstationc$Elev| Lat2*Lon2)
+plot5 <- bwplot(cirques$Glacier ~ cirques$Elev| Lat2*Lon2)
 print(plot5)
 ```
 
