@@ -252,7 +252,7 @@ Note that grouped data set looks almost exactly like the ungrouped one, except w
 
 ```{r summarize groups}
 # summarize groups
-eugclim_summary <- summarize_all(eugclim_group, funs(mean))
+eugclim_summary <- summarize_all(eugclim_group, list(mean = mean))
 eugclim_summary
 ```
 Calculate annual averages of each variable, using the `aggregate()` function from the `stats` package.

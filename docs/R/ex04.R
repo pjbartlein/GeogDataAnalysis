@@ -1,4 +1,4 @@
-# purled from ex04.Rmd
+# purled from Ex04.Rmd
 
 install.packages("classInt")
 
@@ -19,7 +19,6 @@ library(sf)
 csvfile <- "/Users/bartlein/Documents/geog495/data/csv/orstationc.csv"
 orstationc <- read.csv(csvfile)
 str(orstationc)
-attach(orstationc)
 
 # read a county outline shape file
 shapefile <- "/Users/bartlein/Documents/geog495/data/shp/orotl.shp"
@@ -29,7 +28,7 @@ plot(orotl_sf) # plot the outline
 plot(st_geometry(orotl_sf), axes = TRUE)
 
 # set variable and get colors
-plotvals <- pjan # pick a variable to plot
+plotvals <- orstationc$pjan # pick a variable to plot
 plottitle <- "January Precipitation"
 nclr <- 8 # number of colors
 plotclr <- brewer.pal(nclr,"BuPu") # get nclr colors
@@ -41,14 +40,14 @@ cutpts <- round(class$brks, digits=1)
 
 # plot the shape file and the selected variable
 plot(st_geometry(orotl_sf), axes = TRUE)
-points(lon, lat, pch=16, col=colcode, cex=2) # add points
-points(lon, lat, cex=2) # draws black line around each point
+points(orstationc$lon, orstationc$lat, pch=16, col=colcode, cex=2) # add points
+points(orstationc$lon, orstationc$lat, cex=2) # draws black line around each point
 legend(x=-117, y=43.5, legend=names(attr(colcode, "table")), # add legend
     fill=attr(colcode, "palette"), cex=1, bty="n")
 title(plottitle) # add the title
 
 # symbol plot -- fixed-interval class intervals
-plotvals <- pann
+plotvals <- orstationc$pann
 title <- "Oregon Climate Station Data -- Annual Precipitation"
 subtitle <- "Fixed-Interval Class Intervals"
 nclr <- 5
@@ -60,9 +59,9 @@ class <- classIntervals(plotvals, nclr, style="fixed",
 colcode <- findColours(class, plotclr)
 
 # plot
-plot(st_geometry(orcounty_sf), xlim=c(-124.5, -115), ylim=c(42,47))
-points(lon, lat, pch=16, col=colcode, cex=2)
-points(lon, lat, cex=2)
+plot(st_geometry(orotl_sf), xlim=c(-124.5, -115), ylim=c(42,47))
+points(orstationc$lon, orstationc$lat, pch=16, col=colcode, cex=2)
+points(orstationc$lon, orstationc$lat, cex=2)
 title(main=title, sub=subtitle)
 legend(-117, 43.5, legend=names(attr(colcode, "table")),
        fill=attr(colcode, "palette"), cex=1.0, bty="n")
@@ -85,12 +84,7 @@ ggplot() +
   labs(x = "Longitude", y = "Latitude", title = "Oregon Climate Station Data") +
   theme_bw()
 
-# detach orstation
-detach(orstationc)
-
-attach(orstationc)
-
-coplot(tann ~ elev | lon * lat, number=5, overlap=.5,
+coplot(orstationc$tann ~ orstationc$elev | orstationc$lon * orstationc$lat, number=5, overlap=.5,
     panel=function(x,y,...) {
         panel.smooth(x,y,span=.8,iter=5,...)
         abline(lm(y ~ x), col="blue")
@@ -98,7 +92,7 @@ coplot(tann ~ elev | lon * lat, number=5, overlap=.5,
  )
 
 pdf("coplot.pdf")
-coplot(tann ~ elev | lon * lat, number=5, overlap=.5,
+coplot(orstationc$tann ~ orstationc$elev | orstationc$lon * orstationc$lat, number=5, overlap=.5,
   panel=function(x,y,...) {
     points(x,y,...)
     abline(lm(y ~ x), col="blue")
@@ -106,22 +100,19 @@ coplot(tann ~ elev | lon * lat, number=5, overlap=.5,
 )
 dev.off()
 
-detach(orstationc)
-
 csvfile <- "/Users/bartlein/Documents/geog495/data/csv/cirques.csv"
 cirques <- read.csv(csvfile)
-attach(cirques)
 names(cirques)
 
-cloud(Elev ~ Lon*Lat, pch=16, cex=1.25, col=unclass(as.factor(Glacier)))
+cloud(cirques$Elev ~ cirques$Lon*cirques$Lat, pch=16, cex=1.25, col=unclass(as.factor(cirques$Glacier)))
 
-Lat2 <- equal.count(Lat,4,.5)
-Lon2 <- equal.count(Lon,4,.5)
+Lat2 <- equal.count(cirques$Lat,4,.5)
+Lon2 <- equal.count(cirques$Lon,4,.5)
 plot(Lat2)
 plot(Lon2)
 
 # Cirque elevation as a function of longitude, given latitude
-plot2 <- xyplot(Elev ~ Lon | Lat2,
+plot2 <- xyplot(cirques$Elev ~ Lon | Lat2,
     layout = c(4, 2),
     panel = function(x, y) {
         panel.grid(v=2)
@@ -135,10 +126,10 @@ plot2 <- xyplot(Elev ~ Lon | Lat2,
 print(plot2)
 
 # Lattice stripplot
-plot4 <- stripplot(Glacier ~ Elev | Lat2*Lon2)
+plot4 <- stripplot(cirques$Glacier ~ cirques$Elev | Lat2*Lon2)
 print(plot4)
 
 # Lattice boxplot
-plot5 <- bwplot(Glacier ~ Elev| Lat2*Lon2)
+plot5 <- bwplot(cirques$Glacier ~ cirques$Elev| Lat2*Lon2)
 print(plot5)
 
