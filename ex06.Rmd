@@ -203,6 +203,7 @@ boxplot(PJan2x, PJan1x)
 mean(PJan2x)-mean(PJan1x)
 tt_PJan_2 <- t.test(PJan2x, PJan1x, alternative="greater")
 tt_PJan_2
+detach(orsim)
 ```
 
 >Q6:  Is future winter precipitation (`PJan2x`) the same as present (`PJan1x`), or is it significantly greater than present?
