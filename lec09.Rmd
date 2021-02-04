@@ -133,12 +133,13 @@ The two empirical reference distributions can be compared by looking at their hi
 
 ```{r refDist07}
 # histograms of data and of 30-Means
-par(mfrow=c(2,1))
+oldpar <- par(mfrow=c(2,1))
 cutpts <- seq(12.0, 18.0, by=0.1)
 hist(TSum, breaks=cutpts, probability=T, xlim=c(12,20))
 lines(density(TSum))
 hist(Means30yr, breaks=cutpts, probability=T, xlim=c(12,20))
 lines(density(Means30yr))
+par(oldpar)
 ```
 
 The above procedure draws 30 years at random from TSum.  It might be more appropriate to draw 30-consecutive-year samples from TSum.  This can be done as follows:
@@ -163,12 +164,18 @@ And here are the histograms:
 
 ```{r refDist09}
 # histograms of data and of 30-Means from consecutive samples
-par(mfrow=c(2,1))
+oldpar <- par(mfrow=c(2,1))
 cutpts <- seq(12.0, 18.0, by=0.1)
 hist(TSum, breaks=cutpts, probability=T, xlim=c(12,20))
 lines(density(TSum))
 hist(Means30yrb, breaks=cutpts, probability=T, xlim=c(12,20))
 lines(density(Means30yrb))
+```
+
+Set the plotting parameters back to the originals
+
+```{r}
+par(oldpar)
 ```
 
 Note that this approach for using an empirical reference distribution  is a general one--the significance of other statistics (e.g. the variance) can be evaluated the same way.
@@ -244,12 +251,12 @@ Uniform <- runif(n, min=0.0, max=1.0)
 ```
 
 ```{r central02}
-opar <- par(mfrow=c(2,2))
+oldpar <- par(mfrow=c(2,2))
 hist(stdNormal)
 hist(Normal)
 hist(logNormal)
 hist(Uniform)
-par <- opar
+par(oldpar)
 ```
 
 The following script generates nsamp sample means from one of these distributions
@@ -283,7 +290,7 @@ Histograms of the original data, as well as of the sample means can be obtained 
 
 ```{r central04}
 # histograms of data and of sample means
-par(mfrow=c(2,1))
+oldpar <- par(mfrow=c(2,1))
 
 # standard Normal
 xmax <- max(stdNormal)
@@ -305,6 +312,7 @@ xmax <- max(Uniform)
 xmin <- min(Uniform)
 hist(Uniform, nclass=40, probability=T, xlim=c(xmin,xmax))
 hist(mean_Uniform, nclass=40, probability=T, xlim=c(xmin,xmax))
+par(oldpar)
 ```
 
 [[Back to top]](lec09.html)
