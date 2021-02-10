@@ -13,6 +13,7 @@
 
 <title>Nonparametric regression</title>
 
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -25,29 +26,39 @@
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -56,9 +67,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -140,6 +151,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 <link rel="stylesheet" href="SI-md-08.css" type="text/css" />
 
@@ -497,15 +509,18 @@ $(document).ready(function () {
 <div id="TOC">
 <ul>
 <li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="#specific-and-general-cases-of-smoothing-and-nonparametric-regression"><span class="toc-section-number">2</span> Specific and general cases of smoothing and nonparametric regression</a><ul>
-<li><a href="#a-review-of-global-fitting-e.g.linear-regression"><span class="toc-section-number">2.1</span> A review of global fitting (e.g. linear regression)</a></li>
+<li><a href="#specific-and-general-cases-of-smoothing-and-nonparametric-regression"><span class="toc-section-number">2</span> Specific and general cases of smoothing and nonparametric regression</a>
+<ul>
+<li><a href="#a-review-of-global-fitting-e.g.-linear-regression"><span class="toc-section-number">2.1</span> A review of global fitting (e.g. linear regression)</a></li>
 <li><a href="#loess-curves"><span class="toc-section-number">2.2</span> Loess curves</a></li>
 </ul></li>
-<li><a href="#examples-of-nonparametric-regression"><span class="toc-section-number">3</span> Examples of nonparametric regression</a><ul>
+<li><a href="#examples-of-nonparametric-regression"><span class="toc-section-number">3</span> Examples of nonparametric regression</a>
+<ul>
 <li><a href="#lowess"><span class="toc-section-number">3.1</span> lowess()</a></li>
 <li><a href="#loess"><span class="toc-section-number">3.2</span> loess()</a></li>
 <li><a href="#loess-surfaces"><span class="toc-section-number">3.3</span> loess() surfaces</a></li>
-<li><a href="#other-bivariate-smoothers"><span class="toc-section-number">3.4</span> Other bivariate smoothers</a><ul>
+<li><a href="#other-bivariate-smoothers"><span class="toc-section-number">3.4</span> Other bivariate smoothers</a>
+<ul>
 <li><a href="#least-squares-line"><span class="toc-section-number">3.4.1</span> Least-squares line</a></li>
 <li><a href="#least-squares-polynomials"><span class="toc-section-number">3.4.2</span> Least-squares polynomials</a></li>
 <li><a href="#smoothing-spline"><span class="toc-section-number">3.4.3</span> Smoothing spline</a></li>
@@ -521,10 +536,10 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span>
+<span style="color: #00cc00;">NOTE: This page has been revised for Winter 2021, but may undergo further edits.</span>
 </p>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
+<div id="introduction" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>Scatter-diagram smoothing (e.g. using the <code>lowess()</code> or <code>loess()</code> functions) involves drawing a smooth curve on a scatter diagram to summarize a relationship, in a fashion that makes few assumptions initially about the form or strength of the relationship. It is related to (and is a special case of) <em>nonparametric regression</em>, in which the objective is to represent the relationship between a response variable and one or more predictor variables, again in way that makes few assumptions about the form of the relationship. In other words, in contrast to “standard” linear regression analysis, no assumption is made that the relationship is represented by a straight line (although one could certainly think of a straight line as a special case of nonparametric regression).</p>
 <p>If the basic decomposition-of-the-data model is:</p>
 <p>        <em>data = predictable component + noise</em>,</p>
@@ -534,10 +549,10 @@ $(document).ready(function () {
 <p>        <em>data = smooth function determined by data + noise</em>.</p>
 <p>Another way of looking at scatter diagram smoothing is as a way of depicting the “local” relationship between a response variable and a predictor variable over parts of their ranges, which may differ from a “global” relationship determined using the whole data set. (And again, the idea of “local” as opposed to “global” relationships has an obvious geographical analogy.) Nonparametric regression can be thought of as generalizing the scatter plot smoothing idea to the multiple-regression context.</p>
 </div>
-<div id="specific-and-general-cases-of-smoothing-and-nonparametric-regression" class="section level1">
-<h1><span class="header-section-number">2</span> Specific and general cases of smoothing and nonparametric regression</h1>
-<div id="a-review-of-global-fitting-e.g.linear-regression" class="section level2">
-<h2><span class="header-section-number">2.1</span> A review of global fitting (e.g. linear regression)</h2>
+<div id="specific-and-general-cases-of-smoothing-and-nonparametric-regression" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> Specific and general cases of smoothing and nonparametric regression</h1>
+<div id="a-review-of-global-fitting-e.g.-linear-regression" class="section level2" number="2.1">
+<h2 number="2.1"><span class="header-section-number">2.1</span> A review of global fitting (e.g. linear regression)</h2>
 <p>In ordinary linear regression analysis, the objective can be considered to be drawing a line through the data in an optimal way, where the parameters (regression coefficients) are determined using all of the data, i.e. they are globally determined. However, it is possible to think of the line as connecting the points, that for each value of X, represent the local density maxima of Y–it just happens that these local maxima happen to be arranged along a straight line.</p>
 <ul>
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/images/nwk2_3.gif">the scatter diagram and fitted line</a></li>
@@ -545,8 +560,8 @@ $(document).ready(function () {
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/images/nwk2_5.gif">curvilinear regression</a></li>
 </ul>
 </div>
-<div id="loess-curves" class="section level2">
-<h2><span class="header-section-number">2.2</span> Loess curves</h2>
+<div id="loess-curves" class="section level2" number="2.2">
+<h2 number="2.2"><span class="header-section-number">2.2</span> Loess curves</h2>
 <p>A bivariate smoother is a function or procedure for drawing a smooth curve through a scatter diagram. Like linear regression (in which the “curve” is a straight line), the smooth curve is drawn in such a way as to have some desirable properties. In general, the properties are that the curve indeed be smooth, and that locally, the curve minimize the variance of the residuals or prediction error.</p>
 <p>The bivariate smoother used most frequently in practice is known as a “lowess” or “loess” curve. The acronyms are meant to represent the notion of locally weighted regression–a curve- or function-fitting technique that provides a generally smooth curve, the value of which at a particular location along the x-axis is determined only by the points in that vicinity. The method consequently makes no assumptions about the form of the relationship, and allows the form to be discovered using the data itself. (The difference between the two acronyms or names is mostly superficial, but there is an actual difference in R–there are two different functions, <code>lowess()</code> and <code>loess()</code>, the former is an older, simple scatter-diagram-smoothing function, while the latter is newer and more flexible. There is also the <code>locfit</code> (local regression) package that is more flexible still.)</p>
 <p>The mechanics of loess:</p>
@@ -564,70 +579,70 @@ $(document).ready(function () {
 <p><a href="lec14.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="examples-of-nonparametric-regression" class="section level1">
-<h1><span class="header-section-number">3</span> Examples of nonparametric regression</h1>
+<div id="examples-of-nonparametric-regression" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> Examples of nonparametric regression</h1>
 <p>The first examples of nonparametric regression are the familiar scatter diagram smoother <code>lowess()</code> and the related, more flexible <code>loess()</code> function.</p>
 <p>Load some packages, and attach a data set of annual temperatures at Oregon climate stations.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(RColorBrewer)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(sf)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">attach</span>(ortann)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">names</span>(ortann)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(ortann)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(ortann)</span></code></pre></div>
 <pre><code>## [1] &quot;station&quot;   &quot;latitude&quot;  &quot;longitude&quot; &quot;elevation&quot; &quot;tann&quot;</code></pre>
 <p>Look at the annual temperature data:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">plot</span>(elevation, tann, <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(elevation, tann, <span class="at">pch=</span><span class="dv">16</span>)</span></code></pre></div>
 <p><img src="lec14_files/figure-html/low03-1.png" width="1350" /></p>
 <p>Note that there are actually two versions of the lowess or loess scatter-diagram smoothing approach implemented in R <code>lowess()</code> and <code>loess()</code>. The former function (<code>lowess()</code>) was implemented first, while the latter (<code>loess()</code>) is more flexible and powerful. Because the function names are pronouced similarly, they are often confused, but because they basically do the same thing, that’s not such a big deal.</p>
-<div id="lowess" class="section level2">
-<h2><span class="header-section-number">3.1</span> lowess()</h2>
+<div id="lowess" class="section level2" number="3.1">
+<h2 number="3.1"><span class="header-section-number">3.1</span> lowess()</h2>
 <p>A simple “lowess/loess” curve is constructed using the <code>lowess()</code> function, which finds a “fitted” value for each data point; these can be plotted as individual symbols, but they are usually connected with lines. The lowess() function has a “span” argument (sometimes symbolized by <font face="Symbol">l</font>) that represents the proportion of the total number of points that contribute to each local fitted value. In practice, the <code>lowess()</code> function is often embedded in a <code>points()</code> or ’lines()` function.</p>
 <p>In the following, the specific fitted values produced by the <code>lowess()</code> function (one per data point) are plotted in red, and the lowess curve is added, also in red. On top of that, two additional curves are plotted (in magenta and purple) that show the effect of the smoothing parameter choice. The green curve is smoother than the default (<font face="Symbol">l</font> = 0.667), and the magenta curve is “looser” than the default (<font face="Symbol">l</font> = 0.33).</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># lowess</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">plot</span>(elevation, tann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.6</span>)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw">points</span>(<span class="kw">lowess</span>(elevation, tann), <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">cex=</span><span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="kw">lines</span>(<span class="kw">lowess</span>(elevation,tann), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co"># different smoothing</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="kw">lines</span>(<span class="kw">lowess</span>(elevation, tann, <span class="dt">f=</span><span class="fl">0.33</span>), <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="kw">lines</span>(<span class="kw">lowess</span>(elevation, tann, <span class="dt">f=</span><span class="fl">0.80</span>), <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="kw">legend</span>(<span class="st">&quot;bottomleft&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;lowess() spans&quot;</span>, <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;0.667&quot;</span>,<span class="st">&quot;0.8&quot;</span>,<span class="st">&quot;0.33&quot;</span>), <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">cex=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;purple&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lowess</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(elevation, tann, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">0.6</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(<span class="fu">lowess</span>(elevation, tann), <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">cex=</span><span class="fl">0.5</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">lowess</span>(elevation,tann), <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># different smoothing</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">lowess</span>(elevation, tann, <span class="at">f=</span><span class="fl">0.33</span>), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">lowess</span>(elevation, tann, <span class="at">f=</span><span class="fl">0.80</span>), <span class="at">col=</span><span class="st">&quot;purple&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomleft&quot;</span>, <span class="at">title =</span> <span class="st">&quot;lowess() spans&quot;</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;0.667&quot;</span>,<span class="st">&quot;0.8&quot;</span>,<span class="st">&quot;0.33&quot;</span>), <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">cex=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;purple&quot;</span>))</span></code></pre></div>
 <p><img src="lec14_files/figure-html/low04-1.png" width="1350" /></p>
 </div>
-<div id="loess" class="section level2">
-<h2><span class="header-section-number">3.2</span> loess()</h2>
+<div id="loess" class="section level2" number="3.2">
+<h2 number="3.2"><span class="header-section-number">3.2</span> loess()</h2>
 <p>The newer <code>loess()</code> function uses a formula to specify the response (and in its application as a scatter-diagram smoother) a single predictor variable. The <code>loess()</code> function creates an object that contains the results, and the <code>predict()</code> function retrieves the fitted values. These can then be plotted along with the response variable. However, the points must be plotted in increasing order of the predictor variable values in order for the <code>lines()</code> function to draw the line in an appropriate fashion. This is done by using the results of the <code>order()</code> function applied to the predictor variable values, and the explicit subscripting (in square brackets <code>[ ]</code>) to arrange the observations in ascending order.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># loess -- first model</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">loess_model &lt;-<span class="st"> </span><span class="kw">loess</span>(tann <span class="op">~</span><span class="st"> </span>elevation)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">loess_model</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># loess -- first model</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>loess_model <span class="ot">&lt;-</span> <span class="fu">loess</span>(tann <span class="sc">~</span> elevation)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>loess_model</span></code></pre></div>
 <pre><code>## Call:
 ## loess(formula = tann ~ elevation)
 ## 
 ## Number of Observations: 92 
 ## Equivalent Number of Parameters: 4.69 
 ## Residual Standard Error: 0.8758</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># second model, smoother curve</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">loess_model2 &lt;-<span class="st"> </span><span class="kw">loess</span>(tann <span class="op">~</span><span class="st"> </span>elevation, <span class="dt">span=</span><span class="fl">0.90</span>, <span class="dt">degree=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">loess_model2</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># second model, smoother curve</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>loess_model2 <span class="ot">&lt;-</span> <span class="fu">loess</span>(tann <span class="sc">~</span> elevation, <span class="at">span=</span><span class="fl">0.90</span>, <span class="at">degree=</span><span class="dv">2</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>loess_model2</span></code></pre></div>
 <pre><code>## Call:
 ## loess(formula = tann ~ elevation, span = 0.9, degree = 2)
 ## 
 ## Number of Observations: 92 
 ## Equivalent Number of Parameters: 4.04 
 ## Residual Standard Error: 0.8752</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># plot the curves</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">plot</span>(tann <span class="op">~</span><span class="st"> </span>elevation, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.6</span>)</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">hat1 &lt;-<span class="st"> </span><span class="kw">predict</span>(loess_model)</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw">lines</span>(elevation[<span class="kw">order</span>(elevation)], hat1[<span class="kw">order</span>(elevation)], <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">hat2 &lt;-<span class="st"> </span><span class="kw">predict</span>(loess_model2)</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="kw">lines</span>(elevation[<span class="kw">order</span>(elevation)], hat2[<span class="kw">order</span>(elevation)], <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="kw">legend</span>(<span class="st">&quot;bottomleft&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;loess() model&quot;</span>, <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;span=0.667, deg=1&quot;</span>,<span class="st">&quot;span=0.9, deg=2&quot;</span>), <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">cex=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the curves</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tann <span class="sc">~</span> elevation, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">0.6</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>hat1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(loess_model)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(elevation[<span class="fu">order</span>(elevation)], hat1[<span class="fu">order</span>(elevation)], <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>hat2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(loess_model2)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(elevation[<span class="fu">order</span>(elevation)], hat2[<span class="fu">order</span>(elevation)], <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomleft&quot;</span>, <span class="at">title =</span> <span class="st">&quot;loess() model&quot;</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;span=0.667, deg=1&quot;</span>,<span class="st">&quot;span=0.9, deg=2&quot;</span>), <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">cex=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>))</span></code></pre></div>
 <p><img src="lec14_files/figure-html/low07-1.png" width="1350" /></p>
 </div>
-<div id="loess-surfaces" class="section level2">
-<h2><span class="header-section-number">3.3</span> loess() surfaces</h2>
+<div id="loess-surfaces" class="section level2" number="3.3">
+<h2 number="3.3"><span class="header-section-number">3.3</span> loess() surfaces</h2>
 <p>A locally determined surface can be constructed using <code>loess()</code> which is not limited to a single predictor variable, by first fitting a model that illustrates the response of the response variable as a function of two (or more) location variables, and then using the <code>predict()</code> function to visualize the resulting surface:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># tann as a function of latitude and longitude (and interaction)</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">tann_loess &lt;-<span class="st"> </span><span class="kw">loess</span>(tann <span class="op">~</span><span class="st"> </span>longitude <span class="op">+</span><span class="st"> </span>latitude, <span class="dt">span=</span><span class="fl">0.3</span>)</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw">summary</span>(tann_loess)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tann as a function of latitude and longitude (and interaction)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>tann_loess <span class="ot">&lt;-</span> <span class="fu">loess</span>(tann <span class="sc">~</span> longitude <span class="sc">+</span> latitude, <span class="at">span=</span><span class="fl">0.3</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tann_loess)</span></code></pre></div>
 <pre><code>## Call:
 ## loess(formula = tann ~ longitude + latitude, span = 0.3)
 ## 
@@ -644,45 +659,45 @@ $(document).ready(function () {
 ##   normalize:  TRUE
 ##  parametric:  FALSE FALSE
 ## drop.square:  FALSE FALSE</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># poor man&#39;s R-squared value</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">cor</span>(tann, tann_loess<span class="op">$</span>fitted)<span class="op">^</span><span class="dv">2</span></a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># poor man&#39;s R-squared value</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(tann, tann_loess<span class="sc">$</span>fitted)<span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
 <pre><code>## [1] 0.8098961</code></pre>
 <p>Now create an interpolation “target” grid, get the predicted (i.e. interpolated) values, and plot the results.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># create an interpolation target grid to display predicted values</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">grid_longitude &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="fl">124.5000</span>, <span class="fl">-116.8333</span>, <span class="fl">.1667</span>)</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">grid_latitude &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">42.0000</span>, <span class="fl">46.1667</span>, <span class="fl">.0833</span>)</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4">grid_mar &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">longitude=</span>grid_longitude, <span class="dt">latitude=</span>grid_latitude)</a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co"># get the fitted (interpolated) values</span></a>
-<a class="sourceLine" id="cb15-7" data-line-number="7">tann_interp &lt;-<span class="st"> </span><span class="kw">predict</span>(tann_loess, <span class="kw">expand.grid</span>(grid_mar))</a>
-<a class="sourceLine" id="cb15-8" data-line-number="8">tann_z &lt;-<span class="st"> </span><span class="kw">matrix</span>(tann_interp, <span class="kw">length</span>(grid_longitude),</a>
-<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="kw">length</span>(grid_latitude))</a>
-<a class="sourceLine" id="cb15-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co"># plot the interpolated values as shaded rectangles and contours</span></a>
-<a class="sourceLine" id="cb15-12" data-line-number="12">nclr &lt;-<span class="st"> </span><span class="dv">8</span></a>
-<a class="sourceLine" id="cb15-13" data-line-number="13">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(nclr, <span class="st">&quot;PuOr&quot;</span>)</a>
-<a class="sourceLine" id="cb15-14" data-line-number="14">plotclr &lt;-<span class="st"> </span>plotclr[nclr<span class="op">:</span><span class="dv">1</span>] <span class="co"># reorder colors</span></a>
-<a class="sourceLine" id="cb15-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb15-16" data-line-number="16"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(orotl_sf), <span class="dt">axes=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="kw">image</span>(grid_longitude, grid_latitude, tann_z, <span class="dt">col=</span>plotclr, <span class="dt">add=</span>T)</a>
-<a class="sourceLine" id="cb15-18" data-line-number="18"><span class="kw">contour</span>(grid_longitude, grid_latitude, tann_z, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb15-19" data-line-number="19"><span class="kw">points</span>(longitude, latitude)</a>
-<a class="sourceLine" id="cb15-20" data-line-number="20"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(orotl_sf), <span class="dt">add=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create an interpolation target grid to display predicted values</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>grid_longitude <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">124.5000</span>, <span class="sc">-</span><span class="fl">116.8333</span>, .<span class="dv">1667</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>grid_latitude <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">42.0000</span>, <span class="fl">46.1667</span>, .<span class="dv">0833</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>grid_mar <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">longitude=</span>grid_longitude, <span class="at">latitude=</span>grid_latitude)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># get the fitted (interpolated) values</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>tann_interp <span class="ot">&lt;-</span> <span class="fu">predict</span>(tann_loess, <span class="fu">expand.grid</span>(grid_mar))</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>tann_z <span class="ot">&lt;-</span> <span class="fu">matrix</span>(tann_interp, <span class="fu">length</span>(grid_longitude),</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(grid_latitude))</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the interpolated values as shaded rectangles and contours</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>nclr <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(nclr, <span class="st">&quot;PuOr&quot;</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> plotclr[nclr<span class="sc">:</span><span class="dv">1</span>] <span class="co"># reorder colors</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(orotl_sf), <span class="at">axes=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span>(grid_longitude, grid_latitude, tann_z, <span class="at">col=</span>plotclr, <span class="at">add=</span>T)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="fu">contour</span>(grid_longitude, grid_latitude, tann_z, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(longitude, latitude)</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(orotl_sf), <span class="at">add=</span>T)</span></code></pre></div>
 <p><img src="lec14_files/figure-html/low10-1.png" width="2100" /></p>
 </div>
-<div id="other-bivariate-smoothers" class="section level2">
-<h2><span class="header-section-number">3.4</span> Other bivariate smoothers</h2>
+<div id="other-bivariate-smoothers" class="section level2" number="3.4">
+<h2 number="3.4"><span class="header-section-number">3.4</span> Other bivariate smoothers</h2>
 <p>Loess is one of a number of smoothers (including linear regression as an end-member) that can be used. The different smoothers vary in the assumptions they make about</p>
 <ul>
 <li>the form of the relationship</li>
 <li>the influence of individual points</li>
 </ul>
 <p>The other scatter diagram smoothers include a straight, or “least-squares” line, a low-order polynomial least-squares line, and the “smoothing spline”. Each can be viewed as special cases of the more flexible loess-type smoothers in which the curve is very simple. The best way to understand these different smoothers is to compare them:</p>
-<div id="least-squares-line" class="section level3">
-<h3><span class="header-section-number">3.4.1</span> Least-squares line</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># first-order polynomial (i.e. a straight line)</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">linear_model &lt;-<span class="st"> </span><span class="kw">lm</span>(tann <span class="op">~</span><span class="st"> </span>elevation)</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3">linear_model</a></code></pre></div>
+<div id="least-squares-line" class="section level3" number="3.4.1">
+<h3 number="3.4.1"><span class="header-section-number">3.4.1</span> Least-squares line</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first-order polynomial (i.e. a straight line)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>linear_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(tann <span class="sc">~</span> elevation)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>linear_model</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = tann ~ elevation)
@@ -691,11 +706,11 @@ $(document).ready(function () {
 ## (Intercept)    elevation  
 ##   11.688139    -0.003238</code></pre>
 </div>
-<div id="least-squares-polynomials" class="section level3">
-<h3><span class="header-section-number">3.4.2</span> Least-squares polynomials</h3>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># second order polynomial</span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2">poly2_model &lt;-<span class="st"> </span><span class="kw">lm</span>(tann <span class="op">~</span><span class="st"> </span>elevation<span class="op">+</span><span class="st"> </span><span class="kw">I</span>(elevation<span class="op">^</span><span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb18-3" data-line-number="3">poly2_model</a></code></pre></div>
+<div id="least-squares-polynomials" class="section level3" number="3.4.2">
+<h3 number="3.4.2"><span class="header-section-number">3.4.2</span> Least-squares polynomials</h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># second order polynomial</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>poly2_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(tann <span class="sc">~</span> elevation<span class="sc">+</span> <span class="fu">I</span>(elevation<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>poly2_model</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = tann ~ elevation + I(elevation^2))
@@ -703,12 +718,12 @@ $(document).ready(function () {
 ## Coefficients:
 ##    (Intercept)       elevation  I(elevation^2)  
 ##      1.133e+01      -1.147e-03      -1.459e-06</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">poly2_hat &lt;-<span class="st"> </span><span class="kw">predict</span>(poly2_model)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>poly2_hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(poly2_model)</span></code></pre></div>
 </div>
-<div id="smoothing-spline" class="section level3">
-<h3><span class="header-section-number">3.4.3</span> Smoothing spline</h3>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">spline_model &lt;-<span class="st"> </span><span class="kw">smooth.spline</span>(elevation, tann)</a>
-<a class="sourceLine" id="cb21-2" data-line-number="2">spline_model</a></code></pre></div>
+<div id="smoothing-spline" class="section level3" number="3.4.3">
+<h3 number="3.4.3"><span class="header-section-number">3.4.3</span> Smoothing spline</h3>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>spline_model <span class="ot">&lt;-</span> <span class="fu">smooth.spline</span>(elevation, tann)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>spline_model</span></code></pre></div>
 <pre><code>## Call:
 ## smooth.spline(x = elevation, y = tann)
 ## 
@@ -717,18 +732,18 @@ $(document).ready(function () {
 ## Penalized Criterion (RSS): 63.56046
 ## GCV: 0.800279</code></pre>
 <p>Plot the differnt smoothers</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">plot</span>(tann <span class="op">~</span><span class="st"> </span>elevation, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.6</span>)</a>
-<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="kw">abline</span>(linear_model, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="kw">lines</span>(elevation[<span class="kw">order</span>(elevation)], poly2_hat[<span class="kw">order</span>(elevation)],</a>
-<a class="sourceLine" id="cb23-4" data-line-number="4">     <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb23-5" data-line-number="5"><span class="kw">lines</span>(spline_model, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb23-6" data-line-number="6"><span class="kw">legend</span>(<span class="st">&quot;bottomleft&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;smoothers&quot;</span>, <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;linear&quot;</span>,<span class="st">&quot;polynomial&quot;</span>,<span class="st">&quot;spline&quot;</span>), <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">cex=</span><span class="dv">1</span>, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;purple&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tann <span class="sc">~</span> elevation, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">0.6</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(linear_model, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(elevation[<span class="fu">order</span>(elevation)], poly2_hat[<span class="fu">order</span>(elevation)],</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(spline_model, <span class="at">col=</span><span class="st">&quot;purple&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomleft&quot;</span>, <span class="at">title =</span> <span class="st">&quot;smoothers&quot;</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;linear&quot;</span>,<span class="st">&quot;polynomial&quot;</span>,<span class="st">&quot;spline&quot;</span>), <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">cex=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;purple&quot;</span>))</span></code></pre></div>
 <p><img src="lec14_files/figure-html/low14-1.png" width="1350" /> <a href="lec14.html">[Back to top]</a></p>
 </div>
 </div>
 </div>
-<div id="summary-of-smoothers" class="section level1">
-<h1><span class="header-section-number">4</span> Summary of smoothers</h1>
+<div id="summary-of-smoothers" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> Summary of smoothers</h1>
 <p>The various smoothers can be summarized as follows</p>
 <table>
 <thead>
@@ -780,8 +795,8 @@ $(document).ready(function () {
 </table>
 <p><a href="lec14.html">[Back to top]</a></p>
 </div>
-<div id="readings" class="section level1">
-<h1><span class="header-section-number">5</span> Readings</h1>
+<div id="readings" class="section level1" number="5">
+<h1 number="5"><span class="header-section-number">5</span> Readings</h1>
 <ul>
 <li>Kuhnert &amp; Venebles (<em>An Introduction…</em>): p. 120-128</li>
 <li>Cleveland (<em>Visualizing Data</em>) Ch. 3</li>
@@ -797,7 +812,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
