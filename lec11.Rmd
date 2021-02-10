@@ -18,7 +18,7 @@ klippy::klippy(position = c('top', 'right'))
 ```{r load, echo=FALSE, cache=FALSE}
 load(".Rdata")
 ```
-<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2021, but may undergo further edits.</span></p>
 # Introduction #
 
 "Analysis of variance" (or ANOVA) is designed to test hypotheses about the equality of two or more group means, and gets its name from the idea of judging the apparent differences among the means of the groups of observations relative to the *variance* of the individual groups.

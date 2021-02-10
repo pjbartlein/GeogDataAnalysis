@@ -18,7 +18,7 @@ klippy::klippy(position = c('top', 'right'))
 ```{r load, echo=FALSE, cache=FALSE}
 load(".Rdata")
 ```
-<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2021, but may undergo further edits.</span></p>
 # Introduction #
 
 *Regression analysis* aims at constructing relationships between a single dependent or response variable and one or more independent or predictor variables, and is one of the more widely used methods in data analysis. Although the computations and analysis that underlie regression analysis appear more complicated than those for other procedures, simple analyses are quite straightforward.
@@ -238,7 +238,7 @@ The `which.min()` function determines the row in the `rse` matrix of the minimum
 It's useful to see the residual-sum-of-squares surface, which shows graphically how the goodness-of-fit varies as the regression coefficient values change.
 
 ```{r rss surface}
-image(b0, b1, rss, col  = gray((0:64)/64))
+image(b0, b1, rss, col  = gray((9:64)/64))
 ```
 
 The values in the `rss` matrix can be inspected using the `View()` function.
