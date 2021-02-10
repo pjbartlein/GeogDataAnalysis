@@ -18,7 +18,7 @@ klippy::klippy(position = c('top', 'right'))
 ```{r load, echo=FALSE, cache=FALSE}
 load(".Rdata")
 ```
-<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2021, but may undergo further edits.</span></p>
 # Introduction #
 
 Multiple regression is (conceptually) a simple extension of bivariate regression, in which the influence of more than one predictor variable on the response can be estimated.   For the case with two predictor variables, the analysis can be thought of as involving the fitting of a plane (as opposed to a line in the bivariate regression case), and the equations for the OLS estimates of the regression equations are only a little more complicated algebraically.  For three or more predictors, the algebra is also quite simple, but requires the use of matrix algebra.
@@ -724,7 +724,7 @@ opar <- par(mfrow=c(1,4))
 boxplot(Y ~ Country, ylab="Yes")
 
 # residual grouped boxplot
-plot(residuals(vote_lm1) ~ Country, ylim=c(-15,15))
+boxplot(residuals(vote_lm1) ~ Country, ylim=c(-15,15))
 par <- opar
 ```
 
@@ -787,8 +787,8 @@ opar <- par(mfrow=c(1,4))
 boxplot(Y ~ Country, ylab="Yes")
 
 # residual grouped boxplot
-plot(residuals(vote_lm1) ~ Country, ylim=c(-15,15))
-plot(residuals(vote_lm2) ~ Country, ylim=c(-15,15))
+boxplot(residuals(vote_lm1) ~ Country, ylim=c(-15,15))
+boxplot(residuals(vote_lm2) ~ Country, ylim=c(-15,15))
 par <- opar
 ```
 
@@ -836,9 +836,9 @@ opar <- par(mfrow=c(1,4))
 boxplot(Y ~ Country, ylab="Yes")
 
 # residual grouped boxplot
-plot(residuals(vote_lm1) ~ Country, ylim=c(-15,15))
-plot(residuals(vote_lm2) ~ Country, ylim=c(-15,15))
-plot(residuals(vote_lm3) ~ Country, ylim=c(-15,15))
+boxplot(residuals(vote_lm1) ~ Country, ylim=c(-15,15))
+boxplot(residuals(vote_lm2) ~ Country, ylim=c(-15,15))
+boxplot(residuals(vote_lm3) ~ Country, ylim=c(-15,15))
 par <- opar
 ```
 
