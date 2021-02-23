@@ -41,6 +41,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -604,7 +605,7 @@ $(document).ready(function () {
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># different smoothing</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">lowess</span>(elevation, tann, <span class="at">f=</span><span class="fl">0.33</span>), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">lowess</span>(elevation, tann, <span class="at">f=</span><span class="fl">0.80</span>), <span class="at">col=</span><span class="st">&quot;purple&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomleft&quot;</span>, <span class="at">title =</span> <span class="st">&quot;lowess() spans&quot;</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;0.667&quot;</span>,<span class="st">&quot;0.8&quot;</span>,<span class="st">&quot;0.33&quot;</span>), <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">cex=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;purple&quot;</span>))</span></code></pre></div>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomleft&quot;</span>, <span class="at">title =</span> <span class="st">&quot;lowess() spans&quot;</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;0.8&quot;</span>,<span class="st">&quot;0.667&quot;</span>,<span class="st">&quot;0.33&quot;</span>), <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">cex=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;purple&quot;</span>,<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>))</span></code></pre></div>
 <p><img src="lec14_files/figure-html/low04-1.png" width="1350" /></p>
 </div>
 <div id="loess" class="section level2" number="3.2">
