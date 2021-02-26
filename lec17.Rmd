@@ -18,7 +18,7 @@ klippy::klippy(position = c('top', 'right'))
 ```{r load, echo=FALSE, cache=FALSE}
 load(".Rdata")
 ```
-<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2021, but may undergo further edits.</span></p>
 # Introduction #
 
 There are two related multivariate analysis methods, *MANOVA* and *discriminant analysis* that could be thought of as answering the questions, "Are these groups of observations different, and if how, how?"  MANOVA is an extension of ANOVA, while one method of discriminant analysis is somewhat analogous to principal components analysis in that new variables are created that have certain desirable properties.

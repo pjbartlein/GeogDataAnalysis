@@ -13,6 +13,7 @@
 
 <title>MANOVA and discriminant analysis</title>
 
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -25,29 +26,40 @@
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -56,9 +68,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -140,6 +152,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 <link rel="stylesheet" href="SI-md-08.css" type="text/css" />
 
@@ -497,11 +510,13 @@ $(document).ready(function () {
 <div id="TOC">
 <ul>
 <li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="#manova"><span class="toc-section-number">2</span> MANOVA</a><ul>
+<li><a href="#manova"><span class="toc-section-number">2</span> MANOVA</a>
+<ul>
 <li><a href="#anova-on-individual-variables"><span class="toc-section-number">2.1</span> ANOVA on individual variables</a></li>
 <li><a href="#manova-1"><span class="toc-section-number">2.2</span> MANOVA</a></li>
 </ul></li>
-<li><a href="#discriminant-analysis"><span class="toc-section-number">3</span> Discriminant Analysis</a><ul>
+<li><a href="#discriminant-analysis"><span class="toc-section-number">3</span> Discriminant Analysis</a>
+<ul>
 <li><a href="#first-example-two-variables-and-two-groups-grazed-reaches-a-and-c-and-ungrazed-reach-b"><span class="toc-section-number">3.1</span> First example – two variables and two groups (grazed (Reaches A and C), and ungrazed (Reach B))</a></li>
 <li><a href="#a-second-example"><span class="toc-section-number">3.2</span> A second example</a></li>
 </ul></li>
@@ -514,49 +529,49 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span>
+<span style="color: #00cc00;">NOTE: This page has been revised for Winter 2021, but may undergo further edits.</span>
 </p>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
+<div id="introduction" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>There are two related multivariate analysis methods, <em>MANOVA</em> and <em>discriminant analysis</em> that could be thought of as answering the questions, “Are these groups of observations different, and if how, how?” MANOVA is an extension of ANOVA, while one method of discriminant analysis is somewhat analogous to principal components analysis in that new variables are created that have certain desirable properties.</p>
 </div>
-<div id="manova" class="section level1">
-<h1><span class="header-section-number">2</span> MANOVA</h1>
+<div id="manova" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> MANOVA</h1>
 <p>Multivariate analysis of variance, or MANOVA, like univariate analysis of variance is aimed at testing the null hypothesis that the means of groups of observations are identical. Rejection of this hypothesis is generally accompanied by the scientific conclusion that the groups of observations are indeed different, or were generated by some different process, or come from different underlying populations.</p>
 <p>Illustration of the conceptual model:</p>
 <ul>
-<li>The univariate analysis of variance situation <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/aov.gif">[aov.gif]</a></li>
+<li><p>The univariate analysis of variance situation <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/aov.gif">[aov.gif]</a></p></li>
 <li><p>The multivariate analysis of variance situation <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/manova1.gif">[manova.gif]</a></p></li>
 <li><p><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/manova.html">Details of MANOVA</a></p></li>
 </ul>
-<div id="anova-on-individual-variables" class="section level2">
-<h2><span class="header-section-number">2.1</span> ANOVA on individual variables</h2>
+<div id="anova-on-individual-variables" class="section level2" number="2.1">
+<h2 number="2.1"><span class="header-section-number">2.1</span> ANOVA on individual variables</h2>
 <p>As an example of ANOVA, we can use the Summit Cr. data, testing the hypothesis that the mean values of some of the hydraulic geometry variables differ from reach to reach (or from HU to HU). First, we examine some univariate analyses of variance with a single grouping variable (Reach), which implements “one-way” analysis of variance.</p>
 <p>Start by loading the <code>lattice</code> package and attaching the <code>sumcr</code> data frame.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># ANOVA and MANOVA</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(lattice)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">attach</span>(sumcr)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ANOVA and MANOVA</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(sumcr)</span></code></pre></div>
 <p>Then, analysis of variances of individual variables can be conducted by setting a temporary variable (and its name) to one of the variables in the data frame:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># univariate analysis of variance</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co"># set variable to analyze</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">varname &lt;-<span class="st"> &quot;WidthWS&quot;</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co"># plot distributions by groups</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw">histogram</span>(<span class="op">~</span><span class="st"> </span><span class="kw">eval</span>(<span class="kw">get</span>(varname)) <span class="op">|</span><span class="st"> </span>Reach, <span class="dt">nint=</span><span class="dv">20</span>, <span class="dt">aspect=</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>, <span class="dt">xlab=</span>varname)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># univariate analysis of variance</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># set variable to analyze</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>varname <span class="ot">&lt;-</span> <span class="st">&quot;WidthWS&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># plot distributions by groups</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">histogram</span>(<span class="sc">~</span> <span class="fu">eval</span>(<span class="fu">get</span>(varname)) <span class="sc">|</span> Reach, <span class="at">nint=</span><span class="dv">20</span>, <span class="at">aspect=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="at">xlab=</span>varname)</span></code></pre></div>
 <p><img src="lec17_files/figure-html/man03-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># test for homogeneity of group variances</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">tapply</span>(<span class="kw">get</span>(varname), Reach, var)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># test for homogeneity of group variances</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(<span class="fu">get</span>(varname), Reach, var)</span></code></pre></div>
 <pre><code>##         A         B         C 
 ## 0.3898621 0.3712255 0.4260874</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">bartlett.test</span>(<span class="kw">get</span>(varname) <span class="op">~</span><span class="st"> </span>Reach)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bartlett.test</span>(<span class="fu">get</span>(varname) <span class="sc">~</span> Reach)</span></code></pre></div>
 <pre><code>## 
 ##  Bartlett test of homogeneity of variances
 ## 
 ## data:  get(varname) by Reach
 ## Bartlett&#39;s K-squared = 0.13578, df = 2, p-value = 0.9344</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># analysis of variance</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">sumcr_aov1 &lt;-<span class="st"> </span><span class="kw">aov</span>(<span class="kw">get</span>(varname) <span class="op">~</span><span class="st"> </span>Reach)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">summary</span>(sumcr_aov1)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># analysis of variance</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>sumcr_aov1 <span class="ot">&lt;-</span> <span class="fu">aov</span>(<span class="fu">get</span>(varname) <span class="sc">~</span> Reach)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sumcr_aov1)</span></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## Reach        2  37.24  18.621   47.88 1.19e-14 ***
 ## Residuals   85  33.06   0.389                     
@@ -566,13 +581,13 @@ $(document).ready(function () {
 <p>Univariate analyses of variance for individual variables can be gotten simply by replacing the name assigned to <code>varname</code> and rerunning the block of code.</p>
 <p>The main issue that arises in conducting some number of individual ANOVAs is the possibility that some analyses will appear significant, simply by chance.</p>
 </div>
-<div id="manova-1" class="section level2">
-<h2><span class="header-section-number">2.2</span> MANOVA</h2>
+<div id="manova-1" class="section level2" number="2.2">
+<h2 number="2.2"><span class="header-section-number">2.2</span> MANOVA</h2>
 <p>MANOVA aims to answer the question of whether the groups differ, when all variables are considered jointly. The <code>summary.aov()</code> function displays the individual ANOVAs, but the examination of these is not a replacement for examining the individual ANOVAs in detail as above.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># MANOVA</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">Y &lt;-<span class="st"> </span><span class="kw">cbind</span>(DepthWS, WidthWS, WidthBF, HUAreaWS, HUAreaBF, wsgrad)</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">sumcr_mva1 &lt;-<span class="st"> </span><span class="kw">manova</span>(Y <span class="op">~</span><span class="st"> </span>Reach)</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw">summary.aov</span>(sumcr_mva1)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># MANOVA</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">cbind</span>(DepthWS, WidthWS, WidthBF, HUAreaWS, HUAreaBF, wsgrad)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>sumcr_mva1 <span class="ot">&lt;-</span> <span class="fu">manova</span>(Y <span class="sc">~</span> Reach)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary.aov</span>(sumcr_mva1)</span></code></pre></div>
 <pre><code>##  Response DepthWS :
 ##             Df  Sum Sq  Mean Sq F value   Pr(&gt;F)   
 ## Reach        2 0.08798 0.043990  5.9896 0.003685 **
@@ -612,7 +627,7 @@ $(document).ready(function () {
 ##             Df    Sum Sq    Mean Sq F value Pr(&gt;F)
 ## Reach        2 0.0000642 0.00003208  0.0947 0.9098
 ## Residuals   85 0.0288014 0.00033884</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">summary</span>(sumcr_mva1, <span class="dt">test=</span><span class="st">&quot;Wilks&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sumcr_mva1, <span class="at">test=</span><span class="st">&quot;Wilks&quot;</span>)</span></code></pre></div>
 <pre><code>##           Df   Wilks approx F num Df den Df    Pr(&gt;F)    
 ## Reach      2 0.22264   14.925     12    160 &lt; 2.2e-16 ***
 ## Residuals 85                                             
@@ -622,8 +637,8 @@ $(document).ready(function () {
 <p>Here, the <em>F</em>-statistic is large enough (with a correspondingly small <em>p</em>-value) to reject the null hypothesis of equality of group means.</p>
 </div>
 </div>
-<div id="discriminant-analysis" class="section level1">
-<h1><span class="header-section-number">3</span> Discriminant Analysis</h1>
+<div id="discriminant-analysis" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> Discriminant Analysis</h1>
 <p>Discriminant analysis has several interrelated objectives that include:</p>
 <ul>
 <li>identification of how one or more groups of observations differ as described by one or more, usually several, interrelated variables</li>
@@ -640,27 +655,27 @@ $(document).ready(function () {
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/da.html">Details of discriminant analysis</a></li>
 </ul>
 <p>As an example of discriminant analysis, following up on the MANOVA of the Summit Cr. data, we can investigate how the reaches differ from one another, or in other words, we can identify the variables that best illustrate the difference among the reaches.</p>
-<div id="first-example-two-variables-and-two-groups-grazed-reaches-a-and-c-and-ungrazed-reach-b" class="section level2">
-<h2><span class="header-section-number">3.1</span> First example – two variables and two groups (grazed (Reaches A and C), and ungrazed (Reach B))</h2>
+<div id="first-example-two-variables-and-two-groups-grazed-reaches-a-and-c-and-ungrazed-reach-b" class="section level2" number="3.1">
+<h2 number="3.1"><span class="header-section-number">3.1</span> First example – two variables and two groups (grazed (Reaches A and C), and ungrazed (Reach B))</h2>
 <p>Here, the three reaches are recoded into two, grazed (<code>G</code>, reaches <code>A</code> and <code>C</code>) and ungrazed (<code>U</code>, reach <code>B</code>)</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># discriminant analysis example, Summit Cr. data, two variables, two groups</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">library</span>(MASS)</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="kw">library</span>(lattice) <span class="co"># for plots</span></a>
-<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="kw">attach</span>(sumcr)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># discriminant analysis example, Summit Cr. data, two variables, two groups</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lattice) <span class="co"># for plots</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(sumcr)</span></code></pre></div>
 <p>Recode the <code>Reach</code> variable (which has the values <code>A</code>, <code>B</code> and <code>C</code>) first to integer values (1 to 3) using the <code>as.integer()</code> function, then convert the 3’s to 1’s, and then create a factor (using the <code>as.factor()</code> function) with the values “G” and “U” (grazed and ungrazed, assigned using the <code>levels()</code> function).</p>
 <p>The labelled scatter plot displays a distinct separation in a space defined by <code>WidthWS</code> and <code>DepthWS</code> of the grazed <code>G</code> and ungrazed <code>U</code> reaches (with ungrazed reaches tending to be deep and narrow, and grazed reaches wide and shallow).</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># recode Reach into two levels, Grazed and Ungrazed</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">Grazed &lt;-<span class="st"> </span><span class="kw">as.integer</span>(Reach)</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">Grazed[Grazed<span class="op">==</span><span class="dv">3</span>] &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">Grazed &lt;-<span class="st"> </span><span class="kw">as.factor</span>(Grazed)</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="kw">levels</span>(Grazed) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;G&quot;</span>,<span class="st">&quot;U&quot;</span>)</a>
-<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="kw">plot</span>(WidthWS, DepthWS, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="kw">text</span>(WidthWS, DepthWS, <span class="dt">label=</span><span class="kw">as.character</span>(Grazed))</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># recode Reach into two levels, Grazed and Ungrazed</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>Grazed <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(Reach)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>Grazed[Grazed<span class="sc">==</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>Grazed <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(Grazed)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(Grazed) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;G&quot;</span>,<span class="st">&quot;U&quot;</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(WidthWS, DepthWS, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(WidthWS, DepthWS, <span class="at">label=</span><span class="fu">as.character</span>(Grazed))</span></code></pre></div>
 <p><img src="lec17_files/figure-html/da03-1.png" width="2100" /></p>
 <p>Now compute the discriminant function (using the <code>lda()</code> function from the <code>MASS</code> package). Discriminant “loadings” (correlations between the new discriminant functions and the original variables) are found simply with the <code>cor()</code> function, and the discriminant function scores for each observation are plotted using the <code>lattice()</code> function.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># discriminant analysis, coefficients and scores</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">Grazed_lda1 &lt;-<span class="st"> </span><span class="kw">lda</span>(Grazed <span class="op">~</span><span class="st"> </span>WidthWS <span class="op">+</span><span class="st"> </span>DepthWS, <span class="dt">method=</span><span class="st">&quot;moment&quot;</span>)</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">Grazed_lda1</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># discriminant analysis, coefficients and scores</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>Grazed_lda1 <span class="ot">&lt;-</span> <span class="fu">lda</span>(Grazed <span class="sc">~</span> WidthWS <span class="sc">+</span> DepthWS, <span class="at">method=</span><span class="st">&quot;moment&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>Grazed_lda1</span></code></pre></div>
 <pre><code>## Call:
 ## lda(Grazed ~ WidthWS + DepthWS, method = &quot;moment&quot;)
 ## 
@@ -677,48 +692,48 @@ $(document).ready(function () {
 ##               LD1
 ## WidthWS -1.520426
 ## DepthWS  3.005817</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">plot</span>(Grazed_lda1)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Grazed_lda1)</span></code></pre></div>
 <p><img src="lec17_files/figure-html/da04-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">Grazed_dscore &lt;-<span class="st"> </span><span class="kw">predict</span>(Grazed_lda1, <span class="dt">dimen=</span><span class="dv">1</span>)<span class="op">$</span>x</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">cor</span>(<span class="kw">cbind</span>(WidthWS, DepthWS, Grazed_dscore))</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>Grazed_dscore <span class="ot">&lt;-</span> <span class="fu">predict</span>(Grazed_lda1, <span class="at">dimen=</span><span class="dv">1</span>)<span class="sc">$</span>x</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(<span class="fu">cbind</span>(WidthWS, DepthWS, Grazed_dscore))</span></code></pre></div>
 <pre><code>##            WidthWS    DepthWS        LD1
 ## WidthWS  1.0000000 -0.2485592 -0.9835497
 ## DepthWS -0.2485592  1.0000000  0.4194393
 ## LD1     -0.9835497  0.4194393  1.0000000</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">histogram</span>(<span class="op">~</span><span class="st"> </span>Grazed_dscore[,<span class="dv">1</span>] <span class="op">|</span><span class="st"> </span>Grazed, <span class="dt">nint=</span><span class="dv">20</span>, <span class="dt">aspect=</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">histogram</span>(<span class="sc">~</span> Grazed_dscore[,<span class="dv">1</span>] <span class="sc">|</span> Grazed, <span class="at">nint=</span><span class="dv">20</span>, <span class="at">aspect=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)</span></code></pre></div>
 <p><img src="lec17_files/figure-html/da04-2.png" width="2100" /></p>
 <p>The scatter plot, as well as the loadings show that <code>WidthWS</code> is the more important variable for “discriminating” the difference between the grazed and ungrazed observations.</p>
 <p>The following code plots the discriminant function on the scatter plot.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># plot discriminant function and classification line</span></a>
-<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="co"># to make plots easier to interpret, rescale DepthWS by 10x</span></a>
-<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="kw">plot</span>(WidthWS, DepthWS<span class="op">*</span><span class="dv">10</span>, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>, <span class="dt">asp=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb21-4" data-line-number="4"><span class="kw">text</span>(WidthWS, DepthWS<span class="op">*</span><span class="dv">10</span>, <span class="dt">label=</span><span class="kw">as.character</span>(Grazed), <span class="dt">cex=</span>.<span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb21-5" data-line-number="5">     chw &lt;-<span class="st"> </span><span class="kw">par</span>()<span class="op">$</span>cxy[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="kw">text</span>(WidthWS<span class="op">+</span>chw, DepthWS<span class="op">*</span><span class="dv">10</span>, <span class="dt">label=</span><span class="kw">as.character</span>(<span class="kw">round</span>(Grazed_dscore,<span class="dv">2</span>)),</a>
-<a class="sourceLine" id="cb21-7" data-line-number="7">     <span class="dt">cex=</span>.<span class="dv">6</span>)</a>
-<a class="sourceLine" id="cb21-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb21-9" data-line-number="9"><span class="co"># DF1</span></a>
-<a class="sourceLine" id="cb21-10" data-line-number="10">slope_DF1 &lt;-<span class="st"> </span>Grazed_lda1<span class="op">$</span>scaling[<span class="dv">2</span>]<span class="op">/</span>Grazed_lda1<span class="op">$</span>scaling[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb21-11" data-line-number="11"><span class="kw">abline</span>(<span class="dv">7</span>, slope_DF1, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb21-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb21-13" data-line-number="13"><span class="co"># classification threshold line</span></a>
-<a class="sourceLine" id="cb21-14" data-line-number="14">slope_CL1 &lt;-<span class="st"> </span><span class="dv">-1</span><span class="op">/</span>(Grazed_lda1<span class="op">$</span>scaling[<span class="dv">2</span>]<span class="op">/</span>Grazed_lda1<span class="op">$</span>scaling[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="cb21-15" data-line-number="15">int_CL1 &lt;-<span class="st"> </span>((Grazed_lda1<span class="op">$</span>means[<span class="dv">1</span>,]<span class="op">%*%</span>Grazed_lda1<span class="op">$</span>scaling <span class="op">+</span></a>
-<a class="sourceLine" id="cb21-16" data-line-number="16"><span class="st">    </span>Grazed_lda1<span class="op">$</span>means[<span class="dv">2</span>,]<span class="op">%*%</span>Grazed_lda1<span class="op">$</span>scaling)<span class="op">/</span><span class="dv">2</span>)<span class="op">*</span></a>
-<a class="sourceLine" id="cb21-17" data-line-number="17"><span class="st">    </span>(Grazed_lda1<span class="op">$</span>scaling[<span class="dv">1</span>]<span class="op">/</span></a>
-<a class="sourceLine" id="cb21-18" data-line-number="18"><span class="st">    </span>Grazed_lda1<span class="op">$</span>scaling[<span class="dv">2</span>]<span class="op">/</span>Grazed_lda1<span class="op">$</span>scaling[<span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb21-19" data-line-number="19"><span class="kw">abline</span>(int_CL1, slope_CL1, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot discriminant function and classification line</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># to make plots easier to interpret, rescale DepthWS by 10x</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(WidthWS, DepthWS<span class="sc">*</span><span class="dv">10</span>, <span class="at">type=</span><span class="st">&quot;n&quot;</span>, <span class="at">asp=</span><span class="dv">1</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(WidthWS, DepthWS<span class="sc">*</span><span class="dv">10</span>, <span class="at">label=</span><span class="fu">as.character</span>(Grazed), <span class="at">cex=</span>.<span class="dv">5</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>     chw <span class="ot">&lt;-</span> <span class="fu">par</span>()<span class="sc">$</span>cxy[<span class="dv">1</span>]</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(WidthWS<span class="sc">+</span>chw, DepthWS<span class="sc">*</span><span class="dv">10</span>, <span class="at">label=</span><span class="fu">as.character</span>(<span class="fu">round</span>(Grazed_dscore,<span class="dv">2</span>)),</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex=</span>.<span class="dv">6</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co"># DF1</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>slope_DF1 <span class="ot">&lt;-</span> Grazed_lda1<span class="sc">$</span>scaling[<span class="dv">2</span>]<span class="sc">/</span>Grazed_lda1<span class="sc">$</span>scaling[<span class="dv">1</span>]</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">7</span>, slope_DF1, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co"># classification threshold line</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>slope_CL1 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(Grazed_lda1<span class="sc">$</span>scaling[<span class="dv">2</span>]<span class="sc">/</span>Grazed_lda1<span class="sc">$</span>scaling[<span class="dv">1</span>])</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>int_CL1 <span class="ot">&lt;-</span> ((Grazed_lda1<span class="sc">$</span>means[<span class="dv">1</span>,]<span class="sc">%*%</span>Grazed_lda1<span class="sc">$</span>scaling <span class="sc">+</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    Grazed_lda1<span class="sc">$</span>means[<span class="dv">2</span>,]<span class="sc">%*%</span>Grazed_lda1<span class="sc">$</span>scaling)<span class="sc">/</span><span class="dv">2</span>)<span class="sc">*</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    (Grazed_lda1<span class="sc">$</span>scaling[<span class="dv">1</span>]<span class="sc">/</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>    Grazed_lda1<span class="sc">$</span>scaling[<span class="dv">2</span>]<span class="sc">/</span>Grazed_lda1<span class="sc">$</span>scaling[<span class="dv">2</span>])</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(int_CL1, slope_CL1, <span class="at">col=</span><span class="st">&quot;purple&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
 <p><img src="lec17_files/figure-html/da5-1.png" width="2100" /></p>
 <p>The black line is the actual first discriminant function, along which the groups are maximally separated. The purple line is orthogonal to the discriminant function. Points whose <code>WidthWS</code> and <code>DepthWS</code> values plot above the line are likely to be ungrazed, while those below are more likely to be Grazed_</p>
 </div>
-<div id="a-second-example" class="section level2">
-<h2><span class="header-section-number">3.2</span> A second example</h2>
+<div id="a-second-example" class="section level2" number="3.2">
+<h2 number="3.2"><span class="header-section-number">3.2</span> A second example</h2>
 <p>In this second example, all three reaches are considered, along with multiple variables. Two discriminant functions are generated.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co"># second example </span></a>
-<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="co"># linear discriminant analysis</span></a>
-<a class="sourceLine" id="cb22-3" data-line-number="3">Reach_lda1 &lt;-<span class="st"> </span><span class="kw">lda</span>(Reach <span class="op">~</span><span class="st"> </span>DepthWS <span class="op">+</span><span class="st"> </span>WidthWS <span class="op">+</span><span class="st"> </span>WidthBF <span class="op">+</span><span class="st"> </span>HUAreaWS <span class="op">+</span><span class="st"> </span>HUAreaBF</a>
-<a class="sourceLine" id="cb22-4" data-line-number="4">     <span class="op">+</span><span class="st"> </span>wsgrad)</a>
-<a class="sourceLine" id="cb22-5" data-line-number="5">Reach_lda1</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># second example </span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># linear discriminant analysis</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>Reach_lda1 <span class="ot">&lt;-</span> <span class="fu">lda</span>(Reach <span class="sc">~</span> DepthWS <span class="sc">+</span> WidthWS <span class="sc">+</span> WidthBF <span class="sc">+</span> HUAreaWS <span class="sc">+</span> HUAreaBF</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>     <span class="sc">+</span> wsgrad)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>Reach_lda1</span></code></pre></div>
 <pre><code>## Call:
 ## lda(Reach ~ DepthWS + WidthWS + WidthBF + HUAreaWS + HUAreaBF + 
 ##     wsgrad)
@@ -745,14 +760,14 @@ $(document).ready(function () {
 ## Proportion of trace:
 ##    LD1    LD2 
 ## 0.6295 0.3705</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">plot</span>(Reach_lda1, <span class="dt">asp=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Reach_lda1, <span class="at">asp=</span><span class="dv">1</span>)</span></code></pre></div>
 <p><img src="lec17_files/figure-html/da6-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">Reach_dscore &lt;-<span class="st"> </span><span class="kw">predict</span>(Reach_lda1, <span class="dt">dimen=</span><span class="dv">2</span>)<span class="op">$</span>x</a>
-<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw">histogram</span>(<span class="op">~</span>Reach_dscore[,<span class="dv">1</span>] <span class="op">|</span><span class="st"> </span>Reach, <span class="dt">nint=</span><span class="dv">20</span>, <span class="dt">aspect=</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>Reach_dscore <span class="ot">&lt;-</span> <span class="fu">predict</span>(Reach_lda1, <span class="at">dimen=</span><span class="dv">2</span>)<span class="sc">$</span>x</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">histogram</span>(<span class="sc">~</span>Reach_dscore[,<span class="dv">1</span>] <span class="sc">|</span> Reach, <span class="at">nint=</span><span class="dv">20</span>, <span class="at">aspect=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)</span></code></pre></div>
 <p><img src="lec17_files/figure-html/da6-2.png" width="2100" /></p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">histogram</span>(<span class="op">~</span>Reach_dscore[,<span class="dv">2</span>] <span class="op">|</span><span class="st"> </span>Reach, <span class="dt">nint=</span><span class="dv">20</span>, <span class="dt">aspect=</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">histogram</span>(<span class="sc">~</span>Reach_dscore[,<span class="dv">2</span>] <span class="sc">|</span> Reach, <span class="at">nint=</span><span class="dv">20</span>, <span class="at">aspect=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)</span></code></pre></div>
 <p><img src="lec17_files/figure-html/da6-3.png" width="2100" /></p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">cor</span>(sumcr[<span class="dv">6</span><span class="op">:</span><span class="dv">11</span>],Reach_dscore)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(sumcr[<span class="dv">6</span><span class="sc">:</span><span class="dv">11</span>],Reach_dscore)</span></code></pre></div>
 <pre><code>##                  LD1         LD2
 ## DepthWS  -0.36415064 -0.31480457
 ## WidthWS   0.90773016  0.31055407
@@ -762,16 +777,16 @@ $(document).ready(function () {
 ## wsgrad    0.02941063  0.06116015</code></pre>
 <p>The <code>Coefficients of linear discriminants</code> provide the equation for the discriminant functions, while the correlations aid in the interpretation of functions (e.g. which variables they’re correlated with).</p>
 <p>The <code>mosicplot()</code> function compares the true group membership, with that predicted by the discriminant functions. The large boxes along the diagonal of the mosaicplot show the the discriminant functions provide useful information for distinguishing among the groups.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">Reach_pred &lt;-<span class="st"> </span><span class="kw">predict</span>(Reach_lda1, <span class="dt">dimen=</span><span class="dv">2</span>)<span class="op">$</span>class</a>
-<a class="sourceLine" id="cb29-2" data-line-number="2">class_table &lt;-<span class="st"> </span><span class="kw">table</span>(Reach, Reach_pred)</a>
-<a class="sourceLine" id="cb29-3" data-line-number="3"><span class="kw">mosaicplot</span>(class_table, <span class="dt">color=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>Reach_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(Reach_lda1, <span class="at">dimen=</span><span class="dv">2</span>)<span class="sc">$</span>class</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>class_table <span class="ot">&lt;-</span> <span class="fu">table</span>(Reach, Reach_pred)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaicplot</span>(class_table, <span class="at">color=</span>T)</span></code></pre></div>
 <p><img src="lec17_files/figure-html/da7-1.png" width="2100" /></p>
 </div>
 </div>
-<div id="readings" class="section level1">
-<h1><span class="header-section-number">4</span> Readings</h1>
+<div id="readings" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> Readings</h1>
 <ul>
-<li>Ch. 14 in Zuur et al. (2007) <em>Analysing Ecological Data</em>, Springer. (Search the UO Library catalog for the Bivand et al. book (as in lecture 7), then search for “Analysing Ecological Data” in the <em>Springer Link</em> search field.)</li>
+<li>Ch. 14 in Zuur et al. (2007) <em>Analysing Ecological Data</em>, Springer. (Search the UO Library catalog for the Bivand et al. book (as in lecture 7), then search for “Analysing Ecological Data” in the <em>Springer Link</em> search field.)</li>
 <li>Chapter 25, Multivariate Statistics, in Crawley, M.J. (2013) <em>The R Book</em>, Wiley. To get to the book, visit <a href="http://library.uoregon.edu">http://library.uoregon.edu</a>, login, and search for the 2013 edition of the book. Here’s a direct link, once you’re logged on: <a href="http://onlinelibrary.wiley.com/book/10.1002/9781118448908">http://onlinelibrary.wiley.com/book/10.1002/9781118448908</a></li>
 <li>Maindonald (<em>Using R…</em>), Ch. 6</li>
 </ul>
@@ -786,7 +801,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

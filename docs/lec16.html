@@ -13,6 +13,7 @@
 
 <title>Principal components and factor analysis</title>
 
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -25,29 +26,40 @@
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -56,9 +68,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -140,6 +152,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 <link rel="stylesheet" href="SI-md-08.css" type="text/css" />
 
@@ -498,18 +511,22 @@ $(document).ready(function () {
 <ul>
 <li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
 <li><a href="#derivation-of-principal-components-and-their-properties"><span class="toc-section-number">2</span> Derivation of principal components and their properties</a></li>
-<li><a href="#pca-examples"><span class="toc-section-number">3</span> PCA Examples</a><ul>
+<li><a href="#pca-examples"><span class="toc-section-number">3</span> PCA Examples</a>
+<ul>
 <li><a href="#pca-of-a-two-variable-matrix"><span class="toc-section-number">3.1</span> PCA of a two-variable matrix</a></li>
-<li><a href="#a-second-example-using-the-large-cites-data-set"><span class="toc-section-number">3.2</span> A second example using the large-cites data set</a><ul>
+<li><a href="#a-second-example-using-the-large-cites-data-set"><span class="toc-section-number">3.2</span> A second example using the large-cites data set</a>
+<ul>
 <li><a href="#examining-the-correlation-matrix"><span class="toc-section-number">3.2.1</span> Examining the correlation matrix</a></li>
 <li><a href="#pca-of-the-cities-data"><span class="toc-section-number">3.2.2</span> PCA of the cities data</a></li>
 </ul></li>
 <li><a href="#rotation-of-principal-components"><span class="toc-section-number">3.3</span> “Rotation” of principal components</a></li>
 </ul></li>
-<li><a href="#factor-analyis-fa-and-pca"><span class="toc-section-number">4</span> Factor analyis (FA) and PCA</a><ul>
+<li><a href="#factor-analyis-fa-and-pca"><span class="toc-section-number">4</span> Factor analyis (FA) and PCA</a>
+<ul>
 <li><a href="#example-of-a-factor-analysis"><span class="toc-section-number">4.1</span> Example of a factor analysis</a></li>
 </ul></li>
-<li><a href="#a-second-example-controls-of-mid-holocene-aridity-in-eurasia"><span class="toc-section-number">5</span> A second example: Controls of mid-Holocene aridity in Eurasia</a><ul>
+<li><a href="#a-second-example-controls-of-mid-holocene-aridity-in-eurasia"><span class="toc-section-number">5</span> A second example: Controls of mid-Holocene aridity in Eurasia</a>
+<ul>
 <li><a href="#read-and-transform-the-data"><span class="toc-section-number">5.1</span> Read and transform the data</a></li>
 <li><a href="#correlations-among-variables"><span class="toc-section-number">5.2</span> Correlations among variables</a></li>
 <li><a href="#pca-of-the-pmip-3-data"><span class="toc-section-number">5.3</span> PCA of the PMIP 3 data</a></li>
@@ -525,17 +542,17 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span>
+<span style="color: #00cc00;">NOTE: This page has been revised for Winter 2021, but may undergo further edits.</span>
 </p>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
+<div id="introduction" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p><em>Principal components analysis (PCA)</em> is a widely used multivariate analysis method, the general aim of which is to reveal systematic covariations among a group of variables. The analysis can be motivated in a number of different ways, including (in geographical contexts) finding groups of variables that measure the same underlying dimensions of a data set, describing the basic anomaly patterns that appear in spatial data sets, or producing a general index of the common variation of a set of variables.</p>
 <ul>
 <li>Example: Davis’ boxes (<a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_data.png">data</a>, <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_boxes_png">plot</a>, <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scatter.png">scatter</a>, <a href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scores.png">components</a>), (Davis, J.C., 2001, <em>Statistics and Data Analysis in Geology</em>, Wiley)</li>
 </ul>
 </div>
-<div id="derivation-of-principal-components-and-their-properties" class="section level1">
-<h1><span class="header-section-number">2</span> Derivation of principal components and their properties</h1>
+<div id="derivation-of-principal-components-and-their-properties" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> Derivation of principal components and their properties</h1>
 <p>The formal derivation of principal components analysis requires the use of matix algebra.</p>
 <ul>
 <li><a href="https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.pdf">[Matrix algebra]</a></li>
@@ -552,26 +569,26 @@ $(document).ready(function () {
 </ul>
 <p><a href="lec16.html">[Back to top]</a></p>
 </div>
-<div id="pca-examples" class="section level1">
-<h1><span class="header-section-number">3</span> PCA Examples</h1>
-<div id="pca-of-a-two-variable-matrix" class="section level2">
-<h2><span class="header-section-number">3.1</span> PCA of a two-variable matrix</h2>
+<div id="pca-examples" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> PCA Examples</h1>
+<div id="pca-of-a-two-variable-matrix" class="section level2" number="3.1">
+<h2 number="3.1"><span class="header-section-number">3.1</span> PCA of a two-variable matrix</h2>
 <p>A classic data set for illustrating PCA is one that appears in John C. Davis’s 2002 book <em>Statistics and data analysis in geology</em>, Wiley (UO Library, QE48.8 .D38 2002). The data consist of 25 boxes or blocks with random dimensions (the long, intermediate and short axes of the boxes), plus some derived variables, like the length of the longest diagonal that can be contained within a box.</p>
 <p>Here’s the data: <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/boxes_csv">[boxes_csv]</a></p>
 <p>In this example, a simple two-variable (long-axis length and diagonal length) data set is created using Davis’ artificial data.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co">#boxes_pca -- principal components analysis of Davis boxes data</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">boxes_matrix &lt;-<span class="st"> </span><span class="kw">data.matrix</span>(<span class="kw">cbind</span>(boxes[,<span class="dv">1</span>],boxes[,<span class="dv">4</span>]))</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">dimnames</span>(boxes_matrix) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="ot">NULL</span>, <span class="kw">cbind</span>(<span class="st">&quot;long&quot;</span>,<span class="st">&quot;diag&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#boxes_pca -- principal components analysis of Davis boxes data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>boxes_matrix <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(<span class="fu">cbind</span>(boxes[,<span class="dv">1</span>],boxes[,<span class="dv">4</span>]))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(boxes_matrix) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="fu">cbind</span>(<span class="st">&quot;long&quot;</span>,<span class="st">&quot;diag&quot;</span>))</span></code></pre></div>
 <p>Matrix scatter plot of the data (which in this case is a single panel), and the correlation matrix:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">plot</span>(boxes_matrix)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(boxes_matrix)</span></code></pre></div>
 <p><img src="lec16_files/figure-html/pca03-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">cor</span>(boxes_matrix)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(boxes_matrix)</span></code></pre></div>
 <pre><code>##           long      diag
 ## long 1.0000000 0.9112586
 ## diag 0.9112586 1.0000000</code></pre>
 <p>PCA using the <code>princomp()</code> function from the <code>stats</code> package. The <code>loadings()</code> function extracts the <em>loadings</em> or the correlations between the input variables and the new components, and the the <code>biplot()</code> function creates a <em>biplot</em> a single figure that plots the loadings as vectors and the <em>component scores</em> as points represented by the observation numbers.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">boxes_pca &lt;-<span class="st"> </span><span class="kw">princomp</span>(boxes_matrix, <span class="dt">cor=</span>T)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">boxes_pca</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>boxes_pca <span class="ot">&lt;-</span> <span class="fu">princomp</span>(boxes_matrix, <span class="at">cor=</span>T)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>boxes_pca</span></code></pre></div>
 <pre><code>## Call:
 ## princomp(x = boxes_matrix, cor = T)
 ## 
@@ -580,13 +597,13 @@ $(document).ready(function () {
 ## 1.382483 0.297895 
 ## 
 ##  2  variables and  25 observations.</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">summary</span>(boxes_pca)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(boxes_pca)</span></code></pre></div>
 <pre><code>## Importance of components:
 ##                           Comp.1    Comp.2
 ## Standard deviation     1.3824828 0.2978950
 ## Proportion of Variance 0.9556293 0.0443707
 ## Cumulative Proportion  0.9556293 1.0000000</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">print</span>(<span class="kw">loadings</span>(boxes_pca), <span class="dt">cutoff=</span><span class="fl">0.0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">loadings</span>(boxes_pca), <span class="at">cutoff=</span><span class="fl">0.0</span>)</span></code></pre></div>
 <pre><code>## 
 ## Loadings:
 ##      Comp.1 Comp.2
@@ -597,44 +614,44 @@ $(document).ready(function () {
 ## SS loadings       1.0    1.0
 ## Proportion Var    0.5    0.5
 ## Cumulative Var    0.5    1.0</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">biplot</span>(boxes_pca)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">biplot</span>(boxes_pca)</span></code></pre></div>
 <p><img src="lec16_files/figure-html/pca04-1.png" width="2100" /></p>
 <p>Note the angle between the vectors–the correlation between two variables is equal to the cosine of the angle between the vectors (<em>θ</em>), or <em>r = cos(θ)</em>. Here the angle is 24.3201359, which is found by the following R code: <code>acos(cor(boxes_matrix[,1],boxes_matrix[,2]))/((2*pi)/360)</code>.</p>
 <p>The components can be drawn on the scatter plot as follows,</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># get parameters of component lines (after Everitt &amp; Rabe-Hesketh)</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">load &lt;-boxes_pca<span class="op">$</span>loadings</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">slope &lt;-<span class="st"> </span>load[<span class="dv">2</span>,]<span class="op">/</span>load[<span class="dv">1</span>,]</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">mn &lt;-<span class="st"> </span><span class="kw">apply</span>(boxes_matrix,<span class="dv">2</span>,mean)</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">intcpt &lt;-<span class="st"> </span>mn[<span class="dv">2</span>]<span class="op">-</span>(slope<span class="op">*</span>mn[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co"># scatter plot with the two new axes added</span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="kw">par</span>(<span class="dt">pty=</span><span class="st">&quot;s&quot;</span>) <span class="co"># square plotting frame</span></a>
-<a class="sourceLine" id="cb12-9" data-line-number="9">xlim &lt;-<span class="st"> </span><span class="kw">range</span>(boxes_matrix) <span class="co"># overall min, max</span></a>
-<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="kw">plot</span>(boxes_matrix, <span class="dt">xlim=</span>xlim, <span class="dt">ylim=</span>xlim, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>) <span class="co"># both axes same length</span></a>
-<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="kw">abline</span>(intcpt[<span class="dv">1</span>],slope[<span class="dv">1</span>],<span class="dt">lwd=</span><span class="dv">2</span>) <span class="co"># first component solid line</span></a>
-<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="kw">abline</span>(intcpt[<span class="dv">2</span>],slope[<span class="dv">2</span>],<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">lty=</span><span class="dv">2</span>) <span class="co"># second component dashed</span></a>
-<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="kw">legend</span>(<span class="st">&quot;right&quot;</span>, <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&quot;PC 1&quot;</span>, <span class="st">&quot;PC 2&quot;</span>), <span class="dt">lty =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb12-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co"># projections of points onto PCA 1</span></a>
-<a class="sourceLine" id="cb12-16" data-line-number="16">y1 &lt;-<span class="st"> </span>intcpt[<span class="dv">1</span>]<span class="op">+</span>slope[<span class="dv">1</span>]<span class="op">*</span>boxes_matrix[,<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb12-17" data-line-number="17">x1 &lt;-<span class="st"> </span>(boxes_matrix[,<span class="dv">2</span>]<span class="op">-</span>intcpt[<span class="dv">1</span>])<span class="op">/</span>slope[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb12-18" data-line-number="18">y2 &lt;-<span class="st"> </span>(y1<span class="op">+</span>boxes_matrix[,<span class="dv">2</span>])<span class="op">/</span><span class="fl">2.0</span></a>
-<a class="sourceLine" id="cb12-19" data-line-number="19">x2 &lt;-<span class="st"> </span>(x1<span class="op">+</span>boxes_matrix[,<span class="dv">1</span>])<span class="op">/</span><span class="fl">2.0</span></a>
-<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="kw">segments</span>(boxes_matrix[,<span class="dv">1</span>],boxes_matrix[,<span class="dv">2</span>], x2, y2, <span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">col=</span><span class="st">&quot;purple&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get parameters of component lines (after Everitt &amp; Rabe-Hesketh)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>load <span class="ot">&lt;-</span>boxes_pca<span class="sc">$</span>loadings</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>slope <span class="ot">&lt;-</span> load[<span class="dv">2</span>,]<span class="sc">/</span>load[<span class="dv">1</span>,]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>mn <span class="ot">&lt;-</span> <span class="fu">apply</span>(boxes_matrix,<span class="dv">2</span>,mean)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>intcpt <span class="ot">&lt;-</span> mn[<span class="dv">2</span>]<span class="sc">-</span>(slope<span class="sc">*</span>mn[<span class="dv">1</span>])</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># scatter plot with the two new axes added</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">pty=</span><span class="st">&quot;s&quot;</span>) <span class="co"># square plotting frame</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>xlim <span class="ot">&lt;-</span> <span class="fu">range</span>(boxes_matrix) <span class="co"># overall min, max</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(boxes_matrix, <span class="at">xlim=</span>xlim, <span class="at">ylim=</span>xlim, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span><span class="st">&quot;purple&quot;</span>) <span class="co"># both axes same length</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(intcpt[<span class="dv">1</span>],slope[<span class="dv">1</span>],<span class="at">lwd=</span><span class="dv">2</span>) <span class="co"># first component solid line</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(intcpt[<span class="dv">2</span>],slope[<span class="dv">2</span>],<span class="at">lwd=</span><span class="dv">2</span>,<span class="at">lty=</span><span class="dv">2</span>) <span class="co"># second component dashed</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;right&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;PC 1&quot;</span>, <span class="st">&quot;PC 2&quot;</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">cex =</span> <span class="dv">1</span>)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co"># projections of points onto PCA 1</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>y1 <span class="ot">&lt;-</span> intcpt[<span class="dv">1</span>]<span class="sc">+</span>slope[<span class="dv">1</span>]<span class="sc">*</span>boxes_matrix[,<span class="dv">1</span>]</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> (boxes_matrix[,<span class="dv">2</span>]<span class="sc">-</span>intcpt[<span class="dv">1</span>])<span class="sc">/</span>slope[<span class="dv">1</span>]</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>y2 <span class="ot">&lt;-</span> (y1<span class="sc">+</span>boxes_matrix[,<span class="dv">2</span>])<span class="sc">/</span><span class="fl">2.0</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> (x1<span class="sc">+</span>boxes_matrix[,<span class="dv">1</span>])<span class="sc">/</span><span class="fl">2.0</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(boxes_matrix[,<span class="dv">1</span>],boxes_matrix[,<span class="dv">2</span>], x2, y2, <span class="at">lwd=</span><span class="dv">2</span>,<span class="at">col=</span><span class="st">&quot;purple&quot;</span>)</span></code></pre></div>
 <p><img src="lec16_files/figure-html/pca05-1.png" width="2100" /></p>
 <p>This plot illustrates the idea of the first (or “principal” component) providing an optimal summary of the data–no other line drawn on this scatter plot would produce a set of projected values of the data points onto the line with less variance. The first component also has an application in reduced major axis (RMA) regression in which both x- and y-variables are assumed to have errors or uncertainties, or where there is no clear distinction between a predictor and a response.</p>
 </div>
-<div id="a-second-example-using-the-large-cites-data-set" class="section level2">
-<h2><span class="header-section-number">3.2</span> A second example using the large-cites data set</h2>
+<div id="a-second-example-using-the-large-cites-data-set" class="section level2" number="3.2">
+<h2 number="3.2"><span class="header-section-number">3.2</span> A second example using the large-cites data set</h2>
 <p>A second example of a simple PCA analysis can be illustrated using the large-cities data set <a href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/cities.csv">[cities.csv]</a></p>
 <p>Create a data matrix that omits the city names and look at the data and the correlation matrix.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">cities_matrix &lt;-<span class="st"> </span><span class="kw">data.matrix</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>])</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">rownames</span>(cities_matrix) &lt;-<span class="st"> </span>cities[,<span class="dv">1</span>] <span class="co"># add city names as row labels</span></a></code></pre></div>
-<div id="examining-the-correlation-matrix" class="section level3">
-<h3><span class="header-section-number">3.2.1</span> Examining the correlation matrix</h3>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">plot</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>], <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>cities_matrix <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(cities[,<span class="dv">2</span><span class="sc">:</span><span class="dv">12</span>])</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(cities_matrix) <span class="ot">&lt;-</span> cities[,<span class="dv">1</span>] <span class="co"># add city names as row labels</span></span></code></pre></div>
+<div id="examining-the-correlation-matrix" class="section level3" number="3.2.1">
+<h3 number="3.2.1"><span class="header-section-number">3.2.1</span> Examining the correlation matrix</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cities[,<span class="dv">2</span><span class="sc">:</span><span class="dv">12</span>], <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">0.6</span>)</span></code></pre></div>
 <p><img src="lec16_files/figure-html/pca06b-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">cor</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(cities[,<span class="dv">2</span><span class="sc">:</span><span class="dv">12</span>])</span></code></pre></div>
 <pre><code>##                Area   Pop.1980   Pop.1990   Pop.2000     Growth       Food   PersRoom      Water
 ## Area      1.0000000  0.1776504  0.1482707  0.0811688 -0.3106659 -0.2277181 -0.5172160  0.2941461
 ## Pop.1980  0.1776504  1.0000000  0.9559486  0.7919490 -0.6935458 -0.5209447 -0.5664580  0.6213565
@@ -661,32 +678,28 @@ $(document).ready(function () {
 ## Vehicles  0.5019066  0.6303538  1.0000000</code></pre>
 <p>Matrix scatter plots, particularly those for a data set with a large number of variables are some times difficult to interpret. Two alternative plots are available: 1) a generalized depiction of the correlation matrix using the <code>corrplot()</code> function, and 2) a plot of the correlations as a network of links (“edges”) between variables (“nodes”) provided by the <code>qgraph()</code> function in the package of the same name.</p>
 <p>The <code>corrplot()</code> function displays the correlation matrix using a set of little ellipses that provide a generalized dipiction of the strength and sign of a correlation.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">library</span>(corrplot)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span></code></pre></div>
 <pre><code>## corrplot 0.84 loaded</code></pre>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">corrplot</span>(<span class="kw">cor</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>]), <span class="dt">method=</span><span class="st">&quot;ellipse&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(<span class="fu">cor</span>(cities[,<span class="dv">2</span><span class="sc">:</span><span class="dv">12</span>]), <span class="at">method=</span><span class="st">&quot;ellipse&quot;</span>)</span></code></pre></div>
 <p><img src="lec16_files/figure-html/pca07-1.png" width="2100" /></p>
 <p>An alternative is simply fill each cell with an appropriate color and shade.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">corrplot</span>(<span class="kw">cor</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>]), <span class="dt">method=</span><span class="st">&quot;color&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(<span class="fu">cor</span>(cities[,<span class="dv">2</span><span class="sc">:</span><span class="dv">12</span>]), <span class="at">method=</span><span class="st">&quot;color&quot;</span>)</span></code></pre></div>
 <p><img src="lec16_files/figure-html/pca08-1.png" width="2100" /></p>
 <p>Rectangular areas of similar sign and magnitude of the correlation identify groups of variables that tend to covary together across the observations. For example, the three population variables are postively correlated with one another, and are inversely correlated with <code>Growth</code>, <code>Food</code> and <code>PersRoom</code>.</p>
 <p>Another way of depicting the correlations is as a network of line segments, which are drawn to illustrate the strength and sign of the correlations between each pair of variables. This plotting procedure uses the <code>qgraph</code> package for plotting networks, defined here by the correlations among variables (and later, among variables and components).</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">library</span>(qgraph)</a></code></pre></div>
-<pre><code>## Registered S3 methods overwritten by &#39;huge&#39;:
-##   method    from   
-##   plot.sim  BDgraph
-##   print.sim BDgraph</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">qgraph</span>(<span class="kw">cor</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>]))</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(qgraph)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qgraph</span>(<span class="fu">cor</span>(cities[,<span class="dv">2</span><span class="sc">:</span><span class="dv">12</span>]))</span></code></pre></div>
 <p><img src="lec16_files/figure-html/pca09-1.png" width="2100" /></p>
 <p>Note that in the above plot, the variable names are abbreviated using just three characters. Most of the time this is enough.</p>
-<p>A modification of the basic <code>qgraph()</code> plot involves arranging the nodes in a way that locates more highly correlated variables closer to one another (a “force-embedded” layout), specified by the <code>layout=&quot;spring&quot;</code> argument. This approach uses the “Fruchterman-Reingold” algorithm that invokes the concept of spring tension pulling the nodes of the more highly correlated variables toward one another. The sign of the correlations are indicated by color: positive correlations are green, negative magenta (or red).</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">qgraph</span>(<span class="kw">cor</span>(cities[,<span class="dv">2</span><span class="op">:</span><span class="dv">12</span>]), <span class="dt">layout=</span><span class="st">&quot;spring&quot;</span>, <span class="dt">shape=</span><span class="st">&quot;rectangle&quot;</span>, <span class="dt">posCol=</span><span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol=</span><span class="st">&quot;darkmagenta&quot;</span>)</a></code></pre></div>
+<p>A modification of the basic <code>qgraph()</code> plot involves arranging the nodes in a way that locates more highly correlated variables closer to one another (a “force-embedded” layout), specified by the <code>layout="spring"</code> argument. This approach uses the “Fruchterman-Reingold” algorithm that invokes the concept of spring tension pulling the nodes of the more highly correlated variables toward one another. The sign of the correlations are indicated by color: positive correlations are green, negative magenta (or red).</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qgraph</span>(<span class="fu">cor</span>(cities[,<span class="dv">2</span><span class="sc">:</span><span class="dv">12</span>]), <span class="at">layout=</span><span class="st">&quot;spring&quot;</span>, <span class="at">shape=</span><span class="st">&quot;rectangle&quot;</span>, <span class="at">posCol=</span><span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol=</span><span class="st">&quot;darkmagenta&quot;</span>)</span></code></pre></div>
 <p><img src="lec16_files/figure-html/pca10-1.png" width="2100" /></p>
 </div>
-<div id="pca-of-the-cities-data" class="section level3">
-<h3><span class="header-section-number">3.2.2</span> PCA of the cities data</h3>
+<div id="pca-of-the-cities-data" class="section level3" number="3.2.2">
+<h3 number="3.2.2"><span class="header-section-number">3.2.2</span> PCA of the cities data</h3>
 <p>Here’s the principal components analysis of the cities data:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">cities_pca &lt;-<span class="st"> </span><span class="kw">princomp</span>(cities_matrix, <span class="dt">cor=</span>T)</a>
-<a class="sourceLine" id="cb25-2" data-line-number="2">cities_pca</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>cities_pca <span class="ot">&lt;-</span> <span class="fu">princomp</span>(cities_matrix, <span class="at">cor=</span>T)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>cities_pca</span></code></pre></div>
 <pre><code>## Call:
 ## princomp(x = cities_matrix, cor = T)
 ## 
@@ -697,7 +710,7 @@ $(document).ready(function () {
 ## 0.10314352 0.05779932 
 ## 
 ##  11  variables and  21 observations.</code></pre>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">summary</span>(cities_pca)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cities_pca)</span></code></pre></div>
 <pre><code>## Importance of components:
 ##                           Comp.1    Comp.2     Comp.3     Comp.4     Comp.5     Comp.6     Comp.7
 ## Standard deviation     2.4629420 1.3151570 1.00246883 0.92086602 0.83523273 0.50012846 0.48128911
@@ -707,9 +720,9 @@ $(document).ready(function () {
 ## Standard deviation     0.35702153 0.174687526 0.1031435150 0.0577993220
 ## Proportion of Variance 0.01158767 0.002774157 0.0009671441 0.0003037056
 ## Cumulative Proportion  0.99595499 0.998729150 0.9996962944 1.0000000000</code></pre>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">screeplot</span>(cities_pca)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">screeplot</span>(cities_pca)</span></code></pre></div>
 <p><img src="lec16_files/figure-html/pca11-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">loadings</span>(cities_pca)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">loadings</span>(cities_pca)</span></code></pre></div>
 <pre><code>## 
 ## Loadings:
 ##          Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6 Comp.7 Comp.8 Comp.9 Comp.10 Comp.11
@@ -729,31 +742,31 @@ $(document).ready(function () {
 ## SS loadings     1.000  1.000  1.000  1.000  1.000  1.000  1.000  1.000  1.000   1.000   1.000
 ## Proportion Var  0.091  0.091  0.091  0.091  0.091  0.091  0.091  0.091  0.091   0.091   0.091
 ## Cumulative Var  0.091  0.182  0.273  0.364  0.455  0.545  0.636  0.727  0.818   0.909   1.000</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">biplot</span>(cities_pca, <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;black&quot;</span>,<span class="st">&quot;red&quot;</span>), <span class="dt">cex=</span><span class="kw">c</span>(<span class="fl">0.7</span>,<span class="fl">0.8</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">biplot</span>(cities_pca, <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,<span class="st">&quot;red&quot;</span>), <span class="at">cex=</span><span class="fu">c</span>(<span class="fl">0.7</span>,<span class="fl">0.8</span>))</span></code></pre></div>
 <p><img src="lec16_files/figure-html/pca11-2.png" width="2100" /></p>
 <p>In this case, there were two “important components” and a third that was pretty important, as evidenced by the break in slope of the “screeplot”. The biplot diplays both the <em>loadings</em> (correlations between the original variables and the components) as lablelled vectors, and the component <em>scores</em> as either symbols, or as here when the matrix has rownames, as labels.</p>
 <p>The biplot and table of component loadings indicate that the first component includes variables that (more-or-less) trade off developed-world cities against developing-world ones. (Note the opposing directions of the vectors that are sub-parallel to the x-axis.) The second component (population) is noted by vectors and loadings that are (more-or-less) at right angles to the first set, and sub-parallel to the y-axis. (But note that the vector for <code>Pop.1980</code> is actually more parallel to the x-axis than the y.)</p>
 <p>An alternative visualization of the principal component and their relationship with the original variables is provided by the <code>qgraph()</code> function. The original variables are indicted by three-character abbreviations, and the components by numbered nodes.</p>
-<p>To implement this, it would be convenient to create a function that creates a <code>qgraph</code> loadings plot. This is done in two stages, the first creating a standard <code>qplot</code>, and the second applying the <code>layout = &quot;spring&quot;</code> argument. Here is the function:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co"># define a function for producing qgraphs of loadings</span></a>
-<a class="sourceLine" id="cb33-2" data-line-number="2">qgraph_loadings_plot &lt;-<span class="st"> </span><span class="cf">function</span>(loadings_in, title) {</a>
-<a class="sourceLine" id="cb33-3" data-line-number="3">  ld &lt;-<span class="st"> </span><span class="kw">loadings</span>(loadings_in)</a>
-<a class="sourceLine" id="cb33-4" data-line-number="4">  qg_pca &lt;-<span class="st"> </span><span class="kw">qgraph</span>(ld, <span class="dt">title=</span>title, </a>
-<a class="sourceLine" id="cb33-5" data-line-number="5">                   <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>, </a>
-<a class="sourceLine" id="cb33-6" data-line-number="6">                   <span class="dt">labels=</span><span class="kw">attr</span>(ld, <span class="st">&quot;dimnames&quot;</span>)[[<span class="dv">1</span>]])</a>
-<a class="sourceLine" id="cb33-7" data-line-number="7">  <span class="kw">qgraph</span>(qg_pca, <span class="dt">title=</span>title,</a>
-<a class="sourceLine" id="cb33-8" data-line-number="8">         <span class="dt">layout =</span> <span class="st">&quot;spring&quot;</span>, </a>
-<a class="sourceLine" id="cb33-9" data-line-number="9">         <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb33-10" data-line-number="10">         <span class="dt">node.height=</span><span class="fl">0.5</span>, <span class="dt">node.width=</span><span class="fl">0.5</span>, <span class="dt">vTrans=</span><span class="dv">255</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span>, <span class="dt">label.cex=</span><span class="fl">1.0</span>,</a>
-<a class="sourceLine" id="cb33-11" data-line-number="11">         <span class="dt">width=</span><span class="dv">7</span>, <span class="dt">height=</span><span class="dv">5</span>, <span class="dt">normalize=</span><span class="ot">TRUE</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span>)</a>
-<a class="sourceLine" id="cb33-12" data-line-number="12">}</a></code></pre></div>
+<p>To implement this, it would be convenient to create a function that creates a <code>qgraph</code> loadings plot. This is done in two stages, the first creating a standard <code>qplot</code>, and the second applying the <code>layout = "spring"</code> argument. Here is the function:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define a function for producing qgraphs of loadings</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>qgraph_loadings_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(loadings_in, title) {</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  ld <span class="ot">&lt;-</span> <span class="fu">loadings</span>(loadings_in)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  qg_pca <span class="ot">&lt;-</span> <span class="fu">qgraph</span>(ld, <span class="at">title=</span>title, </span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">labels=</span><span class="fu">attr</span>(ld, <span class="st">&quot;dimnames&quot;</span>)[[<span class="dv">1</span>]])</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">qgraph</span>(qg_pca, <span class="at">title=</span>title,</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">layout =</span> <span class="st">&quot;spring&quot;</span>, </span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">node.height=</span><span class="fl">0.5</span>, <span class="at">node.width=</span><span class="fl">0.5</span>, <span class="at">vTrans=</span><span class="dv">255</span>, <span class="at">edge.width=</span><span class="fl">0.75</span>, <span class="at">label.cex=</span><span class="fl">1.0</span>,</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">width=</span><span class="dv">7</span>, <span class="at">height=</span><span class="dv">5</span>, <span class="at">normalize=</span><span class="cn">TRUE</span>, <span class="at">edge.width=</span><span class="fl">0.75</span>)</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>The function has two arguments, a principle components object, from which loadings can be extracted, plus a title.</p>
 <p>The <code>princomp()</code> function returns all <em>p</em> components, but the intial analysis suggests that only two, or possibly three components are meaningful. To manage the number of components that are “extracted” (as well as to implement other aspects of the analysis), we can use the <code>psych</code> package:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">library</span>(psych)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span></code></pre></div>
 <p>The <code>qgraph</code> plot is then created by reextracting only two components in this case, and then sending the object created by te <code>principal()</code> function to the <code>qgraph_loadings_plot()</code> function we created above.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co"># unrotated components</span></a>
-<a class="sourceLine" id="cb35-2" data-line-number="2">cities_pca_unrot &lt;-<span class="st"> </span><span class="kw">principal</span>(cities_matrix, <span class="dt">nfactors=</span><span class="dv">2</span>, <span class="dt">rotate=</span><span class="st">&quot;none&quot;</span>)</a>
-<a class="sourceLine" id="cb35-3" data-line-number="3">cities_pca_unrot</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># unrotated components</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>cities_pca_unrot <span class="ot">&lt;-</span> <span class="fu">principal</span>(cities_matrix, <span class="at">nfactors=</span><span class="dv">2</span>, <span class="at">rotate=</span><span class="st">&quot;none&quot;</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>cities_pca_unrot</span></code></pre></div>
 <pre><code>## Principal Components Analysis
 ## Call: principal(r = cities_matrix, nfactors = 2, rotate = &quot;none&quot;)
 ## Standardized loadings (pattern matrix) based upon correlation matrix
@@ -784,7 +797,7 @@ $(document).ready(function () {
 ##  with the empirical chi square  21.58  with prob &lt;  0.95 
 ## 
 ## Fit based upon off diagonal values = 0.97</code></pre>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">summary</span>(cities_pca_unrot)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cities_pca_unrot)</span></code></pre></div>
 <pre><code>## 
 ## Factor analysis with Call: principal(r = cities_matrix, nfactors = 2, rotate = &quot;none&quot;)
 ## 
@@ -793,19 +806,19 @@ $(document).ready(function () {
 ## The number of observations was  21  with Chi Square =  97.36  with prob &lt;  5e-08 
 ## 
 ## The root mean square of the residuals (RMSA) is  0.1</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">qgraph_loadings_plot</span>(cities_pca_unrot, <span class="st">&quot;Unrotated component loadings&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qgraph_loadings_plot</span>(cities_pca_unrot, <span class="st">&quot;Unrotated component loadings&quot;</span>)</span></code></pre></div>
 <p><img src="lec16_files/figure-html/pca12-1.png" width="2100" /><img src="lec16_files/figure-html/pca12-2.png" width="2100" /></p>
 <p>The first plot shows the two components in the middle and the original variables arranged in an ellipse or circle around the components. Positive loadings are shown in green, negative in magenta, with the magnitude of the loadings shown by the width of the network “edges”. The second plot uses the “spring” method to rearrange the plot so that the length of the edges and arrangement of components and variables reflects the magnitude of the loadings.</p>
 </div>
 </div>
-<div id="rotation-of-principal-components" class="section level2">
-<h2><span class="header-section-number">3.3</span> “Rotation” of principal components</h2>
+<div id="rotation-of-principal-components" class="section level2" number="3.3">
+<h2 number="3.3"><span class="header-section-number">3.3</span> “Rotation” of principal components</h2>
 <p>The interpretation of the components (which is governed by the loadings–the correlations of the original varialbles with the newly created components) can be enhanced by “rotation” which could be thought of a set of coordinated adjustments of the vectors on a biplot. There is not single optimal way of doing rotations, but probably the most common approach is “varimax” rotation in which the components are adjusted in a way that makes the loadings either high positive (or negative) or zero, while keeping the components uncorrelated or orthogonal. One side-product of rotation is that the first, or principal components is no longer optimal or the most efficient single-variable summary of the data set, but losing that property is often worth the incraese in interpretability. The <code>principal()</code> function in the <code>psych</code> package also implements rotation of principal components.</p>
 <p>Note the location and linkages of <code>Pop.1980</code> in the plot.</p>
 <p>Here’s the result with rotated components:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="co"># rotated components</span></a>
-<a class="sourceLine" id="cb40-2" data-line-number="2">cities_pca_rot &lt;-<span class="st"> </span><span class="kw">principal</span>(cities_matrix, <span class="dt">nfactors=</span><span class="dv">2</span>, <span class="dt">rotate=</span><span class="st">&quot;varimax&quot;</span>)</a>
-<a class="sourceLine" id="cb40-3" data-line-number="3">cities_pca_rot</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rotated components</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>cities_pca_rot <span class="ot">&lt;-</span> <span class="fu">principal</span>(cities_matrix, <span class="at">nfactors=</span><span class="dv">2</span>, <span class="at">rotate=</span><span class="st">&quot;varimax&quot;</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>cities_pca_rot</span></code></pre></div>
 <pre><code>## Principal Components Analysis
 ## Call: principal(r = cities_matrix, nfactors = 2, rotate = &quot;varimax&quot;)
 ## Standardized loadings (pattern matrix) based upon correlation matrix
@@ -836,7 +849,7 @@ $(document).ready(function () {
 ##  with the empirical chi square  21.58  with prob &lt;  0.95 
 ## 
 ## Fit based upon off diagonal values = 0.97</code></pre>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="kw">summary</span>(cities_pca_rot)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cities_pca_rot)</span></code></pre></div>
 <pre><code>## 
 ## Factor analysis with Call: principal(r = cities_matrix, nfactors = 2, rotate = &quot;varimax&quot;)
 ## 
@@ -845,21 +858,21 @@ $(document).ready(function () {
 ## The number of observations was  21  with Chi Square =  97.36  with prob &lt;  5e-08 
 ## 
 ## The root mean square of the residuals (RMSA) is  0.1</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="kw">biplot.psych</span>(cities_pca_rot, <span class="dt">labels=</span><span class="kw">rownames</span>(cities_matrix), <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;black&quot;</span>,<span class="st">&quot;red&quot;</span>), <span class="dt">cex=</span><span class="kw">c</span>(<span class="fl">0.7</span>,<span class="fl">0.8</span>),</a>
-<a class="sourceLine" id="cb44-2" data-line-number="2">  <span class="dt">xlim.s=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">3</span>,<span class="dv">3</span>), <span class="dt">ylim.s=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>,<span class="dv">4</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">biplot.psych</span>(cities_pca_rot, <span class="at">labels=</span><span class="fu">rownames</span>(cities_matrix), <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,<span class="st">&quot;red&quot;</span>), <span class="at">cex=</span><span class="fu">c</span>(<span class="fl">0.7</span>,<span class="fl">0.8</span>),</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim.s=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>), <span class="at">ylim.s=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>,<span class="dv">4</span>))</span></code></pre></div>
 <p><img src="lec16_files/figure-html/pca16-1.png" width="2100" /> … and the <code>qgraph()</code> plot of the rotated-component results:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="kw">qgraph_loadings_plot</span>(cities_pca_rot, <span class="st">&quot;Rotated component loadings&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qgraph_loadings_plot</span>(cities_pca_rot, <span class="st">&quot;Rotated component loadings&quot;</span>)</span></code></pre></div>
 <p><img src="lec16_files/figure-html/pca17-1.png" width="2100" /><img src="lec16_files/figure-html/pca17-2.png" width="2100" /></p>
 <p>Notice that now all three population variables are now “most highly loaded on” the second component.</p>
 <p><a href="lec16.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="factor-analyis-fa-and-pca" class="section level1">
-<h1><span class="header-section-number">4</span> Factor analyis (FA) and PCA</h1>
+<div id="factor-analyis-fa-and-pca" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> Factor analyis (FA) and PCA</h1>
 <p><em>Factor analysis (FA)</em> can be thought of as a parallel analysis to PCA, and in some ways PCA and be viewed as a special case of FA. Despite their names being used indiscriminantly, the two alaysis do have differing underlying models:</p>
 <ul>
 <li>PCA: maximum variance, maximum simultaneous resemblance motivations</li>
-<li>Factor Analysis: variables are assembled from two major components common “factors” and “unique” factors, e.g. <strong>X</strong> = <strong>m</strong> + <strong>Lf</strong> + <strong>u</strong>, where <strong>X</strong> is a maxrix of data, <strong>m</strong> is the (vector) mean of the variables, <strong>L</strong> is a <em>p</em> x <em>k</em> matrix of factor loadings <strong>f</strong> and <strong>u</strong> are random vectors representing the underlying common and unique factors.</li>
+<li>Factor Analysis: variables are assembled from two major components common “factors” and “unique” factors, e.g.  <strong>X</strong> = <strong>m</strong> + <strong>Lf</strong> + <strong>u</strong>, where <strong>X</strong> is a maxrix of data, <strong>m</strong> is the (vector) mean of the variables, <strong>L</strong> is a <em>p</em> x <em>k</em> matrix of factor loadings <strong>f</strong> and <strong>u</strong> are random vectors representing the underlying common and unique factors.</li>
 </ul>
 <p>The model underlying factor analysis is:</p>
 <p><em>data = common factors + unique factors</em></p>
@@ -869,12 +882,12 @@ $(document).ready(function () {
 <li>easier interpretation</li>
 <li>in geographical data: regionalization</li>
 </ul>
-<div id="example-of-a-factor-analysis" class="section level2">
-<h2><span class="header-section-number">4.1</span> Example of a factor analysis</h2>
+<div id="example-of-a-factor-analysis" class="section level2" number="4.1">
+<h2 number="4.1"><span class="header-section-number">4.1</span> Example of a factor analysis</h2>
 <p>Here’s a factor analysis of the large-cities data set using the <code>factanal()</code> function:</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="co"># cities_fa1 -- factor analysis of cities data -- no rotation</span></a>
-<a class="sourceLine" id="cb46-2" data-line-number="2">cities_fa1 &lt;-<span class="st"> </span><span class="kw">factanal</span>(cities_matrix, <span class="dt">factors=</span><span class="dv">2</span>, <span class="dt">rotation=</span><span class="st">&quot;none&quot;</span>, <span class="dt">scores=</span><span class="st">&quot;regression&quot;</span>)</a>
-<a class="sourceLine" id="cb46-3" data-line-number="3">cities_fa1</a></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cities_fa1 -- factor analysis of cities data -- no rotation</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>cities_fa1 <span class="ot">&lt;-</span> <span class="fu">factanal</span>(cities_matrix, <span class="at">factors=</span><span class="dv">2</span>, <span class="at">rotation=</span><span class="st">&quot;none&quot;</span>, <span class="at">scores=</span><span class="st">&quot;regression&quot;</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>cities_fa1</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## factanal(x = cities_matrix, factors = 2, scores = &quot;regression&quot;,     rotation = &quot;none&quot;)
@@ -905,17 +918,17 @@ $(document).ready(function () {
 ## Test of the hypothesis that 2 factors are sufficient.
 ## The chi square statistic is 83.44 on 34 degrees of freedom.
 ## The p-value is 4.86e-06</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="kw">biplot</span>(cities_fa1<span class="op">$</span>scores[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="kw">loadings</span>(cities_fa1), <span class="dt">cex=</span><span class="kw">c</span>(<span class="fl">0.7</span>,<span class="fl">0.8</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">biplot</span>(cities_fa1<span class="sc">$</span>scores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="fu">loadings</span>(cities_fa1), <span class="at">cex=</span><span class="fu">c</span>(<span class="fl">0.7</span>,<span class="fl">0.8</span>))</span></code></pre></div>
 <p><img src="lec16_files/figure-html/fa02-1.png" width="2100" /></p>
 <p>Notice that the biplot looks much the same as that for PCA (as to the loadings, which have the same interpretation–as correlations between the factors and the original variables). A new element of the factor analysis output is the “Uniquenesses” table, which, as it says, describes the uniqueness of individual variables, where values near 1.0 indicate variables that are tending to measure unique properties in the data set, while values near 0.0 indicate variables that are duplicated in a sense by other variables in the data set.</p>
 <p>Here’s the <code>qgraph</code> plot:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="kw">qgraph_loadings_plot</span>(cities_fa1, <span class="st">&quot;Factor analysis&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qgraph_loadings_plot</span>(cities_fa1, <span class="st">&quot;Factor analysis&quot;</span>)</span></code></pre></div>
 <p><img src="lec16_files/figure-html/fa03-1.png" width="2100" /><img src="lec16_files/figure-html/fa03-2.png" width="2100" /></p>
 <p>Note the “external” line segments that are scaled to the uniqueness values of each variable, and represent sources of variability extraneous to (or outside of) that generated by the factors.</p>
 <p>Here is a “rotated” factor analysis:</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="co"># cities_fa2 -- factor analysis of cities data -- varimax rotation</span></a>
-<a class="sourceLine" id="cb50-2" data-line-number="2">cities_fa2 &lt;-<span class="st"> </span><span class="kw">factanal</span>(cities_matrix, <span class="dt">factors=</span><span class="dv">2</span>, <span class="dt">rotation=</span><span class="st">&quot;varimax&quot;</span>, <span class="dt">scores=</span><span class="st">&quot;regression&quot;</span>)</a>
-<a class="sourceLine" id="cb50-3" data-line-number="3">cities_fa2</a></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cities_fa2 -- factor analysis of cities data -- varimax rotation</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>cities_fa2 <span class="ot">&lt;-</span> <span class="fu">factanal</span>(cities_matrix, <span class="at">factors=</span><span class="dv">2</span>, <span class="at">rotation=</span><span class="st">&quot;varimax&quot;</span>, <span class="at">scores=</span><span class="st">&quot;regression&quot;</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>cities_fa2</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## factanal(x = cities_matrix, factors = 2, scores = &quot;regression&quot;,     rotation = &quot;varimax&quot;)
@@ -946,17 +959,17 @@ $(document).ready(function () {
 ## Test of the hypothesis that 2 factors are sufficient.
 ## The chi square statistic is 83.44 on 34 degrees of freedom.
 ## The p-value is 4.86e-06</code></pre>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1"><span class="kw">biplot</span>(cities_fa2<span class="op">$</span>scores[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="kw">loadings</span>(cities_fa2), <span class="dt">cex=</span><span class="kw">c</span>(<span class="fl">0.7</span>,<span class="fl">0.8</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">biplot</span>(cities_fa2<span class="sc">$</span>scores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="fu">loadings</span>(cities_fa2), <span class="at">cex=</span><span class="fu">c</span>(<span class="fl">0.7</span>,<span class="fl">0.8</span>))</span></code></pre></div>
 <p><img src="lec16_files/figure-html/fa04-1.png" width="2100" /></p>
 <p>… and the <code>qgraph</code> plot:</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="kw">library</span>(qgraph)</a>
-<a class="sourceLine" id="cb53-2" data-line-number="2"><span class="kw">qgraph_loadings_plot</span>(cities_fa2, <span class="st">&quot;Factor analysis -- rotated factors&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(qgraph)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qgraph_loadings_plot</span>(cities_fa2, <span class="st">&quot;Factor analysis -- rotated factors&quot;</span>)</span></code></pre></div>
 <p><img src="lec16_files/figure-html/fa05-1.png" width="2100" /><img src="lec16_files/figure-html/fa05-2.png" width="2100" /></p>
 <p><a href="lec16.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="a-second-example-controls-of-mid-holocene-aridity-in-eurasia" class="section level1">
-<h1><span class="header-section-number">5</span> A second example: Controls of mid-Holocene aridity in Eurasia</h1>
+<div id="a-second-example-controls-of-mid-holocene-aridity-in-eurasia" class="section level1" number="5">
+<h1 number="5"><span class="header-section-number">5</span> A second example: Controls of mid-Holocene aridity in Eurasia</h1>
 <p>The data set here is a “stacked” data set of output from thirteen “PMIP3” simulations of mid-Holocene climate (in particular, the long-term mean differences between the mid-Holocene simulations and those for the pre-industrial period) for a region in northern Eurasia. The objective of the analysis was to examine the systematic relationship among a number of different climate variables as part of understanding the mismatch between the simulations and paleoenvironmental observations (reconstructions), where the simulations were in general drier and warmer than the climate reconstructed from the data. (See Bartlein, P.J., S.P. Harrison and K. Izumi, 2017, Underlying causes of Eurasian mid-continental aridity in simulations of mid-Holocene climate, <em>Geophysical Research Letters</em> 44:1-9, <a href="http://dx.doi.org/10.1002/2017GL074476">http://dx.doi.org/10.1002/2017GL074476</a>)</p>
 <p>The variables include:</p>
 <ul>
@@ -991,13 +1004,13 @@ $(document).ready(function () {
 <li><code>snd</code>: Snow depth</li>
 </ul>
 <p>The data set was assebled by stacking the monthly long-term mean differneces from each model on top of one another, creating a 13 x 12 row by 24 column array. This arrangement of the data will reveal the common variations in the seasonal cycles of the long-term mean differences.</p>
-<div id="read-and-transform-the-data" class="section level2">
-<h2><span class="header-section-number">5.1</span> Read and transform the data</h2>
+<div id="read-and-transform-the-data" class="section level2" number="5.1">
+<h2 number="5.1"><span class="header-section-number">5.1</span> Read and transform the data</h2>
 <p>Load necessary packages.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="co"># pca of multimodel means</span></a>
-<a class="sourceLine" id="cb54-2" data-line-number="2"><span class="kw">library</span>(corrplot)</a>
-<a class="sourceLine" id="cb54-3" data-line-number="3"><span class="kw">library</span>(qgraph)</a>
-<a class="sourceLine" id="cb54-4" data-line-number="4"><span class="kw">library</span>(psych)</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pca of multimodel means</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(qgraph)</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span></code></pre></div>
 <p>Read the data:</p>
 <pre><code>##  [1] &quot;Kext&quot;  &quot;Kn&quot;    &quot;Ln&quot;    &quot;Qn&quot;    &quot;Qe&quot;    &quot;Qh&quot;    &quot;Qg&quot;    &quot;bowen&quot; &quot;alb&quot;   &quot;ta&quot;    &quot;tas&quot;   &quot;ts&quot;   
 ## [13] &quot;ua&quot;    &quot;va&quot;    &quot;omg&quot;   &quot;uas&quot;   &quot;vas&quot;   &quot;slp&quot;   &quot;Qdv&quot;   &quot;shm&quot;   &quot;clt&quot;   &quot;pre&quot;   &quot;evap&quot;  &quot;pme&quot;  
@@ -1050,53 +1063,53 @@ $(document).ready(function () {
 ##  3rd Qu.: 0.000247   3rd Qu.: 0.044000   3rd Qu.: 0.0156750  
 ##  Max.   : 0.439200   Max.   : 0.262900   Max.   : 0.0593000  
 ##                                          NA&#39;s   :2</code></pre>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="co"># read data</span></a>
-<a class="sourceLine" id="cb57-2" data-line-number="2">datapath &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/csv/&quot;</span></a>
-<a class="sourceLine" id="cb57-3" data-line-number="3">csvfile &lt;-<span class="st"> &quot;aavesModels_ltmdiff_NEurAsia.csv&quot;</span></a>
-<a class="sourceLine" id="cb57-4" data-line-number="4">input_data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">paste</span>(datapath, csvfile, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb57-5" data-line-number="5">mm_data_in &lt;-<span class="st"> </span>input_data[,<span class="dv">3</span><span class="op">:</span><span class="dv">30</span>]</a>
-<a class="sourceLine" id="cb57-6" data-line-number="6"><span class="kw">names</span>(mm_data_in)</a>
-<a class="sourceLine" id="cb57-7" data-line-number="7"><span class="kw">summary</span>(mm_data_in)</a></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read data</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>datapath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Documents/geog495/data/csv/&quot;</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>csvfile <span class="ot">&lt;-</span> <span class="st">&quot;aavesModels_ltmdiff_NEurAsia.csv&quot;</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>input_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">paste</span>(datapath, csvfile, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>mm_data_in <span class="ot">&lt;-</span> input_data[,<span class="dv">3</span><span class="sc">:</span><span class="dv">30</span>]</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(mm_data_in)</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mm_data_in)</span></code></pre></div>
 <p>There are a few fix-ups to do. Recode a few missing (NA) values of snow depth to 0.0:</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1"><span class="co"># recode a few NA&#39;s to zero</span></a>
-<a class="sourceLine" id="cb58-2" data-line-number="2">mm_data_in<span class="op">$</span>snd[<span class="kw">is.na</span>(mm_data_in<span class="op">$</span>snd)] &lt;-<span class="st"> </span><span class="fl">0.0</span></a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># recode a few NA&#39;s to zero</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>mm_data_in<span class="sc">$</span>snd[<span class="fu">is.na</span>(mm_data_in<span class="sc">$</span>snd)] <span class="ot">&lt;-</span> <span class="fl">0.0</span></span></code></pre></div>
 <p>Remove some uncessary or redundant variable:</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="co"># remove uneccesary variables</span></a>
-<a class="sourceLine" id="cb59-2" data-line-number="2">dropvars &lt;-<span class="st"> </span><span class="kw">names</span>(mm_data_in) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Kext&quot;</span>,<span class="st">&quot;bowen&quot;</span>,<span class="st">&quot;sm&quot;</span>,<span class="st">&quot;evap&quot;</span>)</a>
-<a class="sourceLine" id="cb59-3" data-line-number="3">mm_data &lt;-<span class="st"> </span>mm_data_in[<span class="op">!</span>dropvars]</a>
-<a class="sourceLine" id="cb59-4" data-line-number="4"><span class="kw">names</span>(mm_data)</a></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove uneccesary variables</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>dropvars <span class="ot">&lt;-</span> <span class="fu">names</span>(mm_data_in) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Kext&quot;</span>,<span class="st">&quot;bowen&quot;</span>,<span class="st">&quot;sm&quot;</span>,<span class="st">&quot;evap&quot;</span>)</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>mm_data <span class="ot">&lt;-</span> mm_data_in[<span class="sc">!</span>dropvars]</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(mm_data)</span></code></pre></div>
 <pre><code>##  [1] &quot;Kn&quot;  &quot;Ln&quot;  &quot;Qn&quot;  &quot;Qe&quot;  &quot;Qh&quot;  &quot;Qg&quot;  &quot;alb&quot; &quot;ta&quot;  &quot;tas&quot; &quot;ts&quot;  &quot;ua&quot;  &quot;va&quot;  &quot;omg&quot; &quot;uas&quot; &quot;vas&quot; &quot;slp&quot;
 ## [17] &quot;Qdv&quot; &quot;shm&quot; &quot;clt&quot; &quot;pre&quot; &quot;pme&quot; &quot;ro&quot;  &quot;dS&quot;  &quot;snd&quot;</code></pre>
 </div>
-<div id="correlations-among-variables" class="section level2">
-<h2><span class="header-section-number">5.2</span> Correlations among variables</h2>
+<div id="correlations-among-variables" class="section level2" number="5.2">
+<h2 number="5.2"><span class="header-section-number">5.2</span> Correlations among variables</h2>
 <p>It’s useful to look at the correlations among the long-term mean differences among the variables. This could be done using a matrix scatterplot (<code>plot(mm_data, pch=16, cex=0.5</code>), but there are enough variables (24) to make that difficult to interpret. Another approach is to look at a <code>corrplot()</code> image:</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1">cor_mm_data &lt;-<span class="st"> </span><span class="kw">cor</span>(mm_data)</a>
-<a class="sourceLine" id="cb61-2" data-line-number="2"><span class="kw">corrplot</span>(cor_mm_data, <span class="dt">method=</span><span class="st">&quot;color&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>cor_mm_data <span class="ot">&lt;-</span> <span class="fu">cor</span>(mm_data)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(cor_mm_data, <span class="at">method=</span><span class="st">&quot;color&quot;</span>)</span></code></pre></div>
 <p><img src="lec16_files/figure-html/unnamed-chunk-7-1.png" width="2100" /></p>
 <p>The plaid-like appearance of the plot suggests that there are several groups of variables whose variations of long-term mean differences throughout the year are similar.</p>
 <p>The correlations can also be illustrated by plotting the correlations as a network graph using the <code>qgraph()</code> function, with the strength of the correlations indicated by the width of the lines (or “edges”), and the sign by the color (green = positive and magenta = negative).</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1"><span class="kw">qgraph</span>(cor_mm_data, <span class="dt">title=</span><span class="st">&quot;Correlations, multi-model ltm differences over months&quot;</span>,</a>
-<a class="sourceLine" id="cb62-2" data-line-number="2">  <span class="co"># layout = &quot;spring&quot;, </span></a>
-<a class="sourceLine" id="cb62-3" data-line-number="3">  <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb62-4" data-line-number="4">  <span class="dt">node.height=</span><span class="fl">0.5</span>, <span class="dt">node.width=</span><span class="fl">0.5</span>, <span class="dt">vTrans=</span><span class="dv">255</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span>, <span class="dt">label.cex=</span><span class="fl">1.0</span>,</a>
-<a class="sourceLine" id="cb62-5" data-line-number="5">  <span class="dt">width=</span><span class="dv">7</span>, <span class="dt">height=</span><span class="dv">5</span>, <span class="dt">normalize=</span><span class="ot">TRUE</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span> ) </a></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qgraph</span>(cor_mm_data, <span class="at">title=</span><span class="st">&quot;Correlations, multi-model ltm differences over months&quot;</span>,</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># layout = &quot;spring&quot;, </span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">node.height=</span><span class="fl">0.5</span>, <span class="at">node.width=</span><span class="fl">0.5</span>, <span class="at">vTrans=</span><span class="dv">255</span>, <span class="at">edge.width=</span><span class="fl">0.75</span>, <span class="at">label.cex=</span><span class="fl">1.0</span>,</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">width=</span><span class="dv">7</span>, <span class="at">height=</span><span class="dv">5</span>, <span class="at">normalize=</span><span class="cn">TRUE</span>, <span class="at">edge.width=</span><span class="fl">0.75</span> ) </span></code></pre></div>
 <p><img src="lec16_files/figure-html/unnamed-chunk-8-1.png" width="2100" /></p>
 <p>A useful variant of this plot is provided by using the strength of the correlations to arrange the nodes (i.e. the variables). This is done by using the “Fruchterman-Reingold” algorithm that invokes the concept of spring tension pulling the nodes of the more highly correlated variables toward one another.</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="kw">qgraph</span>(cor_mm_data, <span class="dt">title=</span><span class="st">&quot;Correlations, multi-model ltm differences over months&quot;</span>,</a>
-<a class="sourceLine" id="cb63-2" data-line-number="2">  <span class="dt">layout =</span> <span class="st">&quot;spring&quot;</span>, <span class="dt">repulsion =</span> <span class="fl">0.75</span>,</a>
-<a class="sourceLine" id="cb63-3" data-line-number="3">  <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb63-4" data-line-number="4">  <span class="dt">node.height=</span><span class="fl">0.5</span>, <span class="dt">node.width=</span><span class="fl">0.5</span>, <span class="dt">vTrans=</span><span class="dv">255</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span>, <span class="dt">label.cex=</span><span class="fl">1.0</span>,</a>
-<a class="sourceLine" id="cb63-5" data-line-number="5">  <span class="dt">width=</span><span class="dv">7</span>, <span class="dt">height=</span><span class="dv">5</span>, <span class="dt">normalize=</span><span class="ot">TRUE</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span> ) </a></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qgraph</span>(cor_mm_data, <span class="at">title=</span><span class="st">&quot;Correlations, multi-model ltm differences over months&quot;</span>,</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">layout =</span> <span class="st">&quot;spring&quot;</span>, <span class="at">repulsion =</span> <span class="fl">0.75</span>,</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">node.height=</span><span class="fl">0.5</span>, <span class="at">node.width=</span><span class="fl">0.5</span>, <span class="at">vTrans=</span><span class="dv">255</span>, <span class="at">edge.width=</span><span class="fl">0.75</span>, <span class="at">label.cex=</span><span class="fl">1.0</span>,</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">width=</span><span class="dv">7</span>, <span class="at">height=</span><span class="dv">5</span>, <span class="at">normalize=</span><span class="cn">TRUE</span>, <span class="at">edge.width=</span><span class="fl">0.75</span> ) </span></code></pre></div>
 <p><img src="lec16_files/figure-html/unnamed-chunk-9-1.png" width="2100" /></p>
-<p>We can already see that there are groups of variables that are highly correlated with one another. For example the three temperatures variables (<code>tas</code> (2-m air temperature), <code>ts</code> (surface or “skin” temperature), <code>ta</code> (850mb temperature)), are plotted close to one another, as are some of the surface energy-balance variables (e.g. <code>Qn</code> and <code>Kn</code>, net radiation and net shortwave radiation).</p>
+<p>We can already see that there are groups of variables that are highly correlated with one another. For example the three temperatures variables (<code>tas</code> (2-m air temperature), <code>ts</code> (surface or “skin” temperature), <code>ta</code> (850mb temperature)), are plotted close to one another, as are some of the surface energy-balance variables (e.g. <code>Qn</code> and <code>Kn</code>, net radiation and net shortwave radiation).</p>
 </div>
-<div id="pca-of-the-pmip-3-data" class="section level2">
-<h2><span class="header-section-number">5.3</span> PCA of the PMIP 3 data</h2>
+<div id="pca-of-the-pmip-3-data" class="section level2" number="5.3">
+<h2 number="5.3"><span class="header-section-number">5.3</span> PCA of the PMIP 3 data</h2>
 <p>Do a principal components analysis of the long-term mean differneces using the <code>principal()</code> function from the <code>psych</code> package. Initially, extract eight components:</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1">nfactors &lt;-<span class="st"> </span><span class="dv">8</span></a>
-<a class="sourceLine" id="cb64-2" data-line-number="2">mm_pca_unrot &lt;-<span class="st"> </span><span class="kw">principal</span>(mm_data, <span class="dt">nfactors =</span> nfactors, <span class="dt">rotate =</span> <span class="st">&quot;none&quot;</span>)</a>
-<a class="sourceLine" id="cb64-3" data-line-number="3">mm_pca_unrot</a></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>nfactors <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>mm_pca_unrot <span class="ot">&lt;-</span> <span class="fu">principal</span>(mm_data, <span class="at">nfactors =</span> nfactors, <span class="at">rotate =</span> <span class="st">&quot;none&quot;</span>)</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>mm_pca_unrot</span></code></pre></div>
 <pre><code>## Principal Components Analysis
 ## Call: principal(r = mm_data, nfactors = nfactors, rotate = &quot;none&quot;)
 ## Standardized loadings (pattern matrix) based upon correlation matrix
@@ -1141,9 +1154,9 @@ $(document).ready(function () {
 ## 
 ## Fit based upon off diagonal values = 1</code></pre>
 <p>The analysis suggests that only five components are as “important” as any of the original (standardized) variables, so repeate the analysis extracting just five components:</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1">nfactors &lt;-<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb66-2" data-line-number="2">mm_pca_unrot &lt;-<span class="st"> </span><span class="kw">principal</span>(mm_data, <span class="dt">nfactors =</span> nfactors, <span class="dt">rotate =</span> <span class="st">&quot;none&quot;</span>)</a>
-<a class="sourceLine" id="cb66-3" data-line-number="3">mm_pca_unrot</a></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>nfactors <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>mm_pca_unrot <span class="ot">&lt;-</span> <span class="fu">principal</span>(mm_data, <span class="at">nfactors =</span> nfactors, <span class="at">rotate =</span> <span class="st">&quot;none&quot;</span>)</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>mm_pca_unrot</span></code></pre></div>
 <pre><code>## Principal Components Analysis
 ## Call: principal(r = mm_data, nfactors = nfactors, rotate = &quot;none&quot;)
 ## Standardized loadings (pattern matrix) based upon correlation matrix
@@ -1187,7 +1200,7 @@ $(document).ready(function () {
 ##  with the empirical chi square  231.12  with prob &lt;  0.00063 
 ## 
 ## Fit based upon off diagonal values = 0.99</code></pre>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1"><span class="kw">loadings</span>(mm_pca_unrot)</a></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">loadings</span>(mm_pca_unrot)</span></code></pre></div>
 <pre><code>## 
 ## Loadings:
 ##     PC1    PC2    PC3    PC4    PC5   
@@ -1221,23 +1234,23 @@ $(document).ready(function () {
 ## Proportion Var  0.507 0.119 0.073 0.058 0.045
 ## Cumulative Var  0.507 0.626 0.700 0.758 0.803</code></pre>
 <p>This result could also be confirmed by looking at the “scree plot”:</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1"><span class="kw">scree</span>(mm_data, <span class="dt">fa =</span> <span class="ot">FALSE</span>, <span class="dt">pc =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scree</span>(mm_data, <span class="at">fa =</span> <span class="cn">FALSE</span>, <span class="at">pc =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="lec16_files/figure-html/unnamed-chunk-12-1.png" width="2100" /></p>
 </div>
-<div id="qgraph-plot-of-the-principal-components" class="section level2">
-<h2><span class="header-section-number">5.4</span> qgraph plot of the principal components</h2>
+<div id="qgraph-plot-of-the-principal-components" class="section level2" number="5.4">
+<h2 number="5.4"><span class="header-section-number">5.4</span> qgraph plot of the principal components</h2>
 <p>The first plot below shows the components as square nodes, and the orignal variables as circular nodes. The second modifies that first plot by applying the “spring” layout.</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1"><span class="kw">qgraph_loadings_plot</span>(mm_pca_unrot, <span class="dt">title=</span><span class="st">&quot;Unrotated component loadings, all models over all months&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qgraph_loadings_plot</span>(mm_pca_unrot, <span class="at">title=</span><span class="st">&quot;Unrotated component loadings, all models over all months&quot;</span>)</span></code></pre></div>
 <p><img src="lec16_files/figure-html/unnamed-chunk-13-1.png" width="2100" /><img src="lec16_files/figure-html/unnamed-chunk-13-2.png" width="2100" /></p>
-<p>This result suggests (as also does the scree plot) that there is one very important (i.e. “principal” component) that is highly correlated with (or “loads heavily on”) a number of variables, with subsequent components correlated with mainly with a single variable.</p>
+<p>This result suggests (as also does the scree plot) that there is one very important (i.e. “principal” component) that is highly correlated with (or “loads heavily on”) a number of variables, with subsequent components correlated with mainly with a single variable.</p>
 </div>
-<div id="rotated-components" class="section level2">
-<h2><span class="header-section-number">5.5</span> Rotated components</h2>
+<div id="rotated-components" class="section level2" number="5.5">
+<h2 number="5.5"><span class="header-section-number">5.5</span> Rotated components</h2>
 <p>The interpretability of the componets can often be improved by “rotation” of the components, which amounts to slightly moving the PCA axes relative to the original variable axes, while still maintaining the orthogonality (or “uncorrelatedness”) of the components. This has the effect of reducing the importance of the first component(s) (because the adjusted axes are no longer optimal), but this trade-off is usually worth it.</p>
 <p>Here are the results:</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" data-line-number="1">nfactors &lt;-<span class="st"> </span><span class="dv">4</span></a>
-<a class="sourceLine" id="cb72-2" data-line-number="2">mm_pca_rot &lt;-<span class="st"> </span><span class="kw">principal</span>(mm_data, <span class="dt">nfactors =</span> nfactors, <span class="dt">rotate =</span> <span class="st">&quot;varimax&quot;</span>)</a>
-<a class="sourceLine" id="cb72-3" data-line-number="3">mm_pca_rot</a></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>nfactors <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>mm_pca_rot <span class="ot">&lt;-</span> <span class="fu">principal</span>(mm_data, <span class="at">nfactors =</span> nfactors, <span class="at">rotate =</span> <span class="st">&quot;varimax&quot;</span>)</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>mm_pca_rot</span></code></pre></div>
 <pre><code>## Principal Components Analysis
 ## Call: principal(r = mm_data, nfactors = nfactors, rotate = &quot;varimax&quot;)
 ## Standardized loadings (pattern matrix) based upon correlation matrix
@@ -1281,16 +1294,17 @@ $(document).ready(function () {
 ##  with the empirical chi square  290.26  with prob &lt;  1.5e-06 
 ## 
 ## Fit based upon off diagonal values = 0.99</code></pre>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1"><span class="kw">qgraph_loadings_plot</span>(mm_pca_rot, <span class="st">&quot;Rotated component loadings, all models over all months&quot;</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qgraph_loadings_plot</span>(mm_pca_rot, <span class="st">&quot;Rotated component loadings, all models over all months&quot;</span>) </span></code></pre></div>
 <p><img src="lec16_files/figure-html/unnamed-chunk-14-1.png" width="2100" /><img src="lec16_files/figure-html/unnamed-chunk-14-2.png" width="2100" /></p>
 <p><a href="lec16.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="readings" class="section level1">
-<h1><span class="header-section-number">6</span> Readings</h1>
+<div id="readings" class="section level1" number="6">
+<h1 number="6"><span class="header-section-number">6</span> Readings</h1>
 <ul>
-<li>Chapter 25, Multivariate Statistics, in Crawley, M.J. (2013) <em>The R Book</em>, Wiley. To get to the book, visit <a href="http://library.uoregon.edu">http://library.uoregon.edu</a>, login, and search for the 2013 edition of the book. Here’s a direct link, once you’re logged on: <a href="http://onlinelibrary.wiley.com/book/10.1002/9781118448908">http://onlinelibrary.wiley.com/book/10.1002/9781118448908</a></li>
-<li>Maindonald (<em>Using R</em>…): ch. 6, cex=c(0.7,0.8)</li>
+<li>Chapter 25, Multivariate Statistics, in Crawley, M.J. (2013) <em>The R Book</em>, Wiley. To get to the book, visit <a href="http://library.uoregon.edu">http://library.uoregon.edu</a>, login if necessary, and search for the 2013 edition of the book. Here’s a direct link, once you’re logged on: <a href="http://onlinelibrary.wiley.com/book/10.1002/9781118448908">[Link]</a></li>
+<li>Everitt and Hothorn (2011) <em>An Introduction to Applied Multivariate Analysis with R</em>, ch. 3 and 5. To get to the book, visit <a href="http://library.uoregon.edu">http://library.uoregon.edu</a>, search for the book, and login if necessary. Here’s a direct link, once you’re logged on: <a href="https://na01.alma.exlibrisgroup.com/view/action/uresolver.do?operation=resolveService&amp;package_service_id=23665350240001852&amp;institutionId=1852&amp;customerId=1840">[Link]</a></li>
+<li>Peng (2016) <em>Exploratory Data Analysis with R</em>, ch. 13. See readings tab for a link to the e-book.</li>
 </ul>
 <p><a href="lec16.html">[Back to top]</a></p>
 </div>
@@ -1304,7 +1318,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
