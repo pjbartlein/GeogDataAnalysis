@@ -13,41 +13,69 @@
 
 <title>High-resolution and high-dimension data</title>
 
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -56,9 +84,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -107,39 +135,9 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
   }
 })();
 </script>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="SI-md-08.css" type="text/css" />
 
@@ -150,10 +148,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -170,40 +164,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -231,7 +198,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -243,7 +210,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -254,10 +221,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -269,7 +249,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -486,7 +465,7 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -497,29 +476,48 @@ $(document).ready(function () {
 <div id="TOC">
 <ul>
 <li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="#enhanced-standard-displays"><span class="toc-section-number">2</span> Enhanced standard displays</a><ul>
+<li><a href="#enhanced-standard-displays"><span class="toc-section-number">2</span> Enhanced standard displays</a>
+<ul>
 <li><a href="#visualizing-high-resolution-data-sets-using-enhanced-versions-of-standard-displays"><span class="toc-section-number">2.1</span> Visualizing high-resolution data sets using enhanced versions of standard displays</a></li>
 <li><a href="#transparency"><span class="toc-section-number">2.2</span> Transparency</a></li>
 </ul></li>
-<li><a href="#parallel-coordinate-plots"><span class="toc-section-number">3</span> Parallel coordinate plots</a><ul>
+<li><a href="#parallel-coordinate-plots"><span class="toc-section-number">3</span> Parallel coordinate plots</a>
+<ul>
 <li><a href="#global-fire-data"><span class="toc-section-number">3.1</span> Global fire data</a></li>
 <li><a href="#plots"><span class="toc-section-number">3.2</span> Plots</a></li>
 </ul></li>
-<li><a href="#high-density-plots-with-the-tabplot-package"><span class="toc-section-number">4</span> High-density plots with the tabplot package</a><ul>
-<li><a href="#north-american-modern-pollen-data"><span class="toc-section-number">4.1</span> North American modern pollen data</a></li>
-<li><a href="#plots-1"><span class="toc-section-number">4.2</span> Plots</a></li>
-<li><a href="#global-fire-data-1"><span class="toc-section-number">4.3</span> Global fire data</a></li>
-<li><a href="#plots-2"><span class="toc-section-number">4.4</span> Plots</a></li>
+<li><a href="#the-iplots-package-transparency-and-linked-plots"><span class="toc-section-number">4</span> The iplots package: transparency and linked plots</a>
+<ul>
+<li><a href="#installation"><span class="toc-section-number">4.1</span> Installation</a>
+<ul>
+<li><a href="#windows"><span class="toc-section-number">4.1.1</span> Windows</a></li>
+<li><a href="#mac-os-x"><span class="toc-section-number">4.1.2</span> Mac OS X</a></li>
 </ul></li>
-<li><a href="#plotting-multivariatemultiple-time-series"><span class="toc-section-number">5</span> Plotting multivariate/multiple time series</a><ul>
-<li><a href="#carp-l.-pollen-data"><span class="toc-section-number">5.1</span> Carp L. pollen data</a></li>
-<li><a href="#plots-3"><span class="toc-section-number">5.2</span> Plots</a></li>
+<li><a href="#scatter-plot-maps"><span class="toc-section-number">4.2</span> Scatter-plot maps</a></li>
+<li><a href="#linked-interactive-plots-and-brushing"><span class="toc-section-number">4.3</span> Linked interactive plots and “brushing”</a>
+<ul>
+<li><a href="#linked-plots-with-continuous-variables"><span class="toc-section-number">4.3.1</span> Linked plots with continuous variables</a></li>
+<li><a href="#linked-plots-with-categorical-variables"><span class="toc-section-number">4.3.2</span> Linked plots with categorical variables</a></li>
 </ul></li>
-<li><a href="#interactive-plots"><span class="toc-section-number">6</span> Interactive plots</a><ul>
-<li><a href="#data"><span class="toc-section-number">6.1</span> Data</a></li>
-<li><a href="#cube-plot"><span class="toc-section-number">6.2</span> Cube plot</a></li>
 </ul></li>
-<li><a href="#readings"><span class="toc-section-number">7</span> Readings</a></li>
+<li><a href="#high-density-plots-with-the-tabplot-package"><span class="toc-section-number">5</span> High-density plots with the tabplot package</a>
+<ul>
+<li><a href="#north-american-modern-pollen-data"><span class="toc-section-number">5.1</span> North American modern pollen data</a></li>
+<li><a href="#plots-1"><span class="toc-section-number">5.2</span> Plots</a></li>
+<li><a href="#global-fire-data-1"><span class="toc-section-number">5.3</span> Global fire data</a></li>
+<li><a href="#plots-2"><span class="toc-section-number">5.4</span> Plots</a></li>
+</ul></li>
+<li><a href="#plotting-multivariatemultiple-time-series"><span class="toc-section-number">6</span> Plotting multivariate/multiple time series</a>
+<ul>
+<li><a href="#carp-l.-pollen-data"><span class="toc-section-number">6.1</span> Carp L. pollen data</a></li>
+<li><a href="#plots-3"><span class="toc-section-number">6.2</span> Plots</a></li>
+</ul></li>
+<li><a href="#interactive-plots"><span class="toc-section-number">7</span> Interactive plots</a>
+<ul>
+<li><a href="#data"><span class="toc-section-number">7.1</span> Data</a></li>
+<li><a href="#cube-plot"><span class="toc-section-number">7.2</span> Cube plot</a></li>
+</ul></li>
+<li><a href="#readings"><span class="toc-section-number">8</span> Readings</a></li>
 </ul>
 </div>
 
@@ -528,10 +526,10 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span>
+<span style="color: #00cc00;">NOTE: This page has been revised for Winter 2021, but may undergo further edits.</span>
 </p>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
+<div id="introduction" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>There has been a rapid increase in the availability of data sets that may contain thousands of observations (high-resolution, i.e. high-density or high-frequency data sets) and tens or hundreds of variables or attributes (high-dimension). Such data sets arise from:</p>
 <ul>
 <li>satellite remote sensing and other remote-sensing methods (e.g. hyperspectral methods)</li>
@@ -550,188 +548,296 @@ $(document).ready(function () {
 </ul>
 <p>In <code>R</code>, some of these approaches are implemented in the <code>R</code> <code>mvtsplots</code> and <code>tabplots</code> packages, and by appropriate modification of commonplace displays like scatterplots and parallel coordinate plots included in packages available on <a href="http://cran.us.r-project.org/"><code>CRAN</code></a>, plus others available in the <a href="http://www.bioconductor.org/"><code>Bioconductor</code></a> packages as extensions of traditional mulitivariate approaches motivated by large data sets produced in the various biomedical fields.</p>
 </div>
-<div id="enhanced-standard-displays" class="section level1">
-<h1><span class="header-section-number">2</span> Enhanced standard displays</h1>
+<div id="enhanced-standard-displays" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> Enhanced standard displays</h1>
 <p>The techniques for the display and interactive analysis of high-resolution and high-dimension data sets are rapidly developing. The approaches illustrated here make use of the <code>iplots</code> and <code>tabplot</code> packages, plus some enhanced variations of basic plots.</p>
-<div id="visualizing-high-resolution-data-sets-using-enhanced-versions-of-standard-displays" class="section level2">
-<h2><span class="header-section-number">2.1</span> Visualizing high-resolution data sets using enhanced versions of standard displays</h2>
+<div id="visualizing-high-resolution-data-sets-using-enhanced-versions-of-standard-displays" class="section level2" number="2.1">
+<h2 number="2.1"><span class="header-section-number">2.1</span> Visualizing high-resolution data sets using enhanced versions of standard displays</h2>
 <p>The display of high resolution data (in addition to the standard approach of simply mapping it) can be illustrated using a set of precipitation-ratio data for the western United States, consisting of 3728 observations of 15 variables. Although these data are not of extremely high resolution (or high dimension), they illustrate the general ideas.</p>
 <p>The data are mappend in the lecture on <em>Maps in R</em>.</p>
 <p>In what follows, we’ll want to examine the large-scale patterns of the seasonality (summer-wet vs. winter-wet) of precipitation. The data consist of monthly precipitation ratios, or the average precipitation for a particular month and station divided by the average annual total precipitation. This has the effect of removing the very large imprint of elevation on precipitation totals. The ratio of July to January precipitation provides a single overall description of precipitation seasonality.</p>
 </div>
-<div id="transparency" class="section level2">
-<h2><span class="header-section-number">2.2</span> Transparency</h2>
+<div id="transparency" class="section level2" number="2.2">
+<h2 number="2.2"><span class="header-section-number">2.2</span> Transparency</h2>
 <p>A simple scatter plot (below, left) showing the relationship between January and July precipitation ratios illustrates how the crowding of points makes interpretation difficult. The crowding can be overcome by plotting transparent symbols specified using the “alpha channel” of the color for individual points (below, right).</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># plot January vs. July precipitation ratios</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfcol=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># opaque symbols</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>pjanpann, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">1.25</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co"># transparent symbols</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>pjanpann, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">1.25</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>, <span class="fl">.2</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot January vs. July precipitation ratios</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfcol=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># opaque symbols</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wus_pratio<span class="sc">$</span>pjanpann, wus_pratio<span class="sc">$</span>pjulpann, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">1.25</span>, <span class="at">col=</span><span class="fu">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># transparent symbols</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wus_pratio<span class="sc">$</span>pjanpann, wus_pratio<span class="sc">$</span>pjulpann, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">1.25</span>, <span class="at">col=</span><span class="fu">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>, .<span class="dv">2</span>))</span></code></pre></div>
 <p><img src="lec19_files/figure-html/hd05-1.png" width="3000" /></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>par <span class="ot">&lt;-</span> opar</span></code></pre></div>
 <p>When there are a lot of points, sometimes the graphics capability of the GUIs are taxed, and it is more efficient to make a .pdf image directly.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># transparent symbols using the pdf() device </span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">pdf</span>(<span class="dt">file=</span><span class="st">&quot;highres_enhanced_plot01.pdf&quot;</span>)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>pjanpann, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">1.25</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>, <span class="fl">.2</span>))</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw">dev.off</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transparent symbols using the pdf() device </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file=</span><span class="st">&quot;highres_enhanced_plot01.pdf&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wus_pratio<span class="sc">$</span>pjanpann, wus_pratio<span class="sc">$</span>pjulpann, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">1.25</span>, <span class="at">col=</span><span class="fu">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>, .<span class="dv">2</span>))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <p>It’s easy to see how the transparency of the symbols provides a visual measure of the density of points in the various regions in the space represented by the scatter plot. A set of stripcharts illustrates the same principle.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># stripcharts -- opaque symbols</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfcol=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw">stripchart</span>(wus_pratio<span class="op">$</span>pjanpann, <span class="dt">xlab=</span><span class="st">&quot;PJan/Pann&quot;</span>, <span class="dt">method=</span><span class="st">&quot;overplot&quot;</span>, <span class="dt">pch=</span><span class="dv">15</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw">stripchart</span>(wus_pratio<span class="op">$</span>pjanpann, <span class="dt">xlab=</span><span class="st">&quot;PJan/Pann&quot;</span>, <span class="dt">method=</span><span class="st">&quot;stack&quot;</span>, <span class="dt">pch=</span><span class="dv">15</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># stripcharts -- opaque symbols</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfcol=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(wus_pratio<span class="sc">$</span>pjanpann, <span class="at">xlab=</span><span class="st">&quot;PJan/Pann&quot;</span>, <span class="at">method=</span><span class="st">&quot;overplot&quot;</span>, <span class="at">pch=</span><span class="dv">15</span>, <span class="at">col=</span><span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(wus_pratio<span class="sc">$</span>pjanpann, <span class="at">xlab=</span><span class="st">&quot;PJan/Pann&quot;</span>, <span class="at">method=</span><span class="st">&quot;stack&quot;</span>, <span class="at">pch=</span><span class="dv">15</span>, <span class="at">col=</span><span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span></code></pre></div>
 <p><img src="lec19_files/figure-html/hd08-1.png" width="3000" /></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">opar &lt;-<span class="st"> </span>par</a></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># stripcharts -- alpha-channel transparency</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfcol=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw">stripchart</span>(wus_pratio<span class="op">$</span>pjanpann, <span class="dt">xlab=</span><span class="st">&quot;PJan/Pann&quot;</span>, <span class="dt">method=</span><span class="st">&quot;overplot&quot;</span>, <span class="dt">pch=</span><span class="dv">15</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">0.1</span>))</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw">stripchart</span>(wus_pratio<span class="op">$</span>pjanpann, <span class="dt">xlab=</span><span class="st">&quot;PJan/Pann&quot;</span>, <span class="dt">method=</span><span class="st">&quot;stack&quot;</span>, <span class="dt">pch=</span><span class="dv">15</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">0.1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>opar <span class="ot">&lt;-</span> par</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># stripcharts -- alpha-channel transparency</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfcol=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(wus_pratio<span class="sc">$</span>pjanpann, <span class="at">xlab=</span><span class="st">&quot;PJan/Pann&quot;</span>, <span class="at">method=</span><span class="st">&quot;overplot&quot;</span>, <span class="at">pch=</span><span class="dv">15</span>, <span class="at">col=</span><span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">0.1</span>))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">stripchart</span>(wus_pratio<span class="sc">$</span>pjanpann, <span class="at">xlab=</span><span class="st">&quot;PJan/Pann&quot;</span>, <span class="at">method=</span><span class="st">&quot;stack&quot;</span>, <span class="at">pch=</span><span class="dv">15</span>, <span class="at">col=</span><span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">0.1</span>))</span></code></pre></div>
 <p><img src="lec19_files/figure-html/hd09-1.png" width="3000" /></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>par <span class="ot">&lt;-</span> opar</span></code></pre></div>
 <p>Over the region as a whole, the interesting question is the roles location and elevation may play in the seasonality of precipitation. The following plots show that the dependence of precipitation seasonality on elevation is rather complicated.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># seasonal precipitation vs. elevation</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfcol=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>elev, wus_pratio<span class="op">$</span>pjanpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="fl">0.1</span>))</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>elev, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="fl">0.1</span>))</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>elev, wus_pratio<span class="op">$</span>pjulpjan, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="fl">0.1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># seasonal precipitation vs. elevation</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfcol=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wus_pratio<span class="sc">$</span>elev, wus_pratio<span class="sc">$</span>pjanpann, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span><span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wus_pratio<span class="sc">$</span>elev, wus_pratio<span class="sc">$</span>pjulpann, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span><span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(wus_pratio<span class="sc">$</span>elev, wus_pratio<span class="sc">$</span>pjulpjan, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span><span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="fl">0.1</span>))</span></code></pre></div>
 <p><img src="lec19_files/figure-html/hd10-1.png" width="3000" /></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">par &lt;-<span class="st"> </span>opar</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>par <span class="ot">&lt;-</span> opar</span></code></pre></div>
 <p><a href="lec19.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="parallel-coordinate-plots" class="section level1">
-<h1><span class="header-section-number">3</span> Parallel coordinate plots</h1>
+<div id="parallel-coordinate-plots" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> Parallel coordinate plots</h1>
 <p>Parallel coordiate plots in a sense present an individual axis for each variable in a dataframe along which the individual values of the variable are plotted (usually rescaled to lie between 0 and 1), with the points for a particular observation joined by straight-line segments. Usually the points themselves are <em>not</em> plotted to avoid clutter, but all data values (or “cells” in the dataframe) explictly appear on the plot, nearly a million of them in the example here. Parallel coordinate plots can be generated using the <code>GGally</code> package.</p>
-<div id="global-fire-data" class="section level2">
-<h2><span class="header-section-number">3.1</span> Global fire data</h2>
+<div id="global-fire-data" class="section level2" number="3.1">
+<h2 number="3.1"><span class="header-section-number">3.1</span> Global fire data</h2>
 <p>The global fire data set provides a good instructional example of the development and use of parallel coordinate plots. The input data consist of the GFEDv3.1 burned fraction (of half-degree grid cells, <code>gfed</code>), several bioclimatic variables (mean annual temperature (<code>mat</code>), mean temperature of the warmest and coldest months (<code>mtwa</code> and <code>mtco</code> respectively), growing degree days (5-deg C base, <code>gdd5</code>), annual precipitation (<code>map</code>), annual equilibrium evapotranspiration (<code>aet</code>), precipitation minus evapotranspiration (<code>pme</code>), <code>alpha</code> (P-E),lightning-strike frequency (<code>hmrc</code>), population density (<code>gpw</code>), net primary productivity (<code>npp</code>), treecover (<code>treecov</code>), and two categorical variables describing “megabiomes” and potential natural vegetation types (<code>megabiome</code> and <code>vegtype</code> respectively).</p>
 <p>Load the necessary packages:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># load packages</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">library</span>(sf)</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw">library</span>(tidyr)</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="kw">library</span>(GGally)</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#library(gridExtra)</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load packages</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#library(gridExtra)</span></span></code></pre></div>
 <p>Read the data from an existing <code>.csv</code> file.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># read the data -- output suppressed</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">csvfile &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/csv/global_fire.csv&quot;</span></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">gf &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csvfile)</a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="kw">str</span>(gf)</a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="kw">summary</span>(gf)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read the data -- output suppressed</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>csvfile <span class="ot">&lt;-</span> <span class="st">&quot;c:/Users/bartlein/Documents/geog495/data/csv_files/global_fire.csv&quot;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>gf <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csvfile)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(gf)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gf)</span></code></pre></div>
 <p>The two categorical (i.e. factor) variables have levels arranged in the default alphabetical order. The following code reorders the levels into something more ecologically and climatically sensible:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># reorder megabiomes -- output suppressed</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">megabiome_name &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;TropF&quot;</span>, <span class="st">&quot;WarmF&quot;</span>, <span class="st">&quot;SavDWd&quot;</span>, <span class="st">&quot;GrsShrb&quot;</span>, <span class="st">&quot;Dsrt&quot;</span>, <span class="st">&quot;TempF&quot;</span>, <span class="st">&quot;BorF&quot;</span>, <span class="st">&quot;Tund&quot;</span>, <span class="st">&quot;None&quot;</span>, <span class="st">&quot;Ice&quot;</span>)</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">gf<span class="op">$</span>megabiome &lt;-<span class="st"> </span><span class="kw">factor</span>(gf<span class="op">$</span>megabiome, <span class="dt">levels=</span>megabiome_name)</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co"># reorder vegtypes</span></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">vegtype_name &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;TrEFW&quot;</span>,<span class="st">&quot;TrDFW&quot;</span>,<span class="st">&quot;TeBEFW&quot;</span>,<span class="st">&quot;TeNEFW&quot;</span>,<span class="st">&quot;TeDFW&quot;</span>,<span class="st">&quot;BrEFW&quot;</span>,<span class="st">&quot;BrDFW&quot;</span>,<span class="st">&quot;EDMFW&quot;</span>,</a>
-<a class="sourceLine" id="cb12-7" data-line-number="7">                  <span class="st">&quot;Savan&quot;</span>,<span class="st">&quot;GrStp&quot;</span>,<span class="st">&quot;ShrbD&quot;</span>,<span class="st">&quot;ShrbO&quot;</span>,<span class="st">&quot;Tund&quot;</span>,<span class="st">&quot;Dsrt&quot;</span>,<span class="st">&quot;PDRI&quot;</span>)</a>
-<a class="sourceLine" id="cb12-8" data-line-number="8">gf<span class="op">$</span>vegtype &lt;-<span class="st"> </span><span class="kw">factor</span>(gf<span class="op">$</span>vegtype, <span class="dt">levels=</span>vegtype_name)</a>
-<a class="sourceLine" id="cb12-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co"># check the new ordering of factor levels</span></a>
-<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="kw">str</span>(gf[<span class="dv">16</span><span class="op">:</span><span class="dv">17</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># reorder megabiomes -- output suppressed</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>megabiome_name <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;TropF&quot;</span>, <span class="st">&quot;WarmF&quot;</span>, <span class="st">&quot;SavDWd&quot;</span>, <span class="st">&quot;GrsShrb&quot;</span>, <span class="st">&quot;Dsrt&quot;</span>, <span class="st">&quot;TempF&quot;</span>, <span class="st">&quot;BorF&quot;</span>, <span class="st">&quot;Tund&quot;</span>, <span class="st">&quot;None&quot;</span>, <span class="st">&quot;Ice&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>gf<span class="sc">$</span>megabiome <span class="ot">&lt;-</span> <span class="fu">factor</span>(gf<span class="sc">$</span>megabiome, <span class="at">levels=</span>megabiome_name)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># reorder vegtypes</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>vegtype_name <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;TrEFW&quot;</span>,<span class="st">&quot;TrDFW&quot;</span>,<span class="st">&quot;TeBEFW&quot;</span>,<span class="st">&quot;TeNEFW&quot;</span>,<span class="st">&quot;TeDFW&quot;</span>,<span class="st">&quot;BrEFW&quot;</span>,<span class="st">&quot;BrDFW&quot;</span>,<span class="st">&quot;EDMFW&quot;</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;Savan&quot;</span>,<span class="st">&quot;GrStp&quot;</span>,<span class="st">&quot;ShrbD&quot;</span>,<span class="st">&quot;ShrbO&quot;</span>,<span class="st">&quot;Tund&quot;</span>,<span class="st">&quot;Dsrt&quot;</span>,<span class="st">&quot;PDRI&quot;</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>gf<span class="sc">$</span>vegtype <span class="ot">&lt;-</span> <span class="fu">factor</span>(gf<span class="sc">$</span>vegtype, <span class="at">levels=</span>vegtype_name)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># check the new ordering of factor levels</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(gf[<span class="dv">16</span><span class="sc">:</span><span class="dv">17</span>])</span></code></pre></div>
 <p>Drop the last two categories</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># drop last two categories</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">mb2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;TropF&quot;</span>, <span class="st">&quot;WarmF&quot;</span>, <span class="st">&quot;SavDWd&quot;</span>, <span class="st">&quot;GrsShrb&quot;</span>, <span class="st">&quot;Dsrt&quot;</span>, <span class="st">&quot;TempF&quot;</span>, <span class="st">&quot;BorF&quot;</span>, <span class="st">&quot;Tund&quot;</span>)</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">gf &lt;-<span class="st"> </span>gf[gf<span class="op">$</span>megabiome <span class="op">%in%</span><span class="st"> </span>mb2, ]</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="kw">table</span>(gf<span class="op">$</span>megabiome)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># drop last two categories</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>mb2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;TropF&quot;</span>, <span class="st">&quot;WarmF&quot;</span>, <span class="st">&quot;SavDWd&quot;</span>, <span class="st">&quot;GrsShrb&quot;</span>, <span class="st">&quot;Dsrt&quot;</span>, <span class="st">&quot;TempF&quot;</span>, <span class="st">&quot;BorF&quot;</span>, <span class="st">&quot;Tund&quot;</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>gf <span class="ot">&lt;-</span> gf[gf<span class="sc">$</span>megabiome <span class="sc">%in%</span> mb2, ]</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(gf<span class="sc">$</span>megabiome)</span></code></pre></div>
 <pre><code>## 
 ##   TropF   WarmF  SavDWd GrsShrb    Dsrt   TempF    BorF    Tund    None     Ice 
 ##    6678    2331    4719    9372    6728    7874   11356    4896       0       0</code></pre>
 <p>Do the usual transformations:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># transformations (output suppressed)</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">hist</span>(gf<span class="op">$</span>hrmc)</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">gf<span class="op">$</span>hrmc &lt;-<span class="st"> </span><span class="kw">sqrt</span>(gf<span class="op">$</span>hrmc)</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="kw">hist</span>(gf<span class="op">$</span>hrmc)</a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="kw">hist</span>(<span class="kw">log10</span>(gf<span class="op">$</span>gpw[gf<span class="op">$</span>gpw <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]))</a>
-<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="kw">min</span>(<span class="kw">log10</span>(gf<span class="op">$</span>gpw[gf<span class="op">$</span>gpw <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]))</a>
-<a class="sourceLine" id="cb15-8" data-line-number="8">gf<span class="op">$</span>gpw &lt;-<span class="st"> </span><span class="kw">log10</span>(gf<span class="op">$</span>gpw <span class="op">+</span><span class="st"> </span><span class="fl">1e-10</span>)</a>
-<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="kw">hist</span>(gf<span class="op">$</span>gpw)</a>
-<a class="sourceLine" id="cb15-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="kw">hist</span>(gf<span class="op">$</span>map)</a>
-<a class="sourceLine" id="cb15-12" data-line-number="12">gf<span class="op">$</span>map &lt;-<span class="st"> </span><span class="kw">sqrt</span>(gf<span class="op">$</span>map)</a>
-<a class="sourceLine" id="cb15-13" data-line-number="13"><span class="kw">hist</span>(gf<span class="op">$</span>map)</a>
-<a class="sourceLine" id="cb15-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb15-15" data-line-number="15"><span class="kw">hist</span>(gf<span class="op">$</span>pme)</a>
-<a class="sourceLine" id="cb15-16" data-line-number="16">gf<span class="op">$</span>pme &lt;-<span class="st"> </span><span class="kw">sqrt</span>(gf<span class="op">$</span>pme <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(gf<span class="op">$</span>pme))</a>
-<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="kw">hist</span>(gf<span class="op">$</span>pme)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transformations (output suppressed)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(gf<span class="sc">$</span>hrmc)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>gf<span class="sc">$</span>hrmc <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(gf<span class="sc">$</span>hrmc)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(gf<span class="sc">$</span>hrmc)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">log10</span>(gf<span class="sc">$</span>gpw[gf<span class="sc">$</span>gpw <span class="sc">&gt;</span> <span class="dv">0</span>]))</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(<span class="fu">log10</span>(gf<span class="sc">$</span>gpw[gf<span class="sc">$</span>gpw <span class="sc">&gt;</span> <span class="dv">0</span>]))</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>gf<span class="sc">$</span>gpw <span class="ot">&lt;-</span> <span class="fu">log10</span>(gf<span class="sc">$</span>gpw <span class="sc">+</span> <span class="fl">1e-10</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(gf<span class="sc">$</span>gpw)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(gf<span class="sc">$</span>map)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>gf<span class="sc">$</span>map <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(gf<span class="sc">$</span>map)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(gf<span class="sc">$</span>map)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(gf<span class="sc">$</span>pme)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>gf<span class="sc">$</span>pme <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(gf<span class="sc">$</span>pme <span class="sc">-</span> <span class="fu">min</span>(gf<span class="sc">$</span>pme))</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(gf<span class="sc">$</span>pme)</span></code></pre></div>
 <p>Get a shapefile too:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># read a world outlines shape file</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">shp_path &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/shp/&quot;</span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3">shp_name &lt;-<span class="st"> &quot;ne_110m_admin_0_countries.shp&quot;</span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4">shp_file &lt;-<span class="st"> </span><span class="kw">paste</span>(shp_path, shp_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb16-5" data-line-number="5">world_sf &lt;-<span class="st"> </span><span class="kw">read_sf</span>(shp_file)</a></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">ggplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> world_sf, <span class="dt">fill=</span><span class="st">&quot;grey70&quot;</span>, <span class="dt">color=</span><span class="st">&quot;black&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">180</span>, <span class="dv">180</span>), <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="dt">by=</span><span class="dv">30</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="dt">by=</span><span class="dv">30</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span>  <span class="st">&quot;Latitude&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="st">  </span><span class="kw">coord_sf</span>(<span class="dt">expand =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-7" data-line-number="7"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read a world outlines shape file</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>shp_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/&quot;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>shp_name <span class="ot">&lt;-</span> <span class="st">&quot;ne_110m_admin_0_countries.shp&quot;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>shp_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(shp_path, shp_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>world_sf <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(shp_file)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_sf, <span class="at">fill=</span><span class="st">&quot;grey70&quot;</span>, <span class="at">color=</span><span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="at">by=</span><span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by=</span><span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span>  <span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> </span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="lec19_files/figure-html/unnamed-chunk-8-1.png" width="2100" /></p>
 </div>
-<div id="plots" class="section level2">
-<h2><span class="header-section-number">3.2</span> Plots</h2>
+<div id="plots" class="section level2" number="3.2">
+<h2 number="3.2"><span class="header-section-number">3.2</span> Plots</h2>
 <p>Parallel coordinate plots can be made using the <code>ggparcoord()</code> function from the <code>GGally</code> package:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># parallel coordinate plot</span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">ggparcoord</span>(<span class="dt">data =</span> gf[<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>],</a>
-<a class="sourceLine" id="cb18-3" data-line-number="3">  <span class="dt">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="dt">alphaLines =</span> <span class="fl">0.01</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;PCP of Global Fire Data&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x  =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">315</span>, <span class="dt">vjust=</span><span class="fl">1.0</span>, <span class="dt">hjust=</span><span class="fl">0.0</span>, <span class="dt">size=</span><span class="dv">14</span>),</a>
-<a class="sourceLine" id="cb18-7" data-line-number="7">        <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(), </a>
-<a class="sourceLine" id="cb18-8" data-line-number="8">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>() )</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># parallel coordinate plot</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggparcoord</span>(<span class="at">data =</span> gf[<span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>],</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="at">alphaLines =</span> <span class="fl">0.01</span>) <span class="sc">+</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;PCP of Global Fire Data&quot;</span>) <span class="sc">+</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x  =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">315</span>, <span class="at">vjust=</span><span class="fl">1.0</span>, <span class="at">hjust=</span><span class="fl">0.0</span>, <span class="at">size=</span><span class="dv">14</span>),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>() )</span></code></pre></div>
 <p><img src="pcp01.png" /></p>
 <p>Note the use of transparency, specified by the <code>alphaLines</code> argument. Individual observations (gridpoints) that have similar values for each variable trace out dense bands of lines, and several distinct bands, corresponding to different “pyromes” (like biomes) can be observed.</p>
-<p>Parallel coordinate plots are most effective when paired with another display with points highlighted in one display similarly highlighted in the other. In the case of the global fire data set the logical other display is a map. There are (at least) two ways of doing the highlighting. Here, a particular megabiome (“BorF” – Boreal forest/Taiga) is used. First create a new variable that will be set to zero, except where <code>gf$megabiome == &quot;BorF&quot;</code>. Then, the data are sorted so that the non-“BorF” observations get plotted first.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># select those points with megabiome = &quot;BorF&quot;</span></a>
-<a class="sourceLine" id="cb19-2" data-line-number="2">gf<span class="op">$</span>select_points &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">dim</span>(gf)[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="cb19-3" data-line-number="3">gf<span class="op">$</span>select_points[gf<span class="op">$</span>megabiome <span class="op">==</span><span class="st"> &quot;BorF&quot;</span>] &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb19-4" data-line-number="4">gf<span class="op">$</span>select_points &lt;-<span class="st"> </span><span class="kw">as.factor</span>(gf<span class="op">$</span>select_points)</a>
-<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="kw">table</span>(gf<span class="op">$</span>select_points)</a></code></pre></div>
+<p>Parallel coordinate plots are most effective when paired with another display with points highlighted in one display similarly highlighted in the other. In the case of the global fire data set the logical other display is a map. There are (at least) two ways of doing the highlighting. Here, a particular megabiome (“BorF” – Boreal forest/Taiga) is used. First create a new variable that will be set to zero, except where <code>gf$megabiome == "BorF"</code>. Then, the data are sorted so that the non-“BorF” observations get plotted first.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select those points with megabiome = &quot;BorF&quot;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>gf<span class="sc">$</span>select_points <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">dim</span>(gf)[<span class="dv">1</span>])</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>gf<span class="sc">$</span>select_points[gf<span class="sc">$</span>megabiome <span class="sc">==</span> <span class="st">&quot;BorF&quot;</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>gf<span class="sc">$</span>select_points <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(gf<span class="sc">$</span>select_points)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(gf<span class="sc">$</span>select_points)</span></code></pre></div>
 <pre><code>## 
 ##     0     1 
 ## 42598 11356</code></pre>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># pcp</span></a>
-<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw">ggparcoord</span>(<span class="dt">data =</span> gf[<span class="kw">order</span>(gf<span class="op">$</span>select_points),],</a>
-<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="dt">columns =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>), <span class="dt">groupColumn =</span> <span class="st">&quot;select_points&quot;</span>,</a>
-<a class="sourceLine" id="cb21-4" data-line-number="4"><span class="dt">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="dt">alphaLines=</span><span class="fl">0.01</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>)  <span class="op">+</span></a>
-<a class="sourceLine" id="cb21-5" data-line-number="5"><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="kw">theme</span>(<span class="dt">axis.text.x  =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">315</span>, <span class="dt">vjust=</span><span class="fl">1.0</span>, <span class="dt">hjust=</span><span class="fl">0.0</span>, <span class="dt">size=</span><span class="dv">14</span>),</a>
-<a class="sourceLine" id="cb21-7" data-line-number="7">      <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb21-8" data-line-number="8">      <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb21-9" data-line-number="9">      <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb21-10" data-line-number="10"><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="kw">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.2</span>), <span class="st">&quot;red&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pcp</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggparcoord</span>(<span class="at">data =</span> gf[<span class="fu">order</span>(gf<span class="sc">$</span>select_points),],</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="at">columns =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>), <span class="at">groupColumn =</span> <span class="st">&quot;select_points&quot;</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="at">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="at">alphaLines=</span><span class="fl">0.01</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>)  <span class="sc">+</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.text.x  =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">315</span>, <span class="at">vjust=</span><span class="fl">1.0</span>, <span class="at">hjust=</span><span class="fl">0.0</span>, <span class="at">size=</span><span class="dv">14</span>),</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.2</span>), <span class="st">&quot;red&quot;</span>))</span></code></pre></div>
 <p><img src="pcp02.png" /></p>
 <p>Plot the points.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co"># map</span></a>
-<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="kw">ggplot</span>()  <span class="op">+</span></a>
-<a class="sourceLine" id="cb22-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> gf, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">color =</span> select_points), <span class="dt">size =</span> <span class="fl">0.8</span> ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb22-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data =</span> world_sf, <span class="kw">aes</span>(<span class="dt">geometry=</span>geometry), <span class="dt">fill=</span><span class="ot">NA</span>, <span class="dt">color=</span><span class="st">&quot;black&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb22-5" data-line-number="5"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb22-6" data-line-number="6"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb22-7" data-line-number="7"><span class="st">  </span><span class="kw">coord_sf</span>() <span class="op">+</span><span class="st"> </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray80&quot;</span>, <span class="st">&quot;red&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># map</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()  <span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> gf, <span class="fu">aes</span>(<span class="at">x =</span> lon, <span class="at">y =</span> lat, <span class="at">color =</span> select_points), <span class="at">size =</span> <span class="fl">0.8</span> ) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_sf, <span class="fu">aes</span>(<span class="at">geometry=</span>geometry), <span class="at">fill=</span><span class="cn">NA</span>, <span class="at">color=</span><span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>() <span class="sc">+</span> <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray80&quot;</span>, <span class="st">&quot;red&quot;</span>))</span></code></pre></div>
 <p><img src="map02.png" /></p>
 <p>Before moving on, delete the variable <code>select_points</code> from the <code>gf</code> dataframe:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">gf<span class="op">$</span>select_points &lt;-<span class="st"> </span><span class="ot">NULL</span></a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>gf<span class="sc">$</span>select_points <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
+</div>
+</div>
+<div id="the-iplots-package-transparency-and-linked-plots" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> The iplots package: transparency and linked plots</h1>
+<p>The <code>iplots</code> package provides another way of producing “alpha-channel” plots (plus more, as will be illustrated below).</p>
+<div id="installation" class="section level2" number="4.1">
+<h2 number="4.1"><span class="header-section-number">4.1</span> Installation</h2>
+<p>The <code>iplots</code> package was designed to run in a “third-party” GUI called <code>JGR</code> which handles the execution of the Java-language plotting routines. The installation of <code>JGR</code> on Windows is pretty straightforward, but a little tricky on the Mac.</p>
+<div id="windows" class="section level3" number="4.1.1">
+<h3 number="4.1.1"><span class="header-section-number">4.1.1</span> Windows</h3>
+<p>On Windows, download and install the <code>iplots</code> package as usual. (Also install the <code>rJava</code> package; other necessary packages should be automatically installed). Then load the <code>rJava</code> and <code>iplots</code> packages as usual.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rJava)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(iplots)</span></code></pre></div>
+</div>
+<div id="mac-os-x" class="section level3" number="4.1.2">
+<h3 number="4.1.2"><span class="header-section-number">4.1.2</span> Mac OS X</h3>
+<p><strong>NOTE: As of this writing (Feb 2021), JGR does not run correctly on macOS Catalina. The last good instructions follow:</strong></p>
+<p>On the Mac, the installation is a little more involved, <code>iplots</code> is run through an “IDE/script editor”" called <code>JGR</code>, which combines a script editor and console window, and resembles the usual Mac OS X R GUI. <code>JGR</code> was built using an older version of Java (Java 6), and the appropriate “runtime environment” (currently Java for OS X 2015-001) has be downloaded from Apple and installed.</p>
+<p>Go to <a href="https://support.apple.com/kb/DL1572?locale=en_US">https://support.apple.com/kb/DL1572?locale=en_US</a>, and click on the “Download” button, and follow instructions.</p>
+<p>(Note: Apple recommends keeping Java up to date. To download the current Java run-time environment (JRE) from Oracle.</p>
+<ul>
+<li>Go to <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">[http://www.oracle.com/technetwork/java/javase/downloads/index.html]</a>. Click on the JRE Download button, follow the instructions, and eventually download and install <code>jre-8u121-macosx-x64.dmg</code> (or the most current version). Then<br />
+</li>
+<li>Open a terminal window and type or copy and paste the following (including the quotes <code>"</code>):<br />
+<code>export JAVA_HOME="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home"</code></li>
+<li>Check the installation by typing <code>java -version</code> and you should see <code>java version "1.8.0_121-b13"</code>)</li>
+</ul>
+<p>Then download <code>JGR</code> and the appropriate libraries:</p>
+<ul>
+<li>Go to <a href="http://rforge.net/JGR/files/">[http://rforge.net/JGR/files/]</a> and download <code>JGR-1.8.dmg</code> (at the time of this writing), and then open the disk image and install it by copying it to your Applications folder. (Note that there is a <code>JGR</code> application (<code>JGR.app</code>) and the <code>JGR</code> <code>R</code> package; they’re not the same thing, and both need to be installed.)</li>
+<li>install <code>JGR-1.8.dmg</code> (you may have to deal with Mac security restrictions)</li>
+<li>Install the necessary packages the usual way (i.e. <code>install.packages(c("rJava", "JavaGD", "iplots"))</code>)</li>
+</ul>
+<p>Then, to run <code>JGR</code>:</p>
+<ul>
+<li>load the <code>JGR</code> package by typing <code>library(JGR)</code>; some warnings will be produced.</li>
+<li>Then start <code>JGR</code> by typing <code>JGR()</code> in the <code>R</code> or <code>RStudio</code> console window. (It’s ok to quit <code>R</code> or <code>RStudio</code> at this point.)</li>
+<li>switch to the <code>JGR</code> app.</li>
+<li>use the <code>JGR</code> <code>Workspace</code> menu to load a workspace, or paste the following into the bottom pane of the <code>JGR</code> app:</li>
+</ul>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">url</span>(<span class="st">&quot;https://pjbartlein.github.io/GeogDataAnalysis/data/Rdata/geog495.RData&quot;</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="at">file=</span>con)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">close</span>(con)</span></code></pre></div>
+<p>(<code>JRG</code> maintains its own workspace (and <code>.RData</code> file), distinct from the one maintained by RStudio.)</p>
+<p><strong>end of last good macOS instructions</strong></p>
+</div>
+</div>
+<div id="scatter-plot-maps" class="section level2" number="4.2">
+<h2 number="4.2"><span class="header-section-number">4.2</span> Scatter-plot maps</h2>
+<p>Here’s the <code>iplots</code> version of the scatter-plot map. Note the size of the symbols can be controlled by the up and down arrow keys, and the transparency by the right and left arrow keys.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(wus_pratio)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co"># simple scatter plot iplots version with transparency</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># use arrow keys to control transparency and symbol size</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">iplot</span>(elev,pjanpann, <span class="at">xlab=</span><span class="st">&quot;elev&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;pjanpann&quot;</span>) </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(wus_pratio)</span></code></pre></div>
+<p><img src="images/iplot011.png" /></p>
+<p><a href="lec19.html">[Back to top]</a></p>
+</div>
+<div id="linked-interactive-plots-and-brushing" class="section level2" number="4.3">
+<h2 number="4.3"><span class="header-section-number">4.3</span> Linked interactive plots and “brushing”</h2>
+<p>Linked plots are those in which multiple plots are generated and viewed, and particular observations are flagged or “brushed” to call attention to them in each of the individual plots. The iplots package provides an easy way to create a small number of linked plots. The data set used here (precipitation ratios in the region around Yellowstone National Park) is a subset of the larger data set, and facilitates a more rapid demonstration. The function <code>ipcp()</code> creates a parallel-coordinates plot, while the function <code>iplot()</code> in this instance creates a crude map. After the plots are created, the mouse can be used to draw a rectangular selection region that “lights up” points in both plots.</p>
+<p>Note: If you get a “Data length mismatch” dialog box warning when executing the code below, reply “Yes”.</p>
+<div id="linked-plots-with-continuous-variables" class="section level3" number="4.3.1">
+<h3 number="4.3.1"><span class="header-section-number">4.3.1</span> Linked plots with continuous variables</h3>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># linked interactive plots -- brushing</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># example with Yellowstone region pratios iplots version</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(yellpratio)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(yellpratio)</span></code></pre></div>
+<pre><code>##  [1] &quot;Lat&quot;        &quot;Lon&quot;        &quot;Elev&quot;       &quot;APJan&quot;      &quot;APFeb&quot;      &quot;APMar&quot;      &quot;APApr&quot;     
+##  [8] &quot;APMay&quot;      &quot;APJun&quot;      &quot;APJul&quot;      &quot;APAug&quot;      &quot;APSep&quot;      &quot;APOct&quot;      &quot;APNov&quot;     
+## [15] &quot;APDec&quot;      &quot;Lat2&quot;       &quot;Lon2&quot;       &quot;Elev_zones&quot; &quot;Loc_factor&quot; &quot;Lat_factor&quot;</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># parallel coordinate plot plus scatter plot map</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ipcp</span>(yellpratio) <span class="co"># use arrow keys to control transparency</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">iplot</span>(Lon, Lat) <span class="co"># use arrow keys to control symbol size</span></span></code></pre></div>
+<p>Here, stations with low winter precipitation ratios were selected on the parallel coordinates plot, and the corresponding locations are shown on the scatter-plot map.</p>
+<p><img src="figures_iplots/iplot021.png" /> <img src="images/iplot022.png" /></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(yellpratio)</span></code></pre></div>
+<p>Here’s a second example using the higher-density western U.S. precipitation ratios:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># example with the higher-density western U.S. pratios</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(wus_pratio) </span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># parallel coordiate plot plus scatter plot map</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ipcp</span>(wus_pratio) <span class="co"># use arrow keys to control transparency</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">iplot</span>(lon, lat) <span class="co"># use arrow keys to control symbol size</span></span></code></pre></div>
+<p>In these linked plots, the stations in western Oregon and Washington were selected on the map, and the parallel coordinates plot shows their precipitation “regimes”.</p>
+<p><img src="images/iplot031.png" /> <img src="images/iplot032.png" /></p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(wus_pratio)</span></code></pre></div>
+</div>
+<div id="linked-plots-with-categorical-variables" class="section level3" number="4.3.2">
+<h3 number="4.3.2"><span class="header-section-number">4.3.2</span> Linked plots with categorical variables</h3>
+<p>Data sets that contain a mixture of categorical or factor variables and ordinal or ratio-scale “continuous” variables can also be visualized, as illustrated by the Summit Cr. data set. Here the “continuous” variables (<code>CumLen</code> and <code>WidthWS</code>) appear in boxplots and scatter plots (right), with <code>WidthWS</code> on the y-axis, and <code>Reach</code> or <code>CumLen</code> on the x-axis, while the categorical variables, <code>Reach</code> and <code>HU</code> are summarized by traditional bar plots and mosaic plots.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># linked plots -- Summit Cr. data set, including categorical variables</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(sumcr)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">imosaic</span>(<span class="fu">data.frame</span>(Reach,HU))</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ibar</span>(HU)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ibar</span>(Reach)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># add a scatter plot</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="fu">iplot</span>(CumLen, WidthWS)</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="fu">iplot.opt</span>(<span class="at">col=</span><span class="fu">unclass</span>(Reach)<span class="sc">+</span><span class="dv">3</span>)</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="co"># add a boxplot</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ibox</span>(WidthWS, Reach)</span></code></pre></div>
+<p>On the plots below, pools (<code>P</code>) in the exclosure reach (<code>B</code>) were highlighted in the mosaic plot, and appear in red on the other plots.</p>
+<p><img src="images/iplot041.png" /> <img src="images/iplot042.png" /> <img src="images/iplot043.png" /><br />
+<img src="images/iplot044.png" /> <img src="images/iplot045.png" /></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
+<a href="lec19.html">[Back to top]</a>
 <hr>
 </div>
 </div>
-<div id="high-density-plots-with-the-tabplot-package" class="section level1">
-<h1><span class="header-section-number">4</span> High-density plots with the tabplot package</h1>
+</div>
+<div id="high-density-plots-with-the-tabplot-package" class="section level1" number="5">
+<h1 number="5"><span class="header-section-number">5</span> High-density plots with the tabplot package</h1>
 <p>The “tableplot” is an interesting visualization method that can be useful for discovering large-scale patterns in the covariations among a small (&lt; 15) set or subset of variables, which can be either continuous or categorical. The basic idea is to organize the rows of a data set along an axis of increasing or decreasing values of a continuous variable or the different “levels” of a categorical variable. A reduction in the density of the data is achieved by binning multiple rows of the data and plotting bin averages (or frequencies) of the variables. As in all compositing techniques, if there a consistent response in the other variables to the variable selected to organize the rows, then this will emerge, otherwise inconsistent reponses will wash each other out, and no apparent pattern will be evident in the plots of the other variables.</p>
-<div id="north-american-modern-pollen-data" class="section level2">
-<h2><span class="header-section-number">4.1</span> North American modern pollen data</h2>
-<p>This example makes use of a data set of 4360 modern pollen samples for North America, from Whitmore et al. (2005, <em>Quaternary Science Reviews</em> <a href="https://doi.org/10.1016/j.quascirev.2005.03.005">https://doi.org/10.1016/j.quascirev.2005.03.005</a>. The variables include the location and elevation of each sample, the relative abundances of the 12 most-abundant pollen types (transformed by taking square roots), and two categorical variables, Federova et al. (1994) vegetation types and USGS land-cover types from satellite remote-sensing data (see Whitmore et al. 2005 for details). This data set provides an interesting example, inasmuch as the resulting tableplots are reminiscent of “downcore”-plotted pollen diagrams.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co"># read the North American modern pollen data</span></a>
-<a class="sourceLine" id="cb24-2" data-line-number="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/csv/&quot;</span></a>
-<a class="sourceLine" id="cb24-3" data-line-number="3">csv_name &lt;-<span class="st"> &quot;NAmodpol.csv&quot;</span></a>
-<a class="sourceLine" id="cb24-4" data-line-number="4">csv_file &lt;-<span class="st"> </span><span class="kw">paste</span>(csv_path, csv_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb24-5" data-line-number="5">napol &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_file) <span class="co"># takes a while</span></a>
-<a class="sourceLine" id="cb24-6" data-line-number="6"><span class="kw">str</span>(napol)</a></code></pre></div>
+<div id="north-american-modern-pollen-data" class="section level2" number="5.1">
+<h2 number="5.1"><span class="header-section-number">5.1</span> North American modern pollen data</h2>
+<p>This example makes use of a data set of 4360 modern pollen samples for North America, from Whitmore et al. (2005, <em>Quaternary Science Reviews</em> <a href="https://doi.org/10.1016/j.quascirev.2005.03.005">https://doi.org/10.1016/j.quascirev.2005.03.005</a>. The variables include the location and elevation of each sample, the relative abundances of the 12 most-abundant pollen types (transformed by taking square roots), and two categorical variables, Federova et al. (1994) vegetation types and USGS land-cover types from satellite remote-sensing data (see Whitmore et al. 2005 for details). This data set provides an interesting example, inasmuch as the resulting tableplots are reminiscent of “downcore”-plotted pollen diagrams.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read the North American modern pollen data</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>csv_path <span class="ot">&lt;-</span> <span class="st">&quot;c:/Users/bartlein/Documents/geog495/data/csv_files/&quot;</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>csv_name <span class="ot">&lt;-</span> <span class="st">&quot;NAmodpol.csv&quot;</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>csv_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(csv_path, csv_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>napol <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csv_file) <span class="co"># takes a while</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(napol)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    4630 obs. of  17 variables:
 ##  $ Lon    : num  -70 -79.2 -57 -85.5 -73.3 ...
 ##  $ Lat    : num  61 46 52.5 36 45.5 ...
@@ -751,62 +857,63 @@ $(document).ready(function () {
 ##  $ Fed    : chr  &quot;ForestTundra&quot; &quot;ConiferHardwood&quot; &quot;BorealForest&quot; &quot;DeciduousForest&quot; ...
 ##  $ USGS21 : chr  &quot;lc22&quot; &quot;lc15&quot; &quot;lc15&quot; &quot;lc6&quot; ...</code></pre>
 <p>Get a quick map of the pollen site locations:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(world_sf), <span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">180</span>, <span class="dv">-10</span>), <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">80</span>), <span class="dt">axes=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="kw">points</span>(napol<span class="op">$</span>Lat <span class="op">~</span><span class="st"> </span>napol<span class="op">$</span>Lon, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>, <span class="dt">col=</span><span class="st">&quot;darkgreen&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(world_sf), <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">-</span><span class="dv">10</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">80</span>), <span class="at">axes=</span><span class="cn">TRUE</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(napol<span class="sc">$</span>Lat <span class="sc">~</span> napol<span class="sc">$</span>Lon, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">0.5</span>, <span class="at">col=</span><span class="st">&quot;darkgreen&quot;</span>)</span></code></pre></div>
 <p><img src="lec19_files/figure-html/hd31-1.png" width="1800" /></p>
 </div>
-<div id="plots-1" class="section level2">
-<h2><span class="header-section-number">4.2</span> Plots</h2>
+<div id="plots-1" class="section level2" number="5.2">
+<h2 number="5.2"><span class="header-section-number">5.2</span> Plots</h2>
 <p>Load the <code>tabplot</code> package. Note that <code>tabplot</code> loads some other packages (<code>ffbase</code>, <code>ff</code>, <code>bit</code>, etc.) that allow for efficient processing of large data sets and replace some of the functions in the <code>base</code> package. It might be good to restart R after using the <code>tabplot</code> package.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">library</span>(tabplot)</a></code></pre></div>
-<p>Here’s a simple tableplot, with the observations arranged by latitude (<code>sortCol=&quot;Lat&quot;</code>) and linear scales specified for all continuous variables (<code>scales=&quot;lin&quot;</code>, the <code>tabplot()</code> function attempts to find a suitable scale for each variable, but here the pollen variables were all transformed prior to the analysis, and so we want to suppress further transformation here).</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tabplot)</span></code></pre></div>
+<p>Here’s a simple tableplot, with the observations arranged by latitude (<code>sortCol="Lat"</code>) and linear scales specified for all continuous variables (<code>scales="lin"</code>, the <code>tabplot()</code> function attempts to find a suitable scale for each variable, but here the pollen variables were all transformed prior to the analysis, and so we want to suppress further transformation here).</p>
 <p>(Note that it just happens that the resulting plot looks like a standard pollen diagram–this isn’t designed in any way.)</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">tableplot</span>(napol, <span class="dt">sortCol=</span><span class="st">&quot;Lat&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tableplot</span>(napol, <span class="at">sortCol=</span><span class="st">&quot;Lat&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>)</span></code></pre></div>
 <p><img src="lec19_files/figure-html/hd34-1.png" width="90%" height="90%" /></p>
 <p>It’s possible to see broad trends in all of the pollen types, as well as in the frequency of different vegetationtypes as a function of latitude.</p>
 <p>Each bin the above plot represents a bin that, in this case, holds 46 observations, and what is plotted as bars in each column is the bin-average or frequency for those observations. Here’s a second plot like the first, using more bins:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">tableplot</span>(napol, <span class="dt">sortCol=</span><span class="st">&quot;Lat&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">nBins=</span><span class="dv">200</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tableplot</span>(napol, <span class="at">sortCol=</span><span class="st">&quot;Lat&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">nBins=</span><span class="dv">200</span>, <span class="at">fontsize =</span> <span class="dv">8</span>)</span></code></pre></div>
 <p><img src="lec19_files/figure-html/hd36-1.png" width="90%" height="90%" /></p>
 <p>The same broad-scale patterns are evident in this plot, suggesting that the approach is robust with respect to the number of bins. The next plot using the abundance of <em>Picea</em> (spruce to organize the data):</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">tableplot</span>(napol, <span class="dt">sortCol=</span><span class="st">&quot;Picea&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">nBins=</span><span class="dv">100</span>, , <span class="dt">fontsize =</span> <span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tableplot</span>(napol, <span class="at">sortCol=</span><span class="st">&quot;Picea&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">nBins=</span><span class="dv">100</span>, , <span class="at">fontsize =</span> <span class="dv">8</span>)</span></code></pre></div>
 <p><img src="lec19_files/figure-html/hd38-1.png" width="90%" height="90%" /></p>
 <p>The plot shows that <em>Aremisia</em> (sagebrush) pollen has a similar profile to <em>Picea</em> and both tend to be high at high elevation and low (western) longitudes. The next plot using one of the categorical variables to organize the data.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw">tableplot</span>(napol, <span class="dt">sortCol=</span><span class="st">&quot;Fed&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">nBins=</span><span class="dv">100</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tableplot</span>(napol, <span class="at">sortCol=</span><span class="st">&quot;Fed&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">nBins=</span><span class="dv">100</span>, <span class="at">fontsize =</span> <span class="dv">8</span>)</span></code></pre></div>
 <p><img src="lec19_files/figure-html/hd40-1.png" width="90%" height="90%" /></p>
 <p>The blockiness of the different profiles shows that the individual vegetation types have distinctive mixtures of the different pollen types.</p>
 </div>
-<div id="global-fire-data-1" class="section level2">
-<h2><span class="header-section-number">4.3</span> Global fire data</h2>
+<div id="global-fire-data-1" class="section level2" number="5.3">
+<h2 number="5.3"><span class="header-section-number">5.3</span> Global fire data</h2>
 <p>The global fire data set has roughly the same number of variables as the pollen data, but ten times the number of observations. The number of individual observations in each bin is therefore larger, increasing the likelihood that the contents of individual bins will be more heterogeneous, with an consequent loss of overall information.</p>
 </div>
-<div id="plots-2" class="section level2">
-<h2><span class="header-section-number">4.4</span> Plots</h2>
-<p>To start, produce a tableplot, arranged by mean-annual temperature (<code>mat</code>), an obvious first-order preditor of biomass burning, as well as overall climate (through the dependence of the water balance on temperature via the Clausius-Clapyron relationship):</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">tableplot</span>(gf, <span class="dt">sortCol=</span><span class="st">&quot;mat&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>, <span class="dt">pals=</span><span class="kw">list</span>(<span class="dt">megabiome=</span><span class="st">&quot;Set8&quot;</span>, <span class="dt">vegtype=</span><span class="st">&quot;Set8&quot;</span>))</a></code></pre></div>
+<div id="plots-2" class="section level2" number="5.4">
+<h2 number="5.4"><span class="header-section-number">5.4</span> Plots</h2>
+<p>To start, produce a tableplot, arranged by mean-annual temperature (<code>mat</code>), an obvious first-order predictor of biomass burning, as well as overall climate (through the dependence of the water balance on temperature via the Clausius-Clapyron relationship):</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(gf)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tableplot</span>(gf, <span class="at">sortCol=</span><span class="st">&quot;mat&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>, <span class="at">pals=</span><span class="fu">list</span>(<span class="st">&quot;Set8&quot;</span>, <span class="st">&quot;Set8&quot;</span>))</span></code></pre></div>
 <p><img src="lec19_files/figure-html/unnamed-chunk-13-1.png" width="90%" height="90%" /></p>
 <p>Overall, the trends of individual variables are relatively smooth, and it’s easy to see distiguish the temperature and moisture variables (as well as the population variable <code>gpw</code>). The vegetation-type variables <code>megabiome</code> and <code>vegtype</code> are also well sorted out along a mean annual temperature gradient. Burned fraction (<code>gfed</code>) obviously displays a threshold-type relationshion, where values are small at low temperatures, and higher at high values of <code>mat</code>.</p>
 <p>Next, the tableplot is sorted by precipitation minus evapotranspiration (<code>pme</code>, or P-E):</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">tableplot</span>(gf, <span class="dt">sortCol=</span><span class="st">&quot;pme&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>, <span class="dt">pals=</span><span class="kw">list</span>(<span class="dt">megabiome=</span><span class="st">&quot;Set8&quot;</span>, <span class="dt">vegtype=</span><span class="st">&quot;Set8&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tableplot</span>(gf, <span class="at">sortCol=</span><span class="st">&quot;pme&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>)</span></code></pre></div>
 <p><img src="lec19_files/figure-html/unnamed-chunk-14-1.png" width="90%" height="90%" /></p>
 <p>The relationship between burned fraction and P-E evident in univariate plots–the arch-shaped pattern, where burned fraction is highest at intermediate values of effective moisture–is also evident here: as P-E monotonically incrases, burned fraction (<code>gfed</code>) rises, then falls.</p>
 <p>Finally, the tableplot can be sorted by burned fraction (<code>gfed</code>):</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">tableplot</span>(gf, <span class="dt">sortCol=</span><span class="st">&quot;gfed&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>, <span class="dt">pals=</span><span class="kw">list</span>(<span class="dt">megabiome=</span><span class="st">&quot;Set8&quot;</span>, <span class="dt">vegtype=</span><span class="st">&quot;Set8&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tableplot</span>(gf, <span class="at">sortCol=</span><span class="st">&quot;gfed&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>)</span></code></pre></div>
 <p><img src="lec19_files/figure-html/unnamed-chunk-15-1.png" width="90%" height="90%" /></p>
 <p>This plot confirms the existing relationships, where burned fraction broadly tracks temperature and P-E. However the plots also reveal a distinct threshold that is apparently related to a distinct discontinuity in vegetation: the transition beteen desert and tundra vegetation types, and grassland, shubland and forested ones.</p>
 <p><a href="lec19.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="plotting-multivariatemultiple-time-series" class="section level1">
-<h1><span class="header-section-number">5</span> Plotting multivariate/multiple time series</h1>
+<div id="plotting-multivariatemultiple-time-series" class="section level1" number="6">
+<h1 number="6"><span class="header-section-number">6</span> Plotting multivariate/multiple time series</h1>
 <p>Although the tableplots of the North American pollen data above happened to look like conventional pollen diagrams, which were a comparatively early (over a century ago) attempt to visualize multivariate data, the data displayed by the <code>tableplot()</code> function does not necessarily need to be a series. The next example illustrates a display method in which the data <em>do</em> form a series, in this case pollen data again, only this time for a single site, which form a multivariate time series.</p>
-<div id="carp-l.-pollen-data" class="section level2">
-<h2><span class="header-section-number">5.1</span> Carp L. pollen data</h2>
+<div id="carp-l.-pollen-data" class="section level2" number="6.1">
+<h2 number="6.1"><span class="header-section-number">6.1</span> Carp L. pollen data</h2>
 <p>The data here come from a long pollen record from Carp L., in Washinton State. (Whitlock, C.L. et al., 2000, <em>Palaeogeography Palaeoclimatology Palaeoecology</em> 155(1-2):7-29 [<a href="https://doi.org/10.1016/S0031-0182(99)00092-9" class="uri">https://doi.org/10.1016/S0031-0182(99)00092-9</a>] (<a href="https://doi.org/10.1016/S0031-0182\(99\)00092-9" class="uri">https://doi.org/10.1016/S0031-0182\(99\)00092-9</a>) and Whitlock, C. and P.J. Bartlein, 1997, <em>Nature</em> 388:57-61 <a href="https://doi.org/10.1038/40380">https://doi.org/10.1038/40380</a>. Pollen data are “long-tailed” and so the data were transformed earlier by taking the square root of the pollen percentages.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co"># read Carp L. pollen data (transformed to square-roots)</span></a>
-<a class="sourceLine" id="cb35-2" data-line-number="2">csvpath &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/csv/&quot;</span></a>
-<a class="sourceLine" id="cb35-3" data-line-number="3">csvname &lt;-<span class="st"> &quot;carp96t.csv&quot;</span> <span class="co"># square-root transformed data</span></a>
-<a class="sourceLine" id="cb35-4" data-line-number="4">carp &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">paste</span>(csvpath, csvname, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb35-5" data-line-number="5"><span class="kw">summary</span>(carp)</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read Carp L. pollen data (transformed to square-roots)</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>csvpath <span class="ot">&lt;-</span> <span class="st">&quot;c:/Users/bartlein/Documents/geog495/data/csv_files/&quot;</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>csvname <span class="ot">&lt;-</span> <span class="st">&quot;carp96t.csv&quot;</span> <span class="co"># square-root transformed data</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>carp <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">paste</span>(csvpath, csvname, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(carp)</span></code></pre></div>
 <pre><code>##      Depth            Age                IS               Dippine         Happine          undpine     
 ##  Min.   : 1.30   Min.   :  0.3983   Length:199         Min.   :0.000   Min.   :0.0000   Min.   :1.629  
 ##  1st Qu.: 7.15   1st Qu.: 25.1045   Class :character   1st Qu.:1.220   1st Qu.:0.5585   1st Qu.:4.351  
@@ -843,85 +950,85 @@ $(document).ready(function () {
 ##  3rd Qu.:0.8965  
 ##  Max.   :3.9650</code></pre>
 <p>Pollen data (expressed as proportions or percentages of individual pollen types) vary over an order of magnitude in value, and also have long-tailed distributions. Consequently they should be tranformed, and a useful transformation is to simply take the square root of the proportions.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="co"># transform </span></a>
-<a class="sourceLine" id="cb37-2" data-line-number="2">tcarp &lt;-<span class="st"> </span>carp</a>
-<a class="sourceLine" id="cb37-3" data-line-number="3">tcarp[<span class="dv">4</span><span class="op">:</span><span class="dv">25</span>] &lt;-<span class="st"> </span><span class="kw">sqrt</span>(tcarp[<span class="dv">4</span><span class="op">:</span><span class="dv">25</span>])</a>
-<a class="sourceLine" id="cb37-4" data-line-number="4"><span class="kw">names</span>(tcarp)</a></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transform </span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>tcarp <span class="ot">&lt;-</span> carp</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>tcarp[<span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(tcarp[<span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>])</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(tcarp)</span></code></pre></div>
 <pre><code>##  [1] &quot;Depth&quot;      &quot;Age&quot;        &quot;IS&quot;         &quot;Dippine&quot;    &quot;Happine&quot;    &quot;undpine&quot;    &quot;Picea&quot;     
 ##  [8] &quot;Abies&quot;      &quot;Pseudotsug&quot; &quot;Juniperus&quot;  &quot;Thet&quot;       &quot;Tmert&quot;      &quot;Taxusbrev&quot;  &quot;Alnus&quot;     
 ## [15] &quot;Arubra&quot;     &quot;Corylus&quot;    &quot;Betula&quot;     &quot;Salix&quot;      &quot;Fraxinus&quot;   &quot;Quercus&quot;    &quot;Poaceae&quot;   
 ## [22] &quot;Artemisia&quot;  &quot;Ambrosia&quot;   &quot;Ivaciliat&quot;  &quot;Chenopodii&quot;</code></pre>
 <p>As it appears in the spreadsheet, the data are not particularly well organized, but instead the columns are arranged according to the traditional style of pollen diagrams. An alternative approach is to arrange the indiviual variables (pollen types) according to their affinities as they vary over the core, which can be accomplished by doing a cluster analysis on a dissimilary matrix among pollen types: taxa that vary in a similar (or inverse) fashion downcore appear adjacent to one another.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="co"># cluster rearrangement</span></a>
-<a class="sourceLine" id="cb39-2" data-line-number="2">carp_heat &lt;-<span class="st"> </span><span class="kw">heatmap</span>(<span class="kw">as.matrix</span>(tcarp[<span class="dv">4</span><span class="op">:</span><span class="dv">25</span>]), <span class="dt">Rowv =</span> <span class="ot">NA</span>, <span class="dt">scale=</span><span class="st">&quot;none&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cluster rearrangement</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>carp_heat <span class="ot">&lt;-</span> <span class="fu">heatmap</span>(<span class="fu">as.matrix</span>(tcarp[<span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>]), <span class="at">Rowv =</span> <span class="cn">NA</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>)</span></code></pre></div>
 <p><img src="lec19_files/figure-html/unnamed-chunk-17-1.png" width="2100" /></p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw">attributes</span>(carp_heat)</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attributes</span>(carp_heat)</span></code></pre></div>
 <pre><code>## $names
 ## [1] &quot;rowInd&quot; &quot;colInd&quot; &quot;Rowv&quot;   &quot;Colv&quot;</code></pre>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1">carp_heat<span class="op">$</span>colInd</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>carp_heat<span class="sc">$</span>colInd</span></code></pre></div>
 <pre><code>##  [1]  3 18 19  4  2  1 13 20 21 10 16 11 15 14  9  6 12 17  8  5 22  7</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">sort_cols &lt;-<span class="st"> </span>carp_heat<span class="op">$</span>colInd <span class="op">+</span><span class="st"> </span><span class="dv">3</span></a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>sort_cols <span class="ot">&lt;-</span> carp_heat<span class="sc">$</span>colInd <span class="sc">+</span> <span class="dv">3</span></span></code></pre></div>
 <p>The “heatmap” (which in itself provides an interesting way to look at the data), can be used to rearrange the columns of the dataframe to put similar (or inversely similar, when one type is high the other is low) next to one another:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="co"># rearrange matrix</span></a>
-<a class="sourceLine" id="cb45-2" data-line-number="2">stcarp &lt;-<span class="st"> </span>tcarp</a>
-<a class="sourceLine" id="cb45-3" data-line-number="3"><span class="kw">names</span>(stcarp)</a></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rearrange matrix</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>stcarp <span class="ot">&lt;-</span> tcarp</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(stcarp)</span></code></pre></div>
 <pre><code>##  [1] &quot;Depth&quot;      &quot;Age&quot;        &quot;IS&quot;         &quot;Dippine&quot;    &quot;Happine&quot;    &quot;undpine&quot;    &quot;Picea&quot;     
 ##  [8] &quot;Abies&quot;      &quot;Pseudotsug&quot; &quot;Juniperus&quot;  &quot;Thet&quot;       &quot;Tmert&quot;      &quot;Taxusbrev&quot;  &quot;Alnus&quot;     
 ## [15] &quot;Arubra&quot;     &quot;Corylus&quot;    &quot;Betula&quot;     &quot;Salix&quot;      &quot;Fraxinus&quot;   &quot;Quercus&quot;    &quot;Poaceae&quot;   
 ## [22] &quot;Artemisia&quot;  &quot;Ambrosia&quot;   &quot;Ivaciliat&quot;  &quot;Chenopodii&quot;</code></pre>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">stcarp[<span class="dv">4</span><span class="op">:</span><span class="dv">25</span>] &lt;-<span class="st"> </span>tcarp[sort_cols]</a>
-<a class="sourceLine" id="cb47-2" data-line-number="2"><span class="kw">names</span>(stcarp) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Depth&quot;</span>, <span class="st">&quot;Age&quot;</span>, <span class="st">&quot;IS&quot;</span>, <span class="kw">names</span>(tcarp)[sort_cols])</a>
-<a class="sourceLine" id="cb47-3" data-line-number="3"><span class="kw">names</span>(stcarp)</a></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>stcarp[<span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>] <span class="ot">&lt;-</span> tcarp[sort_cols]</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(stcarp) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Depth&quot;</span>, <span class="st">&quot;Age&quot;</span>, <span class="st">&quot;IS&quot;</span>, <span class="fu">names</span>(tcarp)[sort_cols])</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(stcarp)</span></code></pre></div>
 <pre><code>##  [1] &quot;Depth&quot;      &quot;Age&quot;        &quot;IS&quot;         &quot;undpine&quot;    &quot;Poaceae&quot;    &quot;Artemisia&quot;  &quot;Picea&quot;     
 ##  [8] &quot;Happine&quot;    &quot;Dippine&quot;    &quot;Corylus&quot;    &quot;Ambrosia&quot;   &quot;Ivaciliat&quot;  &quot;Taxusbrev&quot;  &quot;Fraxinus&quot;  
 ## [15] &quot;Alnus&quot;      &quot;Salix&quot;      &quot;Betula&quot;     &quot;Tmert&quot;      &quot;Pseudotsug&quot; &quot;Arubra&quot;     &quot;Quercus&quot;   
 ## [22] &quot;Thet&quot;       &quot;Abies&quot;      &quot;Chenopodii&quot; &quot;Juniperus&quot;</code></pre>
 </div>
-<div id="plots-3" class="section level2">
-<h2><span class="header-section-number">5.2</span> Plots</h2>
+<div id="plots-3" class="section level2" number="6.2">
+<h2 number="6.2"><span class="header-section-number">6.2</span> Plots</h2>
 <p>The idea behind the <code>mvtsplots()</code> package (and function) is to use color to reveal underlying patterns in the data. The first plot shows the “raw” data, simply coded for each pollen taxon independently from low (magenta) to high (green). The plots on the margins are of boxplots for the individual series (right), and a time series of the median values across all series (bottom), which attempt to summarize the overall level of the series.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="kw">library</span>(mvtsplot)</a></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mvtsplot)</span></code></pre></div>
 <pre><code>## Loading required package: RColorBrewer</code></pre>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="kw">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>], <span class="at">xtime=</span>carp<span class="sc">$</span>Age, <span class="at">levels=</span><span class="dv">9</span>, <span class="at">margin=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="lec19_files/figure-html/mvtsplots01-1.png" width="2100" /></p>
 <p>PLotted this way, one begins to get an idea of some organization to the data along the time axis. The plot is a little noisy, and can be simplified by smoothing the individual series.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1"><span class="kw">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">smooth.df=</span><span class="dv">25</span>, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>], <span class="at">xtime=</span>carp<span class="sc">$</span>Age, <span class="at">smooth.df=</span><span class="dv">25</span>, <span class="at">levels=</span><span class="dv">9</span>, <span class="at">margin=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="lec19_files/figure-html/mtvsplot02-1.png" width="2100" /></p>
 <p>Further simplification can be gotten by “normalizing” the data, transforming and assigning colors based on the range of values in each series individually.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="kw">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">smooth.df=</span><span class="dv">2</span>, <span class="dt">norm=</span><span class="st">&quot;internal&quot;</span>, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>], <span class="at">xtime=</span>carp<span class="sc">$</span>Age, <span class="at">smooth.df=</span><span class="dv">2</span>, <span class="at">norm=</span><span class="st">&quot;internal&quot;</span>, <span class="at">levels=</span><span class="dv">9</span>, <span class="at">margin=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="lec19_files/figure-html/mtvsplot03-1.png" width="2100" /></p>
 <p>The color field now shows that the data are well organized in time, which can be verified by adding a plot of the variable <code>IS</code> i.e. the MIS (Marine Isotopic Stage) to the plot (on the last row). The progression of plots can also be seen to have proceeded from a fairly chaotic pattern to one with coherent patches:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="kw">mvtsplot</span>(stcarp[, <span class="dv">3</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">smooth.df=</span><span class="dv">2</span>, <span class="dt">norm=</span><span class="st">&quot;internal&quot;</span>, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mvtsplot</span>(stcarp[, <span class="dv">3</span><span class="sc">:</span><span class="dv">25</span>], <span class="at">xtime=</span>carp<span class="sc">$</span>Age, <span class="at">smooth.df=</span><span class="dv">2</span>, <span class="at">norm=</span><span class="st">&quot;internal&quot;</span>, <span class="at">levels=</span><span class="dv">9</span>, <span class="at">margin=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="lec19_files/figure-html/mvtsplot04-1.png" width="2100" /></p>
 <p><a href="lec19.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="interactive-plots" class="section level1">
-<h1><span class="header-section-number">6</span> Interactive plots</h1>
+<div id="interactive-plots" class="section level1" number="7">
+<h1 number="7"><span class="header-section-number">7</span> Interactive plots</h1>
 <p>R has a long history of attempts to develop interactive plots, usually consisting of the basic plots developed from low-dimensional data. RStudio’s <em>Shiny</em> package <a href="https://shiny.rstudio.com">https://shiny.rstudio.com</a> and the <em>Plotly R Open Source Graphics Library</em> <a href="https://plot.ly/r/">https://plot.ly/r/</a> are examples that are rapidly developing. An interesting plot for displaying high-dimensional data is the <em>cubeplot</em>, which is easiest to explain by looking at one. The data here come from the <em>TraCE-21k</em> transient climate simulation from 21,000 years ago to present (at monthly resolution) (Liu, Z., et al. 2009, Science 325(5938): 310-314). A data set of of decadal-average “anomaly” values (the difference between past and present) is examined here.</p>
-<div id="data" class="section level2">
-<h2><span class="header-section-number">6.1</span> Data</h2>
+<div id="data" class="section level2" number="7.1">
+<h2 number="7.1"><span class="header-section-number">7.1</span> Data</h2>
 <p>The data are read and plotted using the <code>raster</code> and <code>rasterVis</code> framework. First, load the packages:</p>
 <p>Read the data:</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="co"># read TraCE21-ka transient climate-model simulation decadal data</span></a>
-<a class="sourceLine" id="cb55-2" data-line-number="2">tr21dec_path &lt;-<span class="st"> &quot;/Users/bartlein/Documents/geog495/data/nc_files/&quot;</span></a>
-<a class="sourceLine" id="cb55-3" data-line-number="3">tr21dec_name &lt;-<span class="st"> &quot;Trace21_TREFHT_anm2.nc&quot;</span></a>
-<a class="sourceLine" id="cb55-4" data-line-number="4">tr21dec_file &lt;-<span class="st"> </span><span class="kw">paste</span>(tr21dec_path, tr21dec_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb55-5" data-line-number="5">tas_anm_ann &lt;-<span class="st"> </span><span class="kw">brick</span>(tr21dec_file, <span class="dt">varname=</span><span class="st">&quot;tas_anm_ann&quot;</span>, <span class="dt">band=</span><span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2204</span>))</a>
-<a class="sourceLine" id="cb55-6" data-line-number="6">tas_anm_ann &lt;-<span class="st"> </span><span class="kw">rotate</span>(tas_anm_ann)</a>
-<a class="sourceLine" id="cb55-7" data-line-number="7">tas_anm_ann</a></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read TraCE21-ka transient climate-model simulation decadal data</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>tr21dec_path <span class="ot">&lt;-</span> <span class="st">&quot;c:/Users/bartlein/Documents/geog495/data/nc_files/&quot;</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>tr21dec_name <span class="ot">&lt;-</span> <span class="st">&quot;Trace21_TREFHT_anm2.nc&quot;</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>tr21dec_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(tr21dec_path, tr21dec_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>tas_anm_ann <span class="ot">&lt;-</span> <span class="fu">brick</span>(tr21dec_file, <span class="at">varname=</span><span class="st">&quot;tas_anm_ann&quot;</span>, <span class="at">band=</span><span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2204</span>))</span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>tas_anm_ann <span class="ot">&lt;-</span> <span class="fu">rotate</span>(tas_anm_ann)</span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>tas_anm_ann</span></code></pre></div>
 <p>Even though the data is decadal resolution, it’s still a lot of data, and so for this example, the data are (actually) decimated to produce century time-step decadal average values.</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1">tas2 &lt;-<span class="st"> </span><span class="kw">subset</span>(tas_anm_ann, <span class="dt">subset=</span><span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">2201</span>, <span class="dt">by=</span><span class="dv">10</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>tas2 <span class="ot">&lt;-</span> <span class="fu">subset</span>(tas_anm_ann, <span class="at">subset=</span><span class="fu">seq</span>(<span class="dv">1</span>,<span class="dv">2201</span>, <span class="at">by=</span><span class="dv">10</span>))</span></code></pre></div>
 <p>A levelplot of one slice of the the data can be used to become oriented to the geographic layout of the data:</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span>(<span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))))</a>
-<a class="sourceLine" id="cb57-2" data-line-number="2">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">40</span>,<span class="op">-</span><span class="dv">10</span>,<span class="op">-</span><span class="dv">5</span>,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb57-3" data-line-number="3">col &lt;-<span class="st"> </span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))</a>
-<a class="sourceLine" id="cb57-4" data-line-number="4">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(<span class="kw">subset</span>(tas2,<span class="dv">1</span>), <span class="dt">at=</span>cutpts, <span class="dt">margin=</span><span class="ot">FALSE</span>, <span class="dt">par.settings=</span>mapTheme)</a>
-<a class="sourceLine" id="cb57-5" data-line-number="5">plt <span class="op">+</span><span class="st"> </span>latticeExtra<span class="op">::</span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(<span class="kw">as_Spatial</span>(world_sf), <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="dv">1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>mapTheme <span class="ot">&lt;-</span> <span class="fu">rasterTheme</span>(<span class="at">region=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))))</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">40</span>,<span class="sc">-</span><span class="dv">10</span>,<span class="sc">-</span><span class="dv">5</span>,<span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>)</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>col <span class="ot">&lt;-</span> <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))</span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>plt <span class="ot">&lt;-</span> <span class="fu">levelplot</span>(<span class="fu">subset</span>(tas2,<span class="dv">1</span>), <span class="at">at=</span>cutpts, <span class="at">margin=</span><span class="cn">FALSE</span>, <span class="at">par.settings=</span>mapTheme)</span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>plt <span class="sc">+</span> latticeExtra<span class="sc">::</span><span class="fu">layer</span>(<span class="fu">sp.lines</span>(<span class="fu">as_Spatial</span>(world_sf), <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="dv">1</span>))</span></code></pre></div>
 <p><img src="lec19_files/figure-html/plot%20setup-1.png" width="2100" /></p>
 </div>
-<div id="cube-plot" class="section level2">
-<h2><span class="header-section-number">6.2</span> Cube plot</h2>
+<div id="cube-plot" class="section level2" number="7.2">
+<h2 number="7.2"><span class="header-section-number">7.2</span> Cube plot</h2>
 <p>Then, the cubeplot can be produced using the <code>cubeview()</code> function from the <code>cubeview</code> package. The plot is interactively controlled as follows (from the <code>cubeview()</code> help file:</p>
 <p>The location of the slices can be controlled by keys:</p>
 <ul>
@@ -937,16 +1044,16 @@ $(document).ready(function () {
 <li>Press space bar to show/hide slice position guides</li>
 </ul>
 <p>The cubeplot, as rendered here, displays a map on the “front (or rear) face” of the brick, and Hovmöller plots on the top (or bottom) and sides.</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1"><span class="kw">cubeView</span>(tas2, <span class="dt">at=</span>cutpts, <span class="dt">col.regions=</span>col)</a></code></pre></div>
-<p><img src="tr21cube.png" /></p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cubeView</span>(tas2, <span class="at">at=</span>cutpts, <span class="at">col.regions=</span>col)</span></code></pre></div>
+<p><img src="images/tr21cube.png" /></p>
 <p>Here is a link to the plot on the server: <a href="https://pjbartlein.github.io/REarthSysSci/tr21cube.html">https://pjbartlein.github.io/REarthSysSci/tr21cube.html</a></p>
-<p><a href="lec19.html">[Back to top]</a> <a href="lec19.html">[Back to top]</a></p>
+<p><a href="lec19.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="readings" class="section level1">
-<h1><span class="header-section-number">7</span> Readings</h1>
+<div id="readings" class="section level1" number="8">
+<h1 number="8"><span class="header-section-number">8</span> Readings</h1>
 <ul>
-<li>Section 6.4 in James, G., et al. (2013) <em>An Introduction to Statistical Learning</em>, Springer. (Search by title for the eBook version on the UO Library page <a href="http://library.uoregon.edu">[http://library.uoregon.edu]</a>.)</li>
+<li>Section 6.4 in James, G., et al. (2013) <em>An Introduction to Statistical Learning</em>, Springer. (Search by title for the eBook version on the UO Library page <a href="http://library.uoregon.edu">[http://library.uoregon.edu]</a>.)</li>
 <li>Chapter 18 in Hastie, T. et al., (2009) <em>The Elements of Statistical Learning</em>, Springer. (Search by title of the eBook version on the UO Library page <a href="http://library.uoregon.edu">[http://library.uoregon.edu]</a>.) This is a technical discussion of the problems that arise in analyzing high-dimension data. (Note, the link seems to be currently slightly broken–you may have to search again for the title once on the Springer Link web page. Look for the 2009 edition.)</li>
 </ul>
 </div>
@@ -960,7 +1067,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -978,7 +1085,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>

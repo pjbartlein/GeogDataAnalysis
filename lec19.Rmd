@@ -15,10 +15,10 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
-```{r load, echo=FALSE, cache=FALSE}
+```{r load, echo=FALSE, cache=FALSE, warning=FALSE}
 load(".Rdata")
 ```
-<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2021, but may undergo further edits.</span></p>
 # Introduction #
 
 There has been a rapid increase in the availability of data sets that may contain thousands of observations (high-resolution, i.e. high-density or high-frequency data sets) and tens or hundreds of variables or attributes (high-dimension).  Such data sets arise from:
@@ -137,7 +137,7 @@ library(GGally)
  
 ```{r, echo=TRUE, eval=TRUE, results='hide'}
 # read the data -- output suppressed
-csvfile <- "/Users/bartlein/Documents/geog495/data/csv/global_fire.csv"
+csvfile <- "c:/Users/bartlein/Documents/geog495/data/csv_files/global_fire.csv"
 gf <- read.csv(csvfile)
 str(gf)
 summary(gf)
@@ -199,7 +199,7 @@ hist(gf$pme)
 
 Get a shapefile too:
 
-```{r, echo=TRUE, eval=TRUE, results='hide'}
+```{r, echo=TRUE, eval=FALSE, results='hide'}
 # read a world outlines shape file
 shp_path <- "/Users/bartlein/Documents/geog495/data/shp/"
 shp_name <- "ne_110m_admin_0_countries.shp"
@@ -319,6 +319,156 @@ Before moving on, delete the variable `select_points` from the `gf` dataframe:
 gf$select_points <- NULL
 ```
 
+# The iplots package:  transparency and linked plots #
+
+The `iplots` package provides another way of producing "alpha-channel" plots (plus more, as will be illustrated below).
+
+## Installation ## 
+
+The `iplots` package was designed to run in a "third-party" GUI called `JGR` which handles the execution of the Java-language plotting routines.  The installation of `JGR` on Windows is pretty straightforward, but a little tricky on the Mac.  
+
+### Windows ###
+
+On Windows, download and install the `iplots` package as usual.  (Also install the `rJava` package; other necessary packages should be automatically installed).  Then load the `rJava` and `iplots` packages as usual.
+
+```{r hd11, message=FALSE, eval=FALSE}
+library(rJava)
+library(iplots)
+```
+
+### Mac OS X ###
+
+**NOTE:  As of this writing (Feb 2021), JGR does not run correctly on macOS Catalina.  The last good instructions follow:**
+
+On the Mac, the installation is a little more involved, `iplots` is run through an "IDE/script editor"" called `JGR`, which combines a script editor and console window, and resembles the usual Mac OS X R GUI.  `JGR` was built using an older version of Java (Java 6), and the appropriate "runtime environment" (currently Java for OS X 2015-001) has be downloaded from Apple and installed. 
+
+Go to [https://support.apple.com/kb/DL1572?locale=en_US](https://support.apple.com/kb/DL1572?locale=en_US), and click on the "Download" button, and follow instructions.
+
+(Note:  Apple recommends keeping Java up to date.  To download the current Java run-time environment (JRE) from Oracle.  
+
+- Go to [[http://www.oracle.com/technetwork/java/javase/downloads/index.html]](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  Click on the JRE Download button, follow the instructions, and eventually download and install `jre-8u121-macosx-x64.dmg` (or the most current version).  Then  
+- Open a terminal window and type or copy and paste the following (including the quotes `"`):  
+`export JAVA_HOME="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home"`
+- Check the installation by typing `java -version` and you should see `java version "1.8.0_121-b13"`)
+
+Then download `JGR` and the appropriate libraries:
+
+- Go to [[http://rforge.net/JGR/files/]](http://rforge.net/JGR/files/) and download `JGR-1.8.dmg` (at the time of this writing), and then open the disk image and install it by copying it to your Applications folder. (Note that there is a `JGR` application (`JGR.app`) and the `JGR` `R` package; they’re not the same thing, and both need to be installed.)
+- install `JGR-1.8.dmg` (you may have to deal with Mac security restrictions)
+- Install the necessary packages the usual way (i.e. `install.packages(c("rJava", "JavaGD", "iplots"))`)
+
+Then, to run `JGR`:
+
+- load the `JGR` package by typing `library(JGR)`; some warnings will be produced.
+- Then start `JGR` by typing `JGR()` in the `R` or `RStudio` console window. (It's ok to quit `R` or `RStudio` at this point.)
+- switch to the `JGR` app.
+- use the `JGR` `Workspace` menu to load a workspace, or paste the following into the bottom pane of the `JGR` app:
+
+```{r loadWorkspace, eval=FALSE, echo=TRUE}
+con <- url("https://pjbartlein.github.io/GeogDataAnalysis/data/Rdata/geog495.RData")
+load(file=con)
+close(con)
+```
+
+(`JRG` maintains its own workspace (and `.RData` file), distinct from the one maintained by RStudio.)
+
+**end of last good macOS instructions**
+
+## Scatter-plot maps ##
+
+Here's the `iplots` version of the scatter-plot map.  Note the size of the symbols can be controlled by the up and down arrow keys, and the transparency by the right and left arrow keys.
+
+```{r hd12, echo=TRUE, eval=FALSE}
+attach(wus_pratio)
+# simple scatter plot iplots version with transparency
+# use arrow keys to control transparency and symbol size
+iplot(elev,pjanpann, xlab="elev", ylab="pjanpann") 
+detach(wus_pratio)
+```
+![](images/iplot011.png)
+
+[[Back to top]](lec19.html)
+
+## Linked interactive plots and "brushing" ##
+
+Linked plots are those in which multiple plots are generated and viewed, and particular observations are flagged or "brushed" to call attention to them in each of the individual plots.  The iplots package provides an easy way to create a small number of linked plots.  The data set used here (precipitation ratios in the region around Yellowstone National Park) is a subset of the larger data set, and facilitates a more rapid demonstration.  The function `ipcp()` creates a parallel-coordinates plot, while the function `iplot()` in this instance creates a crude map. After the plots are created, the mouse can be used to draw a rectangular selection region that "lights up" points in both plots.  
+
+Note:  If you get a "Data length mismatch" dialog box warning when executing the code below, reply "Yes".
+
+### Linked plots with continuous variables ##
+
+```{r hd15}
+# linked interactive plots -- brushing
+# example with Yellowstone region pratios iplots version
+attach(yellpratio)
+names(yellpratio)
+```
+
+```{r hd16, echo=TRUE, eval=FALSE}
+# parallel coordinate plot plus scatter plot map
+ipcp(yellpratio) # use arrow keys to control transparency
+iplot(Lon, Lat) # use arrow keys to control symbol size
+```
+
+Here, stations with low winter precipitation ratios were selected on the parallel coordinates plot, and the corresponding locations are shown on the scatter-plot map.
+
+![](figures_iplots/iplot021.png) ![](images/iplot022.png)
+
+```{r hd17}
+detach(yellpratio)
+```
+
+Here's a second example using the higher-density western U.S. precipitation ratios:
+
+```{r hd18}
+# example with the higher-density western U.S. pratios
+attach(wus_pratio) 
+```
+
+```{r hd19, echo=TRUE, eval=FALSE}
+# parallel coordiate plot plus scatter plot map
+ipcp(wus_pratio) # use arrow keys to control transparency
+iplot(lon, lat) # use arrow keys to control symbol size
+```
+
+In these linked plots, the stations in western Oregon and Washington were selected on the map, and the parallel coordinates plot shows their precipitation "regimes".
+
+![](images/iplot031.png) ![](images/iplot032.png)
+
+```{r hd20}
+detach(wus_pratio)
+```
+
+### Linked plots with categorical variables ###
+
+Data sets that contain a mixture of categorical or factor variables and ordinal or ratio-scale "continuous" variables can also be visualized, as illustrated by the Summit Cr. data set.  Here the "continuous" variables (`CumLen` and `WidthWS`) appear in boxplots and scatter plots (right), with `WidthWS` on the y-axis, and `Reach` or `CumLen` on the x-axis, while the categorical variables, `Reach` and `HU` are summarized by traditional bar plots and mosaic plots.
+
+
+```{r hd22, echo=TRUE, eval=FALSE}
+# linked plots -- Summit Cr. data set, including categorical variables
+attach(sumcr)
+imosaic(data.frame(Reach,HU))
+ibar(HU)
+ibar(Reach)
+
+# add a scatter plot
+iplot(CumLen, WidthWS)
+iplot.opt(col=unclass(Reach)+3)
+
+# add a boxplot
+ibox(WidthWS, Reach)
+```
+
+On the plots below, pools (`P`) in the exclosure reach (`B`) were highlighted in the mosaic plot, and appear in red on the other plots.
+
+![](images/iplot041.png) ![](images/iplot042.png) ![](images/iplot043.png)  
+![](images/iplot044.png) ![](images/iplot045.png) 
+
+```{r hd23, eval=FALSE}
+detach(sumcr)
+```
+
+[[Back to top]](lec19.html)
 <hr>
 # High-density plots with the tabplot package #
 
@@ -330,7 +480,7 @@ This example makes use of a data set of 4360 modern pollen samples for North Ame
 
 ```{r, read napollen}
 # read the North American modern pollen data
-csv_path <- "/Users/bartlein/Documents/geog495/data/csv/"
+csv_path <- "c:/Users/bartlein/Documents/geog495/data/csv_files/"
 csv_name <- "NAmodpol.csv"
 csv_file <- paste(csv_path, csv_name, sep="")
 napol <- read.csv(csv_file) # takes a while
@@ -399,10 +549,11 @@ The global fire data set has roughly the same number of variables as the pollen 
 
 ## Plots ##
 
-To start, produce a tableplot, arranged by mean-annual temperature (`mat`), an obvious first-order preditor of biomass burning, as well as overall climate (through the dependence of the water balance on temperature via the Clausius-Clapyron relationship):
+To start, produce a tableplot, arranged by mean-annual temperature (`mat`), an obvious first-order predictor of biomass burning, as well as overall climate (through the dependence of the water balance on temperature via the Clausius-Clapyron relationship):
 
 ```{r, out.height="90%", out.width="90%"}
-tableplot(gf, sortCol="mat", scales="lin", fontsize = 8, pals=list(megabiome="Set8", vegtype="Set8"))
+attach(gf)
+tableplot(gf, sortCol="mat", scales="lin", fontsize = 8, pals=list("Set8", "Set8"))
 ```
 
 Overall, the trends of individual variables are relatively smooth, and it's easy to see distiguish the temperature and moisture variables (as well as the population variable `gpw`).  The vegetation-type variables `megabiome` and `vegtype` are also well sorted out along a mean annual temperature gradient.  Burned fraction (`gfed`) obviously displays a threshold-type relationshion, where values are small at low temperatures, and higher at high values of `mat`.
@@ -410,7 +561,7 @@ Overall, the trends of individual variables are relatively smooth, and it's easy
 Next, the tableplot is sorted by precipitation minus evapotranspiration (`pme`, or P-E):  
 
 ```{r, out.height="90%", out.width="90%"}
-tableplot(gf, sortCol="pme", scales="lin", fontsize = 8, pals=list(megabiome="Set8", vegtype="Set8"))
+tableplot(gf, sortCol="pme", scales="lin", fontsize = 8)
 ```
 
 The relationship between burned fraction and P-E evident in univariate plots--the arch-shaped pattern, where burned fraction is highest at intermediate values of effective moisture--is also evident here:  as P-E monotonically incrases, burned fraction (`gfed`) rises, then falls.
@@ -418,12 +569,15 @@ The relationship between burned fraction and P-E evident in univariate plots--th
 Finally, the tableplot can be sorted by burned fraction (`gfed`):
 
 ```{r, out.height="90%", out.width="90%"}
-tableplot(gf, sortCol="gfed", scales="lin", fontsize = 8, pals=list(megabiome="Set8", vegtype="Set8"))
+tableplot(gf, sortCol="gfed", scales="lin", fontsize = 8)
 ```
 
 This plot confirms the existing relationships, where burned fraction broadly tracks temperature and P-E.  However the plots also reveal a distinct threshold that is apparently related to a distinct discontinuity in vegetation:  the transition beteen desert and tundra vegetation types, and grassland, shubland and forested ones.
 
 [[Back to top]](lec19.html)
+
+
+
 
 # Plotting multivariate/multiple time series #
 
@@ -435,7 +589,7 @@ The data here come from a long pollen record from Carp L., in Washinton State.  
 
 ```{r, read carp}
 # read Carp L. pollen data (transformed to square-roots)
-csvpath <- "/Users/bartlein/Documents/geog495/data/csv/"
+csvpath <- "c:/Users/bartlein/Documents/geog495/data/csv_files/"
 csvname <- "carp96t.csv" # square-root transformed data
 carp <- read.csv(paste(csvpath, csvname, sep=""))
 summary(carp)
@@ -523,7 +677,7 @@ Read the data:
 
 ```{r read tr21, echo=TRUE, eval=TRUE, results="hide", warning=FALSE, cache=FALSE}
 # read TraCE21-ka transient climate-model simulation decadal data
-tr21dec_path <- "/Users/bartlein/Documents/geog495/data/nc_files/"
+tr21dec_path <- "c:/Users/bartlein/Documents/geog495/data/nc_files/"
 tr21dec_name <- "Trace21_TREFHT_anm2.nc"
 tr21dec_file <- paste(tr21dec_path, tr21dec_name, sep="")
 tas_anm_ann <- brick(tr21dec_file, varname="tas_anm_ann", band=seq(1:2204))
@@ -570,11 +724,10 @@ The cubeplot, as rendered here, displays a map on the "front (or rear) face" of 
 cubeView(tas2, at=cutpts, col.regions=col)
 ```
 
-![](tr21cube.png)
+![](images/tr21cube.png)
 
 Here is a link to the plot on the server:  [https://pjbartlein.github.io/REarthSysSci/tr21cube.html](https://pjbartlein.github.io/REarthSysSci/tr21cube.html)  
 
-[[Back to top]](lec19.html)
 [[Back to top]](lec19.html)
 
 # Readings #
