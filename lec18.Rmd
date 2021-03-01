@@ -14,7 +14,7 @@ options(width = 105)
 load(".Rdata")
 klippy::klippy(position = c('top', 'right'))
 ```
-<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2021, but may undergo further edits.</span></p>
 # Introduction #
 
 There is a broad group of multivariate analyses that have as their objective the organization of individual observations (objects, sites, individuals), and these analyses are built upon the concept of multivariate distances (expressed either as similarities or dissimilarities) among the objects.
@@ -135,12 +135,11 @@ The objective of MDS is to portray the relationship between objects in a multidi
 ```{r mds02, message=FALSE}
 ## Multi-dimensional scaling (MDS)
 # plot Oregon climate stations
-attach(orstationc)
 
 # plot station names as a conventional map
 plot(st_geometry(orotl_sf))
 #points(lon, lat, pch=3)
-text(lon, lat, labels=as.character(station), cex=.6)
+text(orstationc$lon, orstationc$lat, labels=as.character(orstationc$station), cex=.6)
 ```
 
 The plot generated above is a conventional map, where the points (stations) are located by their absolute coordinates.  The next display uses only the distances among points to determine the positions of the points relative to one another.
@@ -152,8 +151,7 @@ X_scal <- cmdscale(dist(X), k=2, eig=T)
 X_scal$points[,1] <- -X_scal$points[,1] # may need to reverse axes
 # X_scal$points[,2] <- -X_scal$points[,2]
 plot(X_scal$points, type="n")
-text(X_scal$points, labels = station, cex=.6)
-detach(orstationc)
+text(X_scal$points, labels = orstationc$station, cex=.6)
 ```
 
 It's possible to see the rough outline of the state in the locations of the stations, which is not surprising.  In the following display, the climate data alone are used in the analysis, and again the rough outline of the state and geographical arrangement of stations is evident on inspection.  Note that only the locations of the stations in "climate space" (as opposed to geographical space) is used to organize the observations in a low-dimensional space.
@@ -200,18 +198,18 @@ X <- as.matrix(ypolsqrt[,4:35]) # just the pollen data
 X_dist <- dist(scale(X))
 # image(seq(1:58),seq(1:58),as.matrix(X_dist))
 hier_cls <- hclust(X_dist, method = "ward.D2")
-plot(hier_cls, labels=Veg, cex=.7)
+plot(hier_cls, labels=ypolsqrt$Veg, cex=.7)
 ```
 
 Ward's method is one of the more "traditional" cluster analysis methods and typically is displayed using a "dendrogram" that can be intuitively interpreted.  Note that there is no prior assumption of the *number* of clusters that is made.  The success of the clustering can be judged by a mosaic plot, which compares the objectively determined clusters of samples, with a previous subjective assignement of each sample to a vegetation zone.
 
 ```{r}
 # list subjective vegetation zones
-levels(Veg)
+levels(ypolsqrt$Veg)
 # cut dendrogram to give 5 clusters
 nclust <- 5
 clusternum <- cutree(hier_cls, k=nclust)
-class_table_hier <- table(Veg, clusternum)
+class_table_hier <- table(ypolsqrt$Veg, clusternum)
 mosaicplot(class_table_hier, color=T)
 ```
 
@@ -226,11 +224,11 @@ In "k-means" clustering, a specific number of clusters, *k*,  is set before the 
 library(cluster)
 X <- as.matrix(ypolsqrt[,4:35])
 kmean_cls <- kmeans(X, centers=5)
-class_table_km <- table(Veg, kmean_cls$cluster)
+class_table_km <- table(ypolsqrt$Veg, kmean_cls$cluster)
 mosaicplot(class_table_km, color=T)
 ```
 
-## PAM ("partioning amung mediods" clustering) ##
+## PAM ("partioning among mediods" clustering) ##
 
 Here's another example of a more exotic clustering algorithm
 
@@ -240,12 +238,13 @@ library(cluster)
 X <- as.matrix(ypolsqrt[,4:35])
 pam_cls <- pam(X, k=5)
 plot(pam_cls)
-class_table_pam <- table(Veg, pam_cls$cluster)
+class_table_pam <- table(ypolsqrt$Veg, pam_cls$cluster)
 mosaicplot(class_table_pam, color=T)
 ```
 
 # Readings #
 
-- Chapter 25, Multivariate Statistics, in Crawley, M.J. (2013) *The R Book*, Wiley.  To get to the book, visit [http://library.uoregon.edu](http://library.uoregon.edu), login, and search for the 2013 edition of the book.  Here's a direct link, once you're logged on: [http://onlinelibrary.wiley.com/book/10.1002/9781118448908](http://onlinelibrary.wiley.com/book/10.1002/9781118448908)
-- Maindonald, Using R, Ch. 6
+- Chapter 25, Multivariate Statistics, in Crawley, M.J. (2013) *The R Book*, Wiley.  To get to the book, visit [http://library.uoregon.edu](http://library.uoregon.edu), login if necessary, and search for the 2013 edition of the book.  Here's a direct link, once you're logged on: [[Link]](http://onlinelibrary.wiley.com/book/10.1002/9781118448908)
+- Everitt and Hothorn (2011) *An Introduction to Applied Multivariate Analysis with R*, ch. 3 and 5.  To get to the book, visit [http://library.uoregon.edu](http://library.uoregon.edu), search for the book, and login if necessary.  Here's a direct link, once you're logged on:  [[Link]](https://na01.alma.exlibrisgroup.com/view/action/uresolver.do?operation=resolveService&package_service_id=23665350240001852&institutionId=1852&customerId=1840)
+- Peng (2016) *Exploratory Data Analysis with R*, ch. 13.  See readings tab for a link to the e-book.
 - Ch. 14 in Zuur et al. (2007) *Analysing Ecological Data*, Springer.  (Search the UO Library catalog for the Bivand et al. book (as in lecture 7), then search for "Analysing Ecological Data" in the *Springer Link* search field.)

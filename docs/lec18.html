@@ -13,6 +13,7 @@
 
 <title>Multivariate distances and cluster analysis</title>
 
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -25,29 +26,40 @@
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -56,9 +68,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -140,6 +152,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 <link rel="stylesheet" href="SI-md-08.css" type="text/css" />
 
@@ -497,14 +510,16 @@ $(document).ready(function () {
 <div id="TOC">
 <ul>
 <li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="#basic-distances"><span class="toc-section-number">2</span> Basic distances</a><ul>
+<li><a href="#basic-distances"><span class="toc-section-number">2</span> Basic distances</a>
+<ul>
 <li><a href="#mahalanobis-distances"><span class="toc-section-number">2.1</span> Mahalanobis distances</a></li>
 </ul></li>
 <li><a href="#multidimensional-scaling-mds"><span class="toc-section-number">3</span> Multidimensional scaling (MDS)</a></li>
-<li><a href="#cluster-analysis"><span class="toc-section-number">4</span> Cluster analysis</a><ul>
+<li><a href="#cluster-analysis"><span class="toc-section-number">4</span> Cluster analysis</a>
+<ul>
 <li><a href="#hierarchical-clustering"><span class="toc-section-number">4.1</span> Hierarchical clustering</a></li>
 <li><a href="#k-means-clustering"><span class="toc-section-number">4.2</span> <em>k</em>-means clustering</a></li>
-<li><a href="#pam-partioning-amung-mediods-clustering"><span class="toc-section-number">4.3</span> PAM (“partioning amung mediods” clustering)</a></li>
+<li><a href="#pam-partioning-among-mediods-clustering"><span class="toc-section-number">4.3</span> PAM (“partioning among mediods” clustering)</a></li>
 </ul></li>
 <li><a href="#readings"><span class="toc-section-number">5</span> Readings</a></li>
 </ul>
@@ -515,10 +530,10 @@ $(document).ready(function () {
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
 <p>
-<span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span>
+<span style="color: #00cc00;">NOTE: This page has been revised for Winter 2021, but may undergo further edits.</span>
 </p>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
+<div id="introduction" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>There is a broad group of multivariate analyses that have as their objective the organization of individual observations (objects, sites, individuals), and these analyses are built upon the concept of multivariate distances (expressed either as similarities or dissimilarities) among the objects.</p>
 <p>The organization generally takes two forms:</p>
 <ul>
@@ -530,187 +545,186 @@ $(document).ready(function () {
 <p><em>d<sub>ij</sub></em> = [(<em>x<sub>i1</sub></em>- <em>x<sub>j1</sub></em>)<sup>2</sup> + (<em>x<sub>i1</sub></em>- <em>x<sub>j1</sub></em>)<sup>2</sup>]<sup>½</sup></p>
 <p>The Euclidean distance, and related measures are easily generalized to more than two dimensions.</p>
 </div>
-<div id="basic-distances" class="section level1">
-<h1><span class="header-section-number">2</span> Basic distances</h1>
+<div id="basic-distances" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> Basic distances</h1>
 <p>As an example of the calculation of multivariate distances, the following script will calculate the Euclidean distances, in terms of pollen abundance, among a set of (modern) pollen surface-samples in the Midwest that were used for fitting regression equations for reconstructing past climates from fossil-pollen data. (Note: because the pollen data were transformed by taking the square roots of pollen abundance data, what is actually being calculated here is the so-called “squared chord-distance” or SCD.)</p>
 <p>The distance matrix, each element of which displays the distance between two points in “pollen space” (as opposed to geographical space) can be displayed using the <code>image()</code> function. The looping in the code below is inefficient, but illustrates what is going on.</p>
 <p>Load some libraries:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(sf)</a></code></pre></div>
-<pre><code>## Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(lattice)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">library</span>(RColorBrewer)</a></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># calculate a Squared Chord-Distance dissimilarity matrix for</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co"># Midwestern pollen data</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">X &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(midwtf2[,<span class="dv">7</span><span class="op">:</span><span class="dv">21</span>])</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">nvars &lt;-<span class="st"> </span><span class="dv">14</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">nobs &lt;-<span class="st"> </span><span class="dv">124</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">SCDist &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="fl">0.0</span>, <span class="kw">c</span>(nobs<span class="op">^</span><span class="dv">2</span>,<span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="kw">dimnames</span>(SCDist) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="ot">NULL</span>,<span class="kw">c</span>(<span class="st">&quot;i&quot;</span>,<span class="st">&quot;j&quot;</span>,<span class="st">&quot;SCD&quot;</span>))</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">SCDist_matrix &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="fl">0.0</span>, <span class="kw">c</span>(nobs,nobs))</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nobs) {</a>
-<a class="sourceLine" id="cb4-10" data-line-number="10">    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nobs) {</a>
-<a class="sourceLine" id="cb4-11" data-line-number="11">    distance &lt;-<span class="st"> </span><span class="fl">0.0</span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">        <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nvars) {</a>
-<a class="sourceLine" id="cb4-13" data-line-number="13">            distance &lt;-<span class="st"> </span>distance <span class="op">+</span><span class="st"> </span>((<span class="kw">sqrt</span>(X[i,k])<span class="op">-</span><span class="kw">sqrt</span>(X[j,k]))<span class="op">^</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb4-14" data-line-number="14">            }</a>
-<a class="sourceLine" id="cb4-15" data-line-number="15">            m &lt;-((i<span class="dv">-1</span>)<span class="op">*</span>nobs)<span class="op">+</span>j</a>
-<a class="sourceLine" id="cb4-16" data-line-number="16">            SCDist[m,<span class="dv">3</span>] &lt;-<span class="st"> </span><span class="kw">sqrt</span>(distance)</a>
-<a class="sourceLine" id="cb4-17" data-line-number="17">            SCDist_matrix[i,j] &lt;-<span class="st"> </span><span class="kw">sqrt</span>(distance)</a>
-<a class="sourceLine" id="cb4-18" data-line-number="18">            SCDist[m,<span class="dv">1</span>] &lt;-<span class="st"> </span>i</a>
-<a class="sourceLine" id="cb4-19" data-line-number="19">            SCDist[m,<span class="dv">2</span>] &lt;-<span class="st"> </span>j</a>
-<a class="sourceLine" id="cb4-20" data-line-number="20">    }</a>
-<a class="sourceLine" id="cb4-21" data-line-number="21">}</a>
-<a class="sourceLine" id="cb4-22" data-line-number="22"></a>
-<a class="sourceLine" id="cb4-23" data-line-number="23"><span class="co"># display the distance matrix</span></a>
-<a class="sourceLine" id="cb4-24" data-line-number="24">grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">obs1 =</span> <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span>nobs), <span class="dt">obs2 =</span> <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span>nobs))</a>
-<a class="sourceLine" id="cb4-25" data-line-number="25"><span class="kw">levelplot</span>(SCDist_matrix <span class="op">~</span><span class="st"> </span>obs1<span class="op">*</span>obs2, <span class="dt">data=</span>grid, <span class="dt">col.regions =</span> <span class="kw">gray</span>(<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">by=</span><span class="fl">0.0625</span>)),</a>
-<a class="sourceLine" id="cb4-26" data-line-number="26">  <span class="dt">xlab=</span><span class="st">&quot;observation&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;observation&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code></pre></div>
+<pre><code>## Linking to GEOS 3.8.1, GDAL 3.1.4, PROJ 6.3.1</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate a Squared Chord-Distance dissimilarity matrix for</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Midwestern pollen data</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(midwtf2[,<span class="dv">7</span><span class="sc">:</span><span class="dv">21</span>])</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>nvars <span class="ot">&lt;-</span> <span class="dv">14</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>nobs <span class="ot">&lt;-</span> <span class="dv">124</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>SCDist <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fl">0.0</span>, <span class="fu">c</span>(nobs<span class="sc">^</span><span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(SCDist) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="cn">NULL</span>,<span class="fu">c</span>(<span class="st">&quot;i&quot;</span>,<span class="st">&quot;j&quot;</span>,<span class="st">&quot;SCD&quot;</span>))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>SCDist_matrix <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fl">0.0</span>, <span class="fu">c</span>(nobs,nobs))</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nobs) {</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nobs) {</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    distance <span class="ot">&lt;-</span> <span class="fl">0.0</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nvars) {</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>            distance <span class="ot">&lt;-</span> distance <span class="sc">+</span> ((<span class="fu">sqrt</span>(X[i,k])<span class="sc">-</span><span class="fu">sqrt</span>(X[j,k]))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>            m <span class="ot">&lt;-</span>((i<span class="dv">-1</span>)<span class="sc">*</span>nobs)<span class="sc">+</span>j</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>            SCDist[m,<span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(distance)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>            SCDist_matrix[i,j] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(distance)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>            SCDist[m,<span class="dv">1</span>] <span class="ot">&lt;-</span> i</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>            SCDist[m,<span class="dv">2</span>] <span class="ot">&lt;-</span> j</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co"># display the distance matrix</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">obs1 =</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>nobs), <span class="at">obs2 =</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>nobs))</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="fu">levelplot</span>(SCDist_matrix <span class="sc">~</span> obs1<span class="sc">*</span>obs2, <span class="at">data=</span>grid, <span class="at">col.regions =</span> <span class="fu">gray</span>(<span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">by=</span><span class="fl">0.0625</span>)),</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab=</span><span class="st">&quot;observation&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;observation&quot;</span>)</span></code></pre></div>
 <p><img src="lec18_files/figure-html/dm02-1.png" width="480" /></p>
-<div id="mahalanobis-distances" class="section level2">
-<h2><span class="header-section-number">2.1</span> Mahalanobis distances</h2>
+<div id="mahalanobis-distances" class="section level2" number="2.1">
+<h2 number="2.1"><span class="header-section-number">2.1</span> Mahalanobis distances</h2>
 <p>The basic Euclidean distance treats each variable as equally important in calculating the distance. An alternative approach is to scale the contribution of individual variables to the distance value according to the variability of each variable. This approach is illustrated by the Mahalanobis distance, which is a measure of the distance between each observation in a multidimensional cloud of points and the centroid of the cloud. The Mahalnobis distance <em>D<sup>2</sup></em> is given by</p>
 <p><em>D<sup>2</sup></em> = <strong>(x - m)V</strong> <sup>-1</sup><strong>(x - m)</strong></p>
 <p>where <strong>x</strong> is a vector of values for a particular observation, <strong>m</strong> is the vector of means of each variable, and <strong>V</strong> is the variance-covariance matriX_</p>
 <p>The following code illustrates the calculation of Mahalanobis distances in a “climate space” described by two climate variables from the Midwest pollen-climate data set. The graduated circle around each point is proportional to the Mahalanobis distance between that point and the centroid of scatter of points. The blue ellipses (drawn using the <code>ellipse()</code> function from the <code>car</code> package) graphically illustrate isolines of Mahalanobis distance from the centroid. The red circles are of radii 1 and 2, and illustrate isolines of Euclidean distance from the centroid.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># Mahalonobis distances</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co"># July and annual temperature</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">X &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(midwtf2[,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>])</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">X_cov &lt;-<span class="st"> </span><span class="kw">var</span>(<span class="kw">scale</span>(X)) <span class="co"># standardize first</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">X_cov &lt;-<span class="st"> </span><span class="kw">var</span>(X)</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">X_mean &lt;-<span class="st"> </span><span class="kw">apply</span>(X,<span class="dv">2</span>,mean)</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">X_mah &lt;-<span class="st"> </span><span class="kw">mahalanobis</span>(X, X_mean, X_cov)</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co"># plot the variables, conf. ellipses and M.D.</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="kw">library</span>(car)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mahalonobis distances</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># July and annual temperature</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(midwtf2[,<span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>])</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>X_cov <span class="ot">&lt;-</span> <span class="fu">var</span>(<span class="fu">scale</span>(X)) <span class="co"># standardize first</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>X_cov <span class="ot">&lt;-</span> <span class="fu">var</span>(X)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>X_mean <span class="ot">&lt;-</span> <span class="fu">apply</span>(X,<span class="dv">2</span>,mean)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>X_mah <span class="ot">&lt;-</span> <span class="fu">mahalanobis</span>(X, X_mean, X_cov)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the variables, conf. ellipses and M.D.</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span></code></pre></div>
 <pre><code>## Loading required package: carData</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">library</span>(plotrix)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co"># plot points, Mahalanobis distances and Euclidean distances</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="kw">plot</span>(midwtf2<span class="op">$</span>tmeanjul, midwtf2<span class="op">$</span>tmeanyr, <span class="dt">asp=</span><span class="dv">1</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;gray50&quot;</span>)</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="kw">ellipse</span>(X_mean, X_cov, <span class="dt">radius=</span><span class="dv">1</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="kw">ellipse</span>(X_mean, X_cov, <span class="dt">radius=</span><span class="dv">2</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="kw">points</span>(midwtf2<span class="op">$</span>tmeanjul, midwtf2<span class="op">$</span>tmeanyr, <span class="dt">cex=</span><span class="dv">10</span><span class="op">*</span>(X_mah<span class="op">-</span><span class="kw">min</span>(X_mah))<span class="op">/</span>(<span class="kw">max</span>(X_mah)<span class="op">-</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="st">    </span><span class="kw">min</span>(X_mah)))</a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="kw">draw.circle</span>(X_mean[<span class="dv">1</span>], X_mean[<span class="dv">2</span>], <span class="dt">radius=</span><span class="dv">1</span>, <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">bor=</span><span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="kw">draw.circle</span>(X_mean[<span class="dv">1</span>], X_mean[<span class="dv">2</span>], <span class="dt">radius=</span><span class="dv">2</span>, <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">bor=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotrix)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot points, Mahalanobis distances and Euclidean distances</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(midwtf2<span class="sc">$</span>tmeanjul, midwtf2<span class="sc">$</span>tmeanyr, <span class="at">asp=</span><span class="dv">1</span>, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span><span class="st">&quot;gray50&quot;</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ellipse</span>(X_mean, X_cov, <span class="at">radius=</span><span class="dv">1</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ellipse</span>(X_mean, X_cov, <span class="at">radius=</span><span class="dv">2</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(midwtf2<span class="sc">$</span>tmeanjul, midwtf2<span class="sc">$</span>tmeanyr, <span class="at">cex=</span><span class="dv">10</span><span class="sc">*</span>(X_mah<span class="sc">-</span><span class="fu">min</span>(X_mah))<span class="sc">/</span>(<span class="fu">max</span>(X_mah)<span class="sc">-</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">min</span>(X_mah)))</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">draw.circle</span>(X_mean[<span class="dv">1</span>], X_mean[<span class="dv">2</span>], <span class="at">radius=</span><span class="dv">1</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">bor=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">draw.circle</span>(X_mean[<span class="dv">1</span>], X_mean[<span class="dv">2</span>], <span class="at">radius=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">bor=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
 <p><img src="lec18_files/figure-html/md02-1.png" width="672" /></p>
 <p>The following code finds the Mahalanobis distances between each pollen site, where distances are now in “pollen space.”.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># Mahalonobis distances for individual spectra, Midwestern pollen data</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">X &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(midwtf2[,<span class="dv">7</span><span class="op">:</span><span class="dv">21</span>])</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">X_cov &lt;-<span class="st"> </span><span class="kw">var</span>(X)</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">X_mean &lt;-<span class="st"> </span><span class="kw">apply</span>(X,<span class="dv">2</span>,mean)</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">X_mah &lt;-<span class="st"> </span><span class="kw">mahalanobis</span>(X, X_mean, X_cov, <span class="dt">tol.inv=</span><span class="fl">1e-16</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mahalonobis distances for individual spectra, Midwestern pollen data</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(midwtf2[,<span class="dv">7</span><span class="sc">:</span><span class="dv">21</span>])</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>X_cov <span class="ot">&lt;-</span> <span class="fu">var</span>(X)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>X_mean <span class="ot">&lt;-</span> <span class="fu">apply</span>(X,<span class="dv">2</span>,mean)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>X_mah <span class="ot">&lt;-</span> <span class="fu">mahalanobis</span>(X, X_mean, X_cov, <span class="at">tol.inv=</span><span class="fl">1e-16</span>)</span></code></pre></div>
 <p>These distances-in-pollen-space can be mapped as graduated circles, where the size of the circle is proporational to the ditance between the pollen data at each point, and the centroid or mean pollen spectrum over all of the data.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># Map the Midwestern study area</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co"># plot shape file</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(midwotl_sf), <span class="dt">axes=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw">points</span>(midwtf2<span class="op">$</span>longitud, midwtf2<span class="op">$</span>latitude, <span class="dt">cex=</span><span class="dv">10</span><span class="op">*</span>(X_mah<span class="op">-</span><span class="kw">min</span>(X_mah))<span class="op">/</span>(<span class="kw">max</span>(X_mah)<span class="op">-</span><span class="kw">min</span>(X_mah)))</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Map the Midwestern study area</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># plot shape file</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(midwotl_sf), <span class="at">axes=</span><span class="cn">TRUE</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(midwtf2<span class="sc">$</span>longitud, midwtf2<span class="sc">$</span>latitude, <span class="at">cex=</span><span class="dv">10</span><span class="sc">*</span>(X_mah<span class="sc">-</span><span class="fu">min</span>(X_mah))<span class="sc">/</span>(<span class="fu">max</span>(X_mah)<span class="sc">-</span><span class="fu">min</span>(X_mah)))</span></code></pre></div>
 <p><img src="lec18_files/figure-html/md04-1.png" width="672" /></p>
 </div>
 </div>
-<div id="multidimensional-scaling-mds" class="section level1">
-<h1><span class="header-section-number">3</span> Multidimensional scaling (MDS)</h1>
+<div id="multidimensional-scaling-mds" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> Multidimensional scaling (MDS)</h1>
 <p>The objective of MDS is to portray the relationship between objects in a multidimensional space in a lower-dimensional space (usually 2-D) in such a way that the relative distances among objects in the multidimensional space are preserved in the lower-dimensional space. The classic illustrative example is the analysis of geographically arrayed data, which can be done with the Oregon climate-station data:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">## Multi-dimensional scaling (MDS)</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co"># plot Oregon climate stations</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="kw">attach</span>(orstationc)</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co"># plot station names as a conventional map</span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(orotl_sf))</a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#points(lon, lat, pch=3)</span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="kw">text</span>(lon, lat, <span class="dt">labels=</span><span class="kw">as.character</span>(station), <span class="dt">cex=</span>.<span class="dv">6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Multi-dimensional scaling (MDS)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># plot Oregon climate stations</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># plot station names as a conventional map</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(orotl_sf))</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#points(lon, lat, pch=3)</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(orstationc<span class="sc">$</span>lon, orstationc<span class="sc">$</span>lat, <span class="at">labels=</span><span class="fu">as.character</span>(orstationc<span class="sc">$</span>station), <span class="at">cex=</span>.<span class="dv">6</span>)</span></code></pre></div>
 <p><img src="lec18_files/figure-html/mds02-1.png" width="672" /></p>
 <p>The plot generated above is a conventional map, where the points (stations) are located by their absolute coordinates. The next display uses only the distances among points to determine the positions of the points relative to one another.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># MDS &quot;map&quot; based only on distances between stations, not their absolute coordinates</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">X &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(orstationc[,<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>]) <span class="co"># longitude and latitude only</span></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">X_scal &lt;-<span class="st"> </span><span class="kw">cmdscale</span>(<span class="kw">dist</span>(X), <span class="dt">k=</span><span class="dv">2</span>, <span class="dt">eig=</span>T)</a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">X_scal<span class="op">$</span>points[,<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="op">-</span>X_scal<span class="op">$</span>points[,<span class="dv">1</span>] <span class="co"># may need to reverse axes</span></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co"># X_scal$points[,2] &lt;- -X_scal$points[,2]</span></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="kw">plot</span>(X_scal<span class="op">$</span>points, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="kw">text</span>(X_scal<span class="op">$</span>points, <span class="dt">labels =</span> station, <span class="dt">cex=</span>.<span class="dv">6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># MDS &quot;map&quot; based only on distances between stations, not their absolute coordinates</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(orstationc[,<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]) <span class="co"># longitude and latitude only</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>X_scal <span class="ot">&lt;-</span> <span class="fu">cmdscale</span>(<span class="fu">dist</span>(X), <span class="at">k=</span><span class="dv">2</span>, <span class="at">eig=</span>T)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>X_scal<span class="sc">$</span>points[,<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="sc">-</span>X_scal<span class="sc">$</span>points[,<span class="dv">1</span>] <span class="co"># may need to reverse axes</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># X_scal$points[,2] &lt;- -X_scal$points[,2]</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X_scal<span class="sc">$</span>points, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(X_scal<span class="sc">$</span>points, <span class="at">labels =</span> orstationc<span class="sc">$</span>station, <span class="at">cex=</span>.<span class="dv">6</span>)</span></code></pre></div>
 <p><img src="lec18_files/figure-html/mds03-1.png" width="672" /></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">detach</span>(orstationc)</a></code></pre></div>
 <p>It’s possible to see the rough outline of the state in the locations of the stations, which is not surprising. In the following display, the climate data alone are used in the analysis, and again the rough outline of the state and geographical arrangement of stations is evident on inspection. Note that only the locations of the stations in “climate space” (as opposed to geographical space) is used to organize the observations in a low-dimensional space.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># multidimensional scaling of Oregon climate station data</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co"># now with climate variables not locations</span></a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">X &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(orstationc[,<span class="dv">5</span><span class="op">:</span><span class="dv">10</span>])</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">X_scal &lt;-<span class="st"> </span><span class="kw">cmdscale</span>(<span class="kw">dist</span>(X), <span class="dt">k=</span><span class="dv">2</span>, <span class="dt">eig=</span>T)</a>
-<a class="sourceLine" id="cb13-5" data-line-number="5">X_scal<span class="op">$</span>points[,<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="op">-</span>X_scal<span class="op">$</span>points[,<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb13-6" data-line-number="6">X_scal<span class="op">$</span>points[,<span class="dv">2</span>] &lt;-<span class="st"> </span><span class="op">-</span>X_scal<span class="op">$</span>points[,<span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="kw">plot</span>(X_scal<span class="op">$</span>points, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="kw">text</span>(X_scal<span class="op">$</span>points, <span class="dt">labels =</span> orstationc<span class="op">$</span>station, <span class="dt">cex=</span>.<span class="dv">6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># multidimensional scaling of Oregon climate station data</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># now with climate variables not locations</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(orstationc[,<span class="dv">5</span><span class="sc">:</span><span class="dv">10</span>])</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>X_scal <span class="ot">&lt;-</span> <span class="fu">cmdscale</span>(<span class="fu">dist</span>(X), <span class="at">k=</span><span class="dv">2</span>, <span class="at">eig=</span>T)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>X_scal<span class="sc">$</span>points[,<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="sc">-</span>X_scal<span class="sc">$</span>points[,<span class="dv">1</span>]</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>X_scal<span class="sc">$</span>points[,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="sc">-</span>X_scal<span class="sc">$</span>points[,<span class="dv">2</span>]</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X_scal<span class="sc">$</span>points, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(X_scal<span class="sc">$</span>points, <span class="at">labels =</span> orstationc<span class="sc">$</span>station, <span class="at">cex=</span>.<span class="dv">6</span>)</span></code></pre></div>
 <p><img src="lec18_files/figure-html/mds04-1.png" width="672" /></p>
 <p>The final example, shows an MDS of the Midwestern pollen data. The two scatter plots show the distributions of latitude and longitude in a low-dimensional pollen space. Points that are close to one another (on either of the plots) have similar pollen spectra, while points farther away from one another are less similar in terms of pollen.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># multidimensional scaling of Midwestern pollen data</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">X &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(midwtf2[,<span class="dv">7</span><span class="op">:</span><span class="dv">21</span>])</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">X_scal &lt;-<span class="st"> </span><span class="kw">cmdscale</span>(<span class="kw">dist</span>(X), <span class="dt">k=</span><span class="dv">2</span>, <span class="dt">eig=</span>T)</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">X_scal<span class="op">$</span>points[,<span class="dv">2</span>] &lt;-<span class="st"> </span><span class="op">-</span>X_scal<span class="op">$</span>points[,<span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="kw">plot</span>(X_scal<span class="op">$</span>points, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>, <span class="dt">main=</span><span class="st">&quot;latitude&quot;</span>)</a>
-<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="kw">text</span>(X_scal<span class="op">$</span>points, <span class="dt">labels =</span> (<span class="kw">format</span>(<span class="kw">signif</span>(midwtf2<span class="op">$</span>latitude,<span class="dt">digits=</span><span class="dv">3</span>))),</a>
-<a class="sourceLine" id="cb14-7" data-line-number="7">    <span class="dt">cex=</span>.<span class="dv">6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># multidimensional scaling of Midwestern pollen data</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(midwtf2[,<span class="dv">7</span><span class="sc">:</span><span class="dv">21</span>])</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>X_scal <span class="ot">&lt;-</span> <span class="fu">cmdscale</span>(<span class="fu">dist</span>(X), <span class="at">k=</span><span class="dv">2</span>, <span class="at">eig=</span>T)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>X_scal<span class="sc">$</span>points[,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="sc">-</span>X_scal<span class="sc">$</span>points[,<span class="dv">2</span>]</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X_scal<span class="sc">$</span>points, <span class="at">type=</span><span class="st">&quot;n&quot;</span>, <span class="at">main=</span><span class="st">&quot;latitude&quot;</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(X_scal<span class="sc">$</span>points, <span class="at">labels =</span> (<span class="fu">format</span>(<span class="fu">signif</span>(midwtf2<span class="sc">$</span>latitude,<span class="at">digits=</span><span class="dv">3</span>))),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex=</span>.<span class="dv">6</span>)</span></code></pre></div>
 <p><img src="lec18_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">plot</span>(X_scal<span class="op">$</span>points, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>, <span class="dt">main=</span><span class="st">&quot;longitude&quot;</span>)</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">text</span>(X_scal<span class="op">$</span>points, <span class="dt">labels =</span> (<span class="kw">format</span>(<span class="kw">signif</span>(midwtf2<span class="op">$</span>longitud,<span class="dt">digits=</span><span class="dv">3</span>))),</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">    <span class="dt">cex=</span>.<span class="dv">6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X_scal<span class="sc">$</span>points, <span class="at">type=</span><span class="st">&quot;n&quot;</span>, <span class="at">main=</span><span class="st">&quot;longitude&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(X_scal<span class="sc">$</span>points, <span class="at">labels =</span> (<span class="fu">format</span>(<span class="fu">signif</span>(midwtf2<span class="sc">$</span>longitud,<span class="at">digits=</span><span class="dv">3</span>))),</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex=</span>.<span class="dv">6</span>)</span></code></pre></div>
 <p><img src="lec18_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
 </div>
-<div id="cluster-analysis" class="section level1">
-<h1><span class="header-section-number">4</span> Cluster analysis</h1>
+<div id="cluster-analysis" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> Cluster analysis</h1>
 <p>In a cluster analysis, the objective is to use similarities or dissimilarities among objects (expressed as multivariate distances), to assign the individual observations to “natural” groups. Cathy Whitlock’s surface sample data from Yellowstone National Park describes the spatial variations in pollen data for that region, and each site was subjectively assigned to one of five vegetation zones.</p>
 <p>There is a very large number of clustering procedures, and quite a few have been implemented in R and S-Plus. Here are some examples:</p>
-<div id="hierarchical-clustering" class="section level2">
-<h2><span class="header-section-number">4.1</span> Hierarchical clustering</h2>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># hierarchical clustering, Ward&#39;s method, Yellowstone pollen data</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw">attach</span>(ypolsqrt)</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3">X &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(ypolsqrt[,<span class="dv">4</span><span class="op">:</span><span class="dv">35</span>]) <span class="co"># just the pollen data</span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4">X_dist &lt;-<span class="st"> </span><span class="kw">dist</span>(<span class="kw">scale</span>(X))</a>
-<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co"># image(seq(1:58),seq(1:58),as.matrix(X_dist))</span></a>
-<a class="sourceLine" id="cb16-6" data-line-number="6">hier_cls &lt;-<span class="st"> </span><span class="kw">hclust</span>(X_dist, <span class="dt">method =</span> <span class="st">&quot;ward.D2&quot;</span>)</a>
-<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="kw">plot</span>(hier_cls, <span class="dt">labels=</span>Veg, <span class="dt">cex=</span>.<span class="dv">7</span>)</a></code></pre></div>
+<div id="hierarchical-clustering" class="section level2" number="4.1">
+<h2 number="4.1"><span class="header-section-number">4.1</span> Hierarchical clustering</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># hierarchical clustering, Ward&#39;s method, Yellowstone pollen data</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(ypolsqrt)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(ypolsqrt[,<span class="dv">4</span><span class="sc">:</span><span class="dv">35</span>]) <span class="co"># just the pollen data</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>X_dist <span class="ot">&lt;-</span> <span class="fu">dist</span>(<span class="fu">scale</span>(X))</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># image(seq(1:58),seq(1:58),as.matrix(X_dist))</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>hier_cls <span class="ot">&lt;-</span> <span class="fu">hclust</span>(X_dist, <span class="at">method =</span> <span class="st">&quot;ward.D2&quot;</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hier_cls, <span class="at">labels=</span>ypolsqrt<span class="sc">$</span>Veg, <span class="at">cex=</span>.<span class="dv">7</span>)</span></code></pre></div>
 <p><img src="lec18_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>Ward’s method is one of the more “traditional” cluster analysis methods and typically is displayed using a “dendrogram” that can be intuitively interpreted. Note that there is no prior assumption of the <em>number</em> of clusters that is made. The success of the clustering can be judged by a mosaic plot, which compares the objectively determined clusters of samples, with a previous subjective assignement of each sample to a vegetation zone.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># list subjective vegetation zones</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw">levels</span>(Veg)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># list subjective vegetation zones</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(ypolsqrt<span class="sc">$</span>Veg)</span></code></pre></div>
 <pre><code>## [1] &quot;Steppe&quot;    &quot;Lodgepole&quot; &quot;Trans&quot;     &quot;Subalpine&quot; &quot;Alpine&quot;</code></pre>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># cut dendrogram to give 5 clusters</span></a>
-<a class="sourceLine" id="cb19-2" data-line-number="2">nclust &lt;-<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb19-3" data-line-number="3">clusternum &lt;-<span class="st"> </span><span class="kw">cutree</span>(hier_cls, <span class="dt">k=</span>nclust)</a>
-<a class="sourceLine" id="cb19-4" data-line-number="4">class_table_hier &lt;-<span class="st"> </span><span class="kw">table</span>(Veg, clusternum)</a>
-<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="kw">mosaicplot</span>(class_table_hier, <span class="dt">color=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cut dendrogram to give 5 clusters</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>nclust <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>clusternum <span class="ot">&lt;-</span> <span class="fu">cutree</span>(hier_cls, <span class="at">k=</span>nclust)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>class_table_hier <span class="ot">&lt;-</span> <span class="fu">table</span>(ypolsqrt<span class="sc">$</span>Veg, clusternum)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaicplot</span>(class_table_hier, <span class="at">color=</span>T)</span></code></pre></div>
 <p><img src="lec18_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>With the exception of the “Subalpine” vegetation zone, the objective clusters usually contain samples that fall into one or two of the subjective zones.</p>
 </div>
-<div id="k-means-clustering" class="section level2">
-<h2><span class="header-section-number">4.2</span> <em>k</em>-means clustering</h2>
+<div id="k-means-clustering" class="section level2" number="4.2">
+<h2 number="4.2"><span class="header-section-number">4.2</span> <em>k</em>-means clustering</h2>
 <p>In “k-means” clustering, a specific number of clusters, <em>k</em>, is set before the analysis, and the analysis moves individual observations into or out of the clusters until the samples are distributed optimally (i.e. low within-cluster variability, high among=cluster variability).</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># k-means clustering of Yellowstone pollen data</span></a>
-<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">library</span>(cluster)</a>
-<a class="sourceLine" id="cb20-3" data-line-number="3">X &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(ypolsqrt[,<span class="dv">4</span><span class="op">:</span><span class="dv">35</span>])</a>
-<a class="sourceLine" id="cb20-4" data-line-number="4">kmean_cls &lt;-<span class="st"> </span><span class="kw">kmeans</span>(X, <span class="dt">centers=</span><span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb20-5" data-line-number="5">class_table_km &lt;-<span class="st"> </span><span class="kw">table</span>(Veg, kmean_cls<span class="op">$</span>cluster)</a>
-<a class="sourceLine" id="cb20-6" data-line-number="6"><span class="kw">mosaicplot</span>(class_table_km, <span class="dt">color=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># k-means clustering of Yellowstone pollen data</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cluster)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(ypolsqrt[,<span class="dv">4</span><span class="sc">:</span><span class="dv">35</span>])</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>kmean_cls <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(X, <span class="at">centers=</span><span class="dv">5</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>class_table_km <span class="ot">&lt;-</span> <span class="fu">table</span>(ypolsqrt<span class="sc">$</span>Veg, kmean_cls<span class="sc">$</span>cluster)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaicplot</span>(class_table_km, <span class="at">color=</span>T)</span></code></pre></div>
 <p><img src="lec18_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
-<div id="pam-partioning-amung-mediods-clustering" class="section level2">
-<h2><span class="header-section-number">4.3</span> PAM (“partioning amung mediods” clustering)</h2>
+<div id="pam-partioning-among-mediods-clustering" class="section level2" number="4.3">
+<h2 number="4.3"><span class="header-section-number">4.3</span> PAM (“partioning among mediods” clustering)</h2>
 <p>Here’s another example of a more exotic clustering algorithm</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># &quot;pam&quot; clustering of Yellowstone pollen data</span></a>
-<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw">library</span>(cluster)</a>
-<a class="sourceLine" id="cb21-3" data-line-number="3">X &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(ypolsqrt[,<span class="dv">4</span><span class="op">:</span><span class="dv">35</span>])</a>
-<a class="sourceLine" id="cb21-4" data-line-number="4">pam_cls &lt;-<span class="st"> </span><span class="kw">pam</span>(X, <span class="dt">k=</span><span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb21-5" data-line-number="5"><span class="kw">plot</span>(pam_cls)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># &quot;pam&quot; clustering of Yellowstone pollen data</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cluster)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(ypolsqrt[,<span class="dv">4</span><span class="sc">:</span><span class="dv">35</span>])</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>pam_cls <span class="ot">&lt;-</span> <span class="fu">pam</span>(X, <span class="at">k=</span><span class="dv">5</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pam_cls)</span></code></pre></div>
 <p><img src="lec18_files/figure-html/unnamed-chunk-6-1.png" width="672" /><img src="lec18_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">class_table_pam &lt;-<span class="st"> </span><span class="kw">table</span>(Veg, pam_cls<span class="op">$</span>cluster)</a>
-<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="kw">mosaicplot</span>(class_table_pam, <span class="dt">color=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>class_table_pam <span class="ot">&lt;-</span> <span class="fu">table</span>(ypolsqrt<span class="sc">$</span>Veg, pam_cls<span class="sc">$</span>cluster)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaicplot</span>(class_table_pam, <span class="at">color=</span>T)</span></code></pre></div>
 <p><img src="lec18_files/figure-html/unnamed-chunk-6-3.png" width="672" /></p>
 </div>
 </div>
-<div id="readings" class="section level1">
-<h1><span class="header-section-number">5</span> Readings</h1>
+<div id="readings" class="section level1" number="5">
+<h1 number="5"><span class="header-section-number">5</span> Readings</h1>
 <ul>
-<li>Chapter 25, Multivariate Statistics, in Crawley, M.J. (2013) <em>The R Book</em>, Wiley. To get to the book, visit <a href="http://library.uoregon.edu">http://library.uoregon.edu</a>, login, and search for the 2013 edition of the book. Here’s a direct link, once you’re logged on: <a href="http://onlinelibrary.wiley.com/book/10.1002/9781118448908">http://onlinelibrary.wiley.com/book/10.1002/9781118448908</a></li>
-<li>Maindonald, Using R, Ch. 6</li>
-<li>Ch. 14 in Zuur et al. (2007) <em>Analysing Ecological Data</em>, Springer. (Search the UO Library catalog for the Bivand et al. book (as in lecture 7), then search for “Analysing Ecological Data” in the <em>Springer Link</em> search field.)</li>
+<li>Chapter 25, Multivariate Statistics, in Crawley, M.J. (2013) <em>The R Book</em>, Wiley. To get to the book, visit <a href="http://library.uoregon.edu">http://library.uoregon.edu</a>, login if necessary, and search for the 2013 edition of the book. Here’s a direct link, once you’re logged on: <a href="http://onlinelibrary.wiley.com/book/10.1002/9781118448908">[Link]</a></li>
+<li>Everitt and Hothorn (2011) <em>An Introduction to Applied Multivariate Analysis with R</em>, ch. 3 and 5. To get to the book, visit <a href="http://library.uoregon.edu">http://library.uoregon.edu</a>, search for the book, and login if necessary. Here’s a direct link, once you’re logged on: <a href="https://na01.alma.exlibrisgroup.com/view/action/uresolver.do?operation=resolveService&amp;package_service_id=23665350240001852&amp;institutionId=1852&amp;customerId=1840">[Link]</a></li>
+<li>Peng (2016) <em>Exploratory Data Analysis with R</em>, ch. 13. See readings tab for a link to the e-book.</li>
+<li>Ch. 14 in Zuur et al. (2007) <em>Analysing Ecological Data</em>, Springer. (Search the UO Library catalog for the Bivand et al. book (as in lecture 7), then search for “Analysing Ecological Data” in the <em>Springer Link</em> search field.)</li>
 </ul>
 </div>
 
@@ -723,7 +737,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
