@@ -15,6 +15,6 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 ```
 
-<p><span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2021, but may undergo further edits.</span></p>
 ```{r child="lec20.md"}
 ```

@@ -13,6 +13,7 @@
 
 <title>Analysis and visualization of large raster data sets</title>
 
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -20,6 +21,15 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
 
@@ -50,6 +60,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 <link rel="stylesheet" href="SI-md-08.css" type="text/css" />
 
@@ -412,10 +423,10 @@ $(document).ready(function () {
 </div>
 
 <p>
-<span style="color: #cc0000;">NOTE:  This page was revised for Spring 2020, and may undergo further edits for Winter 2021.</span>
+<span style="color: #00cc00;">NOTE: This page has been revised for Winter 2021, but may undergo further edits.</span>
 </p>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
+<div id="introduction" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>Raster, or gridded data sets (including x-y, or x-y-z data sets as special cases), arise frequently in practice, from such sources as</p>
 <ul>
 <li>weather and climate modeling</li>
@@ -427,8 +438,8 @@ $(document).ready(function () {
 <p>R, and S+ before it, have included libraries/packages that support the dialog between, for example, R and the GRASS open-source GIS (i.e. spgrass6). More recently, however, the the <code>sp</code>, <code>sf</code>, and <code>raster</code> packages in R allows the execution of many of the typical analyses that a general GIS would provide, without the need for an interface – the analysis can be done directly (and entirely) in R.</p>
 <p>The <code>raster</code> package can read and write many of the standard formats for handling raster data, and also has the facility for doing so without loading the entire data set into memory; this facilitates the analysis of very large data sets. In the examples described here, data stored as netCDF files, the principle mode in which large climate and Earth-system science data sets are stored, are used to illustrate the approach for reading and writing large data sets using the <code>ncdf4</code> package and reading and analyzing data using the <code>raster</code> package, but the same basic ideas apply to, for example, HDF files read using <code>readGDAL()</code> from the <code>rgdal</code> package. The <code>sp</code> and <code>sf</code> packages, along with <code>ggplot2</code> provide support for mapping and plotting.</p>
 </div>
-<div id="examples" class="section level1">
-<h1><span class="header-section-number">2</span> Examples</h1>
+<div id="examples" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> Examples</h1>
 <p>Here are some examples from GEOG 4/595 (GIScience: <em>R for Earth System Science</em>)</p>
 <ul>
 <li><a href="https://pjbartlein.github.io/REarthSysSci/ESSdata.html">Earth-system science data</a></li>
@@ -450,7 +461,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
