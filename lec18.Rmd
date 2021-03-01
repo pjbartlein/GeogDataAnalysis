@@ -257,6 +257,6 @@ mosaicplot(class_table_pam, color=T)
 # Readings #
 
 - Chapter 25, Multivariate Statistics, in Crawley, M.J. (2013) *The R Book*, Wiley.  To get to the book, visit [http://library.uoregon.edu](http://library.uoregon.edu), login if necessary, and search for the 2013 edition of the book.  Here's a direct link, once you're logged on: [[Link]](http://onlinelibrary.wiley.com/book/10.1002/9781118448908)
-- Everitt and Hothorn (2011) *An Introduction to Applied Multivariate Analysis with R*, ch. 3 and 5.  To get to the book, visit [http://library.uoregon.edu](http://library.uoregon.edu), search for the book, and login if necessary.  Here's a direct link, once you're logged on:  [[Link]](https://na01.alma.exlibrisgroup.com/view/action/uresolver.do?operation=resolveService&package_service_id=23665350240001852&institutionId=1852&customerId=1840)
-- Peng (2016) *Exploratory Data Analysis with R*, ch. 13.  See readings tab for a link to the e-book.
+- Everitt and Hothorn (2011) *An Introduction to Applied Multivariate Analysis with R*, ch. 4 and 6.  To get to the book, visit [http://library.uoregon.edu](http://library.uoregon.edu), search for the book, and login if necessary.  Here's a direct link, once you're logged on:  [[Link]](https://na01.alma.exlibrisgroup.com/view/action/uresolver.do?operation=resolveService&package_service_id=23665350240001852&institutionId=1852&customerId=1840)
+- Peng (2016) *Exploratory Data Analysis with R*, ch. 11 and 12.  See readings tab for a link to the e-book.
 - Ch. 14 in Zuur et al. (2007) *Analysing Ecological Data*, Springer.  (Search the UO Library catalog for the Bivand et al. book (as in lecture 7), then search for "Analysing Ecological Data" in the *Springer Link* search field.)
