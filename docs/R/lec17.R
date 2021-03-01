@@ -28,7 +28,6 @@ summary(sumcr_mva1, test="Wilks")
 # discriminant analysis example, Summit Cr. data, two variables, two groups
 library(MASS)
 library(lattice) # for plots
-attach(sumcr)
 
 # recode Reach into two levels, Grazed and Ungrazed
 Grazed <- as.integer(Reach)

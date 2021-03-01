@@ -164,7 +164,7 @@ Drop the last two categories
 ```{r}
 # drop last two categories
 mb2 <- c("TropF", "WarmF", "SavDWd", "GrsShrb", "Dsrt", "TempF", "BorF", "Tund")
-gf <- gf[gf$megabiome %in% mb2, ]
+gf <- droplevels(gf[gf$megabiome %in% mb2, ])
 table(gf$megabiome)
 ```
 
@@ -243,7 +243,7 @@ ggparcoord(data = gf[1:16],
         axis.text.y = element_blank(), axis.ticks.y = element_blank() )
 #dev.off()
 ```
-![](pcp01.png)
+![](images/pcp01.png)
 
 Note the use of transparency, specified by the `alphaLines` argument.  Individual observations (gridpoints) that have similar values for each variable trace out dense bands of lines, and several distinct bands, corresponding to different "pyromes" (like biomes) can be observed.
 
@@ -285,7 +285,7 @@ theme(axis.text.x  = element_text(angle=315, vjust=1.0, hjust=0.0, size=14),
 scale_color_manual(values = c(rgb(0, 0, 0, 0.2), "red"))
 #dev.off()
 ```
-![](pcp02.png)
+![](images/pcp02.png)
 
 Plot the points.
 
@@ -301,7 +301,7 @@ ggplot()  +
 ```{r, echo=FALSE}  
 # map
 pngfile <- "map02.png"
-png(pngfile, width=600, height=300) # oppen the file
+png(pngfile, width=600, height=300) # open the file
 
 ggplot()  +
   geom_point(data = gf, aes(x = lon, y = lat, color = select_points), size = 0.8 ) +
@@ -311,7 +311,7 @@ ggplot()  +
   coord_sf() + scale_color_manual(values = c("gray80", "red"))
 #dev.off()
 ```
-![](map02.png)
+![](images/map02.png)
 
 Before moving on, delete the variable `select_points` from the `gf` dataframe:
 
@@ -575,8 +575,6 @@ tableplot(gf, sortCol="gfed", scales="lin", fontsize = 8)
 This plot confirms the existing relationships, where burned fraction broadly tracks temperature and P-E.  However the plots also reveal a distinct threshold that is apparently related to a distinct discontinuity in vegetation:  the transition beteen desert and tundra vegetation types, and grassland, shubland and forested ones.
 
 [[Back to top]](lec19.html)
-
-
 
 
 # Plotting multivariate/multiple time series #

@@ -633,11 +633,11 @@ $(document).ready(function () {
 <p>Drop the last two categories</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># drop last two categories</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>mb2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;TropF&quot;</span>, <span class="st">&quot;WarmF&quot;</span>, <span class="st">&quot;SavDWd&quot;</span>, <span class="st">&quot;GrsShrb&quot;</span>, <span class="st">&quot;Dsrt&quot;</span>, <span class="st">&quot;TempF&quot;</span>, <span class="st">&quot;BorF&quot;</span>, <span class="st">&quot;Tund&quot;</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>gf <span class="ot">&lt;-</span> gf[gf<span class="sc">$</span>megabiome <span class="sc">%in%</span> mb2, ]</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>gf <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(gf[gf<span class="sc">$</span>megabiome <span class="sc">%in%</span> mb2, ])</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(gf<span class="sc">$</span>megabiome)</span></code></pre></div>
 <pre><code>## 
-##   TropF   WarmF  SavDWd GrsShrb    Dsrt   TempF    BorF    Tund    None     Ice 
-##    6678    2331    4719    9372    6728    7874   11356    4896       0       0</code></pre>
+##   TropF   WarmF  SavDWd GrsShrb    Dsrt   TempF    BorF    Tund 
+##    6678    2331    4719    9372    6728    7874   11356    4896</code></pre>
 <p>Do the usual transformations:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transformations (output suppressed)</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(gf<span class="sc">$</span>hrmc)</span>
@@ -682,7 +682,7 @@ $(document).ready(function () {
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x  =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">315</span>, <span class="at">vjust=</span><span class="fl">1.0</span>, <span class="at">hjust=</span><span class="fl">0.0</span>, <span class="at">size=</span><span class="dv">14</span>),</span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), </span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>() )</span></code></pre></div>
-<p><img src="pcp01.png" /></p>
+<p><img src="images/pcp01.png" /></p>
 <p>Note the use of transparency, specified by the <code>alphaLines</code> argument. Individual observations (gridpoints) that have similar values for each variable trace out dense bands of lines, and several distinct bands, corresponding to different “pyromes” (like biomes) can be observed.</p>
 <p>Parallel coordinate plots are most effective when paired with another display with points highlighted in one display similarly highlighted in the other. In the case of the global fire data set the logical other display is a map. There are (at least) two ways of doing the highlighting. Here, a particular megabiome (“BorF” – Boreal forest/Taiga) is used. First create a new variable that will be set to zero, except where <code>gf$megabiome == "BorF"</code>. Then, the data are sorted so that the non-“BorF” observations get plotted first.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select those points with megabiome = &quot;BorF&quot;</span></span>
@@ -703,7 +703,7 @@ $(document).ready(function () {
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
 <span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.2</span>), <span class="st">&quot;red&quot;</span>))</span></code></pre></div>
-<p><img src="pcp02.png" /></p>
+<p><img src="images/pcp02.png" /></p>
 <p>Plot the points.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># map</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()  <span class="sc">+</span></span>
@@ -712,7 +712,7 @@ $(document).ready(function () {
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>() <span class="sc">+</span> <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray80&quot;</span>, <span class="st">&quot;red&quot;</span>))</span></code></pre></div>
-<p><img src="map02.png" /></p>
+<p><img src="images/map02.png" /></p>
 <p>Before moving on, delete the variable <code>select_points</code> from the <code>gf</code> dataframe:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>gf<span class="sc">$</span>select_points <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
 </div>
