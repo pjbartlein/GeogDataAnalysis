@@ -217,7 +217,7 @@ With the exception of the "Subalpine" vegetation zone, the objective clusters us
 
 ## *k*-means clustering ##
 
-In "k-means" clustering, a specific number of clusters, *k*,  is set before the analysis, and the analysis moves individual observations into or out of the clusters until the samples are distributed optimally (i.e. low within-cluster variability, high among=cluster variability).
+In "*k*-means" clustering, a specific number of clusters, *k*,  is set before the analysis, and the analysis moves individual observations into or out of the clusters until the samples are distributed optimally (i.e. low within-cluster variability, high among-cluster variability).
 
 ```{r}
 # k-means clustering of Yellowstone pollen data
@@ -226,6 +226,18 @@ X <- as.matrix(ypolsqrt[,4:35])
 kmean_cls <- kmeans(X, centers=5)
 class_table_km <- table(ypolsqrt$Veg, kmean_cls$cluster)
 mosaicplot(class_table_km, color=T)
+```
+
+Another approach for viewing the within vs. among cluster variability for *k*-means clustering is via a "stripes plot" from the `flexclust` package.  The stripes plot contains *k* large rectangular areas, one for each cluster, within which are shown the distances from the centroid of the cluster of the points that wound up in each cluster, highlighted by a smaller rectangle.  Additional points that had a particular cluster as the second closest are shown by other horizontal lines.  In an ideal case, there would be little or no overlap between the additional points, and the smaller shaded rectangles.
+
+```{r, warning=FALSE, message=FALSE}
+# flexclust library version of k-means, with stripes plot
+library(flexclust)
+X <- as.matrix(ypolsqrt[,4:35])
+flexclust_cls <- cclust(X, dist="euclidean", method="kmeans", k=5)
+class_table_flexclust <- table(ypolsqrt$Veg, flexclust_cls@cluster)
+stripes(flexclust_cls, type="second", col = 1)
+mosaicplot(class_table_flexclust, color=T)
 ```
 
 ## PAM ("partioning among mediods" clustering) ##
