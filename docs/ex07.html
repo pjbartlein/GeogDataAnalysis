@@ -41,6 +41,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -552,7 +553,7 @@ $(document).ready(function () {
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>There are three arguments that must be passed to the function: 1) the map title (a string), 2) a label for the variable (a string), 3) the name of the variable (a string), and 4) the variable-value limits (a pair of values, concatenated with <code>c()</code>)</p>
-<p>Plot the values of TJanDiff by setting the values of the arguments, and then calling the <code>map_tmp()</code> function:</p>
+<p>Plot the values of tann by setting the values for each of the arguments, and then calling the <code>map_tmp()</code> function:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># map the annual tempeature values</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>title <span class="ot">&lt;-</span> <span class="st">&quot;Oregon Climate Station Data -- Annual Temperature&quot;</span>  </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>varname <span class="ot">&lt;-</span> <span class="st">&quot;Annual Temp. (C)&quot;</span> </span>

@@ -85,7 +85,7 @@ map_temp <- function(title, varname, plotvar, limits) {
 
 There are three arguments that must be passed to the function:  1) the map title (a string), 2) a label for the variable (a string), 3) the name of the variable (a string), and 4) the variable-value limits (a pair of values, concatenated with `c()`)
 
-Plot the values of TJanDiff by setting the values of the arguments, and then calling the `map_tmp()` function:
+Plot the values of tann by setting the values for each of the arguments, and then calling the `map_tmp()` function:
 
 ```{r echo=TRUE, eval=FALSE}
 # map the annual tempeature values
