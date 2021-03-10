@@ -60,6 +60,17 @@ O18_lowerCI <- O18_mean - 2*O18_semean
 print(c(O18_lowerCI, O18_mean, O18_upperCI))
 ```
 
+Here's a plot of the data (labeled by Age), along with the mean (solid red line), and the confidence interval (as dashed lines) that will help with the interpretation.
+
+```{r echo=TRUE, eval=FALSE}
+# plot the data labeled by Age, and the the mean and confidence interval
+plot(Age, O18, type="o", pch=16, cex=0.5)
+text(Age, O18, Age, cex=0.5, pos=4, offset=0.2)
+abline(O18_mean, 0.0, col="red")
+abline(O18_upperCI, 0.0, col="red", lty="dashed")
+abline(O18_lowerCI, 0.0, col="red", lty="dashed")
+```
+
 >Q3:  Does the present (0 ka) value of δ<sup>18</sup>O fall inside or outside of the .95 or 95% confidence interval for the mean of δ<sup>18</sup>O? How about the value 1000 years ago (1 ka, row 2)? How far back in the record does one have to go to find the first δ<sup>18</sup>O value that would not be considered significantly different from the long-term mean? (Hint: just look at the numbers in a `View()` window.  Also, you will have to mentally interpolate between values.  For example, the δ<sup>18</sup>O at 2 ka is -1.91, and that at 3ka is -1.83, so at any time between 2ka and 3ka the value of δ<sup>18</sup>O is somewhere between -1.91 and -1.83.)
 
 <br>
