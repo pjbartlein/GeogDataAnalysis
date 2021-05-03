@@ -41,6 +41,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -570,14 +571,14 @@ The easiest way to get most of these data files and shape-file components, is to
 ##  Linking to sp version: 1.4-2 
 ##  Polygon checking: TRUE</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rgdal)</span></code></pre></div>
-<pre><code>## rgdal: version: 1.5-19, (SVN revision 1092)
+<pre><code>## rgdal: version: 1.5-21, (SVN revision 1105)
 ## Geospatial Data Abstraction Library extensions to R successfully loaded
 ## Loaded GDAL runtime: GDAL 3.1.4, released 2020/10/20
 ## Path to GDAL shared files: /Library/Frameworks/R.framework/Versions/4.0/Resources/library/rgdal/gdal
 ## GDAL binary built with GEOS: TRUE 
 ## Loaded PROJ runtime: Rel. 6.3.1, February 10th, 2020, [PJ_VERSION: 631]
 ## Path to PROJ shared files: /Library/Frameworks/R.framework/Versions/4.0/Resources/library/rgdal/proj
-## Linking to sp version:1.4-4
+## Linking to sp version:1.4-5
 ## To mute warnings of possible GDAL/OSR exportToProj4() degradation,
 ## use options(&quot;rgdal_show_exportToProj4_warnings&quot;=&quot;none&quot;) before loading rgdal.</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code></pre></div>
@@ -868,8 +869,8 @@ The easiest way to get most of these data files and shape-file components, is to
 <div id="precipiation-ratio-data" class="section level2" number="4.2">
 <h2 number="4.2"><span class="header-section-number">4.2</span> Precipiation-ratio data</h2>
 <p>The precipitation-ratio data can be read in the usual way:</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>shapefile <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Documents/geog495/data/csv/wus_pratio.csv&quot;</span></span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>wus_pratio <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(shapefile)</span>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>csvfile <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Documents/geog495/data/csv/wus_pratio.csv&quot;</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>wus_pratio <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csvfile)</span>
 <span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(wus_pratio)</span></code></pre></div>
 <pre><code>##  [1] &quot;lat&quot;      &quot;lon&quot;      &quot;elev&quot;     &quot;pjanpann&quot; &quot;pfebpann&quot; &quot;pmarpann&quot; &quot;paprpann&quot; &quot;pmaypann&quot; &quot;pjunpann&quot;
 ## [10] &quot;pjulpann&quot; &quot;paugpann&quot; &quot;pseppann&quot; &quot;poctpann&quot; &quot;pnovpann&quot; &quot;pdecpann&quot;</code></pre>

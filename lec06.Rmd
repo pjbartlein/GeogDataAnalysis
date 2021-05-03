@@ -370,8 +370,8 @@ ggplot() + geom_sf(data = na2_sf) + theme_bw()
 The precipitation-ratio data can be read in the usual way:
 
 ```{r m15}
-shapefile <- "/Users/bartlein/Documents/geog495/data/csv/wus_pratio.csv"
-wus_pratio <- read.csv(shapefile)
+csvfile <- "/Users/bartlein/Documents/geog495/data/csv/wus_pratio.csv"
+wus_pratio <- read.csv(csvfile)
 names(wus_pratio)
 ```
 
